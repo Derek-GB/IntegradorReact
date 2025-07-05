@@ -1,0 +1,1460 @@
+/* === VARIABLES DE COLOR Y FUENTE === */
+:root {
+  --color-fondo: #f3f4f6;
+  --color-blanco: #fff;
+  --color-amarillo: #f9b700;
+  --color-amarillo-hover: #f0a500;
+  --color-verde: #059669;
+  --color-verde-oscuro: #00796B;
+  --color-gris-borde: #ccc;
+  --color-gris-claro: #f8f9fa;
+  --color-texto: #212529;
+  --color-verde-form: #00897B;
+  --fuente-principal: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* === RESET Y BODY === */
+body {
+  font-family: var(--fuente-principal);
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  font-size: 18px;
+  line-height: 1.6;
+  letter-spacing: 0.05em;
+  margin: 0;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+/* === APP CONTAINER === */
+#root{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.container {
+    max-width: 100%;
+    margin: 0px auto;
+    margin-left: 0px;
+    margin-bottom: 20px;
+    padding: 20px;
+    text-align: center;
+    background-color: #FAFAFA;
+    color: black;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    
+}
+
+.containerIndex {
+  background: linear-gradient(135deg, #00897B 0%, #004D40 100%);
+  color: #f4f8f7;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  padding: 40px 30px 30px 30px;
+  margin: 0px auto 30px auto;
+  max-width: 1050px;
+
+  min-height: 420px;
+  height: 590px;
+  position: relative;
+  top: 20px;
+  left: 20%;
+  margin-bottom: 19%;
+  text-align: center;
+}
+
+.containerIndex .bienvenida h1 {
+  color: #FBC02D;
+  font-size: 2.2em;
+  margin-bottom: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+
+.containerIndex .intro {
+  font-size: 1.15em;
+  margin-bottom: 22px;
+  color: #e0f7fa;
+}
+
+.containerIndex .ventajas {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 22px 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+}
+
+.containerIndex .ventajas li {
+  background: rgba(255,255,255,0.10);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 14px 22px;
+  font-size: 1.08em;
+  color: #ffe082;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 220px;
+  border: 1px solid rgba(255,255,255,0.13);
+}
+
+.containerIndex .ventajas i {
+  font-size: 1.3em;
+  color: #FBC02D;
+}
+
+.containerIndex .progreso {
+  margin-top: 18px;
+}
+
+.containerIndex .badge {
+  background: #FBC02D;
+  color: #212121;
+  padding: 7px 18px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1em;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+}
+
+@media (max-width: 700px) {
+  .containerIndex {
+    padding: 18px 6px 18px 6px;
+    min-height: 320px;
+  }
+  .containerIndex .ventajas {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+.containerCONSULTA {
+    max-width: 100%;
+    margin: 0px auto;
+    margin-bottom: 20px;
+    padding: 20px;
+    text-align: center;
+    background-color: #FAFAFA;
+    color: #FAFAFA;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.container1 {
+    max-width: 100%;
+    margin: 0px auto;
+    margin-left: 320px;
+    margin-right: 40px;
+    margin-bottom: 20px;
+    padding: 20px;
+    text-align: center;
+    background-color: #00897B;
+    color: #0000;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.preContainer {
+    max-width: 00px; 
+    height: auto;
+    margin: 0px auto;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 10%;
+    padding: 20px;
+    text-align: center;
+    background-color: #FAFAFA;
+    color: black;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    position: static;
+    display: flex;
+    flex-direction: column  ;
+  
+    
+}
+
+.listaContainer {
+    max-width: 100%;
+    margin: 0px auto;
+    margin-left: 0px;
+
+    margin-bottom: 20%;
+    padding: 20px;
+    text-align: center;
+    background-color: #FAFAFA;
+    color: black;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--color-fondo);
+  font-family: var(--fuente-principal);
+}
+
+/* === SIDEBAR FUSIONADA === */
+#sidebar{
+  width: 65px; /* ancho solo iconos */
+  height: 100vh;
+  background: var(--color-verde-form, #00897B);
+  color: #fff;
+  overflow: hidden;
+  z-index: 100;
+  transition: width 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar--collapsed {
+  width: 65px;
+}
+
+.sidebar--expanded {
+  width: 250px;
+}
+
+
+
+
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 48px; /* ancho solo iconos */
+    height: 100vh;
+    background: var(--color-verde-form, #00897B);
+    color: #fff;
+    overflow: hidden;
+    z-index: 100;
+    transition: width 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+#sidebar:hover {
+  width: 290px;
+  overflow-y: auto;
+}
+
+/* SIEMPRE muestra los iconos, solo oculta el texto cuando está retraído */
+
+
+#sidebar ul li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    overflow: hidden; /* Oculta el texto que no cabe */
+    transition: color 0.2s;
+}
+
+#sidebar ul li a:hover {
+    color: #FBC02D;
+}
+
+#sidebar:not(:hover) ul li a span,
+#sidebar:not(:hover) ul li a:not(:has(i)) {
+  display: none; /* Oculta el texto cuando no hay hover */
+}
+
+/* Los iconos siempre visibles */
+#sidebar ul li a i#sidebar ul li a i {
+  min-width: 24px;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+#sidebar nav {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+#sidebar nav ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+#sidebar nav ul li {
+    padding: 15px 20px;
+    transition: background 0.2s;
+}
+
+#sidebar nav ul li:hover {
+    background: #1a2230;
+}
+
+#sidebar nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.material-icons {
+  font-size: 20px;
+  vertical-align: middle;
+  margin-right: 8px;
+  font-family: 'Material Icons';
+}
+
+/* Ajusta el contenido principal para dejar espacio al sidebar */
+.main-content {
+  margin-left: 140px;
+  padding: 30px;
+  transition: margin-left 0.3s ease;
+}
+
+#sidebar:hover ~ .main-content {
+  margin-left: 290px;
+}
+
+/* Responsive: Sidebar ocupa toda la pantalla en móviles */
+@media (max-width: 700px) {
+  #sidebar {
+    width: 100vw;
+    height: auto;
+    position: relative;
+    min-height: unset;
+    z-index: 200;
+  }
+  #sidebar:hover {
+    width: 100vw;
+  }
+  
+}
+
+/* === TITULOS === */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-verde-form);
+  color: var(--color-blanco);
+  padding: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+
+
+.btn-header {
+
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 100px;
+  color: var(--color-blanco);
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-left: auto;
+  position: relative;
+  left: 10px;
+  bottom: 10px;
+
+  
+
+  padding: 0.5rem 0.1rem;
+  
+}
+
+h2, h4 {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  justify-content: center;
+  background-color: var(--color-verde-form);
+  color: var(--color-blanco);
+  text-align: center;
+  padding: 2rem 1rem;
+  margin-top: 0;
+  font-family: var(--fuente-principal);
+  letter-spacing: 0.05em;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+@media (max-width: 700px) {
+  h2, h4 {
+    font-size: 1.2rem;
+    padding: 1rem 0.5rem;
+  }
+}
+
+/* === HR === */
+hr {
+  border: 1px solid var(--color-verde-form);
+}
+
+/* === FORMULARIOS UNIFICADOS === */
+form,
+.formulario,
+form#formularioAlbergue,
+form#preformularioAlbergue,
+form#recursoForm {
+  background-color: var(--color-blanco);
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  max-width: 850px;
+  margin: 2rem auto;
+  text-align: left;
+  font-family: var(--fuente-principal);
+}
+
+form h3,
+.formulario h3 {
+  margin-bottom: 20px;
+  font-size: 2rem;
+  color: var(--color-verde-form);
+  padding: 25px;
+  border: var(--color-verde-form) solid 2px;
+  text-align: center;
+}
+
+/* === ETIQUETAS === */
+label,
+form label,
+.accordion-body label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+  color: var(--color-texto);
+  font-family: var(--fuente-principal);
+}
+
+/* === INPUTS, SELECTS, TEXTAREA === */
+input,
+select,
+textarea,
+form input,
+form select,
+form textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  font-family: var(--fuente-principal);
+  color: var(--color-texto);
+  background-color: var(--color-blanco);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-verde-form);
+}
+
+/* === CHECKBOX Y RADIO === */
+input[type="checkbox"],
+input[type="radio"] {
+  margin-right: 6px;
+  cursor: pointer;
+  accent-color: var(--color-verde-form);
+}
+
+/* === BOTONES === */
+
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-link {
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background-color: var(--color-amarillo);
+  color: var(--color-blanco);
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  font-family: var(--fuente-principal);
+}
+
+button:hover,
+.btn:hover,
+.btn-primary:hover,
+.btn-secondary:hover {
+  background-color: var(--color-amarillo-hover);
+}
+
+.btn-primary,
+.btn-secondary {
+  background-color: var(--color-amarillo);
+  color: var(--color-texto);
+}
+
+.btn-link {
+  background: none;
+  color: var(--color-verde-form);
+  padding: 0;
+  font-weight: 600;
+}
+
+/* === TABLAS === */
+table,
+.tabla-resumen {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: var(--color-blanco);
+  font-family: var(--fuente-principal);
+}
+
+th, td {
+  border: 1px solid var(--color-gris-borde);
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background: var(--color-gris-claro);
+  font-weight: 700;
+}
+
+/* === DETALLES/ACCORDION === */
+details {
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  background-color: var(--color-blanco);
+}
+
+details summary {
+  background-color: var(--color-verde-form);
+  color: var(--color-blanco);
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  user-select: none;
+  transition: background-color 0.3s ease;
+  font-family: var(--fuente-principal);
+  list-style: none;
+  position: relative;
+}
+
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+details summary::before {
+  content: '▼ ';
+  display: inline-block;
+  width: 1em;
+  margin-right: 0.5em;
+  transition: transform 0.2s;
+}
+
+details[open] summary::before {
+  transform: rotate(0deg);
+}
+
+details:not([open]) summary::before {
+  transform: rotate(-90deg);
+}
+
+details[open] summary {
+  border-bottom: 1px solid var(--color-gris-borde);
+}
+
+details > *:not(summary) {
+  padding: 10px;
+  background-color: var(--color-gris-claro);
+}
+
+/* === GRID DE PRODUCTOS Y SECCIÓN LIMPIEZA === */
+.cuadro-grid,
+#productosLimpiezaDisponibles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 15px;
+  padding: 20px;
+  background-color: var(--color-gris-claro);
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+.cuadro-grid .producto,
+#productosLimpiezaDisponibles .producto,
+.producto-limpieza-item {
+  background-color: var(--color-blanco);
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 5px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease-in-out;
+  position: relative;
+  font-size: 0.9em;
+}
+
+.cuadro-grid .producto:hover,
+#productosLimpiezaDisponibles .producto:hover,
+.producto-limpieza-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cuadro-grid .producto label,
+#productosLimpiezaDisponibles .producto label,
+.producto-limpieza-item label {
+  font-weight: normal;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  line-height: 1.2;
+  width: 100%;
+}
+
+.cuadro-grid .producto input[type="checkbox"],
+#productosLimpiezaDisponibles .producto input[type="checkbox"],
+.producto-limpieza-item input[type="checkbox"] {
+  margin-right: 8px;
+  transform: scale(0.9);
+}
+
+.cuadro-grid .producto .cantidad,
+#productosLimpiezaDisponibles .producto .cantidad,
+.producto-limpieza-item .cantidad,
+#productosLimpiezaDisponibles .producto .cantidad-limpieza,
+.producto-limpieza-item .cantidad-limpieza {
+  width: calc(100% - 16px);
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-top: 5px;
+  font-size: 0.85em;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.producto-limpieza-item.oculto-en-lista {
+  transform: translateY(10px);
+  opacity: 0;
+  height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  border: none;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* === RESULTADO Y TABLAS DE RESUMEN === */
+.resultado ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.resultado li {
+  background-color: #e9ecef;
+  border: 1px solid #dee2e6;
+  padding: 8px 12px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9em;
+  line-height: 1.4;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.resultado li .btn-eliminar-lista,
+.btn-eliminar {
+  background-color: var(--color-amarillo);
+  color: var(--color-blanco);
+  border: none;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.8em;
+  margin-left: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.resultado li .btn-eliminar-lista:hover,
+.btn-eliminar:hover {
+  background-color: var(--color-amarillo-hover);
+}
+
+/* === FOOTER === */
+footer {
+  width: 100%;
+  background: var(--color-verde-form);
+  color: var(--color-blanco);
+  text-align: center;
+  padding: 18px 0 12px 0;
+  font-size: 1.05em;
+  letter-spacing: 0.5px;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+  margin-top: 40px;
+  position: static;
+  left: unset;
+  bottom: unset;
+  z-index: 100;
+  font-family: var(--fuente-principal);
+}
+
+/* === UTILIDADES === */
+.mt-2 { margin-top: 0.5rem !important; }
+.mt-3 { margin-top: 1rem !important; }
+.mb-2 { margin-bottom: 0.5rem !important; }
+.hidden { display: none; }
+.texto-centrado { text-align: center !important; }
+.fuente-grande { font-size: 22px !important; }
+.alto-linea { line-height: 2 !important; }
+.saturacion * { filter: saturate(200%) contrast(130%) brightness(110%) !important; }
+
+/* --- Formulario --- */
+form#formularioAlbergue {
+    background-color: #FAFAFA;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    max-width: 850px;
+    margin: auto;
+    text-align: left;
+}
+
+form#formularioAlbergue h3 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #00897B;
+    padding: 25px;
+    border: #00897B solid 2px;
+    text-align: center;
+}
+
+/* Etiquetas */
+form#formularioAlbergue label,
+.accordion-body label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+    color: #212529;
+}
+
+/* Inputs, select, textarea */
+form#formularioAlbergue input[type="text"],
+form#formularioAlbergue input[type="number"],
+form#formularioAlbergue input[type="password"],
+form#formularioAlbergue input[type="date"],
+form#formularioAlbergue input[type="email"],
+form#formularioAlbergue select,
+form#formularioAlbergue textarea,
+form#formularioAlbergue input[type="tel"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+form#formularioAlbergue input[type="text"]:focus,
+form#formularioAlbergue input[type="number"]:focus,
+form#formularioAlbergue input[type="password"]:focus,
+form#formularioAlbergue input[type="date"]:focus,
+form#formularioAlbergue input[type="email"]:focus,
+form#formularioAlbergue select:focus,
+form#formularioAlbergue textarea:focus,
+form#formularioAlbergue input[type="tel"]:focus {
+    outline: none;
+    border-color: #00897B;
+}
+
+/* Inputs tipo checkbox y radio */
+form#formularioAlbergue input[type="checkbox"],
+form#formularioAlbergue input[type="radio"] {
+    margin-right: 6px;
+    cursor: pointer;
+}
+
+
+form#preformularioAlbergue {
+    background-color: #FAFAFA;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    max-width: 850px;
+    margin: auto;
+    text-align: left;
+}
+
+form#preformularioAlbergue h3 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #00897B;
+    padding: 25px;
+    border: #00897B solid 2px;
+    text-align: center;
+}
+
+/* Etiquetas */
+form#preformularioAlbergue label,
+.accordion-body label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+    color: #212529;
+}
+
+/* Inputs, select, textarea */
+form#preformularioAlbergue input[type="text"],
+form#preformularioAlbergue input[type="number"],
+form#preformularioAlbergue input[type="password"],
+form#preformularioAlbergue input[type="date"],
+form#preformularioAlbergue input[type="email"],
+form#preformularioAlbergue select,
+form#preformularioAlbergue textarea,
+form#preformularioAlbergue input[type="tel"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+
+/* --- Formulario Asignación de Recursos --- */
+form#recursoForm {
+    background-color: #FAFAFA;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    max-width: 850px;
+    margin: auto;
+    text-align: left;
+}
+
+/* Etiquetas */
+form#recursoForm label{
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+    color: #212529;
+}
+form#recursoForm summary strong {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+    color: #fafafa;
+}
+
+/* Inputs, select, textarea */
+form#recursoForm input[type="text"],
+form#recursoForm input[type="number"],
+form#recursoForm input[type="password"],
+form#recursoForm select,
+form#recursoForm textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+form#recursoForm input[type="text"]:focus,
+form#recursoForm input[type="password"]:focus,
+form#recursoForm input[type="number"]:focus,
+form#recursoForm select:focus,
+form#recursoForm textarea:focus {
+    outline: none;
+    border-color: #00897B;
+}
+
+/* Inputs tipo checkbox y radio */
+form#recursoForm input[type="checkbox"],
+form#recursoForm input[type="radio"] {
+    margin-right: 6px;
+    cursor: pointer;
+}
+
+/* Para los botones */
+form#recursoForm button {
+    min-width: 100px;
+    margin-right: 10px;
+}
+
+/* Contenedores de items */
+form#recursoForm .item {
+    margin-bottom: 20px;
+}
+
+/* Botones */
+.btn {
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #FBC02D;
+    color: black;
+
+}
+
+
+
+/* este de pre es para cambiar el color del form preformulario */
+
+.pre {
+    color: black;
+}
+
+.btn-primary:hover {
+    background-color: #bd9122;
+}
+
+.btn-secondary {
+    background-color: #FBC02D;
+    color: black;
+}
+
+.btn-secondary:hover {
+    background-color: #bd9122;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Márgenes para botones */
+.mt-2 {
+    margin-top: 0.5rem !important;
+}
+
+.mt-3 {
+    margin-top: 1rem !important;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem !important;
+}
+
+/* --- Canvas Firma Digital --- */
+#signature-pad {
+    border: 2px solid #00897B;
+    border-radius: 8px;
+    background-color: #f5faff;
+    display: block;
+    margin-top: 8px;
+}
+
+/* --- Accordion --- */
+.accordion-button {
+    font-weight: 600;
+    color: #00897B;
+    background-color: #e9f0ff;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #cfe2ff;
+    color: #00897B;
+}
+
+.accordion-body {
+    background-color: #FBC02D;
+    color: #212529;
+    padding: 15px;
+}
+
+#usuariosSelect {
+    display: block;
+    margin: 0 auto 12px;
+    max-width: 400px;
+}
+
+.btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 0 auto;
+}
+
+.btn-group .btn {
+    color: #212529;
+    background-color: #FBC02D;
+    min-width: 120px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 600px) {
+    #signature-pad {
+        width: 100% !important;
+        height: 150px !important;
+    }
+
+    form#formularioAlbergue {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    .btn-group .btn {
+        text-align: center;
+        min-width: auto;
+        font-size: 0.9rem;
+        padding: 8px 10px;
+    }
+}
+
+/* --- Accordion CSS (fuera de Bootstrap) --- */
+.accordion-css details {
+    border: 1px solid #ccc;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.accordion-css summary {
+    background-color: #00897B;
+    color: #212529;
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    user-select: none;
+}
+
+.accordion-css summary:hover {
+    background-color: #00897B;
+}
+
+.accordion-css details[open] summary {
+    border-bottom: 1px solid #212529;
+}
+
+.accordion-css details>div {
+    padding: 10px;
+    background-color: #f8f9fa;
+}
+
+/* --- Panel de Accesibilidad --- */
+#accesibilidad-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #00897B;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+#accesibilidad-panel {
+    display: none;
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 240px;
+    z-index: 999;
+}
+
+#accesibilidad-panel.active {
+    display: block;
+}
+
+#accesibilidad-panel button {
+    display: block;
+    width: 100%;
+    margin: 6px 0;
+    padding: 8px;
+    font-size: 14px;
+    background-color: #00897B;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-align: left;
+    cursor: pointer;
+}
+
+#accesibilidad-panel button:hover {
+    background-color: #00897B;
+}
+
+/* -------- ACCESIBILIDAD -------- */
+
+/* CONTRASTE ALTO */
+.contraste,
+.contraste * {
+    background-color: #000 !important;
+    color: #FFF !important;
+    border-color: #FFF !important;
+}
+
+.contraste a {
+    color: #00897B !important;
+    text-decoration: underline !important;
+}
+
+.contraste input,
+.contraste textarea,
+.contraste select,
+.contraste button {
+    background-color: #111 !important;
+    color: #FFF !important;
+    border: 1px solid #FFF !important;
+}
+
+/* RESALTADO DE ENLACES */
+.resaltado a {
+    background-color: #FBC02D !important;
+    color: red !important;
+    font-weight: bold;
+}
+
+/* ESPACIADO DE TEXTO */
+.espaciado-texto * {
+    letter-spacing: 0.12em !important;
+    line-height: 1.8 !important;
+}
+
+/* FUENTE GRANDE */
+.fuente-grande {
+    font-size: 22px !important;
+}
+
+/* CURSOR PERSONALIZADO */
+.cursor-grande * {
+    cursor: pointer !important;
+}
+
+/* CENTRADO DE TEXTO */
+.texto-centrado {
+    text-align: center !important;
+}
+
+/* ALTO DE LÍNEA EXTRA */
+.alto-linea {
+    line-height: 2 !important;
+}
+
+/* SATURACIÓN (COLORES MÁS VIVOS) */
+.saturacion * {
+    filter: saturate(200%) contrast(130%) brightness(110%) !important;
+}
+
+/* --- Buscador de Albergues (ConsultaAlbergues) --- */
+.search-bar {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.search-bar input[type="text"],.search-bar select {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+}
+
+.albergue-resultado {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1.5rem;
+    max-width: 600px;
+    margin: 0 auto 2rem auto;
+    text-align: left;
+    background: #fff;
+    font-size: large;
+}
+
+.albergue-resultado h2 {
+    margin-top: 0;
+}
+
+.albergue-resultado ul {
+    list-style: none;
+    padding: 0;
+}
+
+.albergue-resultado li {
+    margin-bottom: 0.5rem;
+}
+
+/* Ajusta el contenido principal para dejar espacio al sidebar */
+
+
+.form-ayuda-revision {
+    background-color: #FAFAFA;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 25px;
+    max-width: 850px;
+    margin: 2rem auto;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+.form-ayuda-revision summary {
+    background-color: #00897B;
+    color: #FAFAFA;
+    font-weight: bold;
+    padding: 14px 20px;
+    border-radius: 8px 8px 0 0;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.form-ayuda-revision fieldset {
+    border: none;
+    padding-top: 20px;
+}
+
+.form-ayuda-revision label {
+    font-weight: 600;
+    margin-top: 12px;
+    display: block;
+    color: #212121;
+}
+
+.form-ayuda-revision input,
+.form-ayuda-revision select,
+.form-ayuda-revision textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.form-ayuda-revision input:focus,
+.form-ayuda-revision select:focus,
+.form-ayuda-revision textarea:focus {
+    outline: none;
+    border-color: #00897B;
+}
+
+.form-ayuda-revision button {
+    background-color: #FBC02D;
+    color: #212121;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-ayuda-revision button:hover {
+    background-color: #e0ac27;
+}
+
+
+.hidden { display: none; }
+
+.integrante-section { display: none; }
+
+.integrante-section.active { display: block; }
+
+.principal-section { display: block; }
+
+.principal-section.hidden { display: none; }
+
+.main-content { transition: margin-left 0.3s; }
+
+
+footer {
+  width: 100%;
+  background: rgb(0, 119, 107);
+  color: #fff;
+  text-align: center;
+  padding: 18px 0 12px 0;
+  font-size: 1.05em;
+  letter-spacing: 0.5px;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+  margin-top: 40px;
+  position: static;
+  left: unset;
+  bottom: unset;
+  z-index: 100;
+}
+
+/* Diferencias y utilidades específicas de formAbasteci.css para fusionar */
+/* filepath: c:\Users\Churry\Desktop\II-C\Integrador-1\IntegradorI-React\integradorI-react\src\styles\formulario_fusionado.css */
+
+/* Grid para lista de abarrotes y productos limpieza */
+.cuadro-grid,
+#productosLimpiezaDisponibles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 15px;
+  padding: 20px;
+  background-color: var(--color-gris-claro);
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+.cuadro-grid .producto,
+#productosLimpiezaDisponibles .producto,
+.producto-limpieza-item {
+  background-color: var(--color-blanco);
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 5px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease-in-out;
+  position: relative;
+  font-size: 0.9em;
+}
+
+.cuadro-grid .producto:hover,
+#productosLimpiezaDisponibles .producto:hover,
+.producto-limpieza-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cuadro-grid .producto label,
+#productosLimpiezaDisponibles .producto label,
+.producto-limpieza-item label {
+  font-weight: normal;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  line-height: 1.2;
+  width: 100%;
+}
+
+.cuadro-grid .producto input[type="checkbox"],
+#productosLimpiezaDisponibles .producto input[type="checkbox"],
+.producto-limpieza-item input[type="checkbox"] {
+  margin-right: 8px;
+  transform: scale(0.9);
+}
+
+.cuadro-grid .producto .cantidad,
+#productosLimpiezaDisponibles .producto .cantidad,
+.producto-limpieza-item .cantidad,
+#productosLimpiezaDisponibles .producto .cantidad-limpieza,
+.producto-limpieza-item .cantidad-limpieza {
+  width: calc(100% - 16px);
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-top: 5px;
+  font-size: 0.85em;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.producto-limpieza-item.oculto-en-lista {
+  transform: translateY(10px);
+  opacity: 0;
+  height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  border: none;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Resultado y tablas de resumen de abarrotes */
+.resultado ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.resultado li {
+  background-color: #e9ecef;
+  border: 1px solid #dee2e6;
+  padding: 8px 12px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9em;
+  line-height: 1.4;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.resultado li .btn-eliminar-lista,
+.btn-eliminar {
+  background-color: var(--color-amarillo);
+  color: var(--color-blanco);
+  border: none;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.8em;
+  margin-left: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.resultado li .btn-eliminar-lista:hover,
+.btn-eliminar:hover {
+  background-color: var(--color-amarillo-hover);
+}

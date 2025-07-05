@@ -1,0 +1,220 @@
+/* =========================
+   VARIABLES GLOBALES
+   ========================= */
+:root {
+  --color-fondo: #f3f4f6;
+  --color-blanco: #fff;
+  --color-amarillo: #f9b700;
+  --color-amarillo-hover: #f0a500;
+  --color-verde: #059669;
+  --color-verde-oscuro: #00796B;
+  --color-gris-borde: #ccc;
+  --color-gris-claro: #f8f9fa;
+  --color-texto: #212529;
+  --color-verde-form: #00897B;
+}
+
+/* =========================
+   FORMULARIOS UNIFICADOS
+   ========================= */
+.formulario {
+  background-color: var(--color-blanco);
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  max-width: 850px;
+  margin: 2rem auto;
+  text-align: left;
+}
+
+.formulario label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+  color: var(--color-texto);
+}
+
+.formulario input,
+.formulario select,
+.formulario textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.formulario input:focus,
+.formulario select:focus,
+.formulario textarea:focus {
+  outline: none;
+  border-color: var(--color-verde-form);
+}
+
+.formulario .btn {
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background-color: var(--color-amarillo);
+  color: var(--color-blanco);
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.formulario .btn:hover {
+  background-color: var(--color-amarillo-hover);
+}
+
+/* =========================
+   SIDEBAR Y MENÚ
+   ========================= */
+.sidebar {
+  width: 250px;
+  background-color: var(--color-verde-form);
+  color: var(--color-blanco);
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  padding: 14px 20px;
+}
+
+.sidebar ul li a {
+  color: var(--color-blanco);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.sidebar ul li a.active,
+.sidebar ul li a:hover {
+  background-color: var(--color-verde-oscuro);
+  border-radius: 6px;
+}
+
+/* =========================
+   ICONOS DE GOOGLE FONTS
+   ========================= */
+.material-icons {
+  font-size: 20px;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+/* =========================
+   TABLAS Y RESÚMENES
+   ========================= */
+.tabla-resumen,
+.formulario table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: var(--color-blanco);
+}
+
+.tabla-resumen th,
+.tabla-resumen td,
+.formulario th,
+.formulario td {
+  border: 1px solid var(--color-gris-borde);
+  padding: 8px;
+  text-align: center;
+}
+
+.tabla-resumen th,
+.formulario th {
+  background: var(--color-gris-claro);
+  font-weight: 700;
+}
+
+/* =========================
+   GRID DE PRODUCTOS
+   ========================= */
+.cuadro-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 2rem;
+}
+
+.cuadro-grid .producto {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease-in-out;
+  position: relative;
+  font-size: 0.9em;
+  background: var(--color-blanco);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.cuadro-grid .producto:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cuadro-grid .producto label {
+  font-weight: normal;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  line-height: 1.2;
+}
+
+.cuadro-grid .producto input[type="checkbox"] {
+  margin-right: 8px;
+  transform: scale(0.9);
+}
+
+.cuadro-grid .producto .cantidad {
+  width: calc(100% - 16px);
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-top: 5px;
+  font-size: 0.85em;
+  text-align: center;
+}
+
+/* =========================
+   SECCIÓN LIMPIEZA
+   ========================= */
+#productosLimpiezaDisponibles {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* =========================
+   FOOTER
+   ========================= */
+footer {
+  margin-top: 2rem;
+  text-align: center;
+  color: var(--color-texto);
+  font-size: 0.95em;
+  background: var(--color-gris-claro);
+  padding: 12px 0;
+  border-radius: 0 0 8px 8px;
+}

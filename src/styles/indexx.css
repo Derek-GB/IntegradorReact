@@ -1,0 +1,537 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    background-color: #FAFAFA;
+    color: #212529;
+    line-height: 1.6;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+    margin: 0;
+    padding: 0;
+    
+}
+
+h2, h4 {
+    background-color: #00897B;
+    color: #FAFAFA;
+    text-align: center;
+    padding: 2rem 1rem 2rem 40px; 
+    position: relative;
+    bottom: 8px;
+    left: 8px; 
+    margin-top: 0px;
+}
+
+.container {
+    max-width: 100%;
+    margin: 0px auto;
+    margin-left: 0px;
+    margin-bottom: 20px;
+    padding: 20px;
+    text-align: center;
+    background-color: #FAFAFA;
+    color: #0000;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+
+.containerIndex {
+  background: linear-gradient(135deg, #00897B 0%, #004D40 100%);
+  color: #f4f8f7;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  padding: 40px 30px 30px 30px;
+  margin: 0px auto 30px auto;
+  max-width: 1050px;
+
+  min-height: 420px;
+  height: 590qpx;
+  position: relative;
+  top: 20px;
+  left: 20%;
+  margin-bottom: 19%;
+  text-align: center;
+}
+
+.containerIndex .bienvenida h1 {
+  color: #FBC02D;
+  font-size: 2.2em;
+  margin-bottom: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+
+.containerIndex .intro {
+  font-size: 1.15em;
+  margin-bottom: 22px;
+  color: #e0f7fa;
+}
+
+.containerIndex .ventajas {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 22px 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+}
+
+.containerIndex .ventajas li {
+  background: rgba(255,255,255,0.10);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 14px 22px;
+  font-size: 1.08em;
+  color: #ffe082;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 220px;
+  border: 1px solid rgba(255,255,255,0.13);
+}
+
+.containerIndex .ventajas i {
+  font-size: 1.3em;
+  color: #FBC02D;
+}
+
+.containerIndex .progreso {
+  margin-top: 18px;
+}
+
+.containerIndex .badge {
+  background: #FBC02D;
+  color: #212121;
+  padding: 7px 18px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1em;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+}
+
+@media (max-width: 700px) {
+  .containerIndex {
+    padding: 18px 6px 18px 6px;
+    min-height: 320px;
+  }
+  .containerIndex .ventajas {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+.containerCONSULTA {
+    max-width: 100%;
+    margin: 0px auto;
+    margin-bottom: 20px;
+    padding: 20px;
+    text-align: center;
+    background-color: #FAFAFA;
+    color: #FAFAFA;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.container1 {
+    max-width: 100%;
+    margin: 0px auto;
+    margin-left: 320px;
+    margin-right: 40px;
+    margin-bottom: 20px;
+    padding: 20px;
+    text-align: center;
+    background-color: #00897B;
+    color: #0000;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.card-row {
+    display: flex;
+    flex-wrap: wrap;
+    color: #00897B;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.custom-card {
+    background-color: #fafafa;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 25px;
+    flex: 1 1 300px;
+    max-width: 400px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+}
+
+.custom-card h2 {
+    color: #212121;
+    margin-bottom: 15px;
+}
+
+.custom-card p {
+    color: #444444;
+}
+
+.custom-card.selected {
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    border-color: #00897B;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-decoration: none;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-accent {
+    background-color: #FBC02D;
+    color: #212121;
+    border: none;
+}
+
+.btn-accent:hover {
+    background-color: #e0ac27;
+}
+
+/* --- Panel de Accesibilidad --- */
+#accesibilidad-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #00897B;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+#accesibilidad-panel {
+    display: none;
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 240px;
+    z-index: 999;
+}
+
+#accesibilidad-panel.active {
+    display: block;
+}
+
+#accesibilidad-panel button {
+    display: block;
+    width: 100%;
+    margin: 6px 0;
+    padding: 8px;
+    font-size: 14px;
+    background-color: #00897B;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-align: left;
+    cursor: pointer;
+}
+
+#accesibilidad-panel button:hover {
+    background-color: #00897B;
+}
+
+/* -------- ACCESIBILIDAD -------- */
+
+/* CONTRASTE ALTO */
+.contraste,
+.contraste * {
+    background-color: #000 !important;
+    color: #FFF !important;
+    border-color: #FFF !important;
+}
+
+.contraste a {
+    color: #00897B !important;
+    text-decoration: underline !important;
+}
+
+.contraste input,
+.contraste textarea,
+.contraste select,
+.contraste button {
+    background-color: #111 !important;
+    color: #FFF !important;
+    border: 1px solid #FFF !important;
+}
+
+/* RESALTADO DE ENLACES */
+.resaltado a {
+    background-color: #FBC02D !important;
+    color: red !important;
+    font-weight: bold;
+}
+
+/* ESPACIADO DE TEXTO */
+.espaciado-texto * {
+    letter-spacing: 0.12em !important;
+    line-height: 1.8 !important;
+}
+
+/* FUENTE GRANDE */
+.fuente-grande {
+    font-size: 22px !important;
+}
+
+/* CURSOR PERSONALIZADO */
+.cursor-grande * {
+    cursor: pointer !important;
+}
+
+/* CENTRADO DE TEXTO */
+.texto-centrado {
+    text-align: center !important;
+}
+
+/* ALTO DE LÍNEA EXTRA */
+.alto-linea {
+    line-height: 2 !important;
+}
+
+/* SATURACIÓN (COLORES MÁS VIVOS) */
+.saturacion * {
+    filter: saturate(200%) contrast(130%) brightness(110%) !important;
+}
+
+/* --- Buscador de Albergues (ConsultaAlbergues) --- */
+.search-bar {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.search-bar input[type="text"],.search-bar select {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+}
+
+
+.albergue-resultado {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1.5rem;
+    max-width: 600px;
+    margin: 0 auto 2rem auto;
+    text-align: left;
+    background: #fff;
+    font-size: large;
+}
+
+.albergue-resultado h2 {
+    margin-top: 0;
+}
+
+.albergue-resultado ul {
+    list-style: none;
+    padding: 0;
+}
+
+.albergue-resultado li {
+    margin-bottom: 0.5rem;
+}
+
+
+/* Ajusta el contenido principal para dejar espacio al sidebar */
+.main-content {
+    margin-left: 100px;
+    padding: 30px;
+    transition: margin-left 0.3s ease;
+}
+
+.form-ayuda-revision {
+    background-color: #FAFAFA;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 25px;
+    max-width: 850px;
+    margin: 2rem auto;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+.form-ayuda-revision summary {
+    background-color: #00897B;
+    color: #FAFAFA;
+    font-weight: bold;
+    padding: 14px 20px;
+    border-radius: 8px 8px 0 0;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.form-ayuda-revision fieldset {
+    border: none;
+    padding-top: 20px;
+}
+
+.form-ayuda-revision label {
+    font-weight: 600;
+    margin-top: 12px;
+    display: block;
+    color: #212121;
+}
+
+.form-ayuda-revision input,
+.form-ayuda-revision select,
+.form-ayuda-revision textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.form-ayuda-revision input:focus,
+.form-ayuda-revision select:focus,
+.form-ayuda-revision textarea:focus {
+    outline: none;
+    border-color: #00897B;
+}
+
+.form-ayuda-revision button {
+    background-color: #FBC02D;
+    color: #212121;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-ayuda-revision button:hover {
+    background-color: #e0ac27;
+}
+
+
+.sidebar {
+    position: fixed;
+    margin-top: 0px;
+    width: 65px;
+    height: 100vh;
+    background: #00897B;
+    overflow: hidden;
+   
+    color: #fff;
+    /* padding-top: 60px; */
+    z-index: 100;
+    transition: width 0.3s ease;
+}
+
+.sidebar:hover {
+    width: 290px; /* Ancho expandido al pasar el mouse */
+    overflow-y: auto; 
+}
+
+.sidebar ul li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    overflow: hidden; /* Oculta el texto que no cabe */
+    transition: color 0.2s;
+}
+
+.sidebar ul li a:hover {
+    color: #FBC02D;
+}
+
+.sidebar:not(:hover) ul li a span,
+.sidebar:not(:hover) ul li a:not(:has(i)) {
+  display: none; /* Oculta el texto cuando no hay hover */
+}
+
+
+.sidebar ul li a i {
+  min-width: 24px;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+.sidebar nav {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+
+.sidebar nav ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.sidebar nav ul li {
+    padding: 15px 20px;
+    transition: background 0.2s;
+}
+
+.sidebar nav ul li:hover {
+    background: #1a2230;
+}
+
+.sidebar nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.hidden { display: none; }
+.integrante-section { display: none; }
+.integrante-section.active { display: block; }
+.principal-section { display: block; }
+.principal-section.hidden { display: none; }
+.main-content { transition: margin-left 0.3s; }
+
+/* Botón hamburguesa para mostrar el sidebar cuando está oculto */
+
+
+footer {
+  width: 100%;
+  background: rgb(0, 119, 107);
+  color: #fff;
+  text-align: center;
+  padding: 18px 0 12px 0;
+  font-size: 1.05em;
+  letter-spacing: 0.5px;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+  margin-top: 40px;
+  position: static;
+  left: unset;
+  bottom: unset;
+  z-index: 100;
+}
