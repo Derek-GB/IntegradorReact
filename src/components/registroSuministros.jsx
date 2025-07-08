@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/formulario.css';
-import '../styles/indexx.css';
+import '../styles/formularioFusionado.css'
 
 const RegistroSuministros = () => {
   const [form, setForm] = useState({

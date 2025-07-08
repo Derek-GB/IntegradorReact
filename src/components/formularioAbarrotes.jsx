@@ -7,8 +7,7 @@ import Abarrotes from './abarrotes';
 import Limpieza from './limpieza';
 import { AbastecimientoProvider } from '../context/contextoAbastecimiento';
 import { BrowserRouter } from 'react-router-dom'; 
-import '../styles/formAbasteci.css';
-import '../styles/formulario.css';
+import '../styles/formularioFusionado.css'
 
 
 const FormularioAbastecimiento = () => {

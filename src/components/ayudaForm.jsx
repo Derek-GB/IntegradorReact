@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/formulario.css';
-import '../styles/indexx.css';
+import '../styles/formularioFusionado.css'
 
 const AyudaForm = () => {
   const [formData, setFormData] = useState({

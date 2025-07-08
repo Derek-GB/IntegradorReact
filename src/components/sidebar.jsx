@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom'
+
+// Puedes agregar un pequeño estilo en línea o una clase adicional si quieres más control
+
 import React from 'react';
 import '../styles/formularioFusionado.css'; // Asegúrate de que la ruta sea
 
@@ -26,7 +29,7 @@ const Sidebar = () => {
             <li key={index}>
               <Link to={link.href}>
                 <span className="material-icons">{link.icon}</span>
-                <span>{link.label}</span>
+                <span>{ link.label}</span>
               </Link>
             </li>
           ))}

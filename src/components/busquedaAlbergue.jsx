@@ -1,8 +1,6 @@
 import React from 'react';
 import { useUbicaciones } from '../hooks/useUbicaciones';
-import '../styles/formulario.css';
-import '../styles/indexx.css';
-
+import '../styles/formularioFusionado.css'
 const busquedaAlbergue = () => {
   const {
     provincias, cantones, distritos,

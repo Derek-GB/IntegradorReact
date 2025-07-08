@@ -36,7 +36,7 @@ const PreFormulario = () => {
 
       
 
-      <form>
+      <form className='formPreContainer'>
         <details open>
           <summary><strong>Información del Evento</strong></summary>
           <fieldset className="mt-2">
