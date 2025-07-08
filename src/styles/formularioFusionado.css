@@ -11,6 +11,7 @@
   --color-texto: #212529;
   --color-verde-form: #00897B;
   --fuente-principal: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --color-verde-form: #00897B;
 }
 
 /* === RESET Y BODY === */
@@ -21,8 +22,8 @@ body {
   font-size: 18px;
   line-height: 1.6;
   letter-spacing: 0.05em;
+  display: flex;
   margin: 0;
-  padding: 0;
   transition: all 0.3s ease;
 }
 
@@ -41,8 +42,8 @@ body {
     margin-bottom: 20px;
     padding: 20px;
     text-align: center;
-    background-color: #FAFAFA;
-    color: black;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
     border-radius: 10px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     display: flex;
@@ -53,9 +54,9 @@ body {
     
 }
 
-.containerIndex {
-  background: linear-gradient(135deg, #00897B 0%, #004D40 100%);
-  color: #f4f8f7;
+.containerInicio {
+  background: linear-gradient(135deg, var(--color-verde-form) 0%, var(--color-verde-oscuro) 100%);
+  color: var(--color-texto);
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.10);
   padding: 40px 30px 30px 30px;
@@ -71,8 +72,8 @@ body {
   text-align: center;
 }
 
-.containerIndex .bienvenida h1 {
-  color: #FBC02D;
+.containerInicio .bienvenida h1 {
+  color: var(--color-amarillo);
   font-size: 2.2em;
   margin-bottom: 18px;
   font-weight: 700;
@@ -80,13 +81,13 @@ body {
   text-shadow: 0 2px 8px rgba(0,0,0,0.10);
 }
 
-.containerIndex .intro {
+.containerInicio .intro {
   font-size: 1.15em;
   margin-bottom: 22px;
   color: #e0f7fa;
 }
 
-.containerIndex .ventajas {
+.containerInicio .ventajas {
   list-style: none;
   padding: 0;
   margin: 0 0 22px 0;
@@ -96,13 +97,13 @@ body {
   gap: 18px;
 }
 
-.containerIndex .ventajas li {
+.containerInicio .ventajas li {
   background: rgba(255,255,255,0.10);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   padding: 14px 22px;
   font-size: 1.08em;
-  color: #ffe082;
+  color: var(--color-amarillo);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -110,18 +111,18 @@ body {
   border: 1px solid rgba(255,255,255,0.13);
 }
 
-.containerIndex .ventajas i {
+.containerInicio .ventajas i {
   font-size: 1.3em;
-  color: #FBC02D;
+  color: var(--color-amarillo);
 }
 
-.containerIndex .progreso {
+.containerInicio .progreso {
   margin-top: 18px;
 }
 
-.containerIndex .badge {
-  background: #FBC02D;
-  color: #212121;
+.containerInicio .badge {
+  background: var(--color-amarillo);
+  color: var(--color-texto);
   padding: 7px 18px;
   border-radius: 20px;
   font-weight: bold;
@@ -131,11 +132,11 @@ body {
 }
 
 @media (max-width: 700px) {
-  .containerIndex {
+  .containerInicio {
     padding: 18px 6px 18px 6px;
     min-height: 320px;
   }
-  .containerIndex .ventajas {
+  .containerInicio .ventajas {
     flex-direction: column;
     gap: 10px;
   }
@@ -203,15 +204,18 @@ body {
 
 .app-container {
   display: flex;
+  flex-direction: row;
   min-height: 100vh;
   width: 100%;
   background-color: var(--color-fondo);
   font-family: var(--fuente-principal);
+  overflow: hidden; /* Evita el scroll horizontal */
+
 }
 
 /* === SIDEBAR FUSIONADA === */
-#sidebar{
-  width: 65px; /* ancho solo iconos */
+/*.sidebar{
+  width: 65px; /* ancho solo iconos 
   height: 100vh;
   background: var(--color-verde-form, #00897B);
   color: #fff;
@@ -221,126 +225,110 @@ body {
   display: flex;
   flex-direction: column;
 }
+*/
 
-.sidebar--collapsed {
+/* .sidebar--collapsed {
   width: 65px;
-}
+} */
 
-.sidebar--expanded {
+/* .sidebar--expanded {
   width: 250px;
+} */
+
+
+/* --- SIDEBAR RETRAÍDO Y EXPANDIBLE --- */
+.sidebar {
+  position: fixed;
+  margin-top: 0;
+  left: 0;
+  width: 65px; /* retraído: solo iconos */
+  height: 100vh;
+  background: var(--color-verde-form);
+  color: #fff;
+  padding-top: 60px;
+  z-index: 1000;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  /* transition: width 0.3s cubic-bezier(.4,2,.6,1); */
 }
 
 
-
-
-#sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 48px; /* ancho solo iconos */
-    height: 100vh;
-    background: var(--color-verde-form, #00897B);
-    color: #fff;
-    overflow: hidden;
-    z-index: 100;
-    transition: width 0.3s ease;
-    display: flex;
-    flex-direction: column;
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 8px;
+  width: 120%;
 }
 
-#sidebar:hover {
-  width: 290px;
-  overflow-y: auto;
+.sidebar nav ul li {
+  margin: 20px 0;
+  width: 80%;
 }
 
-/* SIEMPRE muestra los iconos, solo oculta el texto cuando está retraído */
-
-
-#sidebar ul li a {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-    overflow: hidden; /* Oculta el texto que no cabe */
-    transition: color 0.2s;
+.sidebar nav ul li a {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 1rem;
+  padding: 5px 6px;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
-#sidebar ul li a:hover {
-    color: #FBC02D;
-}
-
-#sidebar:not(:hover) ul li a span,
-#sidebar:not(:hover) ul li a:not(:has(i)) {
-  display: none; /* Oculta el texto cuando no hay hover */
-}
-
-/* Los iconos siempre visibles */
-#sidebar ul li a i#sidebar ul li a i {
+.sidebar nav ul li a .material-icons {
+  font-size: 1.7rem;
   min-width: 24px;
   text-align: center;
-  font-size: 1.2em;
 }
 
-#sidebar nav {
-  position: relative;
-  height: 100%;
-  width: 100%;
+/* Oculta el texto de los enlaces cuando está retraído */
+.sidebar:not(:hover) nav ul li a span{
+ 
+  transition: display 0.2s;
 }
 
-#sidebar nav ul {
-    padding: 0;
-    margin: 0;
-    list-style: none;
+/* Expande el sidebar al hacer hover y muestra el texto */
+.sidebar:hover {
+  min-width: none;
+  width: 290px;
+  transition: width 0.3s cubic-bezier(.4,2,.6,1);
 }
 
-#sidebar nav ul li {
-    padding: 15px 20px;
-    transition: background 0.2s;
-}
-
-#sidebar nav ul li:hover {
-    background: #1a2230;
-}
-
-#sidebar nav ul li a {
-    color: #fff;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.material-icons {
-  font-size: 20px;
-  vertical-align: middle;
-  margin-right: 8px;
-  font-family: 'Material Icons';
+.sidebar:hover nav ul li a span {
+  display: inline;
 }
 
 /* Ajusta el contenido principal para dejar espacio al sidebar */
 .main-content {
-  margin-left: 140px;
-  padding: 30px;
-  transition: margin-left 0.3s ease;
+  margin-left: 65px;
+  transition: margin-left 0.3s cubic-bezier(.4,2,.6,1);
 }
 
-#sidebar:hover ~ .main-content {
-  margin-left: 290px;
+.sidebar:hover ~ .main-content {
+  margin-left: 6px;
 }
 
 /* Responsive: Sidebar ocupa toda la pantalla en móviles */
 @media (max-width: 700px) {
-  #sidebar {
+  .sidebar,
+  .sidebar:hover {
     width: 100vw;
     height: auto;
     position: relative;
     min-height: unset;
     z-index: 200;
   }
-  #sidebar:hover {
-    width: 100vw;
+  .main-content,
+  .sidebar:hover ~ .main-content {
+    margin-left: 0;
   }
-  
 }
 
 /* === TITULOS === */

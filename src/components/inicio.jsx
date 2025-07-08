@@ -6,7 +6,7 @@ const Inicio = () => {
      
 
       {/* Contenido principal */}
-      <div className="containerIndex main-content">
+      <div className="containerInicio main-content">
         <div className="bienvenida">
           <h1>Bienvenido al Sistema de Gestión de Albergues</h1>
           <br />
