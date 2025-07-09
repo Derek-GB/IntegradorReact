@@ -1,10 +1,10 @@
 import React from 'react';
-import Carnes from './carne';
-import Proteinas from './proteinas';
-import Verduras from './verduras';
-import Olores from './olores';
-import Abarrotes from './abarrotes';
-import Limpieza from './limpieza';
+import Carnes from './Carne';
+import Proteinas from './Proteinas';
+import Verduras from './Verduras';
+import Olores from './Olores';
+import Abarrotes from './Abarrotes';
+import Limpieza from './Limpieza';
 import { AbastecimientoProvider } from '../context/contextoAbastecimiento';
 import { BrowserRouter } from 'react-router-dom'; 
 import '../styles/formAbasteci.css';
