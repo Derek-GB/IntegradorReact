@@ -49,9 +49,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-  
-    
-    
+
+
 }
 
 .containerInicio {
@@ -181,30 +180,171 @@ body {
   
     
 }
+/* Form de PreFormulario */
 
-.formPreContainer {
+.formPreFormulario {
     display: flex;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80%;
+    width: 50%;
     flex-direction: column;
     max-width: 100%;
     height: fit-content;
     margin: 0px auto;
-    text-align: center;
+    text-align: left;
     background-color: var(--color-fondo);
     color: black;
     border-radius: 10px;
 }
 
-.formPreContainer details {
+.formPreFormulario details {
     margin-bottom: 20px;
     background-color: var(--color-blanco);
     border-radius: 8px;
     padding: 15px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+
+/* Alternativamente, para desactivar solo la acción de expandir/cerrar pero mantener el estilo: */
+.formPreFormulario details summary {
+  text-align: center;
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Deshabilita el ::before y la animación de flecha en summary */
+.formPreFormulario details summary::before {
+  content: none !important;
+}
+
+.formPreFormulario details summary strong{
+  color: var(--color-blanco);
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 6px;
+  text-align: center;
+  font-family: var(--fuente-principal);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.formPreFormulario details fieldset{
+  border: none;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--color-blanco);
+  display: flex;
+  flex-direction: row;
+  
+}
+
+.formPreFormulario details fieldset label {
+  width: 20%;
+  font-size: 1.2rem;
+  color: var(--color-texto);
+  text-align: center;
+  font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+.formPreFormulario details fieldset select{
+  width: 25%;
+  height: 40px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 10px;
+  margin-right: 15px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+.formPreFormulario details fieldset select:focus {
+  outline: none;
+  border-color: var(--color-verde-form);
+}
+.formPreFormulario details fieldset input[type="number"]{
+  width: 25%;
+  height: 40px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 10px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+#registroSuministrosField {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+#registroSuministrosField label  {
+  text-align: center;
+  font-weight: bold;
+  color: var(--color-texto);
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+#registroSuministrosField input[type="text"]{
+  width: 100%;
+  height: 90px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 10px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+#registroSuministros1,
+#registroSuministros2 {
+ display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 20px;
+  justify-content: center;
+  justify-content: space-around;
+}
+#registroSuministros1 label,#registroSuministros2 label{
+  width: 20%;
+  font-size: 1.2rem;
+  
+  font-family: var(--fuente-principal);
+  color: var(--color-texto);
+  text-align: center;
+  font-weight: 700;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+#registroSuministros1 input[type="text"],#registroSuministros1 input[type="number"] {
+  width: 25%;
+  height: 40px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 10px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+#registroSuministros2 select,
+#registroSuministros2 input[type="number"] {
+  width: 25%;
+  height: 40px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 10px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
 }
 
 .listaContainer {
@@ -267,7 +407,7 @@ body {
 .sidebar nav ul li a {
   display: flex;
   align-items: center;
-
+  width: 247px;
   font-size: 1rem;
   padding: 5px 6px;
   color: #fff;

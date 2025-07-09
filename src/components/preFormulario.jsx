@@ -34,13 +34,11 @@ const PreFormulario = () => {
     
     <div className="preContainer main-content">
 
-      
-
-      <form className='formPreContainer'>
+      <form className='formPreFormulario'>
         <details open>
           <summary><strong>Información del Evento</strong></summary>
           <fieldset className="mt-2">
-            <label>Tipo de Evento o Emergencia:</label>
+            <label>Evento o Emergencia:</label>
             <select className="form-control mb-2" value={evento} onChange={e => setEvento(e.target.value)}>
               <option value="">Seleccione una opción</option>
               <option value="inundacion">Inundación</option>
@@ -49,7 +47,7 @@ const PreFormulario = () => {
               <option value="deslizamiento">Deslizamiento</option>
             </select>
 
-            <label>Cantidad de Integrantes Adicionales:</label>
+            <label>Cantidad de Integrantes:</label>
             <input
               type="number"
               className="form-control mb-2"
