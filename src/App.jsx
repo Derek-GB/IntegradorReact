@@ -1,50 +1,50 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Inicio from './components/inicio.jsx';
-import Sidebar from './components/sidebar.jsx';
-import PreFormulario from './components/preFormulario.jsx';
-import RegistroSuministros from './components/registroSuministros.jsx';
-import AsignacionRecursos from './components/asignacionRecursos.jsx';
-import BusquedaAlbergue from './components/busquedaAlbergue.jsx';
-import AyudaForm from './components/ayudaForm.jsx';
-import RegistrarProducto from './components/registrarProducto.jsx';
-import RegistroAlbergue from './components/registroAlbergue.jsx';
-import RegistroUsuario from './components/registroUsuario.jsx';
-import ListaProducto from './components/listaProducto.jsx';
-import ListaAlbergue from './components/listaAlbergue.jsx';
-import FormularioAbastecimiento from './components/formularioAbarrotes.jsx'; // <--- nombre correcto
+import Inicio from './components/Inicio.jsx';
+import Sidebar from './components/Sidebar.jsx';
+import PreFormulario from './components/PreFormulario.jsx';
+import RegistroSuministros from './components/RegistroSuministros.jsx';
+import AsignacionRecursos from './components/AsignacionRecursos.jsx';
+import BusquedaAlbergue from './components/BusquedaAlbergue.jsx';
+import AyudaForm from './components/AyudaForm.jsx';
+import RegistrarProducto from './components/RegistrarProducto.jsx';
+import RegistroAlbergue from './components/RegistroAlbergue.jsx';
+import RegistroUsuario from './components/RegistroUsuario.jsx';
+import ListaProducto from './components/ListaProducto.jsx';
+import ListaAlbergue from './components/ListaAlbergue.jsx';
+import FormularioAbastecimiento from './components/FormularioAbarrotes.jsx'; // <--- nombre correcto
+import Login from './components/Login.jsx'; // Asegúrate de importar tu componente Login
 
 import './styles/formularioFusionado.css';
 
 const App = () => {
   return (
     <>
-    <div className="app-container">
-      <Sidebar />
-      <div className="container main-content">
-        <Routes>
-          <Route path="/" element={<Inicio />} />
-          <Route path="/inicio.jsx" element={<Inicio />} />
-          <Route path="/preFormulario.jsx" element={<PreFormulario />} />
-          <Route path="/registroSuministros.jsx" element={<RegistroSuministros />} />
-          <Route path="/asignacionRecursos.jsx" element={<AsignacionRecursos />} />
-          <Route path="/busquedaAlbergue.jsx" element={<BusquedaAlbergue />} />
-          <Route path="/ayudaForm.jsx" element={<AyudaForm />} />
-          <Route path="/registrarProducto.jsx" element={<RegistrarProducto />} />
-          <Route path="/registroAlbergue.jsx" element={<RegistroAlbergue />} />
-          <Route path="/registroUsuario.jsx" element={<RegistroUsuario />} />
-          <Route path="/listaProducto.jsx" element={<ListaProducto />} />
-          <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
-          <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
-        </Routes>
-
-         
+      <div className="app-container">
+        {/* El Sidebar solo se mostrará si la ruta no es "/". */}
+        <Sidebar />
+        <div className="container main-content">
+          <Routes>
+            <Route path="/" element={<Login />} /> {/* Cambia la ruta para que muestre el Login */}
+            <Route path="/inicio" element={<Inicio />} />
+            <Route path="/preFormulario" element={<PreFormulario />} />
+            <Route path="/registroSuministros" element={<RegistroSuministros />} />
+            <Route path="/asignacionRecursos" element={<AsignacionRecursos />} />
+            <Route path="/busquedaAlbergue" element={<BusquedaAlbergue />} />
+            <Route path="/ayudaForm" element={<AyudaForm />} />
+            <Route path="/registrarProducto" element={<RegistrarProducto />} />
+            <Route path="/registroAlbergue" element={<RegistroAlbergue />} />
+            <Route path="/registroUsuario" element={<RegistroUsuario />} />
+            <Route path="/listaProducto" element={<ListaProducto />} />
+            <Route path="/listaAlbergue" element={<ListaAlbergue />} />
+            <Route path="/formularioAbarrotes" element={<FormularioAbastecimiento />} />
+          </Routes>
+        </div>
       </div>
-    </div>
-    <footer>
+      <footer>
         <p>© 2025 Integrador I - Todos los derechos reservados.</p>
       </footer>
-    </>   
+    </>
   );
 };
 
