@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Inicio from './components/Inicio.jsx';
 import Sidebar from './components/Sidebar.jsx';
 import PreFormulario from './components/PreFormulario.jsx';
@@ -12,20 +12,26 @@ import RegistroAlbergue from './components/RegistroAlbergue.jsx';
 import RegistroUsuario from './components/RegistroUsuario.jsx';
 import ListaProducto from './components/ListaProducto.jsx';
 import ListaAlbergue from './components/ListaAlbergue.jsx';
-import FormularioAbastecimiento from './components/FormularioAbarrotes.jsx'; // <--- nombre correcto
-import Login from './components/Login.jsx'; // Asegúrate de importar tu componente Login
+import FormularioAbastecimiento from './components/FormularioAbarrotes.jsx';
+import Login from './components/Login.jsx';
 
 import './styles/formularioFusionado.css';
 
 const App = () => {
+  const location = useLocation();
+
+  // Verifica si la ruta actual es "/"
+  const isLogin = location.pathname === '/';
+
   return (
     <>
       <div className="app-container">
-        {/* El Sidebar solo se mostrará si la ruta no es "/". */}
-        <Sidebar />
+        {/* Solo muestra el Sidebar si NO estás en Login */}
+        {!isLogin && <Sidebar />}
+
         <div className="container main-content">
           <Routes>
-            <Route path="/" element={<Login />} /> {/* Cambia la ruta para que muestre el Login */}
+            <Route path="/" element={<Login />} />
             <Route path="/inicio" element={<Inicio />} />
             <Route path="/preFormulario" element={<PreFormulario />} />
             <Route path="/registroSuministros" element={<RegistroSuministros />} />
