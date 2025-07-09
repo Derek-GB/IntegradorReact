@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const login = async (email, password) => {
+const login = async (correo, contrasena) => {
   try {
     const res = await axios.post("https://apiintegrador-production-8ef8.up.railway.app/api/auth/login", {
-      email,
-      password,
+      correo,
+      contrasena,
     });
 
     const { token } = res.data;
