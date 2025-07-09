@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import './formulario.css'; // Asegúrate de tener este archivo con tus estilos
+import authHelper from '../helpers/sesion'; // Asegúrate de importar correctamente tu helper
 
 const Login = () => {
   const [usuario, setUsuario] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!usuario || !contrasena) {
@@ -14,13 +15,15 @@ const Login = () => {
       return;
     }
 
-    // Aquí va tu lógica real de autenticación. Ejemplo:
-    console.log('Usuario:', usuario);
-    console.log('Contraseña:', contrasena);
-    setError('');
+    try {
+      await authHelper.login(usuario, contrasena); // Llama a la función de login
+      setError(''); // Limpia el error si la autenticación es exitosa
 
-    // Simulación de redirección (React Router o window.location)
-    window.location.href = 'inicio.html';
+      // Redirige a la página de inicio después de iniciar sesión
+      window.location.href = 'inicio.html';
+    } catch (err) {
+      setError(`Error al iniciar sesión: ${err.message}`); // Manejo de errores
+    }
   };
 
   return (
@@ -60,4 +63,3 @@ const Login = () => {
 };
 
 export default Login;
-
