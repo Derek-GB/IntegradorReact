@@ -1,7 +1,8 @@
 import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import Inicio from './components/Inicio.jsx';
 import Sidebar from './components/Sidebar.jsx';
+import Login from './components/Login.jsx';
+import Inicio from './components/Inicio.jsx';
 import PreFormulario from './components/PreFormulario.jsx';
 import RegistroSuministros from './components/RegistroSuministros.jsx';
 import AsignacionRecursos from './components/AsignacionRecursos.jsx';
@@ -13,38 +14,34 @@ import RegistroUsuario from './components/RegistroUsuario.jsx';
 import ListaProducto from './components/ListaProducto.jsx';
 import ListaAlbergue from './components/ListaAlbergue.jsx';
 import FormularioAbastecimiento from './components/FormularioAbarrotes.jsx';
-import Login from './components/Login.jsx';
 
 import './styles/formularioFusionado.css';
 
 const App = () => {
   const location = useLocation();
-
-  // Verifica si la ruta actual es "/"
   const isLogin = location.pathname === '/';
 
   return (
     <>
       <div className="app-container">
-        {/* Solo muestra el Sidebar si NO estás en Login */}
         {!isLogin && <Sidebar />}
-
         <div className="container main-content">
           <Routes>
             <Route path="/" element={<Login />} />
-            <Route path="/inicio" element={<Inicio />} />
-            <Route path="/preFormulario" element={<PreFormulario />} />
-            <Route path="/registroSuministros" element={<RegistroSuministros />} />
-            <Route path="/asignacionRecursos" element={<AsignacionRecursos />} />
-            <Route path="/busquedaAlbergue" element={<BusquedaAlbergue />} />
-            <Route path="/ayudaForm" element={<AyudaForm />} />
-            <Route path="/registrarProducto" element={<RegistrarProducto />} />
-            <Route path="/registroAlbergue" element={<RegistroAlbergue />} />
-            <Route path="/registroUsuario" element={<RegistroUsuario />} />
-            <Route path="/listaProducto" element={<ListaProducto />} />
-            <Route path="/listaAlbergue" element={<ListaAlbergue />} />
-            <Route path="/formularioAbarrotes" element={<FormularioAbastecimiento />} />
+            <Route path="/inicio.jsx" element={<Inicio />} />
+            <Route path="/preFormulario.jsx" element={<PreFormulario />} />
+            <Route path="/registroSuministros.jsx" element={<RegistroSuministros />} />
+            <Route path="/asignacionRecursos.jsx" element={<AsignacionRecursos />} />
+            <Route path="/busquedaAlbergue.jsx" element={<BusquedaAlbergue />} />
+            <Route path="/ayudaForm.jsx" element={<AyudaForm />} />
+            <Route path="/registrarProducto.jsx" element={<RegistrarProducto />} />
+            <Route path="/registroAlbergue.jsx" element={<RegistroAlbergue />} />
+            <Route path="/registroUsuario.jsx" element={<RegistroUsuario />} />
+            <Route path="/listaProducto.jsx" element={<ListaProducto />} />
+            <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
+            <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
           </Routes>
+
         </div>
       </div>
       <footer>
