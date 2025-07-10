@@ -1,6 +1,6 @@
 import React from 'react';
 
-const resultadoAlbergue = ({ resultado }) => {
+const ResultadoAlbergue = ({ resultado }) => {
   return (
     <div className="albergue-resultado espaciado-texto">
       <h2>Resultado</h2>
@@ -15,4 +15,4 @@ const resultadoAlbergue = ({ resultado }) => {
   );
 };
 
-export default resultadoAlbergue;
+export default ResultadoAlbergue;
