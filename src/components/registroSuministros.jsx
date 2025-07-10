@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import '../styles/formulario.css';
 import '../styles/indexx.css';
 
 const RegistroSuministros = () => {
+  const navigate = useNavigate(); 
+
   const [form, setForm] = useState({
     nombre: '',
     descripcionProducto: '',

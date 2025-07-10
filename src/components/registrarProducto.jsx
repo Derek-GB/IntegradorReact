@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/formulario.css';
 import '../styles/indexx.css';
 
-const registrarProducto = () => {
+const RegistrarProducto = () => {
   const [form, setForm] = useState({
     codigo: '',
     descripcion: '',
@@ -107,4 +107,4 @@ const registrarProducto = () => {
   );
 };
 
-export default registrarProducto;
+export default RegistrarProducto;

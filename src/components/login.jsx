@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import './formulario.css'; // Asegúrate de tener este archivo con tus estilos
+import { useNavigate } from 'react-router-dom'; // Importa useNavigate
+import '../styles/formulario.css'; // Asegúrate de tener este archivo con tus estilos
+import authHelper from '../helpers/sesion'; // Asegúrate de importar correctamente tu helper
 
 const Login = () => {
   const [usuario, setUsuario] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate(); // Inicializa useNavigate
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!usuario || !contrasena) {
@@ -14,13 +17,15 @@ const Login = () => {
       return;
     }
 
-    // Aquí va tu lógica real de autenticación. Ejemplo:
-    console.log('Usuario:', usuario);
-    console.log('Contraseña:', contrasena);
-    setError('');
+    try {
+      await authHelper.login(usuario, contrasena); // Llama a la función de login
+      setError(''); // Limpia el error si la autenticación es exitosa
 
-    // Simulación de redirección (React Router o window.location)
-    window.location.href = 'inicio.html';
+      // Redirige a la página de inicio después de iniciar sesión
+      navigate('/inicio'); // Cambia a la ruta de inicio
+    } catch {
+      setError('Error al iniciar sesión. Verifica tus credenciales.'); // Manejo de errores
+    }
   };
 
   return (
@@ -60,4 +65,3 @@ const Login = () => {
 };
 
 export default Login;
-
