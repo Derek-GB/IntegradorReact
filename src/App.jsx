@@ -28,7 +28,7 @@ const App = () => {
         <div className="container main-content">
           <Routes>
             <Route path="/" element={<Login />} />
-            <Route path="/inicio.jsx" element={<Inicio />} />
+            <Route path="/inicio" element={<Inicio />} />
             <Route path="/preFormulario.jsx" element={<PreFormulario />} />
             <Route path="/registroSuministros.jsx" element={<RegistroSuministros />} />
             <Route path="/asignacionRecursos.jsx" element={<AsignacionRecursos />} />

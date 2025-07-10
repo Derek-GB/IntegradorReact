@@ -9,12 +9,23 @@ const ListaProducto = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('https://apiintegrador-production-8ef8.up.railway.app/api/Productos/all')
-      .then(res => {
+    const fetchProductos = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const res = await axios.get('https://apiintegrador-production-8ef8.up.railway.app/api/Productos/all', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = Array.isArray(res.data) ? res.data : res.data.data || [];
         setProductos(data);
-      })
-      .catch(err => console.error('Error al cargar productos:', err));
+      } catch (err) {
+        console.error('Error al cargar productos:', err);
+        alert('Error al cargar productos. Verifica si tu sesión expiró.');
+      }
+    };
+
+    fetchProductos();
   }, []);
 
   useEffect(() => {
@@ -29,7 +40,16 @@ const ListaProducto = () => {
 
   const actualizarProducto = async () => {
     try {
-      await axios.put(`https://apiintegrador-production-8ef8.up.railway.app/api/Productos/id/${form.id}`, form);
+      const token = localStorage.getItem('token');
+      await axios.put(
+        `https://apiintegrador-production-8ef8.up.railway.app/api/Productos/id/${form.id}`,
+        form,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       alert("Producto actualizado con éxito.");
     } catch (error) {
       console.error("Error al actualizar:", error);
@@ -40,7 +60,15 @@ const ListaProducto = () => {
   const eliminarProducto = async () => {
     if (!window.confirm("¿Seguro que deseas eliminar este producto?")) return;
     try {
-      await axios.delete(`https://apiintegrador-production-8ef8.up.railway.app/api/Productos/id/${form.id}`);
+      const token = localStorage.getItem('token');
+      await axios.delete(
+        `https://apiintegrador-production-8ef8.up.railway.app/api/Productos/id/${form.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       alert("Producto eliminado con éxito.");
       window.location.reload();
     } catch (error) {
