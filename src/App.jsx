@@ -12,7 +12,8 @@ import RegistroAlbergue from './components/registroAlbergue.jsx';
 import RegistroUsuario from './components/registroUsuario.jsx';
 import ListaProducto from './components/listaProducto.jsx';
 import ListaAlbergue from './components/listaAlbergue.jsx';
-import FormularioAbastecimiento from './components/formularioAbarrotes.jsx'; // <--- nombre correcto
+import FormularioAbastecimiento from './components/formularioAbarrotes.jsx'; 
+import AjusteInventario from "./components/ajusteInventario";// <--- nombre correcto
 
 import './styles/formularioFusionado.css';
 
@@ -36,6 +37,7 @@ const App = () => {
           <Route path="/listaProducto.jsx" element={<ListaProducto />} />
           <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
           <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
+          <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
         </Routes>
 
          
