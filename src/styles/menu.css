@@ -1,0 +1,352 @@
+/* Variables para colores */
+:root {
+  --color-fondo: #f3f4f6;
+  --color-blanco: #fff;
+  --color-amarillo: #f9b700;
+  --color-amarillo-hover: #f0a500;
+  --color-verde: #059669;
+  --color-verde-oscuro: #00796B;
+  --color-gris-borde: #ccc;
+  --color-gris-claro: #f8f9fa;
+  --color-texto: #212529;
+  --color-verde-form: #00897B;
+}
+
+/* --- Reset y body --- */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  font-size: 18px;
+  line-height: 1.6;
+  letter-spacing: 0.05em;
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background-color: var(--color-verde-form);
+  color: var(--color-blanco);
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.nav li {
+  padding: 14px 20px;
+}
+
+.nav li a {
+  color: var(--color-blanco);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+}
+
+.nav li a.active,
+.nav li a:hover {
+  background-color: var(--color-verde-oscuro);
+  border-radius: 6px;
+}
+
+.material-icons {
+  font-size: 20px;
+  vertical-align: middle;
+}
+
+/* Contenedor general (header + main) */
+.content-area {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+/* Header */
+.top-header {
+  background-color: #00897B;
+  color: white;
+  padding: 20px 40px;
+  position: relative; 
+  display: flex;
+  align-items: center;
+}
+
+.top-header h1 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.back-button {
+  background-color: #fdd835;
+  color: black;
+  border-radius: 5px;
+  padding: 6px 8px;
+  text-decoration: none;
+  font-weight: bold;
+  /* Mantener en el flujo normal (a la derecha) */
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+.back-button .material-icons {
+  vertical-align: middle;
+  font-size: 24px;
+}
+
+/* Área principal con el formulario centrado */
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem 1rem 3rem;
+  background-color: var(--color-fondo);
+  overflow-y: auto;
+}
+
+/* Formulario centrado y con max-width */
+#formularioAbarrotes {
+  width: 100%;
+  max-width: 600px;
+  background-color: #FAFAFA;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Titulos centrados */
+h1, h2 {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+/* H2 con fondo verde y texto blanco */
+h2 {
+  background-color: var(--color-verde-form);
+  color: var(--color-blanco);
+  padding: 2rem 1rem;
+  border-radius: 8px;
+}
+
+/* Tarjetas blancas con sombra */
+.card {
+  max-width: 700px; /* antes 600px o menos */
+  width: 90%;       /* para que se adapte bien en pantallas chicas */
+  margin: 0 auto;   /* centrado horizontal */
+  background-color: var(--color-blanco);
+  padding: 20px;
+  margin-bottom: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+
+/* Formularios */
+form {
+  margin: 0; /* Lo controlamos en #formularioAbarrotes */
+}
+
+/* Etiquetas */
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+/* Inputs, selects, textarea */
+input, select, textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--color-verde-form);
+}
+
+/* Botones */
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #f9b700 !important;
+  background-color: var(--color-amarillo);
+  color: var(--color-blanco);
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 12px;
+}
+
+button:hover {
+  background-color: var(--color-amarillo-hover);
+}
+
+/* Tablas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background-color: #f9fafb;
+  font-weight: bold;
+}
+
+/* Enlaces dentro de tarjeta */
+.card a {
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Detalles/Accordion */
+details {
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+details summary {
+  background-color: var(--color-verde-form);
+  color: var(--color-blanco);
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+details summary:hover {
+  background-color: var(--color-verde-oscuro);
+}
+
+details[open] summary {
+  border-bottom: 1px solid var(--color-gris-borde);
+}
+
+details > *:not(summary) {
+  padding: 10px;
+  background-color: var(--color-gris-claro);
+}
+
+/* Grid para lista de abarrotes */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+/* Items abarrotes con label flex */
+.abarrote-item label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--color-gris-borde);
+  background-color: var(--color-blanco);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.abarrote-item label:hover {
+  background-color: #e0f7fa;
+}
+
+.abarrote-item label input[type="checkbox"] {
+  order: 2;
+  cursor: pointer;
+}
+
+.abarrote-item label span {
+  order: 1;
+}
+
+/* Detalle (cantidad + unidad) dentro item */
+.abarrote-item .detalle {
+  display: flex;
+  gap: 10px;
+  margin-left: 10px;
+  margin-top: 6px;
+}
+
+.abarrote-item .detalle input[type="number"],
+.abarrote-item .detalle select {
+  width: 50%;
+  padding: 6px 10px;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.abarrote-item .detalle input[type="number"]:focus,
+.abarrote-item .detalle select:focus {
+  outline: none;
+  border-color: var(--color-verde-form);
+}
+
+.boton-resumen-final {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.boton-resumen-final a button {
+  width: auto;
+  padding: 10px 24px;
+  font-size: 16px;
+  background-color: var(--color-amarillo);
+  color: var(--color-blanco);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.boton-resumen-final a button:hover {
+  background-color: var(--color-amarillo-hover);
+}
+
+

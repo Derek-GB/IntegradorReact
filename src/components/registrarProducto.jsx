@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../styles/formularioFusionado.css'
+import '../styles/formulario.css';
+import '../styles/indexx.css';
 
 const registrarProducto = () => {
   const [form, setForm] = useState({

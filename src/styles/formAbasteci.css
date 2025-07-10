@@ -1,0 +1,869 @@
+/* Variables para colores */
+:root {
+  --color-fondo: #f3f4f6;
+  --color-blanco: #fff;
+  --color-amarillo: #f9b700;
+  --color-amarillo-hover: #f0a500;
+  --color-verde: #059669;
+  --color-verde-oscuro: #00796B;
+  --color-gris-borde: #ccc;
+  --color-gris-claro: #f8f9fa;
+  --color-texto: #212529;
+  --color-verde-form: #00897B;
+}
+
+/* --- Reset y body --- */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  font-size: 18px;
+  line-height: 1.6;
+  letter-spacing: 0.05em;
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background-color: var(--color-verde-form);
+  color: var(--color-blanco);
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.nav li {
+  padding: 14px 20px;
+}
+
+.nav li a {
+  color: var(--color-blanco);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+}
+
+.nav li a.active,
+.nav li a:hover {
+  background-color: var(--color-verde-oscuro);
+  border-radius: 6px;
+}
+
+.material-icons {
+  font-size: 20px;
+  vertical-align: middle;
+}
+
+/* Contenedor general (header + main) */
+.content-area {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+/* Header */
+.top-header {
+  background-color: #00897B;
+  color: white;
+  padding: 20px 40px;
+  position: relative; 
+  display: flex;
+  align-items: center;
+}
+
+.top-header h1 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.back-button {
+  background-color: #fdd835;
+  color: black;
+  border-radius: 5px;
+  padding: 6px 8px;
+  text-decoration: none;
+  font-weight: bold;
+  /* Mantener en el flujo normal (a la derecha) */
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+.back-button .material-icons {
+  vertical-align: middle;
+  font-size: 24px;
+}
+
+/* Área principal con el formulario centrado */
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem 1rem 3rem;
+  background-color: var(--color-fondo);
+  overflow-y: auto;
+}
+
+/* Formulario centrado y con max-width */
+#formularioAbarrotes {
+  width: 100%;
+  max-width: 600px;
+  background-color: #FAFAFA;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Titulos centrados */
+h1, h2 {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+/* H2 con fondo verde y texto blanco */
+h2 {
+  background-color: var(--color-verde-form);
+  color: var(--color-blanco);
+  padding: 2rem 1rem;
+  border-radius: 8px;
+}
+
+/* Tarjetas blancas con sombra */
+.card {
+  background-color: var(--color-blanco);
+  padding: 20px;
+  margin-bottom: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Formularios */
+form {
+  margin: 0; /* Lo controlamos en #formularioAbarrotes */
+}
+
+/* Etiquetas */
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+/* Inputs, selects, textarea */
+input, select, textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--color-verde-form);
+}
+
+/* Botones */
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--color-amarillo);
+  color: var(--color-blanco);
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 12px;
+}
+
+button:hover {
+  background-color: var(--color-amarillo-hover);
+}
+
+/* Tablas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background-color: #f9fafb;
+  font-weight: bold;
+}
+
+/* Enlaces dentro de tarjeta */
+.card a {
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Detalles/Accordion */
+details {
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+details summary {
+  background-color: var(--color-verde-form);
+  color: var(--color-blanco);
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+details summary:hover {
+  background-color: var(--color-verde-oscuro);
+}
+
+details[open] summary {
+  border-bottom: 1px solid var(--color-gris-borde);
+}
+
+details > *:not(summary) {
+  padding: 10px;
+  background-color: var(--color-gris-claro);
+}
+
+/* Grid para lista de abarrotes */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+/* Items abarrotes con label flex */
+.abarrote-item label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--color-gris-borde);
+  background-color: var(--color-blanco);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.abarrote-item label:hover {
+  background-color: #FAFAFA;
+}
+
+.abarrote-item label input[type="checkbox"] {
+  order: 2;
+  cursor: pointer;
+}
+
+.abarrote-item label span {
+  order: 1;
+}
+
+/* Detalle (cantidad + unidad) dentro item */
+.abarrote-item .detalle {
+  display: flex;
+  gap: 10px;
+  margin-left: 10px;
+  margin-top: 6px;
+}
+
+.abarrote-item .detalle input[type="number"],
+.abarrote-item .detalle select {
+  width: 50%;
+  padding: 6px 10px;
+  font-size: 1rem;
+  border: 1px solid #FAFAFA;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.abarrote-item .detalle input[type="number"]:focus,
+.abarrote-item .detalle select:focus {
+  outline: none;
+  border-color: var(--color-verde-form);
+}
+
+.boton-resumen-final {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.boton-resumen-final a button {
+  width: auto;
+  padding: 10px 24px;
+  font-size: 16px;
+  background-color: var(--color-amarillo);
+  color: var(--color-blanco);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.boton-resumen-final a button:hover {
+  background-color: var(--color-amarillo-hover);
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-contenido {
+  background-color: #FAFAFA;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+}
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #00897B;
+  color: #FAFAFA;
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  display: none;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  animation: fadeInOut 5s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0%   { opacity: 0; bottom: 10px; }
+  10%  { opacity: 1; bottom: 20px; }
+  90%  { opacity: 1; bottom: 20px; }
+  100% { opacity: 0; bottom: 10px; }
+}
+.selector-productos {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.grid-productos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.producto-btn {
+  background-color: #f0f0f0;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+}
+
+.producto-btn:hover {
+  background-color: #d1e7dd;
+  border-color: #0f5132;
+}
+/* Inputs de cantidad ocultos por defecto */
+.cantidad {
+  display: none;
+  width: 70px;
+  margin-left: 10px;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+/* Cuando se muestran */
+.cantidad.mostrar {
+  display: inline-block;
+}
+.cuadro-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 15px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  max-width: 1000px;
+}
+
+.producto {
+  display: flex;
+  flex-direction: column;
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.producto label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.producto input[type="number"] {
+  padding: 5px;
+  font-size: 14px;
+}
+
+.resultado ul {
+  list-style: none;
+  padding-left: 0;
+}
+/* ... (tu CSS existente) ... */
+
+/* Estilos para la sección de Abarrotes (cuadritos más pequeños) */
+.cuadro-grid {
+    display: grid;
+    /* Ajusta minmax para hacer los cuadritos más pequeños. Por ejemplo, de 150px a 200px. */
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Más pequeño que 200px */
+    gap: 15px; /* Espacio entre los cuadritos */
+    padding: 20px;
+    background-color: var(--color-gris-claro);
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.cuadro-grid .producto {
+    background-color: var(--color-blanco);
+    border: 1px solid var(--color-gris-borde);
+    border-radius: 5px;
+    padding: 8px; /* Reduce el padding para hacerlos más pequeños */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease-in-out;
+    position: relative; /* Necesario para posicionar el input */
+    font-size: 0.9em; /* Fuente un poco más pequeña para el texto */
+}
+
+.cuadro-grid .producto:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cuadro-grid .producto label {
+    font-weight: normal; /* Para que el texto no sea negrita */
+    cursor: pointer;
+    display: flex; /* Para alinear el checkbox y el texto */
+    align-items: center;
+    margin-bottom: 5px; /* Espacio entre el label y el input */
+    line-height: 1.2; /* Ajusta si el texto es largo y se corta */
+}
+
+.cuadro-grid .producto input[type="checkbox"] {
+    margin-right: 8px; /* Espacio entre el checkbox y el texto */
+    transform: scale(0.9); /* Hace el checkbox un poco más pequeño */
+}
+
+.cuadro-grid .producto .cantidad {
+    width: calc(100% - 16px); /* Ajusta el ancho */
+    padding: 5px; /* Reduce el padding del input */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 5px; /* Espacio superior */
+    font-size: 0.85em; /* Fuente más pequeña */
+    text-align: center;
+}
+
+
+/* Estilos para la sección de Limpieza (orden vertical, cuadritos más pequeños, y nueva lógica) */
+#productosLimpiezaDisponibles {
+    display: flex;
+    flex-direction: column; /* Orden vertical */
+    gap: 10px; /* Espacio entre los elementos */
+    padding: 15px;
+    background-color: var(--color-gris-claro);
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.producto-limpieza-item {
+    background-color: var(--color-blanco);
+    border: 1px solid var(--color-gris-borde);
+    border-radius: 5px;
+    padding: 8px 12px; /* Padding más pequeño */
+    display: flex;
+    align-items: center; /* Centra verticalmente contenido */
+    justify-content: space-between; /* Espacio entre label, input y botón */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Transición para cuando desaparece */
+    font-size: 0.9em; /* Fuente un poco más pequeña */
+}
+
+/* Ocultar el elemento del formulario cuando se selecciona (animación) */
+.producto-limpieza-item.oculto-en-lista {
+    transform: translateY(10px); /* Pequeño movimiento antes de desaparecer */
+    opacity: 0;
+    height: 0;
+    padding: 0 12px; /* Mantén el padding horizontal si quieres la misma anchura durante la transición */
+    margin: 0;
+    border: none;
+    pointer-events: none; /* Deshabilita interacciones */
+}
+
+
+.producto-limpieza-item label {
+    flex-grow: 1; /* Permite que el label ocupe el espacio restante */
+    margin-right: 10px; /* Espacio entre el label y el input/botón */
+    font-weight: normal;
+}
+
+.producto-limpieza-item .cantidad-limpieza {
+    width: 70px; /* Ancho fijo para el input de cantidad, ajustado */
+    padding: 5px; /* Padding más pequeño */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.8em; /* Fuente más pequeña */
+    text-align: center;
+    margin-right: 10px; /* Espacio antes del botón */
+}
+
+.producto-limpieza-item .btn-seleccionar-limpieza {
+    background-color: var(--color-verde);
+    color: white;
+    border: none;
+    padding: 6px 10px; /* Ajusta el padding del botón */
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85em; /* Fuente del botón */
+}
+
+.producto-limpieza-item .btn-seleccionar-limpieza:hover {
+    background-color: var(--color-verde-oscuro);
+}
+
+/* Estilos para la lista de resumen de productos seleccionados */
+.resultado ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px; /* Espacio superior para la lista de resultados */
+}
+
+.resultado li {
+    background-color: #e9ecef;
+    border: 1px solid #dee2e6;
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9em; /* Fuente para los elementos de la lista */
+}
+
+.resultado li .btn-eliminar-lista {
+    background-color: #dc3545; /* Rojo para eliminar */
+    color: white;
+    border: none;
+    padding: 5px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    margin-left: 10px; /* Espacio a la izquierda del botón */
+}
+
+.resultado li .btn-eliminar-lista:hover {
+    background-color: #c82333;
+}
+/* --- ADAPTACIONES PARA QUE LIMPIEZA SE VEA COMO ABARROTES --- */
+
+/* Estilos para el elemento <summary> dentro de <details> (aplicado a abarrotes y limpieza) */
+/* Usamos el color de tu variable para verde-form */
+details summary {
+    background-color: var(--color-verde-form); /* Usa tu variable */
+    color: var(--color-blanco);
+    padding: 10px; /* Ajustado a tu padding de details summary existente */
+    cursor: pointer;
+    font-weight: bold;
+    user-select: none;
+    transition: background-color 0.3s ease;
+    /* Los estilos para la flecha se mantienen de tu CSS original */
+    list-style: none; /* Elimina la flecha de lista por defecto en algunos navegadores */
+    position: relative; /* Para posicionar el icono de flecha personalizado si se añade */
+}
+
+/* Para agregar la flecha de colapsar/expandir si list-style:none la eliminó */
+details summary::-webkit-details-marker {
+    display: none; /* Oculta la flecha por defecto en Webkit (Chrome, Edge, Safari) */
+}
+
+details summary::before {
+    content: '▼ '; /* Icono de flecha hacia abajo */
+    display: inline-block;
+    width: 1em;
+    margin-right: 0.5em;
+    transition: transform 0.2s; /* Transición para la rotación */
+}
+
+details[open] summary::before {
+    transform: rotate(0deg); /* Flecha hacia abajo cuando está abierto */
+}
+
+details:not([open]) summary::before {
+    transform: rotate(-90deg); /* Flecha girada cuando está cerrado (apuntando a la derecha) */
+}
+
+
+/* Reutilizamos .cuadro-grid para #productosLimpiezaDisponibles */
+/* Esto hará que la sección de Limpieza se vea como la de Abarrotes */
+#productosLimpiezaDisponibles {
+    display: grid;
+    /* Usa el mismo grid-template-columns que .cuadro-grid para consistencia */
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px; /* Mismo gap que .cuadro-grid */
+    padding: 20px; /* Mismo padding que .cuadro-grid */
+    background-color: var(--color-gris-claro); /* Mismo fondo que .cuadro-grid */
+    border-radius: 8px; /* Mismos bordes */
+    margin-top: 15px; /* Mismo margen */
+    /* Asegurarse de que no haya bordes dobles si el details ya tiene uno */
+    border: none; /* Quitamos el borde del #productosLimpiezaDisponibles si el details ya lo tiene */
+}
+
+/* Aplicamos los mismos estilos de tarjeta a los productos de Limpieza */
+/* .producto es la clase común, .producto-limpieza-item es específica */
+#productosLimpiezaDisponibles .producto,
+.producto-limpieza-item { /* Ambas clases apuntan al mismo estilo de tarjeta */
+    background-color: var(--color-blanco);
+    border: 1px solid var(--color-gris-borde);
+    border-radius: 5px;
+    padding: 8px; /* Reduce el padding para hacerlos más pequeños */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinea el contenido a la izquierda como en abarrotes */
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease-in-out;
+    position: relative;
+    font-size: 0.9em; /* Fuente un poco más pequeña */
+}
+
+#productosLimpiezaDisponibles .producto:hover,
+.producto-limpieza-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Ajustes para el label dentro del producto de Limpieza */
+#productosLimpiezaDisponibles .producto label,
+.producto-limpieza-item label {
+    font-weight: normal; /* Para que el texto no sea negrita */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    line-height: 1.2;
+    width: 100%; /* Aseguramos que ocupe todo el ancho */
+}
+
+/* Ajustes para el checkbox dentro del producto de Limpieza */
+#productosLimpiezaDisponibles .producto input[type="checkbox"],
+.producto-limpieza-item input[type="checkbox"] {
+    margin-right: 8px;
+    transform: scale(0.9);
+}
+
+/* Ajustes para el input de cantidad de limpieza */
+#productosLimpiezaDisponibles .producto .cantidad-limpieza,
+.producto-limpieza-item .cantidad-limpieza {
+    width: calc(100% - 16px); /* Ajusta el ancho para que coincida con .cantidad de abarrotes */
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 5px;
+    font-size: 0.85em;
+    text-align: center;
+    box-sizing: border-box; /* Crucial para que el ancho sea correcto */
+}
+
+
+/* Ocultar el elemento del formulario cuando se selecciona (animación) */
+/* Esto se aplicará a los items de limpieza que desaparecen */
+.producto-limpieza-item.oculto-en-lista {
+    transform: translateY(10px);
+    opacity: 0;
+    height: 0;
+    padding-top: 0; /* Aseguramos que el padding se reduzca también */
+    padding-bottom: 0;
+    margin-top: 0; /* Aseguramos que el margen se reduzca también */
+    margin-bottom: 0;
+    border: none;
+    pointer-events: none;
+    overflow: hidden; /* Oculta cualquier contenido que se desborde durante la transición */
+}
+
+/* --- Estilos para las Tablas de Resumen (Abarrotes y Limpieza) --- */
+
+/* Reutiliza los estilos de tu tabla de resumen de carnes */
+table {
+    width: 100%;
+    border-collapse: collapse; /* Elimina el espacio entre celdas */
+    margin-top: 12px;
+    background-color: var(--color-blanco); /* Fondo blanco para la tabla */
+    border-radius: 8px; /* Bordes redondeados para la tabla */
+    overflow: hidden; /* Asegura que los bordes redondeados se vean bien */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra suave para la tabla */
+}
+
+th, td {
+    border: 1px solid var(--color-gris-borde); /* Bordes de celdas usando tu variable */
+    padding: 10px;
+    text-align: center; /* Centra el texto en las celdas */
+    font-size: 0.95em; /* Ajusta el tamaño de fuente si es necesario */
+}
+
+th {
+    background-color: var(--color-gris-claro); /* Fondo para los encabezados */
+    font-weight: bold;
+    color: var(--color-texto); /* Color del texto de los encabezados */
+}
+
+/* Estilo para el botón de eliminar dentro de la tabla */
+.btn-eliminar {
+    background-color: var(--color-amarillo); /* Color de tu botón de eliminar */
+    color: var(--color-blanco);
+    border: none;
+    border-radius: 4px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 0.8em; /* Tamaño de fuente más pequeño para el botón */
+    transition: background-color 0.3s ease;
+}
+
+.btn-eliminar:hover {
+    background-color: var(--color-amarillo-hover); /* Color al pasar el ratón */
+}
+
+
+
+
+.resultado ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.resultado li {
+    background-color: #e9ecef;
+    border: 1px solid #dee2e6;
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9em;
+    line-height: 1.4;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+*/
+
+
+/* Tus estilos de .cuadro-grid (para abarrotes, olores, limpieza) */
+.cuadro-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    background-color: var(--color-gris-claro);
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.cuadro-grid .producto {
+    background-color: var(--color-blanco);
+    border: 1px solid var(--color-gris-borde);
+    border-radius: 5px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease-in-out;
+    position: relative;
+    font-size: 0.9em;
+}
+
+.cuadro-grid .producto:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cuadro-grid .producto label {
+    font-weight: normal;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    line-height: 1.2;
+}
+
+.cuadro-grid .producto input[type="checkbox"] {
+    margin-right: 8px;
+    transform: scale(0.9);
+}
+
+.cuadro-grid .producto .cantidad {
+    width: calc(100% - 16px);
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 5px;
+    font-size: 0.85em;
+    text-align: center;
+}
+
+
+
