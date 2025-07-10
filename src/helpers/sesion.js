@@ -7,15 +7,23 @@ const login = async (correo, contrasena) => {
       contrasena,
     });
 
-    const { token } = res.data;
+    const { token, usuario } = res.data;
+    const { id } = usuario;
+    if (!token || !id) {
+      throw new Error("No se recibió un token de autenticación");
+    } else {
     localStorage.setItem("token", token); // ahora se usará en todas las peticiones
+    localStorage.setItem("idUsuario", id);
+    }
   } catch (err) {
     console.error("Error al iniciar sesión", err.message);
+    throw err;
   }
 };
 
 const logout = () => {
   localStorage.removeItem("token");
+  localStorage.removeItem("idUsuario");
 };
 
 export default { login, logout };
