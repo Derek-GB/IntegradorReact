@@ -544,6 +544,67 @@ template#templateAlbergue input[type="radio"] {
     cursor: pointer;
 }
 
+/* Asignacion recursos */
+
+.pantalla-completa {
+  min-height: 100vh;        /* Permite crecer verticalmente */
+  width: 90vw;
+  background-color: #f4f6f8;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;  /* Para que inicie desde arriba y no centre verticalmente */
+  overflow-y: auto;         /* Scroll vertical si es necesario */
+  overflow-x: hidden;       /* No scroll horizontal */
+  padding-top: 20px;        /* Un poco de espacio arriba */
+  box-sizing: border-box;
+}
+
+
+.container-formulario {
+  background-color: #fff;
+  padding: 2.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 700px;
+  width: 100%;
+  height: auto;
+  position: relative;
+}
+
+.boton-regresar {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 6px 10px;
+  font-size: 18px;
+  width: 740px;
+}
+
+.titulo-formulario {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.tabla-contenedor {
+  max-height: 200px;
+  overflow-y: auto;
+  color: black;
+}
+
+.botones {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-start;
+}
+
+/* final asginacion de recursos */
+
+
+
 
 .sidebar {
     position: fixed;
