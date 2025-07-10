@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { productosAPI } from '../helpers/api'; // Asegúrate de ajustar el path si es distinto
 
 const ListaProducto = () => {
   const [productos, setProductos] = useState([]);
@@ -11,14 +11,9 @@ const ListaProducto = () => {
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const res = await axios.get('https://apiintegrador-production-8ef8.up.railway.app/api/Productos/all', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = Array.isArray(res.data) ? res.data : res.data.data || [];
-        setProductos(data);
+        const data = await productosAPI.getAll();
+        const lista = Array.isArray(data) ? data : data.data || [];
+        setProductos(lista);
       } catch (err) {
         console.error('Error al cargar productos:', err);
         alert('Error al cargar productos. Verifica si tu sesión expiró.');
@@ -40,16 +35,7 @@ const ListaProducto = () => {
 
   const actualizarProducto = async () => {
     try {
-      const token = localStorage.getItem('token');
-      await axios.put(
-        `https://apiintegrador-production-8ef8.up.railway.app/api/Productos/id/${form.id}`,
-        form,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await productosAPI.update(form.id, form);
       alert("Producto actualizado con éxito.");
     } catch (error) {
       console.error("Error al actualizar:", error);
@@ -60,15 +46,7 @@ const ListaProducto = () => {
   const eliminarProducto = async () => {
     if (!window.confirm("¿Seguro que deseas eliminar este producto?")) return;
     try {
-      const token = localStorage.getItem('token');
-      await axios.delete(
-        `https://apiintegrador-production-8ef8.up.railway.app/api/Productos/id/${form.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await productosAPI.remove(form.id);
       alert("Producto eliminado con éxito.");
       window.location.reload();
     } catch (error) {
