@@ -1,6 +1,12 @@
 import React from 'react';
 import '../styles/formularioFusionado.css'
+import { productosAPI } from '../helpers/api';
 const Inicio = () => {
+  async function handleSesion() {
+    const productos = await productosAPI.getAll();
+
+    alert(JSON.stringify(productos));
+  }
   return (
     <>
      
@@ -20,6 +26,7 @@ const Inicio = () => {
             <li><span className="material-icons">inventory_2</span> Control eficiente de suministros</li>
             <li><span className="material-icons">hotel</span> Gestión centralizada de albergues</li>
             <li><span className="material-icons">bolt</span> Respuesta ágil ante emergencias</li>
+            <button onClick={handleSesion}>Probar sesión</button>
           </ul>
           <div className="progreso">
             <br />
