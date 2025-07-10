@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { productosAPI } from '../helpers/api'; // Asegúrate de ajustar el path si es distinto
+import { productosAPI } from '../helpers/api'; // Ajusta si el path es diferente
 
 const ListaProducto = () => {
   const [productos, setProductos] = useState([]);
@@ -8,6 +8,7 @@ const ListaProducto = () => {
   const [form, setForm] = useState({});
   const navigate = useNavigate();
 
+  // Cargar todos los productos al iniciar
   useEffect(() => {
     const fetchProductos = async () => {
       try {
@@ -23,16 +24,19 @@ const ListaProducto = () => {
     fetchProductos();
   }, []);
 
+  // Actualizar el formulario al seleccionar un producto
   useEffect(() => {
     const seleccionado = productos.find(p => p.id == productoId);
     if (seleccionado) setForm(seleccionado);
   }, [productoId, productos]);
 
+  // Cambios en campos del formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
+  // Actualizar producto
   const actualizarProducto = async () => {
     try {
       await productosAPI.update(form.id, form);
@@ -43,12 +47,17 @@ const ListaProducto = () => {
     }
   };
 
+  // Eliminar producto
   const eliminarProducto = async () => {
     if (!window.confirm("¿Seguro que deseas eliminar este producto?")) return;
+
     try {
-      await productosAPI.remove(form.id);
+      await productosAPI.remove(form.id); // DELETE /productos/{id}
       alert("Producto eliminado con éxito.");
-      window.location.reload();
+      // Actualizar lista local sin recargar
+      setProductos(prev => prev.filter(p => p.id !== form.id));
+      setProductoId('');
+      setForm({});
     } catch (error) {
       console.error("Error al eliminar:", error);
       alert("Error al eliminar el producto.");
@@ -102,22 +111,22 @@ const ListaProducto = () => {
                 <label>Categoría:</label>
                 <select name="categoria" value={form.categoria || ''} onChange={handleChange} className="form-control mb-2" required>
                   <option value="">Seleccione una categoría</option>
-                  <option>Carne</option>
-                  <option>Proteína</option>
-                  <option>Verdura</option>
-                  <option>Reperte</option>
-                  <option>Olores</option>
-                  <option>Abarrotes</option>
-                  <option>Limpieza</option>
-                  <option>Mobiliario</option>
+                  <option value="1">Carne</option>
+                  <option value="2">Proteína</option>
+                  <option value="3">Verdura</option>
+                  <option value="4">Reperte</option>
+                  <option value="5">Olores</option>
+                  <option value="6">Abarrotes</option>
+                  <option value="7">Limpieza</option>
+                  <option value="8">Mobiliario</option>
                 </select>
 
                 <label>Unidad de Medida:</label>
                 <select name="unidadMedida" value={form.unidadMedida || ''} onChange={handleChange} className="form-control mb-2" required>
                   <option value="">Seleccione una unidad</option>
-                  <option>Mililitros</option>
-                  <option>Gramos</option>
-                  <option>Unidades</option>
+                  <option value="1">Mililitros</option>
+                  <option value="2">Gramos</option>
+                  <option value="3">Unidades</option>
                 </select>
 
                 <div className="mt-3">

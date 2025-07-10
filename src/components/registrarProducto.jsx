@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { productosAPI } from '../helpers/api';
 import '../styles/formulario.css';
 import '../styles/indexx.css';
 
@@ -29,11 +29,11 @@ const RegistrarProducto = () => {
         nombre: form.producto,
         descripcion: form.descripcion,
         cantidad: parseInt(form.cantidad),
-        categoria: form.categoria,
-        unidadMedida: form.unidad
+        categoria: parseInt(form.categoria), // ✅ convertir a entero
+        unidadMedida: parseInt(form.unidad)  // ✅ convertir a entero
       };
 
-      await axios.post("https://apiintegrador-production-8ef8.up.railway.app/api/Productos", data);
+      await productosAPI.create(data); // ✅ usa el helper
       alert("Producto registrado correctamente");
       setForm({
         codigo: '',
@@ -83,8 +83,14 @@ const RegistrarProducto = () => {
             <label>Categoría:</label>
             <select name="categoria" value={form.categoria} onChange={handleChange} required>
               <option value="">Seleccione una opción</option>
-              {["Carne", "Proteina", "Verdura", "Reperte", "Olores", "Abarrotes", "Limpieza", "Mobiliario"]
-                .map(cat => <option key={cat} value={cat}>{cat}</option>)}
+              <option value="1">Carne</option>
+              <option value="2">Proteina</option>
+              <option value="3">Verdura</option>
+              <option value="4">Reperte</option>
+              <option value="5">Olores</option>
+              <option value="6">Abarrotes</option>
+              <option value="7">Limpieza</option>
+              <option value="8">Mobiliario</option>
             </select>
 
             <label>Nombre del Producto:</label>
@@ -93,8 +99,9 @@ const RegistrarProducto = () => {
             <label>Unidad:</label>
             <select name="unidad" value={form.unidad} onChange={handleChange} required>
               <option value="">Seleccione una unidad</option>
-              {["Mililitros", "Gramos", "Unidades"]
-                .map(unit => <option key={unit} value={unit}>{unit}</option>)}
+              <option value="1">Mililitros</option>
+              <option value="2">Gramos</option>
+              <option value="3">Unidades</option>
             </select>
 
             <label>Cantidad:</label>
