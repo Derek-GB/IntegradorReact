@@ -3,7 +3,7 @@ import { useUbicaciones } from '../hooks/useUbicaciones';
 import '../styles/formulario.css';
 import '../styles/indexx.css';
 
-const busquedaAlbergue = () => {
+const BusquedaAlbergue = () => {
   const {
     provincias, cantones, distritos,
     setProvinciaId, setCantonId
@@ -40,4 +40,4 @@ const busquedaAlbergue = () => {
   );
 };
 
-export default busquedaAlbergue;
+export default BusquedaAlbergue;

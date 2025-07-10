@@ -24,7 +24,7 @@ const productosOlores = [
   { nombre: 'Consome', unidad: 'kg' }
 ];
 
-const olores = () => {
+const Olores = () => {
   const { agregarItem, eliminarItem, items } = useContext(contextoAbastecimiento);
   const [selecciones, setSelecciones] = useState({});
 
@@ -107,4 +107,4 @@ const olores = () => {
   );
 };
 
-export default olores;
+export default Olores;
