@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importa useNavigate
-import '../styles/formulario.css'; // Asegúrate de tener este archivo con tus estilos
-import authHelper from '../helpers/sesion'; // Asegúrate de importar correctamente tu helper
+import { useNavigate } from 'react-router-dom';
+import '../styles/formulario.css';
+import authHelper from '../helpers/sesion';
 
 const Login = () => {
   const [usuario, setUsuario] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate(); // Inicializa useNavigate
+  const navigate = useNavigate();
+
+  const verificarToken = () => {
+    const token = localStorage.getItem('token');
+    return token && token.length > 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,19 +23,39 @@ const Login = () => {
     }
 
     try {
-      await authHelper.login(usuario, contrasena); // Llama a la función de login
-      setError(''); // Limpia el error si la autenticación es exitosa
+      await authHelper.login(usuario, contrasena);
 
-      // Redirige a la página de inicio después de iniciar sesión
-      navigate('/inicio'); // Cambia a la ruta de inicio
-    } catch {
-      setError('Error al iniciar sesión. Verifica tus credenciales.'); // Manejo de errores
+      if (verificarToken()) {
+        setError('');
+        navigate('/inicio');
+      } else {
+        setError('Inicio de sesión fallido. Token no generado.');
+      }
+    } catch (error) {
+      setError(error.message || 'Error al iniciar sesión. Verifica tus credenciales.');
     }
+  };
+
+  // 🔴 Nueva función: cerrar sesión
+  const handleLogout = () => {
+    authHelper.logout(); // Elimina el token
+    setUsuario('');
+    setContrasena('');
+    setError('Sesión cerrada.');
+    navigate('/'); // Redirige a la raíz o login
   };
 
   return (
     <div className="login-wrapper">
       <h2>Iniciar Sesión</h2>
+      {verificarToken() && (
+        <div style={{ marginBottom: '1rem' }}>
+          <button onClick={handleLogout} className="btn btn-danger">
+            Cerrar sesión
+          </button>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="login">
         {error && <div className="error">{error}</div>}
 
