@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const registroUsuario = () => {
+const RegistroUsuario = () => {
   const navigate = useNavigate();
   const [municipalidades, setMunicipalidades] = useState([]);
   const [form, setForm] = useState({
@@ -135,4 +135,4 @@ const registroUsuario = () => {
   );
 };
 
-export default registroUsuario;
+export default RegistroUsuario;
