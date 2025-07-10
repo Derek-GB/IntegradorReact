@@ -43,7 +43,7 @@ const createApiMethods = (endpoint) => ({
 
   remove: async (id) => {
     try {
-      const res = await customAxios.delete(`/${endpoint}/${id}`);
+      const res = await customAxios.delete(`/${endpoint}/id/${id}`);
       return res.data;
     } catch (error) {
       handleError(error);
