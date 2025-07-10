@@ -36,25 +36,10 @@ const Login = () => {
     }
   };
 
-  // 🔴 Nueva función: cerrar sesión
-  const handleLogout = () => {
-    authHelper.logout(); // Elimina el token
-    setUsuario('');
-    setContrasena('');
-    setError('Sesión cerrada.');
-    navigate('/'); // Redirige a la raíz o login
-  };
-
   return (
     <div className="login-wrapper">
       <h2>Iniciar Sesión</h2>
-      {verificarToken() && (
-        <div style={{ marginBottom: '1rem' }}>
-          <button onClick={handleLogout} className="btn btn-danger">
-            Cerrar sesión
-          </button>
-        </div>
-      )}
+      
 
       <form onSubmit={handleSubmit} className="login">
         {error && <div className="error">{error}</div>}
