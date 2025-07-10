@@ -1,7 +1,7 @@
 import customAxios from "./customAxios";
 
 const handleError = (error) => {
-  throw new Error("Error al conectar con la API: " + error.message);
+  throw new Error("Error al conectar con la API: " + error.message + "\n" + error);
 };
 
 const createApiMethods = (endpoint) => ({

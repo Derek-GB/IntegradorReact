@@ -8,9 +8,14 @@ const login = async (correo, contrasena) => {
     });
 
     const { token } = res.data;
+    if (!token){
+      throw new Error("No se recibió un token de autenticación");
+    } else {
     localStorage.setItem("token", token); // ahora se usará en todas las peticiones
+    }
   } catch (err) {
     console.error("Error al iniciar sesión", err.message);
+    throw err;
   }
 };
 
