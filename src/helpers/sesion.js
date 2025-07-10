@@ -9,7 +9,13 @@ const login = async (correo, contrasena) => {
 
     const { token, usuario } = res.data;
     const { id } = usuario;
-    if (!token || !id) {
+    if (!usuario) {
+      throw new Error("No se recibió información de usuario");
+    }
+    if (!usuario.id) {
+      throw new Error("No se recibió el ID del usuario");
+    }
+    if (!token) {
       throw new Error("No se recibió un token de autenticación");
     } else {
     localStorage.setItem("token", token); // ahora se usará en todas las peticiones
