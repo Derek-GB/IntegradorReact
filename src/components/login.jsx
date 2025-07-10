@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/formulario.css';
 import authHelper from '../helpers/sesion';
@@ -18,7 +18,7 @@ const Login = () => {
     e.preventDefault();
 
     if (!usuario || !contrasena) {
-      setError('Por favor complete todos los campos');
+      setError("Por favor complete todos los campos");
       return;
     }
 
@@ -36,10 +36,15 @@ const Login = () => {
     }
   };
 
+  useEffect(() => {
+    if (error) {
+      alert(error);
+    }
+  }, [error]);
+
   return (
     <div className="login-wrapper">
       <h2>Iniciar Sesión</h2>
-      
 
       <form onSubmit={handleSubmit} className="login">
         {error && <div className="error">{error}</div>}
