@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
-import '../styles/formulario.css';
-import '../styles/indexx.css';
+import '../styles/formularioFusionado.css';
 
 const RegistroSuministros = () => {
   const navigate = useNavigate(); 
