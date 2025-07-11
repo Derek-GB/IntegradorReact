@@ -12,14 +12,14 @@ const login = async (correo, contrasena) => {
     if (!usuario) {
       throw new Error("No se recibió información de usuario");
     }
-    if (!usuario.id) {
+    if (!id) {
       throw new Error("No se recibió el ID del usuario");
     }
     if (!token) {
       throw new Error("No se recibió un token de autenticación");
     } else {
-    localStorage.setItem("token", token); // ahora se usará en todas las peticiones
-    localStorage.setItem("idUsuario", id);
+      localStorage.setItem("token", token); // ahora se usará en todas las peticiones
+      localStorage.setItem("idUsuario", id);
     }
   } catch (err) {
     console.error("Error al iniciar sesión", err.message);
