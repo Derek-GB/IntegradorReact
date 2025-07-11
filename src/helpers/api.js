@@ -1,7 +1,7 @@
 import customAxios from "./customAxios";
 
 const handleError = (error) => {
-  throw new Error("Error al conectar con la API: " + error.message);
+  throw new Error("Error al conectar con la API: " + error.message + "\n" + error);
 };
 
 const createApiMethods = (endpoint) => ({
@@ -43,7 +43,7 @@ const createApiMethods = (endpoint) => ({
 
   remove: async (id) => {
     try {
-      const res = await customAxios.delete(`/${endpoint}/${id}`);
+      const res = await customAxios.delete(`/${endpoint}/id/${id}`);
       return res.data;
     } catch (error) {
       handleError(error);

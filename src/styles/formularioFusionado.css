@@ -169,11 +169,10 @@ body {
 }
 
 .preContainer {
-    max-width: 00px; 
-    height: auto;
+    max-width: 100%;
     margin: 0px auto;
     margin-left: 0px;
-    margin-right: 0px;
+
     margin-bottom: 10%;
     padding: 20px;
     
