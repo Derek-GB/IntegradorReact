@@ -8,7 +8,6 @@ const login = async (correo, contrasena) => {
     });
 
     const { token, usuario } = res.data;
-    console.log("Datos de usuario:", res.data);
     const { id } = usuario;
     if (!usuario) {
       throw new Error("No se recibió información de usuario");
