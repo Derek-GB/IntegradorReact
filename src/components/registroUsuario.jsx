@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { municipalidadAPI, usuariosAPI } from '../helpers/api'; // Asegúrate del path correcto
 
 const RegistroUsuario = () => {
   const navigate = useNavigate();
@@ -9,7 +9,6 @@ const RegistroUsuario = () => {
     nombre: '',
     correo: '',
     contrasena: '',
-    numero: '',
     rol: '',
     activo: '',
     municipalidad: '',
@@ -19,10 +18,9 @@ const RegistroUsuario = () => {
   useEffect(() => {
     const fetchMunicipalidades = async () => {
       try {
-        const res = await axios.get('https://apiintegrador-production-8ef8.up.railway.app/api/municipalidad/all');
-        const data = Array.isArray(res.data) ? res.data
-                  : res.data.municipalidades ?? res.data.data ?? [];
-        setMunicipalidades(data || []);
+        const data = await municipalidadAPI.getAll();
+        const lista = Array.isArray(data) ? data : data.data ?? [];
+        setMunicipalidades(lista || []);
       } catch (error) {
         console.error('Error al cargar municipalidades:', error);
         setMunicipalidades([]);
@@ -39,7 +37,8 @@ const RegistroUsuario = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     const { nombre, correo, contrasena, rol, activo, municipalidad, identificacion } = form;
-    if (!nombre || !correo || !contrasena || !rol || !municipalidad || !identificacion) {
+
+    if (!nombre || !correo || !contrasena || !rol || !activo || !municipalidad || !identificacion) {
       alert("Por favor complete todos los campos.");
       return;
     }
@@ -49,16 +48,16 @@ const RegistroUsuario = () => {
       correo: correo.trim(),
       contrasenaHash: contrasena.trim(),
       rol: rol.trim(),
-      activo: activo.trim() === 'activo',
+      activo: activo === "activo",
       idMunicipalidad: parseInt(municipalidad),
       identificacion: identificacion.trim()
     };
 
     try {
-      await axios.post("https://apiintegrador-production-8ef8.up.railway.app/api/usuarios", payload);
+      await usuariosAPI.create(payload); // ✅ Usa el helper
       alert("Usuario registrado correctamente.");
       setForm({
-        nombre: '', correo: '', contrasena: '', numero: '',
+        nombre: '', correo: '', contrasena: '',
         rol: '', activo: '', municipalidad: '', identificacion: ''
       });
     } catch (error) {
@@ -92,13 +91,10 @@ const RegistroUsuario = () => {
             <input name="nombre" value={form.nombre} onChange={handleChange} required />
 
             <label>Correo Electrónico:</label>
-            <input name="correo" value={form.correo} type="email" onChange={handleChange} required />
+            <input name="correo" type="email" value={form.correo} onChange={handleChange} required />
 
             <label>Contraseña:</label>
-            <input name="contrasena" value={form.contrasena} type="password" onChange={handleChange} required />
-
-            <label>Número de Teléfono:</label>
-            <input name="numero" value={form.numero} type="tel" pattern="[0-9]{4}-[0-9]{4}" onChange={handleChange} required />
+            <input name="contrasena" type="password" value={form.contrasena} onChange={handleChange} required />
 
             <label>Rol:</label>
             <select name="rol" value={form.rol} onChange={handleChange} required>
