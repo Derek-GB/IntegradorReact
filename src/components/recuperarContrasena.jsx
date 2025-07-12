@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import emailjs from '@emailjs/browser';
 import '../styles/formulario.css';
 
-const RecuperarContrasena = () => {
+const recuperarContrasena = () => {
   const [correo, setCorreo] = useState('');
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState('');
@@ -70,4 +70,4 @@ const RecuperarContrasena = () => {
   );
 };
 
-export default RecuperarContrasena;
+export default recuperarContrasena;
