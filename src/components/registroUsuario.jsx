@@ -15,19 +15,21 @@ const RegistroUsuario = () => {
     identificacion: ''
   });
 
-  useEffect(() => {
-    const fetchMunicipalidades = async () => {
-      try {
-        const data = await municipalidadAPI.getAll();
-        const lista = Array.isArray(data) ? data : data.data ?? [];
-        setMunicipalidades(lista || []);
-      } catch (error) {
-        console.error('Error al cargar municipalidades:', error);
-        setMunicipalidades([]);
-      }
-    };
-    fetchMunicipalidades();
-  }, []);
+useEffect(() => {
+  const fetchMunicipalidades = async () => {
+    try {
+      const data = await municipalidadAPI.getAll();
+      const lista = Array.isArray(data) ? data : data.data ?? [];
+      setMunicipalidades(lista || []);
+    } catch (error) {
+      console.error('Error al cargar municipalidades:', error);
+      setMunicipalidades([]);
+    }
+  };
+  fetchMunicipalidades();
+}, []);
+
+
 
   const handleChange = e => {
     const { name, value } = e.target;
