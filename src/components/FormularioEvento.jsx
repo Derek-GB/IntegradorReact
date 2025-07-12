@@ -120,11 +120,16 @@ const FormularioRegistro = () => {
   };
 
   return (
-    <details open>
-      <summary><strong>Registro de Familia en Albergue</strong></summary>
-      <fieldset className="mt-2">
-        <legend className="mt-3"><strong>Familia</strong></legend>
 
+    <>
+    <span className="formPreFormulario main-content">
+<h2>Registro de Familia en Albergue</h2>
+<details open>
+      {/* <summary>Registro de Familia en Albergue</strong></summary> */}
+      
+      <fieldset id = 'registroSuministrosField' className=" mt-2">
+        <legend className="mt-3"><strong>Familia</strong></legend>
+        <div id="registroSuministros1">
         <label htmlFor="albergue">Albergue:</label>
         <select
           id="albergue"
@@ -159,9 +164,13 @@ const FormularioRegistro = () => {
           placeholder="Cantidad"
         />
 
-        <legend className="mt-4"><strong>Evento</strong></legend>
+        </div>
+        
+        
 
-        <label htmlFor="evento">Tipo:</label>
+          <div id="registroSuministros2">
+            <legend className="mt-3"><strong>Evento</strong></legend>
+          <label htmlFor="evento">Tipo:</label>
         <select
           id="evento"
           className="form-control mb-2"
@@ -174,9 +183,13 @@ const FormularioRegistro = () => {
           ))}
         </select>
 
-        <legend className="mt-4"><strong>Ubicación</strong></legend>
+          </div>
 
-        <label htmlFor="provincia">Provincia:</label>
+        
+
+          <div id="registroSuministros1">
+              <legend className="mt-4"><strong>Ubicación</strong></legend>
+            <label htmlFor="provincia">Provincia:</label>
         <select
           id="provincia"
           className="form-select mb-2"
@@ -227,6 +240,8 @@ const FormularioRegistro = () => {
             <option key={d.idDistrito} value={d.idDistrito}>{d.descripcion}</option>
           ))}
         </select>
+          </div>
+        
 
         <label htmlFor="direccion">Dirección:</label>
         <textarea
@@ -246,6 +261,13 @@ const FormularioRegistro = () => {
         </button>
       </fieldset>
     </details>
+    </span>
+      
+
+
+    </>
+    
+    
   );
 };
 

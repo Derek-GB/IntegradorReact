@@ -20,8 +20,8 @@ const Verduras = () => {
     <details>
       <summary><strong>Verduras</strong></summary>
       <div>
-        <label htmlFor="tipoVerdura">Verdura:</label>
-        <select id="tipoVerdura" value={tipoVerdura} onChange={e => setTipoVerdura(e.target.value)}>
+        <label className='labelAbarrote' htmlFor="tipoVerdura">Verdura:</label>
+        <select className='selectAbarrote' id="tipoVerdura" value={tipoVerdura} onChange={e => setTipoVerdura(e.target.value)}>
           <option value="">Seleccione</option>
           <option value="Yuca">Yuca</option>
           <option value="Papa">Papa</option>

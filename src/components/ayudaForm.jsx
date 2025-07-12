@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import '../styles/formulario.css';
-import '../styles/indexx.css';
+import { useNavigate } from 'react-router-dom';
+import '../styles/formularioFusionado.css'; // Asegúrate de tener este archivo con
 
 const AyudaForm = () => {
   const [formData, setFormData] = useState({

@@ -18,12 +18,12 @@ const Carnes = () => {
     <details open>
       <summary><strong>Carnes</strong></summary>
       <div>
-        <label>Cantidad de personas:</label>
-        <input type="number" value={personas} onChange={e => setPersonas(e.target.value)} />
+        <label className='labelAbarrote'>Cantidad de personas:</label>
+        <input className='inputAbarrote' type="number" value={personas} onChange={e => setPersonas(e.target.value)} />
         <p>* Se calculan automáticamente 120 gramos por persona. *</p>
 
-        <label>Tipo de carne:</label>
-        <select value={tipoCarne} onChange={e => setTipoCarne(e.target.value)}>
+        <label className='labelAbarrote'>Tipo de carne:</label>
+        <select className = 'selectAbarrote' value={tipoCarne} onChange={e => setTipoCarne(e.target.value)}>
           <option value="">Seleccione</option>
           <option value="Pollo">Pollo</option>
           <option value="Cerdo">Cerdo</option>

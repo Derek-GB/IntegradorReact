@@ -38,10 +38,9 @@ body {
 .container {
     max-width: 100%;
     width: 100%;
+    height: fit-content;
     margin: 0px auto;
     margin-left: 65px;
-    margin-bottom: 20px;
-    padding: 20px;
     text-align: center;
     background-color: var(--color-fondo);
     color: var(--color-texto);
@@ -49,7 +48,6 @@ body {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
-    align-items: center;
 
 
 }
@@ -148,8 +146,8 @@ body {
     margin-bottom: 20px;
     padding: 20px;
     text-align: center;
-    background-color: #FAFAFA;
-    color: #FAFAFA;
+    background-color: var(--color-blanco);
+    color: var(--color-blanco);
     border-radius: 10px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
@@ -170,14 +168,11 @@ body {
 
 .preContainer {
     max-width: 100%;
+    width: auto;
     margin: 0px auto;
     margin-left: 0px;
-
     margin-bottom: 10%;
     padding: 20px;
-    
-  
-    
 }
 /* Form de PreFormulario */
 
@@ -187,15 +182,14 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 50%;
+    width: 100%;
+    
     flex-direction: column;
-    max-width: 100%;
-    height: fit-content;
+    height: max-content;
     margin: 0px auto;
     text-align: left;
     background-color: var(--color-fondo);
-    color: black;
-    border-radius: 10px;
+   
 }
 
 .formPreFormulario details {
@@ -209,146 +203,6 @@ body {
     flex-direction: column  ;
 
   
-}
-
-
-/* Alternativamente, para desactivar solo la acción de expandir/cerrar pero mantener el estilo: */
-.formPreFormulario details summary {
-  text-align: center;
-  pointer-events: none;
-  cursor: default;
-}
-
-/* Deshabilita el ::before y la animación de flecha en summary */
-.formPreFormulario details summary::before {
-  content: none !important;
-}
-
-.formPreFormulario details summary strong{
-  color: var(--color-blanco);
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 6px;
-  text-align: center;
-  font-family: var(--fuente-principal);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.formPreFormulario details fieldset{
-  border: none;
-  margin: 0;
-  width: 100%;
-  box-sizing: border-box;
-  background-color: var(--color-blanco);
-  display: flex;
-  flex-direction: row;
-  
-}
-
-.formPreFormulario details fieldset label {
-  width: 20%;
-  font-size: 1.2rem;
-  color: var(--color-texto);
-  text-align: center;
-  font-weight: 600;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  text-align: center;
-}
-.formPreFormulario details fieldset select{
-  width: 25%;
-  height: 40px;
-  border: 1px solid var(--color-gris-borde);
-  border-radius: 4px;
-  font-size: 1rem;
-  margin-top: 10px;
-  margin-right: 15px;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease;
-}
-.formPreFormulario details fieldset select:focus {
-  outline: none;
-  border-color: var(--color-verde-form);
-}
-.formPreFormulario details fieldset input[type="number"]{
-  width: 25%;
-  height: 40px;
-  border: 1px solid var(--color-gris-borde);
-  border-radius: 4px;
-  font-size: 1rem;
-  margin-top: 10px;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease;
-}
-
-#registroSuministrosField {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  align-items: center;
-}
-
-#registroSuministrosField label  {
-  text-align: center;
-  font-weight: bold;
-  color: var(--color-texto);
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-}
-#registroSuministrosField input[type="text"]{
-  width: 100%;
-  height: 90px;
-  border: 1px solid var(--color-gris-borde);
-  border-radius: 4px;
-  font-size: 1rem;
-  margin-top: 10px;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease;
-}
-
-#registroSuministros1,
-#registroSuministros2 {
- display: flex;
-  flex-direction: row;
-  width: 100%;
-  margin-bottom: 20px;
-  justify-content: center;
-  justify-content: space-around;
-}
-#registroSuministros1 label,#registroSuministros2 label{
-  width: 20%;
-  font-size: 1.2rem;
-  
-  font-family: var(--fuente-principal);
-  color: var(--color-texto);
-  text-align: center;
-  font-weight: 700;
-  margin-top: 10px;
-  margin-right: 10px;
-  margin-bottom: 5px;
-}
-#registroSuministros1 input[type="text"],#registroSuministros1 input[type="number"] {
-  width: 25%;
-  height: 40px;
-  border: 1px solid var(--color-gris-borde);
-  border-radius: 4px;
-  font-size: 1rem;
-  margin-top: 10px;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease;
-}
-
-#registroSuministros2 select,
-#registroSuministros2 input[type="number"] {
-  width: 25%;
-  height: 40px;
-  border: 1px solid var(--color-gris-borde);
-  border-radius: 4px;
-  font-size: 1rem;
-  margin-top: 10px;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease;
 }
 
 
@@ -522,11 +376,12 @@ body {
   position: fixed;
   margin-top: 0;
   left: 0;
-  width: 65px; /* retraído: solo iconos */
+  width: 55px; /* retraído: solo iconos */
   height: 100vh;
   background: var(--color-verde-form);
   color: #fff;
   padding-top: 60px;
+
   z-index: 1000;
   overflow: hidden;
   display: flex;
@@ -552,7 +407,7 @@ body {
 .sidebar nav ul li a {
   display: flex;
   align-items: center;
-
+  
   font-size: 1rem;
   padding: 5px 6px;
   color: #fff;
@@ -564,9 +419,11 @@ body {
 }
 
 .sidebar nav ul li a .material-icons {
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   min-width: 24px;
   text-align: center;
+  margin-left: 10px;
+  margin-right: 16px;
 }
 
 /* Oculta el texto de los enlaces cuando está retraído */
@@ -588,12 +445,12 @@ body {
 
 /* Ajusta el contenido principal para dejar espacio al sidebar */
 .main-content {
-  margin-left: 65px;
+  margin-left: 55px;
   transition: margin-left 0.3s cubic-bezier(.4,2,.6,1);
 }
 
 .sidebar:hover ~ .main-content {
-  margin-left: 6px;
+  margin-left: 1px;
 }
 
 /* Responsive: Sidebar ocupa toda la pantalla en móviles */
@@ -653,9 +510,6 @@ body {
 }
 
 h2, h4 {
-  display: flex;
-  align-items: center;
-  flex-direction: row-reverse;
   justify-content: center;
   background-color: var(--color-verde-form);
   color: var(--color-blanco);
@@ -806,11 +660,13 @@ th, td {
   border: 1px solid var(--color-gris-borde);
   padding: 8px;
   text-align: center;
+
 }
 
 th {
   background: var(--color-gris-claro);
   font-weight: 700;
+  
 }
 
 /* === DETALLES/ACCORDION === */
@@ -839,6 +695,14 @@ details summary::-webkit-details-marker {
   display: none;
 }
 
+details summary:hover {
+  background-color: var(--color-verde-oscuro);
+}
+
+details[open] summary {
+  border-bottom: 1px solid var(--color-gris-borde);
+}
+
 details summary::before {
   content: '▼ ';
   display: inline-block;
@@ -865,15 +729,15 @@ details > *:not(summary) {
 }
 
 /* === GRID DE PRODUCTOS Y SECCIÓN LIMPIEZA === */
-.cuadro-grid,
+.cuadro-grid,checkbox-grid,
 #productosLimpiezaDisponibles {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 15px;
+  gap: 12px;
   padding: 20px;
   background-color: var(--color-gris-claro);
   border-radius: 8px;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 .cuadro-grid .producto,
@@ -1200,22 +1064,6 @@ form#recursoForm .item {
     margin-bottom: 20px;
 }
 
-/* Botones */
-.btn {
-    font-weight: 600;
-    padding: 10px 18px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.btn-primary {
-    background-color: #FBC02D;
-    color: black;
-
-}
-
 
 
 /* este de pre es para cambiar el color del form preformulario */
@@ -1228,22 +1076,11 @@ form#recursoForm .item {
     background-color: #bd9122;
 }
 
-.btn-secondary {
-    background-color: #FBC02D;
-    color: black;
-}
 
 .btn-secondary:hover {
     background-color: #bd9122;
 }
 
-.btn-link {
-    background: none;
-    border: none;
-    padding: 0;
-    font-weight: 600;
-    cursor: pointer;
-}
 
 /* Márgenes para botones */
 .mt-2 {
@@ -1608,126 +1445,223 @@ footer {
   z-index: 100;
 }
 
-/* Diferencias y utilidades específicas de formAbasteci.css para fusionar */
-/* filepath: c:\Users\Churry\Desktop\II-C\Integrador-1\IntegradorI-React\integradorI-react\src\styles\formulario_fusionado.css */
 
-/* Grid para lista de abarrotes y productos limpieza */
-.cuadro-grid,
-#productosLimpiezaDisponibles {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 15px;
-  padding: 20px;
-  background-color: var(--color-gris-claro);
-  border-radius: 8px;
-  margin-top: 15px;
-}
 
-.cuadro-grid .producto,
-#productosLimpiezaDisponibles .producto,
-.producto-limpieza-item {
-  background-color: var(--color-blanco);
-  border: 1px solid var(--color-gris-borde);
-  border-radius: 5px;
-  padding: 8px;
+-----PROPIEDADES DE LOS FORMULARIOS DE ABARROTES ------
+
+.content-area {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.2s ease-in-out;
-  position: relative;
-  font-size: 0.9em;
-}
+  height: 100vh;
+  overflow-y: auto;
+} 
 
-.cuadro-grid .producto:hover,
-#productosLimpiezaDisponibles .producto:hover,
-.producto-limpieza-item:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
 
-.cuadro-grid .producto label,
-#productosLimpiezaDisponibles .producto label,
-.producto-limpieza-item label {
-  font-weight: normal;
-  cursor: pointer;
+ .top-header {
+  background-color: var(--color-verde-form);
+  color: var(--color-blanco);
+  padding: 20px 40px;
+  position: relative; 
   display: flex;
   align-items: center;
-  margin-bottom: 5px;
-  line-height: 1.2;
+} 
+
+ .top-header h1 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+} 
+
+.main-Content-abarrote {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem 1rem 3rem;
+  background-color: var(--color-fondo);
+  overflow-y: auto;
+} 
+
+#formularioAbarrotes {
   width: 100%;
+  max-width: 600px;
+  background-color: #FAFAFA;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.cuadro-grid .producto input[type="checkbox"],
-#productosLimpiezaDisponibles .producto input[type="checkbox"],
-.producto-limpieza-item input[type="checkbox"] {
-  margin-right: 8px;
-  transform: scale(0.9);
+/* Tarjetas blancas con sombra */
+.card {
+  background-color: var(--color-blanco);
+  width: 90%;
+  padding: 20px;
+  margin-bottom: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.cuadro-grid .producto .cantidad,
-#productosLimpiezaDisponibles .producto .cantidad,
-.producto-limpieza-item .cantidad,
-#productosLimpiezaDisponibles .producto .cantidad-limpieza,
-.producto-limpieza-item .cantidad-limpieza {
-  width: calc(100% - 16px);
-  padding: 5px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  margin-top: 5px;
-  font-size: 0.85em;
-  text-align: center;
-  box-sizing: border-box;
+.labelAbarrote {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: var(--color-texto);
 }
 
-.producto-limpieza-item.oculto-en-lista {
-  transform: translateY(10px);
-  opacity: 0;
-  height: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-  margin-top: 0;
-  margin-bottom: 0;
-  border: none;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-/* Resultado y tablas de resumen de abarrotes */
-.resultado ul {
-  list-style: none;
-  padding: 0;
-  margin-top: 20px;
-}
-
-.resultado li {
-  background-color: #e9ecef;
-  border: 1px solid #dee2e6;
+.inputAbarrote, .selectAbarrote, .textArea{
+  width: 100%;
   padding: 8px 12px;
-  margin-bottom: 5px;
+  border: 1px solid #ced4da;
   border-radius: 4px;
+  font-size: 1rem;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--color-verde-form);
+}
+
+.abarrote-item label {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.9em;
-  line-height: 1.4;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-.resultado li .btn-eliminar-lista,
-.btn-eliminar {
-  background-color: var(--color-amarillo);
-  color: var(--color-blanco);
-  border: none;
-  border-radius: 4px;
-  padding: 6px 10px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--color-gris-borde);
+  background-color: var(--color-blanco);
   cursor: pointer;
-  font-size: 0.8em;
-  margin-left: 10px;
   transition: background-color 0.3s ease;
 }
 
-.resultado li .btn-eliminar-lista:hover,
-.btn-eliminar:hover {
+.abarrote-item label:hover {
+  background-color: var(--color-blanco);
+}
+
+.abarrote-item label input[type="checkbox"] {
+  order: 2;
+  cursor: pointer;
+}
+
+.abarrote-item label span {
+  order: 1;
+} */
+
+/* Detalle (cantidad + unidad) dentro item */
+.abarrote-item .detalle {
+  display: flex;
+  gap: 10px;
+  margin-left: 10px;
+  margin-top: 6px;
+}
+
+.abarrote-item .detalle input[type="number"],
+.abarrote-item .detalle select {
+  width: 50%;
+  padding: 6px 10px;
+  font-size: 1rem;
+  border: 1px solid var(--color-blanco);
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.abarrote-item .detalle input[type="number"]:focus,
+.abarrote-item .detalle select:focus {
+  outline: none;
+  border-color: var(--color-verde-form);
+}
+
+.boton-resumen-final {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.boton-resumen-final a button {
+  width: auto;
+  padding: 10px 24px;
+  font-size: 16px;
+  background-color: var(--color-amarillo);
+  color: var(--color-blanco);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.boton-resumen-final a button:hover {
   background-color: var(--color-amarillo-hover);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-contenido {
+  background-color: #FAFAFA;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+}
+
+@keyframes fadeInOut {
+  0%   { opacity: 0; bottom: 10px; }
+  10%  { opacity: 1; bottom: 20px; }
+  90%  { opacity: 1; bottom: 20px; }
+  100% { opacity: 0; bottom: 10px; }
+}
+
+
+.back-button {
+  background-color: #fdd835;
+  color: black;
+  border-radius: 5px;
+  padding: 6px 8px;
+  text-decoration: none;
+  font-weight: bold; 
+  /* Mantener en el flujo normal (a la derecha) */
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+.back-button .material-icons {
+  vertical-align: middle;
+  font-size: 24px;
+} 
+
+ #formularioAbarrotes {
+  width: 100%;
+  max-width: 600px;
+  background-color: #FAFAFA;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+h1, h2 {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.card a {
+  display: block;
+  margin-bottom: 10px;
 }

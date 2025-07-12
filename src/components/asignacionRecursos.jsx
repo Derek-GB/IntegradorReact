@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/formulario.css';
-import '../styles/indexx.css';
+import '../styles/formularioFusionado.css'; // Asegúrate de tener este archivo con tus estilos
 
 const AsignacionRecursos = () => {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Importa useNavigate
-import '../styles/formulario.css'; // Asegúrate de tener este archivo con tus estilos
+import '../styles/formularioFusionado.css'; // Asegúrate de tener este archivo con tus estilos
 import authHelper from '../helpers/sesion'; // Asegúrate de importar correctamente tu helper
 
 const Login = () => {
@@ -23,7 +23,7 @@ const Login = () => {
       setError(""); // Limpia el error si la autenticación es exitosa
 
       // Redirige a la página de inicio después de iniciar sesión
-      navigate("/inicio"); // Cambia a la ruta de inicio
+      navigate("/inicio.jsx"); // Cambia a la ruta de inicio
     } catch (error) {
       console.log("Error al iniciar sesión:", error);
       setError("Error al iniciar sesión. Verifica tus credenciales." + "\n" + error.message); // Manejo de errores
