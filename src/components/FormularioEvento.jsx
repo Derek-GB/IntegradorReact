@@ -1,56 +1,252 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { alberguesAPI, amenazasAPI } from "../helpers/api.js";
+import obtenerTodos from "../helpers/obtenerUbicaciones.js";
+import customAxios from "../helpers/customAxios.js";
 
-const FormularioEvento = () => {
+const FormularioRegistro = () => {
   const [integrantes, setIntegrantes] = useState("");
+  const [provinciaSeleccionada, setProvinciaSeleccionada] = useState("");
+  const [cantonSeleccionado, setCantonSeleccionado] = useState("");
+  const [albergueSeleccionado, setAlbergueSeleccionado] = useState("");
+  const [eventoSeleccionado, setEventoSeleccionado] = useState("");
+  const [direccion, setDireccion] = useState("");
+  const [codigoFamilia, setCodigoFamilia] = useState("");
+  const [nombreProvincia, setNombreProvincia] = useState("");
+  const [nombreCanton, setNombreCanton] = useState("");
+  const [nombreDistrito, setNombreDistrito] = useState("");
 
-  const guardarCantidadYContinuar = () => {
-    const cantidad = parseInt(integrantes, 10);
-    if (!cantidad || cantidad < 0) {
-      alert("Por favor, ingrese una cantidad válida de integrantes.");
+  const [albergues, setAlbergues] = useState([]);
+  const [amenazas, setAmenazas] = useState([]);
+  const [provincias, setProvincias] = useState([]);
+  const [cantones, setCantones] = useState([]);
+  const [distritos, setDistritos] = useState([]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const cargarDatos = async () => {
+      try {
+        const [resAlbergues, resAmenazas] = await Promise.all([
+          alberguesAPI.getAll(),
+          amenazasAPI.getAll(),
+        ]);
+        setAlbergues(resAlbergues?.data || []);
+        setAmenazas(resAmenazas?.data || []);
+      } catch (error) {
+        console.error("Error al cargar datos internos:", error.message);
+      }
+    };
+    cargarDatos();
+  }, []);
+
+  useEffect(() => {
+    const cargarProvincias = async () => {
+      const datos = await obtenerTodos("https://api-geo-cr.vercel.app/provincias");
+      setProvincias(datos);
+    };
+    cargarProvincias();
+  }, []);
+
+  useEffect(() => {
+    if (!provinciaSeleccionada) {
+      setCantones([]);
+      setCantonSeleccionado("");
       return;
     }
-    localStorage.setItem("cantidadIntegrantes", cantidad - 1);
-    // Ajustar la ruta
-    window.location.href = "formulario.html";
+    const cargarCantones = async () => {
+      const datos = await obtenerTodos(
+        `https://api-geo-cr.vercel.app/provincias/${provinciaSeleccionada}/cantones`
+      );
+      setCantones(datos);
+    };
+    cargarCantones();
+  }, [provinciaSeleccionada]);
+
+  useEffect(() => {
+    if (!cantonSeleccionado) {
+      setDistritos([]);
+      return;
+    }
+    const cargarDistritos = async () => {
+      const datos = await obtenerTodos(
+        `https://api-geo-cr.vercel.app/cantones/${cantonSeleccionado}/distritos`
+      );
+      setDistritos(datos);
+    };
+    cargarDistritos();
+  }, [cantonSeleccionado]);
+
+  const crearFamilia = async () => {
+    const idUsuario = localStorage.getItem("idUsuario");
+
+    if (
+      !albergueSeleccionado ||
+      !codigoFamilia ||
+      !integrantes ||
+      !eventoSeleccionado ||
+      !nombreProvincia ||
+      !nombreCanton ||
+      !nombreDistrito ||
+      !direccion ||
+      !idUsuario
+    ) {
+      alert("Complete todos los campos obligatorios.");
+      return;
+    }
+
+    const datos = {
+      provincia: nombreProvincia,
+      canton: nombreCanton,
+      distrito: nombreDistrito,
+      direccion,
+      codigoFamilia,
+      cantidadPersonas: parseInt(integrantes),
+      idAlbergue: parseInt(albergueSeleccionado),
+      idAmenaza: parseInt(eventoSeleccionado),
+      idUsuarioCreacion: parseInt(idUsuario),
+    };
+
+    try {
+      const res = await customAxios.post("/familias", datos);
+      const idFamilia = res.data.idFamilia;
+      localStorage.setItem("idFamilia", idFamilia);
+      alert("Familia registrada correctamente.");
+      navigate("/formulario");
+    } catch (error) {
+      console.error("Error al crear familia:", error);
+      alert("Hubo un error al crear la familia.");
+    }
   };
 
   return (
-    <form>
-      <details open>
-        <summary>
-          <strong>Información</strong>
-        </summary>
-        <fieldset className="mt-2">
-          <label htmlFor="evento">Tipo de Evento o Emergencia:</label>
-          <select id="evento" className="form-control mb-2">
-            <option value="">Seleccione una opción</option>
-            <option value="inundacion">Inundación</option>
-            <option value="terremoto">Terremoto</option>
-            <option value="incendio">Incendio</option>
-            <option value="deslizamiento">Deslizamiento</option>
-          </select>
+    <details open>
+      <summary><strong>Registro de Familia en Albergue</strong></summary>
+      <fieldset className="mt-2">
+        <legend className="mt-3"><strong>Familia</strong></legend>
 
-          <label htmlFor="integrantes">Cantidad de Integrantes</label>
-          <input
-            type="number"
-            id="integrantes"
-            className="form-control mb-2"
-            placeholder="Ingrese la cantidad"
-            value={integrantes}
-            onChange={(e) => setIntegrantes(e.target.value)}
-          />
-        </fieldset>
-      </details>
+        <label htmlFor="albergue">Albergue:</label>
+        <select
+          id="albergue"
+          className="form-select mb-2"
+          value={albergueSeleccionado}
+          onChange={(e) => setAlbergueSeleccionado(e.target.value)}
+        >
+          <option value="">Seleccione</option>
+          {albergues.map((a) => (
+            <option key={a.id} value={a.id}>{a.nombre}</option>
+          ))}
+        </select>
 
-      <button
-        type="button"
-        className="btn btn-primary mt-3 pre"
-        onClick={guardarCantidadYContinuar}
-      >
-        Continuar
-      </button>
-    </form>
+        <label htmlFor="idFamilia">Código de Familia:</label>
+        <input
+          name="idFamilia"
+          id="idFamilia"
+          type="text"
+          className="form-control mb-2"
+          value={codigoFamilia}
+          onChange={(e) => setCodigoFamilia(e.target.value)}
+          placeholder="Ej: 2025-SJ-03-001"
+        />
+
+        <label htmlFor="integrantes">Integrantes:</label>
+        <input
+          type="number"
+          id="integrantes"
+          className="form-control mb-2"
+          value={integrantes}
+          onChange={(e) => setIntegrantes(e.target.value)}
+          placeholder="Cantidad"
+        />
+
+        <legend className="mt-4"><strong>Evento</strong></legend>
+
+        <label htmlFor="evento">Tipo:</label>
+        <select
+          id="evento"
+          className="form-control mb-2"
+          value={eventoSeleccionado}
+          onChange={(e) => setEventoSeleccionado(e.target.value)}
+        >
+          <option value="">Seleccione</option>
+          {amenazas.map((e) => (
+            <option key={e.id} value={e.id}>{e.evento}</option>
+          ))}
+        </select>
+
+        <legend className="mt-4"><strong>Ubicación</strong></legend>
+
+        <label htmlFor="provincia">Provincia:</label>
+        <select
+          id="provincia"
+          className="form-select mb-2"
+          value={provinciaSeleccionada}
+          onChange={(e) => {
+            const id = e.target.value;
+            setProvinciaSeleccionada(id);
+            const texto = e.target.options[e.target.selectedIndex].text;
+            setNombreProvincia(texto);
+          }}
+        >
+          <option value="">Seleccione</option>
+          {provincias.map((p) => (
+            <option key={p.idProvincia} value={p.idProvincia}>{p.descripcion}</option>
+          ))}
+        </select>
+
+        <label htmlFor="canton">Cantón:</label>
+        <select
+          id="canton"
+          className="form-select mb-2"
+          value={cantonSeleccionado}
+          onChange={(e) => {
+            const id = e.target.value;
+            setCantonSeleccionado(id);
+            const texto = e.target.options[e.target.selectedIndex].text;
+            setNombreCanton(texto);
+          }}
+        >
+          <option value="">Seleccione</option>
+          {cantones.map((c) => (
+            <option key={c.idCanton} value={c.idCanton}>{c.descripcion}</option>
+          ))}
+        </select>
+
+        <label htmlFor="distrito">Distrito:</label>
+        <select
+          id="distrito"
+          className="form-select mb-2"
+          disabled={!distritos.length}
+          onChange={(e) => {
+            const texto = e.target.options[e.target.selectedIndex].text;
+            setNombreDistrito(texto);
+          }}
+        >
+          <option value="">Seleccione</option>
+          {distritos.map((d) => (
+            <option key={d.idDistrito} value={d.idDistrito}>{d.descripcion}</option>
+          ))}
+        </select>
+
+        <label htmlFor="direccion">Dirección:</label>
+        <textarea
+          id="direccion"
+          className="form-control mb-2"
+          placeholder="Ej: 100m norte del parque"
+          value={direccion}
+          onChange={(e) => setDireccion(e.target.value)}
+        ></textarea>
+
+        <button
+          type="button"
+          className="btn btn-success mt-3"
+          onClick={crearFamilia}
+        >
+          Registrar Familia
+        </button>
+      </fieldset>
+    </details>
   );
 };
 
-export default FormularioEvento;
+export default FormularioRegistro;
