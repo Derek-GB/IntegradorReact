@@ -1135,10 +1135,16 @@ form#recursoForm .item {
     margin: 0 auto;
 }
 
+
 .btn-group .btn {
     color: #212529;
-    background-color: #FBC02D;
+    background-color:var(--color-amarillo);
     min-width: 120px;
+    font-size: 0.95rem;
+    text-transform:uppercase ;
+}
+.btn-group .btn:hover {
+    background-color: var(--color-amarillo-hover)
 }
 
 /* --- Responsive --- */
@@ -1664,4 +1670,45 @@ h1, h2 {
 .card a {
   display: block;
   margin-bottom: 10px;
+}
+
+.containerLogin{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: var(--color-fondo);
+  width: 100%;
+  position: fixed;
+
+}
+
+.login-wrapper{
+  width: 50%;
+  margin: 0 auto;
+  padding-bottom: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
+  background-color: var(--color-blanco);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  font-family: var(--fuente-principal);
+  color: var(--color-texto);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-50%);
+  text-align: center;
+  max-width: 400px;
+  
+
+}
+
+.login-wrapper h2 {
+  width: 100%;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  color: var(--color-blanco);
 }

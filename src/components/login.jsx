@@ -37,12 +37,14 @@ const Login = () => {
 }, [error]);
 
   return (
-    <div className="login-wrapper">
+    <>
+    <div className="containerLogin">
+      <div className="login-wrapper">
       <h2>Iniciar Sesión</h2>
       <form onSubmit={handleSubmit} className="login">
         {error && <div className="error">{error}</div>}
 
-        <label htmlFor="usuario">Usuario o correo</label>
+        <label htmlFor="usuario">Usuario o Correo</label>
         <input
           type="text"
           id="usuario"
@@ -69,6 +71,11 @@ const Login = () => {
         </div>
       </form>
     </div>
+
+    </div>
+    
+    </>
+    
   );
 };
 
