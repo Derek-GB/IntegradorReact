@@ -50,7 +50,7 @@ const Login = () => {
       <form onSubmit={handleSubmit} className="login">
         {error && <div className="error">{error}</div>}
 
-        <label htmlFor="usuario">Usuario o correo</label>
+        <label htmlFor="usuario">Usuario</label>
         <input
           type="text"
           id="usuario"
