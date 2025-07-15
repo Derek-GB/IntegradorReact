@@ -84,153 +84,251 @@ const RegistroAlbergue = () => {
   };
 
   return (
-    <div className="container main-content">
-      <h2>Registro de Albergue</h2>
-      <form onSubmit={handleSubmit}>
-        <details open>
-          <summary><strong>Información del Albergue</strong></summary>
-          <fieldset className="mt-2">
-            <label>ID:</label>
-            <input name="id" type="number" value={form.id || ''} onChange={handleChange} required />
 
-            <label>Especificación:</label>
-            <input name="especificacion" type="text" value={form.especificacion || ''} onChange={handleChange} required />
+    <>
+      <div className="header">
+        <h2>Registro de albergue</h2>
+        <button className="btn-header">
+          <span className="material-icons">arrow_back</span>
+        </button>
+      </div>
 
-            <label>Detalle de Condición:</label>
-            <input name="detalle_condicion" type="text" value={form.detalle_condicion || ''} onChange={handleChange} required />
+      <div className="containerRegiAlbergue">
 
-            <label>Sección:</label>
-            <input name="seccion" type="text" value={form.seccion || ''} onChange={handleChange} required />
+        <div className='formRegisAlbergue main-content' onSubmit={handleSubmit}>
+          <section className='ordenRegisAlberg1'>
+            <fieldset className=" fieldsetRegisAlbergue mt-2">
+              <legend>Datos Principales del Albergue</legend>
 
-            <label>Requerimientos Técnicos:</label>
-            <textarea name="requerimientos_tecnicos" value={form.requerimientos_tecnicos || ''} onChange={handleChange} required />
+              <div className="divRegistroAlbergues">
 
-            <label>Coordenada X:</label>
-            <input name="coordenadaX" type="number" step="any" value={form.coordenadaX || ''} onChange={handleChange} required />
+                <div className="divRegisAlbergue">
+                  <label>ID:</label>
+                  <input name="id" type="number" value={form.id || ''} onChange={handleChange} required />
+                </div>
 
-            <label>Coordenada Y:</label>
-            <input name="coordenadaY" type="number" step="any" value={form.coordenadaY || ''} onChange={handleChange} required />
+                <div className="divRegisAlbergue">
+                  <label>Nombre del Albergue:</label>
+                  <input name="nombreAlbergue" type="text" value={form.nombreAlbergue || ''} onChange={handleChange} required />
 
-            <label>Nombre del Albergue:</label>
-            <input name="nombreAlbergue" type="text" value={form.nombreAlbergue || ''} onChange={handleChange} required />
+                </div>
+                <div className="divRegisAlbergue">
+                  <label>Especificación:</label>
+                  <input name="especificacion" type="text" value={form.especificacion || ''} onChange={handleChange} required />
+                </div>
 
-            <label>Región CNE:</label>
-            <select name="regionCNE" value={form.regionCNE || ''} onChange={handleChange} required>
-              <option value="">Seleccione una región</option>
-              {["Región Central", "Región Chorotega", "Región Brunca", "Región Huetar Caribe", "Región Huetar Norte", "Región Pacífico Central"].map(r => (
-                <option key={r}>{r}</option>
-              ))}
-            </select>
 
-            <label>Provincia:</label>
-            <select name="provincia" value={form.provincia || ''} onChange={e => handleProvinciaChange(e.target.value)} required>
-              <option value="">Seleccione una provincia</option>
-              {Object.keys(cantonesPorProvincia).map(p => (
-                <option key={p}>{p}</option>
-              ))}
-            </select>
 
-            <label>Cantón:</label>
-            <select name="canton" value={form.canton || ''} onChange={handleChange} required>
-              <option value="">Seleccione un cantón</option>
-              {cantones.map(c => (
-                <option key={c}>{c}</option>
-              ))}
-            </select>
+              </div>
+              <div className="divRegistroAlbergues">
+                <div className="divRegisAlbergue">
+                  <label>Detalle de Condición:</label>
+                  <input name="detalle_condicion" type="text" value={form.detalle_condicion || ''} onChange={handleChange} required />
+                </div>
 
-            <label>Distrito:</label>
-            <input name="distrito" type="text" value={form.distrito || ''} onChange={handleChange} required />
+                <div className="divRegisAlbergue">
+                  <label>Sección:</label>
+                  <input name="seccion" type="text" value={form.seccion || ''} onChange={handleChange} required />
+                </div>
+              </div>
 
-            <label>Dirección:</label>
-            <textarea name="direccion" value={form.direccion || ''} onChange={handleChange} required />
+            </fieldset>
 
-            <label>Capacidad Total:</label>
-            <input name="capacidad" type="number" min="0" value={form.capacidad || ''} onChange={handleChange} required />
 
-            <label>Costo Requerimientos Técnicos:</label>
-            <input name="costo_requerimientos_tecnicos" type="number" step="any" value={form.costo_requerimientos_tecnicos || ''} onChange={handleChange} required />
+            <fieldset className='fieldsetRegisAlbergue'>
+              <legend>Contacto</legend>
 
-                    <label>Estado del Albergue:</label>
-        <select name="estado" value={form.estado || ''} onChange={handleChange} required>
-          <option value="">Seleccione el estado</option>
-          <option>Abierto</option>
-          <option>Cerrado</option>
-        </select>
+              <div className="divRegistroAlbergues">
 
-        <label>Tipo de Albergue:</label>
-        <select name="tipoAlbergue" value={form.tipoAlbergue || ''} onChange={handleChange} required>
-          <option value="">Seleccione el tipo de albergue</option>
-          <option>Centro Educativo</option>
-          <option>Salón Comunal</option>
-          <option>Iglesia</option>
-          <option>Redondel</option>
-          <option>Gimnasio</option>
-          <option>Casa de Acogida</option>
-          <option>Zona de Refugio Temporal</option>
-        </select>
+                <div className="divRegisAlbergue">
 
-        <label>Tipo de Establecimiento:</label>
-        <select name="tipoEstablecimiento" value={form.tipoEstablecimiento || ''} onChange={handleChange}>
-          <option value="">Seleccione el tipo de establecimiento</option>
-        </select>
+                  <label>Administrador:</label>
+                  <input name="administrador" type="text" value={form.administrador || ''} onChange={handleChange} required />
 
-        <label>Ubicación:</label>
-        <select name="idUbicacion" value={form.idUbicacion || ''} onChange={handleChange} required>
-          <option value="">Seleccione una ubicación</option>
-          {ubicaciones.map(u => (
-            <option key={u.id} value={u.id}>
-              {`${u.provincia} / ${u.canton} / ${u.distrito} / ${u.ubicacion}`}
-            </option>
-          ))}
-        </select>
+                </div>
 
-        <label>Capacidad:</label>
-        <select name="idCapacidad" value={form.idCapacidad || ''} onChange={handleChange} required>
-          <option value="">Seleccione una capacidad</option>
-          {capacidades.map(c => (
-            <option key={c.id} value={c.id}>
-              {`ID ${c.id} - Personas: ${c.capacidadPersonas}, Colectiva: ${c.capacidadColectiva}, Familias: ${c.cantidadFamilias}`}
-            </option>
-          ))}
-        </select>
+                <div className="divRegisAlbergue">
+                  <label>Teléfono:</label>
+                  <input name="telefono" type="tel" value={form.telefono || ''} onChange={handleChange} required pattern="[0-9]{4}-[0-9]{4}" />
+                </div>
+              </div>
+              <div className="divRegistroAlbergues">
+                <div className="divRegisAlbergue">
+                  <label>Municipalidad:</label>
+                  <select name="idMunicipalidad" value={form.idMunicipalidad || ''} onChange={handleChange} required>
+                    <option value="">Seleccione una municipalidad</option>
+                    {municipalidades.map(m => (
+                      <option key={m.id} value={m.id}>
+                        {`ID ${m.id} - ${m.nombre}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </fieldset>
 
-        <label>Infraestructura:</label>
-        <select name="idInfraestructura" value={form.idInfraestructura || ''} onChange={handleChange} required>
-          <option value="">Seleccione una infraestructura</option>
-          {infraestructuras.map(i => (
-            <option key={i.id} value={i.id}>
-              {`ID ${i.id} - Cocina: ${i.cocina}, Ducha: ${i.duchas}, SS: ${i.serviciosSanitarios}, Área: ${i.areaTotalM2} m²`}
-            </option>
-          ))}
-        </select>
+          </section>
 
-        <label>Municipalidad:</label>
-        <select name="idMunicipalidad" value={form.idMunicipalidad || ''} onChange={handleChange} required>
-          <option value="">Seleccione una municipalidad</option>
-          {municipalidades.map(m => (
-            <option key={m.id} value={m.id}>
-              {`ID ${m.id} - ${m.nombre}`}
-            </option>
-          ))}
-        </select>
+          <section className='ordenRegisAlberg2'>
+            <fieldset className='fieldsetRegisAlbergue'>
 
-        <label>Administrador:</label>
-        <input name="administrador" type="text" value={form.administrador || ''} onChange={handleChange} required />
+              <legend>Ubicacion Geografica</legend>
 
-        <label>Teléfono:</label>
-        <input name="telefono" type="tel" value={form.telefono || ''} onChange={handleChange} required pattern="[0-9]{4}-[0-9]{4}" />
+              <div className="divRegistroAlbergues">
+                <div className="divRegisAlbergue">
+                  <label>Región CNE:</label>
+                  <select name="regionCNE" value={form.regionCNE || ''} onChange={handleChange} required>
+                    <option value="">Seleccione una región</option>
+                    {["Región Central", "Región Chorotega", "Región Brunca", "Región Huetar Caribe", "Región Huetar Norte", "Región Pacífico Central"].map(r => (
+                      <option key={r}>{r}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </fieldset>
 
-        <label>Cantidad de Familias:</label>
-        <input name="cantidadFamilias" type="number" min="0" value={form.cantidadFamilias || ''} onChange={handleChange} required />
+            <fieldset className="fieldsetRegisAlbergueX">
+<div className="divRegistroAlbergues">
+              <div className="divRegisAlbergue">
+                <label>Provincia:</label>
+                <select name="provincia" value={form.provincia || ''} onChange={e => handleProvinciaChange(e.target.value)} required>
+                  <option value="">Seleccione una provincia</option>
+                  {Object.keys(cantonesPorProvincia).map(p => (
+                    <option key={p}>{p}</option>
+                  ))}
+                </select>
+              </div>
 
-        <label>Área Total (m²):</label>
-        <input name="areaTotal" type="number" min="0" value={form.areaTotal || ''} onChange={handleChange} required />
-      </fieldset>
-    </details>
-    <button type="submit" className="btn btn-primary mt-3">Registrar</button>
-  </form>
-</div>
-);
+              <div className="divRegisAlbergue">
+                <label>Cantón:</label>
+                <select name="canton" value={form.canton || ''} onChange={handleChange} required>
+                  <option value="">Seleccione un cantón</option>
+                  {cantones.map(c => (
+                    <option key={c}>{c}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="divRegisAlbergue">
+
+                <label>Distrito:</label>
+                <input name="distrito" type="text" value={form.distrito || ''} onChange={handleChange} required />
+              </div>
+            </div>
+            </fieldset>
+           
+
+            <fieldset className='fieldsetRegisAlbergueX'>
+              <div className="divRegistroAlbergues">
+
+                <div className="divRegisAlbergue">   <label>Coordenada X:</label>
+                  <input name="coordenadaX" type="number" step="any" value={form.coordenadaX || ''} onChange={handleChange} required />
+                </div>
+
+                <div className="divRegisAlbergue">
+                  <label>Coordenada Y:</label>
+                  <input name="coordenadaY" type="number" step="any" value={form.coordenadaY || ''} onChange={handleChange} required />
+
+                </div>
+              </div>
+              <div className="divRegistroAlberguesDireccion">
+
+                <div className="divRegisAlbergueDireccion">
+                  <label>Dirección:</label>
+                  <textarea name="direccion" value={form.direccion || ''} onChange={handleChange} required />
+
+                </div>
+              </div>
+
+            </fieldset>
+          </section>
+        </div>
+
+        <div className="formRegisAlbergue main-content">
+          <section className='ordenRegisAlberg3'>
+
+            <fieldset className='fieldsetRegisAlbergue'>
+              <legend>Capacidad y Requerimientos Técnicos</legend>
+
+              <div className="divRegistroAlbergues">
+
+
+                <div className="divRegisAlbergue">
+                  <label>Cantidad de Familias:</label>
+                  <input name="cantidadFamilias" type="number" min="0" value={form.cantidadFamilias || ''} onChange={handleChange} required />
+                </div>
+
+                <div className="divRegisAlbergue">
+                    <label>Infraestructura:</label>
+                    <select name="idInfraestructura" value={form.idInfraestructura || ''} onChange={handleChange} required>
+                      <option value="">Seleccione una infraestructura</option>
+                      {infraestructuras.map(i => (
+                        <option key={i.id} value={i.id}>
+                          {`ID ${i.id} - Cocina: ${i.cocina}, Ducha: ${i.duchas}, SS: ${i.serviciosSanitarios}, Área: ${i.areaTotalM2} m²`}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                <div className="divRegisAlbergue">
+                  <label>Tipo de Establecimiento:</label>
+                  <select name="tipoEstablecimiento" value={form.tipoEstablecimiento || ''} onChange={handleChange}>
+                    <option value="">Seleccione el tipo de establecimiento</option>
+                  </select>
+                </div>
+                </div>
+                  
+                <div className="divRegistroAlbergues">
+                  <div className="divRegisAlbergue">
+
+                    <label>Ubicación:</label>
+                    <select name="idUbicacion" value={form.idUbicacion || ''} onChange={handleChange} required>
+                      <option value="">Seleccione una ubicación</option>
+                      {ubicaciones.map(u => (
+                        <option key={u.id} value={u.id}>
+                          {`${u.provincia} / ${u.canton} / ${u.distrito} / ${u.ubicacion}`}
+                        </option>
+                      ))}
+                    </select>
+
+                  </div>
+
+
+                  <div className="divRegisAlbergue">
+                    <label>Capacidad:</label>
+                    <select name="idCapacidad" value={form.idCapacidad || ''} onChange={handleChange} required>
+                      <option value="">Seleccione una capacidad</option>
+                      {capacidades.map(c => (
+                        <option key={c.id} value={c.id}>
+                          {`ID ${c.id} - Personas: ${c.capacidadPersonas}, Colectiva: ${c.capacidadColectiva}, Familias: ${c.cantidadFamilias}`}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="divRegisAlbergue"><label>Requerimientos Técnicos:</label>
+                  <textarea name="requerimientos_tecnicos" value={form.requerimientos_tecnicos || ''} onChange={handleChange} required />
+                </div>
+                </div>
+
+
+
+
+              
+
+            </fieldset>
+          </section>
+
+        </div>
+
+
+        <button type="submit" className="btn btn-primary mt-3">Registrar</button>
+
+
+      </div>
+
+    </>
+
+  );
 }
 
 export default RegistroAlbergue;

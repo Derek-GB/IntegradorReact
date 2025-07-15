@@ -49,21 +49,27 @@ body {
 }
 
 .containerInicio {
-  background: linear-gradient(135deg, var(--color-verde-form) 0%, var(--color-verde-oscuro) 100%);
   color: var(--color-texto);
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
-  padding: 40px 30px 30px 30px;
+  padding: 30px 30px 30px 30px;
   margin: 0px auto 30px auto;
   max-width: 1050px;
-
   min-height: 420px;
-  height: 590px;
+  height: 790px;
   position: relative;
   top: 20px;
   left: 20%;
-  margin-bottom: 19%;
+  margin-bottom: 12%;
   text-align: center;
+  background: linear-gradient(135deg, var(--color-verde-form) 0%, var(--color-verde-oscuro) 100%);
+
+}
+
+.bienvenida {
+  width: 100%;
+  height: fit-content;
+
 }
 
 .containerInicio .bienvenida h1 {
@@ -777,7 +783,7 @@ body {
   width: 100%;
   height: 100%;
   display: flex;
-  
+
 }
 
 .formRegistroProducto {
@@ -822,12 +828,13 @@ body {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+
 .fieldsetRegistroProducto2 button:hover {
   background-color: var(--color-amarillo-hover);
   color: var(--color-blanco);
 }
 
-.divRegiProductos{
+.divRegiProductos {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -837,7 +844,7 @@ body {
   align-items: center;
   margin-right: 0px;
   margin-left: 0px;
-  
+
 }
 
 .divRegiProducto1 {
@@ -870,6 +877,7 @@ body {
   justify-content: space-around;
   text-align: center;
 }
+
 .divRegiProducto label {
   width: 20%;
   font-size: 1.2rem;
@@ -880,9 +888,10 @@ body {
   margin-right: 10px;
   margin-bottom: 5px;
 }
+
 .divRegiProducto1 input,
 .divRegiProducto1 select {
-  width:100;
+  width: 100;
   height: 40px;
   border: 1px solid var(--color-gris-borde);
   border-radius: 4px;
@@ -904,9 +913,9 @@ body {
   margin-bottom: 5px;
 }
 
-.divRegiProducto2 input[type ="number"],
+.divRegiProducto2 input[type="number"],
 .divRegiProducto2 select {
-  width:100%;
+  width: 100%;
   height: 40px;
   border: 1px solid var(--color-gris-borde);
   border-radius: 4px;
@@ -917,7 +926,7 @@ body {
   align-self: center;
 }
 
-.divRegiProductosDescripcion input{
+.divRegiProductosDescripcion input {
   width: 80%;
   height: 140px;
   border: 1px solid var(--color-gris-borde);
@@ -931,10 +940,104 @@ body {
 
 
 
-/* === SIDEBAR RETRAÍDO Y EXPANDIBLE === */
 
 
 
+/* === Registro Albergue=== */
+
+.containerRegiAlbergue {
+  max-width: 100%;
+  width: 100%;
+  height: 100vh;
+  margin: 0px auto;
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+
+
+}
+
+.formRegisAlbergue {
+  max-width: 100%;
+  width: 100%;
+  display: flex;
+  position: relative;
+  right: 55px;
+  flex-direction: row;
+  height: 100vh;
+  background-color: var(--color-fondo);
+  overflow: visible;
+}
+
+.fieldsetRegisAlbergue {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  align-items: center;
+  height: 50%;
+  position: relative;
+  top: 40px;
+  border-top: #00000027 solid 0.11rem;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+.fieldsetRegisAlbergueX {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  align-items: center;
+  height: 50%;
+  position: relative;
+  top: 40px;
+ border: none;
+}
+
+.divRegistroAlbergues {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: fit-content;
+  margin-bottom: 20px;
+  justify-content: center;
+  justify-content: space-around;
+
+}
+
+.divRegisAlbergue {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 20px;
+  justify-content: center;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+}
+
+.ordenRegisAlberg1 {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-right: #00000027 1px solid;
+}
+
+.ordenRegisAlberg2 {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0px;
+}
+
+.ordenRegisAlberg3 {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
 
 
 /* --- SIDEBAR RETRAÍDO Y EXPANDIBLE --- */
@@ -991,6 +1094,10 @@ body {
   text-align: center;
   margin-left: 10px;
   margin-right: 16px;
+}
+
+.sidebar nav ul li :hover {
+  color: var(--color-amarillo-hover);
 }
 
 /* Oculta el texto de los enlaces cuando está retraído */
