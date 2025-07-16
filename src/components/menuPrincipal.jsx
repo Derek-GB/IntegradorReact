@@ -1,10 +1,13 @@
 // src/components/FormularioAbastecimiento.jsx
 import React, { useEffect, useState } from 'react';
-import './formulario.css';
-import './menu.css';
+import "../styles/formularioFusionado.css";
+import "../styles/menuPrincipal.css"; // Asegúrate de que la ruta sea correcta
+import { useNavigate } from 'react-router-dom';
 
 function FormularioAbastecimiento() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
+
     fecha: '',
     comida: '',
     personas: '',
@@ -154,7 +157,7 @@ function FormularioAbastecimiento() {
                 {guardado ? 'Guardado' : 'Guardar'}
               </button>
 
-              <button type="button" id="btnEnviar" onClick={handleEnviar}>
+              <button className="btn-enviar" onClick={() => navigate('/formularioAbarrotes')}>
                 Enviar
               </button>
             </div>

@@ -17,6 +17,7 @@ import RegistroAlbergue from './components/RegistroAlbergue.jsx';
 import RegistroUsuario from './components/registroUsuario.jsx';
 import ListaProducto from './components/ListaProducto.jsx';
 import ListaAlbergue from './components/ListaAlbergue.jsx';
+import MenuPrincipal from './components/MenuPrincipal.jsx';
 import FormularioAbastecimiento from './components/formularioAbarrotes.jsx';
 import ActualizarAlbergue from './components/ActualizarAlbergue.jsx';
 
@@ -54,6 +55,7 @@ const App = () => {
             <Route path="/registroUsuario" element={<RegistroUsuario />} />
             <Route path="/listaProducto" element={<ListaProducto />} />
             <Route path="/listaAlbergue" element={<ListaAlbergue />} />
+            <Route path="/menuPrincipal" element={<MenuPrincipal />} />
             <Route path="/formularioAbarrotes" element={<FormularioAbastecimiento />} />
             <Route path="/ajusteInventario" element={<AjusteInventario />} />
             <Route path="/ActualizarAlbergue" element={<ActualizarAlbergue idAlbergue={17} />} />
