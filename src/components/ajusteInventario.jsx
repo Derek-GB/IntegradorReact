@@ -1,83 +1,107 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/ajusteInventario.css";
+import { productosAPI, ajusteInventarioAPI } from "../helpers/api";
 
 export default function AjusteInventario() {
+  const [productos, setProductos] = useState([]);
   const [idProducto, setIdProducto] = useState("");
   const [motivo, setMotivo] = useState("");
-  const [arti, setArti] = useState("");
+  const [cantidadOriginal, setCantidadOriginal] = useState("");
   const [cantidadReal, setCantidadReal] = useState("");
-  const [fecha, setFecha] = useState("");
   const [mensaje, setMensaje] = useState("");
 
-  // Simulación de búsqueda de producto por ID
-  const handleBuscarIdProducto = () => {
-    // Aquí puedes abrir un modal o buscar en una lista real
-    // Por ahora solo simula un resultado
-    setIdProducto("12345");
-    setArti("Ejemplo Artículo");
-    setMensaje("Producto encontrado y seleccionado.");
-  };
+  const fetchProductos = async () => {
+      try {
+        const res = await productosAPI.getAll();
+        setProductos(res.data);
+      } catch (error) {
+        setMensaje("Error al cargar productos.", error.mensaje);
+      }
+    };
 
-  const handleBuscarArticulo = () => {
-    setArti("Ejemplo Artículo");
-    setMensaje("Artículo encontrado y seleccionado.");
-  };
+  useEffect(() => {
+    fetchProductos();
+  }, []);
 
-  const handleAjuste = (e) => {
+  useEffect(() => {
+    const productoSeleccionado = productos.find(p => p.id === Number(idProducto));
+    setCantidadOriginal(productoSeleccionado?.cantidad ?? "");
+    setCantidadReal(""); 
+    setMotivo(""); 
+  }, [idProducto, productos]);
+
+  useEffect(() => {
+    if (!mensaje) return;
+    alert(mensaje);
+  }, [mensaje]);
+
+  const handleAjuste = async (e) => {
     e.preventDefault();
-    if (!idProducto || !motivo || !arti || !cantidadReal || !fecha) {
+    if (!idProducto || !motivo || !cantidadOriginal || !cantidadReal) {
       setMensaje("Completa todos los campos.");
       return;
     }
-    setMensaje("Ajuste registrado correctamente.");
-    setIdProducto("");
-    setMotivo("");
-    setArti("");
-    setCantidadReal("");
-    setFecha("");
+
+    try {
+      await ajusteInventarioAPI.create({
+        idProducto: Number(idProducto),
+        justificacion: motivo,
+        cantidadOriginal: Number(cantidadOriginal),
+        cantidadAjustada: Number(cantidadReal),
+        idUsuarioCreacion: localStorage.getItem("idUsuario"), // se obtiene del almacenamiento local
+      });
+
+      setMensaje("Ajuste registrado correctamente.");
+      setIdProducto("");
+      setMotivo("");
+      setCantidadOriginal("");
+      setCantidadReal("");
+      fetchProductos();
+    } catch (error) {
+      setMensaje("Error al registrar el ajuste.", error.mensaje);
+    }
   };
 
   return (
     <div className="ajuste-inventario-fullscreen">
       <form className="ajuste-inventario-form" onSubmit={handleAjuste}>
         <h2>Ajuste de Inventario</h2>
+
         <label>
-          Buscar producto:
-          <div style={{ display: "flex", gap: "8px" }}>
-            <input
-              type="text"
-              value={idProducto}
-              onChange={(e) => setProducto(e.target.value)}
-              placeholder="Buscar producto"
-              style={{ flex: 1 }}
-            />
-            <button
-              type="button"
-              onClick={handleBuscarIdProducto}
-              title="Buscar producto"
-              className="boton-buscar-id"
-            >
-              +
-            </button>
-          </div>
+          Producto:
+          <select
+            value={idProducto}
+            onChange={(e) => setIdProducto(e.target.value)}
+          >
+            <option value="">Seleccionar producto</option>
+            {productos.map((producto) => (
+              <option key={producto.id} value={producto.id}>
+                {producto.nombre}
+              </option>
+            ))}
+          </select>
         </label>
-        Motivo:
-        <input
-          type="text"
-          value={motivo}
-          onChange={(e) => setMotivo(e.target.value)}
-          placeholder="Motivo del ajuste"
-        />
+
         <label>
-          Articulo:
+          Motivo:
           <input
             type="text"
-            value={arti}
-            onChange={(e) => setArti(e.target.value)}
-            placeholder="Nombre del artículo"
-            readOnly
+            value={motivo}
+            onChange={(e) => setMotivo(e.target.value)}
+            placeholder="Motivo del ajuste"
           />
         </label>
+
+        <label>
+          Cantidad registrada:
+          <input
+            type="number"
+            value={cantidadOriginal}
+            readOnly
+            placeholder="Cantidad registrada"
+          />
+        </label>
+
         <label>
           Cantidad real:
           <input
@@ -87,16 +111,9 @@ export default function AjusteInventario() {
             placeholder="Cantidad real"
           />
         </label>
-        <label>
-          Fecha:
-          <input
-            type="date"
-            value={fecha}
-            onChange={(e) => setFecha(e.target.value)}
-          />
-        </label>
+
         <button type="submit">Registrar Ajuste</button>
-        {mensaje && <p>{mensaje}</p>}
+        {/* {mensaje && <p>{mensaje}</p>} */}
       </form>
     </div>
   );
