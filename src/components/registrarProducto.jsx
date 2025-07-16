@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { productosAPI } from '../helpers/api';
 import '../styles/formularioFusionado.css'; // Asegúrate de que la ruta sea correcta';
-import '../styles/indexx.css';
 
 
 const RegistrarProducto = () => {
