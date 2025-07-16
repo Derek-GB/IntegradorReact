@@ -16,9 +16,9 @@ const Sidebar = () => {
     { href: "/listaProducto.", icon: "list", label: "Lista de Productos" },
     { href: "/listaAlbergue", icon: "list_alt", label: "Lista de Albergues" },
     { href: "/menuPrincipal", icon: "warehouse", label: "menu Principal" },
-{ href: "/formularioAbarrotes", icon: "local_shipping", label: "Abastecimiento" },
-{ href: "/ajusteInventario", icon: "warehouse", label: "Ajuste de inventario" },
-{ href: "/registroAmenazas", icon: "report", label: "Registro de Amenazas" }
+    { href: "/formularioAbarrotes", icon: "local_shipping", label: "Abastecimiento" },
+    { href: "/ajusteInventario", icon: "warehouse", label: "Ajuste de inventario" },
+    { href: "/registroAmenazas", icon: "report", label: "Registro de Amenazas" }
   ];
 
   return (
