@@ -1,6 +1,9 @@
 import React from 'react';
-import './styles/formularioFusionado.css'; // Asegúrate de que la ruta sea correcta
+import './styles/formularioFusionado.css'; // Asegúrate de que esta ruta sea correcta
+
 import { Routes, Route, useLocation } from 'react-router-dom';
+
+// Componentes
 import Sidebar from './components/sidebar.jsx';
 import Login from './components/Login.jsx';
 import Inicio from './components/Inicio.jsx';
@@ -19,17 +22,25 @@ import ActualizarAlbergue from './components/ActualizarAlbergue.jsx';
 import AjusteInventario from "./components/ajusteInventario";
 import RecuperarContrasena from './components/recuperarContrasena';
 import RestablecerContrasena from './components/restablecerContrasena';
+import FormularioAbastecimiento from './components/formularioAbarrotes.jsx';
+import AjusteInventario from './components/ajusteInventario.jsx';
+import RecuperarContrasena from './components/recuperarContrasena.jsx';
+import RestablecerContrasena from './components/restablecerContrasena.jsx';
 
 
 const App = () => {
   const location = useLocation();
-  const isLogin = location.pathname === '/'|| location.pathname === '/recuperarContrasena'|| location.pathname === '/restablecerContrasena';
+
+  // Ocultar sidebar si estamos en login o recuperación
+  const isLogin =
+    location.pathname === '/' ||
+    location.pathname === '/recuperarContrasena' ||
+    location.pathname === '/restablecerContrasena';
 
   return (
     <>
       <div className="app-container">
-
-        {!isLogin && <Sidebar/>}
+        {!isLogin && <Sidebar />}
 
         <div className="container main-content">
           <Routes>
@@ -58,7 +69,30 @@ const App = () => {
           </Routes>
         </div>
       </div>
-    </>
+            <Route path="/inicio" element={<Inicio />} />
+            <Route path="/preFormulario" element={<PreFormulario />} />
+            <Route path="/registroSuministros" element={<RegistroSuministros />} />
+            <Route path="/asignacionRecursos" element={<AsignacionRecursos />} />
+            <Route path="/busquedaAlbergue" element={<BusquedaAlbergue />} />
+            <Route path="/ayudaForm" element={<AyudaForm />} />
+            <Route path="/registrarProducto" element={<RegistrarProducto />} />
+            <Route path="/registroAlbergue" element={<RegistroAlbergue />} />
+            <Route path="/registroUsuario" element={<RegistroUsuario />} />
+            <Route path="/listaProducto" element={<ListaProducto />} />
+            <Route path="/listaAlbergue" element={<ListaAlbergue />} />
+            <Route path="/formularioAbarrotes" element={<FormularioAbastecimiento />} />
+            <Route path="/ajusteInventario" element={<AjusteInventario />} />
+            <Route path="/recuperarContrasena" element={<RecuperarContrasena />} />
+            <Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
+          </Routes>
+   d
+
+      <footer>
+        <p>© 2025 Integrador I - Todos los derechos reservados.</p>
+      </footer>
+      </div>
+    </div>
+  </div>  
   );
 };
 
