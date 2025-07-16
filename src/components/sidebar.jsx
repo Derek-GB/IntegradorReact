@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom'
+import React from 'react';
+import '../styles/formularioFusionado.css'; // Asegúrate de que la ruta sea
 
 const Sidebar = () => {
   const links = [
@@ -20,7 +22,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside id="sidebar" className="sidebar">
+    <aside className="sidebar">
       <nav>
         <ul>
           {links.map((link, index) => (
