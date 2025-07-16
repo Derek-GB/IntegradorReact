@@ -17,7 +17,7 @@ import RegistroAlbergue from './components/RegistroAlbergue.jsx';
 import RegistroUsuario from './components/registroUsuario.jsx';
 import ListaProducto from './components/ListaProducto.jsx';
 import ListaAlbergue from './components/ListaAlbergue.jsx';
-import FormularioAbastecimiento from './components/FormularioAbarrotes.jsx';
+import FormularioAbastecimiento from './components/formularioAbarrotes.jsx';
 import ActualizarAlbergue from './components/ActualizarAlbergue.jsx';
 import AjusteInventario from "./components/ajusteInventario";
 import RecuperarContrasena from './components/recuperarContrasena';
@@ -45,30 +45,7 @@ const App = () => {
         <div className="container main-content">
           <Routes>
             <Route path="/" element={<Login />} />
-            <Route path="/inicio.jsx" element={<Inicio />} />
-            <Route path="/preFormulario.jsx" element={<PreFormulario />} />
-            <Route path="/registroSuministros.jsx" element={<RegistroSuministros />} />
-            <Route path="/asignacionRecursos.jsx" element={<AsignacionRecursos />} />
-            <Route path="/busquedaAlbergue.jsx" element={<BusquedaAlbergue />} />
-            <Route path="/ayudaForm.jsx" element={<AyudaForm />} />
-            <Route path="/registrarProducto.jsx" element={<RegistrarProducto />} />
-            <Route path="/registroAlbergue.jsx" element={<RegistroAlbergue />} />
-            <Route path="/registroUsuario.jsx" element={<RegistroUsuario />} />
-            <Route path="/listaProducto.jsx" element={<ListaProducto />} />
-            <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
-            <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
-
-            <Route path="/ActualizarAlbergue.jxs" element={<ActualizarAlbergue idAlbergue={17} />} />
-
-            <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
-<Route path="/ActualizarAlbergue.jsx" element={<ActualizarAlbergue idAlbergue={17} />} />
-<Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
-<Route path="/recuperarContrasena.jsx" element={<RecuperarContrasena />} />
-<Route path="/restablecerContrasena.jsx" element={<RestablecerContrasena />} />
-<Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
-          </Routes>
-        </div>
-      </div>
+            
             <Route path="/inicio" element={<Inicio />} />
             <Route path="/preFormulario" element={<PreFormulario />} />
             <Route path="/registroSuministros" element={<RegistroSuministros />} />
@@ -82,17 +59,16 @@ const App = () => {
             <Route path="/listaAlbergue" element={<ListaAlbergue />} />
             <Route path="/formularioAbarrotes" element={<FormularioAbastecimiento />} />
             <Route path="/ajusteInventario" element={<AjusteInventario />} />
+            <Route path="/ActualizarAlbergue" element={<ActualizarAlbergue idAlbergue={17} />} />
             <Route path="/recuperarContrasena" element={<RecuperarContrasena />} />
             <Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
           </Routes>
-   d
-
-      <footer>
-        <p>© 2025 Integrador I - Todos los derechos reservados.</p>
-      </footer>
+        </div>
+        <footer>
+          <p>© 2025 Integrador I - Todos los derechos reservados.</p>
+        </footer>
       </div>
-    </div>
-  </div>  
+    </>
   );
 };
 
