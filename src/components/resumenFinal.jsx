@@ -38,7 +38,7 @@ const ResumenFinal = () => {
         </button>
       </header>
 
-      <main className="main-content">
+      <main className="main-Content-abarrote">
         <div className="card" style={{ maxWidth: '800px', width: '100%' }}>
           <h2 style={{ marginTop: '2rem' }}>Productos Registrados</h2>
           <table>

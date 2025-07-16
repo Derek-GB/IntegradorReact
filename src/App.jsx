@@ -1,15 +1,16 @@
 import React from 'react';
+import './styles/formularioFusionado.css'; // Asegúrate de que la ruta sea correcta
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Sidebar from './components/sidebar.jsx';
-import Login from './components/login.jsx';
+import Login from './components/Login.jsx';
 
 import Inicio from './components/Inicio.jsx';
 import PreFormulario from './components/PreFormulario.jsx';
-import RegistroSuministros from './components/RegistroSuministros.jsx';
+import RegistroSuministros from './components/registroSuministros.jsx';
 import AsignacionRecursos from './components/AsignacionRecursos.jsx';
 import BusquedaAlbergue from './components/BusquedaAlbergue.jsx';
-import AyudaForm from './components/AyudaForm.jsx';
-import RegistrarProducto from './components/RegistrarProducto.jsx';
+import AyudaForm from './components/ayudaForm.jsx';
+import RegistrarProducto from './components/registrarProducto.jsx';
 import RegistroAlbergue from './components/RegistroAlbergue.jsx';
 import RegistroUsuario from './components/registroUsuario.jsx';
 import ListaProducto from './components/ListaProducto.jsx';
@@ -21,7 +22,7 @@ import RestablecerContrasena from './components/restablecerContrasena';
 import FamiliaFormulario from './components/familiaFormulario.jsx';
 import FormularioIntegrantes from "./components/formularioIntegrantes";
 
-import './styles/formularioFusionado.css';
+
 
 const App = () => {
   const location = useLocation();
@@ -30,7 +31,9 @@ const App = () => {
   return (
     <>
       <div className="app-container">
-        {!isLogin && <Sidebar />}
+
+        {!isLogin && <Sidebar/>}
+
         <div className="container main-content">
           <Routes>
             <Route path="/" element={<Login />} />

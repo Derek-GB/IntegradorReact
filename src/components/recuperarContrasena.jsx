@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import emailjs from '@emailjs/browser';
-import '../styles/formulario.css';
 
 const recuperarContrasena = () => {
   const [correo, setCorreo] = useState('');

@@ -11,6 +11,7 @@
   --color-texto: #212529;
   --color-verde-form: #00897B;
   --fuente-principal: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --color-verde-form: #00897B;
 }
 
 /* === RESET Y BODY === */
@@ -21,13 +22,13 @@ body {
   font-size: 18px;
   line-height: 1.6;
   letter-spacing: 0.05em;
+  display: flex;
   margin: 0;
-  padding: 0;
   transition: all 0.3s ease;
 }
 
 /* === APP CONTAINER === */
-#root{
+#root {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -35,58 +36,58 @@ body {
 }
 
 .container {
-    max-width: 100%;
-    margin: 0px auto;
-    margin-left: 0px;
-    margin-bottom: 20px;
-    padding: 20px;
-    text-align: center;
-    background-color: #FAFAFA;
-    color: black;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    
+  max-width: 100%;
+  width: 100%;
+  height: 100vh;
+  margin: 0px auto;
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  display: flex;
+  flex-direction: column;
+
+
 }
 
-.containerIndex {
-  background: linear-gradient(135deg, #00897B 0%, #004D40 100%);
-  color: #f4f8f7;
+.containerInicio {
+  color: var(--color-texto);
   border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-  padding: 40px 30px 30px 30px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+  padding: 30px 30px 30px 30px;
   margin: 0px auto 30px auto;
   max-width: 1050px;
-
   min-height: 420px;
-  height: 590px;
+  height: 790px;
   position: relative;
   top: 20px;
   left: 20%;
-  margin-bottom: 19%;
+  margin-bottom: 12%;
   text-align: center;
+  background: linear-gradient(135deg, var(--color-verde-form) 0%, var(--color-verde-oscuro) 100%);
+
 }
 
-.containerIndex .bienvenida h1 {
-  color: #FBC02D;
+.bienvenida {
+  width: 100%;
+  height: fit-content;
+
+}
+
+.containerInicio .bienvenida h1 {
+  color: var(--color-amarillo);
   font-size: 2.2em;
   margin-bottom: 18px;
   font-weight: 700;
   letter-spacing: 1px;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
 }
 
-.containerIndex .intro {
+.containerInicio .intro {
   font-size: 1.15em;
   margin-bottom: 22px;
   color: #e0f7fa;
 }
 
-.containerIndex .ventajas {
+.containerInicio .ventajas {
   list-style: none;
   padding: 0;
   margin: 0 0 22px 0;
@@ -96,290 +97,1244 @@ body {
   gap: 18px;
 }
 
-.containerIndex .ventajas li {
-  background: rgba(255,255,255,0.10);
+.containerInicio .ventajas li {
+  background: rgba(255, 255, 255, 0.10);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   padding: 14px 22px;
   font-size: 1.08em;
-  color: #ffe082;
+  color: var(--color-amarillo);
   display: flex;
   align-items: center;
   gap: 10px;
   min-width: 220px;
-  border: 1px solid rgba(255,255,255,0.13);
+  border: 1px solid rgba(255, 255, 255, 0.13);
 }
 
-.containerIndex .ventajas i {
+.containerInicio .ventajas i {
   font-size: 1.3em;
-  color: #FBC02D;
+  color: var(--color-amarillo);
 }
 
-.containerIndex .progreso {
+.containerInicio .progreso {
   margin-top: 18px;
 }
 
-.containerIndex .badge {
-  background: #FBC02D;
-  color: #212121;
+.containerInicio .badge {
+  background: var(--color-amarillo);
+  color: var(--color-texto);
   padding: 7px 18px;
   border-radius: 20px;
   font-weight: bold;
   font-size: 1em;
   letter-spacing: 0.5px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
 }
 
 @media (max-width: 700px) {
-  .containerIndex {
+  .containerInicio {
     padding: 18px 6px 18px 6px;
     min-height: 320px;
   }
-  .containerIndex .ventajas {
+
+  .containerInicio .ventajas {
     flex-direction: column;
     gap: 10px;
   }
 }
 
 .containerCONSULTA {
-    max-width: 100%;
-    margin: 0px auto;
-    margin-bottom: 20px;
-    padding: 20px;
-    text-align: center;
-    background-color: #FAFAFA;
-    color: #FAFAFA;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  max-width: 100%;
+  margin: 0px auto;
+  margin-bottom: 20px;
+  padding: 20px;
+  text-align: center;
+  background-color: var(--color-blanco);
+  color: var(--color-blanco);
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .container1 {
-    max-width: 100%;
-    margin: 0px auto;
-    margin-left: 320px;
-    margin-right: 40px;
-    margin-bottom: 20px;
-    padding: 20px;
-    text-align: center;
-    background-color: #00897B;
-    color: #0000;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  max-width: 100%;
+  margin: 0px auto;
+  margin-left: 320px;
+  margin-right: 40px;
+  margin-bottom: 20px;
+  padding: 20px;
+  text-align: center;
+  background-color: #00897B;
+  color: #0000;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .preContainer {
-    max-width: 100%;
-    margin: 0px auto;
-    margin-left: 0px;
+  max-width: 100%;
+  width: auto;
+  margin: 0px auto;
+  margin-left: 0px;
+  margin-bottom: 10%;
+  padding: 20px;
+}
 
-    margin-bottom: 10%;
-    padding: 20px;
-    text-align: center;
-    background-color: #FAFAFA;
-    color: black;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    
+/* Form de PreFormulario */
+
+.formPreFormulario {
+  max-width: 100%;
+  width: 100%;
+  display: flex;
+  position: relative;
+  right: 55px;
+  flex-direction: column;
+  height: 100vh;
+  background-color: var(--color-fondo);
+
+}
+
+.formPreFormulario h2 {
+  font-size: 1.5rem;
+  color: var(--color-verde-form);
+  padding: 25px;
+  border: var(--color-verde-form) solid 2px;
+  text-align: center;
+  font-family: var(--fuente-principal);
+  letter-spacing: 0.05em;
+  border-radius: 1px;
+}
+
+.formPreFormulario details {
+  background-color: var(--color-blanco);
+  border-radius: 8px;
+  padding-top: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  position: static;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+
+}
+
+
+
+/* Alternativamente, para desactivar solo la acción de expandir/cerrar pero mantener el estilo: */
+.formPreFormulario details summary {
+  text-align: center;
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Deshabilita el ::before y la animación de flecha en summary */
+.formPreFormulario details summary::before {
+  content: none !important;
+}
+
+.formPreFormulario details summary strong {
+  color: var(--color-blanco);
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 6px;
+  text-align: center;
+  font-family: var(--fuente-principal);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.formPreFormulario details fieldset {
+  border: none;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background-color: var(--color-blanco);
+  display: flex;
+  flex-direction: row;
+
+}
+
+.formPreFormulario details fieldset label {
+  width: 20%;
+  font-size: 1.2rem;
+  color: var(--color-texto);
+  text-align: center;
+  font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.formPreFormulario details fieldset select {
+  width: 25%;
+  height: 40px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 10px;
+  margin-right: 15px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.formPreFormulario details fieldset select:focus {
+  outline: none;
+  border-color: var(--color-verde-form);
+}
+
+.formPreFormulario details fieldset input[type="number"] {
+  width: 25%;
+  height: 40px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 10px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+/*----------Registro de Suministros en Albergue ----------*/
+
+#registroSuministrosField {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  height: 100%;
+  position: relative;
+  top: 40px;
+  border-top: #00000027 solid 0.11rem;
+  border-left: none;
+}
+
+#registroSuministrosField button {
+  width: 120px;
+  height: 50px;
+  border: none;
+  border-radius: 6px;
+  color: var(--color-blanco);
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: relative;
+  top: 200px;
+}
+
+#registroSuministrosField input[type="text"] {
+
+  width: 80%;
+  height: 140px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 10px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  align-self: center;
+}
+
+
+#registroSuministros1 {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 20px;
+  justify-content: center;
+  justify-content: space-around;
+}
+
+.legendPrincipalProducto {
+  text-align: left;
+  font-weight: 450;
+  color: var(--color-texto);
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+#registroSuministros1 label {
+  width: 20%;
+  font-size: 1.2rem;
+
+  font-family: var(--fuente-principal);
+  color: var(--color-texto);
+  text-align: center;
+  font-weight: 700;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+
+#registroSuministros1 input[type="text"],
+#registroSuministros1 input[type="number"],
+#registroSuministros1 select {
+  width: 25%;
+  height: 40px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 10px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+
+#divProducto {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 20px;
+  justify-content: center;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+}
+
+#divProducto label {
+  width: 70%;
+  font-size: 1.3rem;
+  color: var(--color-texto);
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-family: var(--fuente-principal);
+}
+
+
+#divProducto input[type="text"],
+#divProducto input[type="number"],
+#divProducto select {
+  width: 70%;
+  height: 40px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 10px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  align-self: center;
+}
+
+/*----------Registro de Familia en Albergue ----------*/
+
+#detailsFamilia {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+
+#registroFamiliaField {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  height: 100%;
+  position: relative;
+  top: 40px;
+  border-top: #00000027 solid 0.11rem;
+  border-left: none;
+}
+
+#registroFamiliaField button {
+  width: 120px;
+  height: 50px;
+  border: none;
+  border-radius: 6px;
+  color: var(--color-blanco);
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: relative;
+  top: 80px;
+}
+
+.legendFamiliaField {
+  text-align: left;
+  font-weight: 450;
+  color: var(--color-texto);
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+}
+
+#registroFamilia1 {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 20px;
+  justify-content: center;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#registroFamiliaUbicacion {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 20px;
+  justify-content: center;
+  justify-content: space-around;
+  text-align: center;
+}
+
+#registroFamiliaUbicacion select {
+  width: 25%;
+  height: 40px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 10px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+
+#divFamilia {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 20px;
+  justify-content: center;
+  justify-content: space-around;
+  text-align: center;
+}
+
+#divFamilia legend {
+  width: 50%;
+  font-size: 1.2rem;
+  color: var(--color-texto);
+  text-align: center;
+  font-weight: 450;
+  margin-bottom: 10px;
+  font-family: var(--fuente-principal);
+}
+
+#divFamilia input[type="text"],
+#divFamilia input[type="number"],
+#divFamilia select {
+  width: 70%;
+  height: 40px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 10px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  align-self: center;
+}
+
+.divFamiliaUbicacion {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 20px;
+  justify-content: center;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.divFamiliaDireccion {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 20px;
+  justify-content: center;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.divFamiliaDireccion textarea {
+
+  width: 80%;
+  height: 140px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 10px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  align-self: center;
+}
+
+/* Asignacion de Suministros */
+
+.asigContainer {
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  right: 55px;
+  border-top: #00000027 solid 0.11rem;
+  background-color: var(--color-fondo);
+}
+
+.asigContainer fieldset {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background-color: var(--color-fondo);
+  display: flex;
+  flex-direction: column;
+  border-bottom: none;
+  position: relative;
+  top: 40px;
+}
+
+.asigContainer fieldset legend {
+  text-align: left;
+  font-weight: 450;
+  color: var(--color-texto);
+  font-size: 1.6rem;
+}
+
+.fieldset2 {
+  width: 80%;
+  height: 20%;
+  border-top: none;
+  border-left: none;
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+}
+
+.fieldset2 .btn1Asig {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-texto);
+}
+
+.fieldset2 .btn1Asig button {
+  background-color: var(--color-amarillo);
+  color: var(--color-texto);
+}
+
+.fieldset2 .btn1Asig button .material-icons {
+  align-items: center;
+  width: 10%;
+  margin-left: 10px;
+  position: relative;
+  top: 4px;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.fieldset2 .btn1Asig button:hover {
+  background-color: var(--color-amarillo-hover);
+  color: var(--color-blanco);
+}
+
+.fieldset2 .btn2Asig {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.fieldset2 .btn2Asig button .material-icons {
+  align-items: center;
+  width: 10%;
+  margin-left: 10px;
+  position: relative;
+  top: 4px;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.fieldset2 .btn2Asig button {
+  background-color: var(--color-amarillo-hover);
+  color: var(--color-texto);
+}
+
+.fieldset2 .btn2Asig button:hover {
+  background-color: var(--color-amarillo-hover);
+  color: var(--color-blanco);
+}
+
+/* Asignacion de Suministros */
+
+#asignacionSuministro {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 20px;
+  justify-content: center;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#asignacionSuministro button {
+  width: 10%;
+  text-align: center;
+  margin: 0px auto;
+  position: relative;
+  top: 10px;
+}
+
+
+#asignacionSuministro button .material-icons {
+  align-items: center;
+  width: 100%;
+  margin: 0px auto;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-blanco);
+}
+
+#asignacionSuministro button:hover {
+  background-color: var(--color-amarillo-hover);
+  border: var(--color-verde) solid 1px;
+}
+
+.tabla-asignacion {
+  width: 60%;
+  position: relative;
+  left: 20%;
+  margin-top: 20px;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: var(--color-fondo);
+  font-family: var(--fuente-principal);
+}
+
+.table-asignacion th {
+  padding: 8px;
+  text-align: center;
+  background: var(--color-gris-claro);
+  font-weight: 700;
+  border-bottom: rgba(255, 0, 0, 0.539);
+}
+
+.table-asignacion td {
+  border: 1px solid var(--color-gris-borde);
+  padding: 8px;
+  text-align: center;
+
+}
+
+.btnEliminarTabla {
+  background-color: var(--color-amarillo);
+  color: var(--color-blanco);
+  border: none;
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 20%;
+}
+
+.btnEliminarTabla:hover {
+  background-color: var(--color-amarillo-hover);
+  color: rgba(255, 0, 0, 0.539);
+  border: 1px solid rgba(255, 0, 0, 0.539);
+}
+
+.btnModificarTabla {
+  background-color: var(--color-amarillo);
+  color: var(--color-blanco);
+  border: none;
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 20%;
+  margin-left: 10px;
+}
+
+.btnModificarTabla:hover {
+  background-color: var(--color-amarillo-hover);
+  color: rgba(0, 85, 255, 0.712);
+  border: 1px solid rgba(0, 85, 255, 0.712);
 }
 
 .listaContainer {
-    max-width: 100%;
-    margin: 0px auto;
-    margin-left: 0px;
+  max-width: 100%;
+  margin: 0px auto;
+  margin-left: 0px;
 
-    margin-bottom: 20%;
-    padding: 20px;
-    text-align: center;
-    background-color: #FAFAFA;
-    color: black;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20%;
+  padding: 20px;
+  text-align: center;
+  background-color: #FAFAFA;
+  color: black;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .app-container {
   display: flex;
+  flex-direction: row;
   min-height: 100vh;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
   background-color: var(--color-fondo);
   font-family: var(--fuente-principal);
+  overflow: hidden;
+  /* Evita el scroll horizontal */
+
 }
 
-/* === SIDEBAR FUSIONADA === */
-#sidebar{
-  width: 65px; /* ancho solo iconos */
+/* registro de producto */
+
+.containerRegistroProducto {
+  width: 100%;
+  height: 100%;
+  display: flex;
+
+}
+
+.formRegistroProducto {
+  width: 100%;
+  background-color: var(--color-fondo);
+  height: 100%;
+  align-self: center;
+}
+
+.fieldsetRegistroProducto {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-fondo);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: 40px;
+  border: none;
+}
+
+
+.fieldsetRegistroProducto2 {
+  width: 20%;
+  height: 10%;
+  background-color: var(--color-fondo);
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  position: relative;
+  top: 180px;
+  border: none;
+  align-items: center;
+}
+
+.fieldsetRegistroProducto2 button {
+  width: 120px;
+  height: 50px;
+  border: none;
+  border-radius: 6px;
+  color: var(--color-blanco);
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.fieldsetRegistroProducto2 button:hover {
+  background-color: var(--color-amarillo-hover);
+  color: var(--color-blanco);
+}
+
+.divRegiProductos {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 20px;
+  justify-content: center;
+  justify-content: space-around;
+  align-items: center;
+  margin-right: 0px;
+  margin-left: 0px;
+
+}
+
+.divRegiProducto1 {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+  margin-bottom: 20px;
+  justify-content: center;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.divRegiProducto2 {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+  margin-bottom: 20px;
+  justify-content: center;
+  justify-content: space-around;
+  text-align: center;
+}
+
+
+.divRegiProductosDescripcion {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 120px;
+  justify-content: center;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.divRegiProducto label {
+  width: 20%;
+  font-size: 1.2rem;
+  color: var(--color-texto);
+  text-align: center;
+  font-weight: 700;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+
+.divRegiProducto1 input,
+.divRegiProducto1 select {
+  width: 100;
+  height: 40px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 10px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  align-self: center;
+}
+
+.divRegiProducto2 label {
+  width: 20%;
+  font-size: 1.2rem;
+  color: var(--color-texto);
+  text-align: center;
+  font-weight: 700;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+
+.divRegiProducto2 input[type="number"],
+.divRegiProducto2 select {
+  width: 100%;
+  height: 40px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 10px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  align-self: center;
+}
+
+.divRegiProductosDescripcion input {
+  width: 80%;
+  height: 140px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 10px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  align-self: center;
+}
+
+
+
+
+
+
+/* === Registro Albergue=== */
+
+.containerRegiAlbergue {
+  max-width: 100%;
+  width: 100%;
   height: 100vh;
-  background: var(--color-verde-form, #00897B);
-  color: #fff;
-  overflow: hidden;
-  z-index: 100;
-  transition: width 0.3s ease;
+  margin: 0px auto;
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+
+
+}
+
+.formRegisAlbergue {
+  max-width: 100%;
+  width: 100%;
+  position: relative;
+  right: 55px;
+  display: flex;
+ flex-direction: row;
+  height: 70%;
+  background-color: var(--color-fondo);
+  overflow: visible;
+}
+
+.formRegisAlbergue2 {
+  max-width: 100%;
+  width: 100%;
+  position: relative;
+  right: 55px;
+  display: flex;
+  flex-direction: row;
+  height: 50%;
+  background-color: var(--color-fondo);
+  overflow: visible;
+}
+
+.fieldsetRegisAlbergue {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  align-items: center;
+  height: 50%;
+  position: relative;
+  top: 40px;
+  border-top: #00000027 solid 0.11rem;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+.fieldsetRegisAlbergueX {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  align-items: center;
+  height: 50%;
+  position: relative;
+  top: 40px;
+ border: none;
+}
+
+.fieldsetRegisAlbergueXL {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  height: 100%;
+  position: relative;
+  top: 50px;
+  border-top: #00000027 solid 0.11rem;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+.divRegistroAlbergues {
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  height: 70px;
+  
+  justify-content: center;
+  justify-content: space-between;
+
+}
+.divRegistroAlberguesXL {
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  height: 120px;
+  justify-content: center;
+  justify-content: space-between;
+
+  
+
+  
+}
+
+
+.divRegisAlbergue {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  
+}
+
+.divRegistroAlberguesDireccion {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 120px;
+  justify-content: center;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+}
+
+
+.divRegisAlbergueXL {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 180px;
+  margin-top: 20px;
+  justify-content: center;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+}
+
+
+
+.divRegisAlbergue select {
+  width: 80%;
+  height: 40px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 5px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  align-self: center;
+}
+
+.divRegisAlbergue textarea {
+  width: 80%;
+  height: 140px;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 10px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  align-self: center;
+}
+
+.ordenRegisAlberg1 {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-right: #00000027 1px solid;
+}
+
+.ordenRegisAlberg2 {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0px;
+}
+
+.ordenRegisAlberg3 {
+  width: 100%;
+  height: 80%;
   display: flex;
   flex-direction: column;
 }
 
-.sidebar--collapsed {
-  width: 65px;
+/*  Formulario Usuario  */
+
+.divAgrupado {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  
 }
 
-.sidebar--expanded {
-  width: 250px;
+.fieldsetRegistroUSuario1{
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  align-items: start;
+  height: 50%;
+  position: relative;
+  top: 40px;
+  border-top: #00000027 solid 0.11rem;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+.fieldsetRegistroUSuario2{
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  align-items: center;
+  height: 50%;
+  position: relative;
+  top: 40px;
+  border-top: #00000027 solid 0.11rem;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+.datosUsuario {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 70px;
+  justify-content: center;
+  justify-content: space-between;
+
 }
 
 
+/* --- SIDEBAR RETRAÍDO Y EXPANDIBLE --- */
+.sidebar {
+  position: fixed;
+  margin-top: 0;
+  left: 0;
+  width: 55px;
+  /* retraído: solo iconos */
+  height: 100vh;
+  background: var(--color-verde-form);
+  color: #fff;
+  padding-top: 60px;
 
-
-#sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 48px; /* ancho solo iconos */
-    height: 100vh;
-    background: var(--color-verde-form, #00897B);
-    color: #fff;
-    overflow: hidden;
-    z-index: 100;
-    transition: width 0.3s ease;
-    display: flex;
-    flex-direction: column;
+  z-index: 1000;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  /* transition: width 0.3s cubic-bezier(.4,2,.6,1); */
 }
 
-#sidebar:hover {
-  width: 290px;
-  overflow-y: auto;
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 8px;
+  width: 120%;
 }
 
-/* SIEMPRE muestra los iconos, solo oculta el texto cuando está retraído */
-
-
-#sidebar ul li a {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-    overflow: hidden; /* Oculta el texto que no cabe */
-    transition: color 0.2s;
+.sidebar nav ul li {
+  margin: 20px 0;
+  width: 80%;
 }
 
-#sidebar ul li a:hover {
-    color: #FBC02D;
+.sidebar nav ul li a {
+  display: flex;
+  align-items: center;
+
+  font-size: 1rem;
+  padding: 5px 6px;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
-#sidebar:not(:hover) ul li a span,
-#sidebar:not(:hover) ul li a:not(:has(i)) {
-  display: none; /* Oculta el texto cuando no hay hover */
-}
-
-/* Los iconos siempre visibles */
-#sidebar ul li a i#sidebar ul li a i {
+.sidebar nav ul li a .material-icons {
+  font-size: 1.8rem;
   min-width: 24px;
   text-align: center;
-  font-size: 1.2em;
+  margin-left: 10px;
+  margin-right: 16px;
 }
 
-#sidebar nav {
-  position: relative;
-  height: 100%;
-  width: 100%;
+.sidebar nav ul li :hover {
+  color: var(--color-amarillo-hover);
 }
 
-#sidebar nav ul {
-    padding: 0;
-    margin: 0;
-    list-style: none;
+/* Oculta el texto de los enlaces cuando está retraído */
+.sidebar:not(:hover) nav ul li a span {
+
+  transition: display 0.2s;
 }
 
-#sidebar nav ul li {
-    padding: 15px 20px;
-    transition: background 0.2s;
+/* Expande el sidebar al hacer hover y muestra el texto */
+.sidebar:hover {
+  min-width: none;
+  width: 290px;
+  transition: width 0.3s cubic-bezier(.4, 2, .6, 1);
 }
 
-#sidebar nav ul li:hover {
-    background: #1a2230;
-}
-
-#sidebar nav ul li a {
-    color: #fff;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.material-icons {
-  font-size: 20px;
-  vertical-align: middle;
-  margin-right: 8px;
-  font-family: 'Material Icons';
+.sidebar:hover nav ul li a span {
+  display: inline;
 }
 
 /* Ajusta el contenido principal para dejar espacio al sidebar */
 .main-content {
-  margin-left: 140px;
-  padding: 30px;
-  transition: margin-left 0.3s ease;
+  margin-left: 55px;
+  transition: margin-left 0.3s cubic-bezier(.4, 2, .6, 1);
 }
 
-#sidebar:hover ~ .main-content {
-  margin-left: 290px;
+.sidebar:hover~.main-content {
+  margin-left: 1px;
 }
 
 /* Responsive: Sidebar ocupa toda la pantalla en móviles */
 @media (max-width: 700px) {
-  #sidebar {
+
+  .sidebar,
+  .sidebar:hover {
     width: 100vw;
     height: auto;
     position: relative;
     min-height: unset;
     z-index: 200;
   }
-  #sidebar:hover {
-    width: 100vw;
+
+  .main-content,
+  .sidebar:hover~.main-content {
+    margin-left: 0;
   }
-  
 }
 
 /* === TITULOS === */
 
 .header {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   background-color: var(--color-verde-form);
-  color: var(--color-blanco);
-  padding: 1rem;
   font-size: 1.5rem;
   font-weight: bold;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  width: 100%;
 }
 
-
+.header h2 {
+  background-color: var(--color-verde-form);
+  width: 95%;
+  height: auto;
+  margin: 0;
+  color: var(--color-blanco);
+  font-family: var(--fuente-principal);
+  letter-spacing: 0.05rem;
+  text-align: center;
+  font-size: 1.7rem;
+}
 
 .btn-header {
 
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   border: none;
   border-radius: 100px;
   color: var(--color-blanco);
-  font-size: 1.2rem;
+  background-color: var(--color-amarillo);
   cursor: pointer;
-  margin-left: auto;
-  position: relative;
-  left: 10px;
-  bottom: 10px;
-
-  
-
   padding: 0.5rem 0.1rem;
-  
+
 }
 
-h2, h4 {
-  display: flex;
-  align-items: center;
-  flex-direction: row-reverse;
+.btn-header .material-icons {
+  font-size: 2rem;
+  color: var(--color-blanco);
+}
+
+.btn-header:hover {
+  background-color: var(--color-amarillo-hover);
+}
+
+h2,
+h4 {
   justify-content: center;
   background-color: var(--color-verde-form);
   color: var(--color-blanco);
@@ -389,13 +1344,15 @@ h2, h4 {
   font-family: var(--fuente-principal);
   letter-spacing: 0.05em;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
   font-weight: 700;
   font-size: 2rem;
 }
 
 @media (max-width: 700px) {
-  h2, h4 {
+
+  h2,
+  h4 {
     font-size: 1.2rem;
     padding: 1rem 0.5rem;
   }
@@ -407,7 +1364,7 @@ hr {
 }
 
 /* === FORMULARIOS UNIFICADOS === */
-form,
+/* form, */
 .formulario,
 form#formularioAlbergue,
 form#preformularioAlbergue,
@@ -528,15 +1485,18 @@ table,
   font-family: var(--fuente-principal);
 }
 
-th, td {
+th,
+td {
   border: 1px solid var(--color-gris-borde);
   padding: 8px;
   text-align: center;
+
 }
 
 th {
   background: var(--color-gris-claro);
   font-weight: 700;
+
 }
 
 /* === DETALLES/ACCORDION === */
@@ -565,6 +1525,14 @@ details summary::-webkit-details-marker {
   display: none;
 }
 
+details summary:hover {
+  background-color: var(--color-verde-oscuro);
+}
+
+details[open] summary {
+  border-bottom: 1px solid var(--color-gris-borde);
+}
+
 details summary::before {
   content: '▼ ';
   display: inline-block;
@@ -585,21 +1553,22 @@ details[open] summary {
   border-bottom: 1px solid var(--color-gris-borde);
 }
 
-details > *:not(summary) {
+details>*:not(summary) {
   padding: 10px;
   background-color: var(--color-gris-claro);
 }
 
 /* === GRID DE PRODUCTOS Y SECCIÓN LIMPIEZA === */
 .cuadro-grid,
+checkbox-grid,
 #productosLimpiezaDisponibles {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 15px;
+  gap: 12px;
   padding: 20px;
   background-color: var(--color-gris-claro);
   border-radius: 8px;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 .cuadro-grid .producto,
@@ -720,8 +1689,7 @@ footer {
   padding: 18px 0 12px 0;
   font-size: 1.05em;
   letter-spacing: 0.5px;
-  box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
-  margin-top: 40px;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
   position: static;
   left: unset;
   bottom: unset;
@@ -730,42 +1698,65 @@ footer {
 }
 
 /* === UTILIDADES === */
-.mt-2 { margin-top: 0.5rem !important; }
-.mt-3 { margin-top: 1rem !important; }
-.mb-2 { margin-bottom: 0.5rem !important; }
-.hidden { display: none; }
-.texto-centrado { text-align: center !important; }
-.fuente-grande { font-size: 22px !important; }
-.alto-linea { line-height: 2 !important; }
-.saturacion * { filter: saturate(200%) contrast(130%) brightness(110%) !important; }
+.mt-2 {
+  margin-top: 0.5rem !important;
+}
+
+.mt-3 {
+  margin-top: 1rem !important;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem !important;
+}
+
+.hidden {
+  display: none;
+}
+
+.texto-centrado {
+  text-align: center !important;
+}
+
+.fuente-grande {
+  font-size: 22px !important;
+}
+
+.alto-linea {
+  line-height: 2 !important;
+}
+
+.saturacion * {
+  filter: saturate(200%) contrast(130%) brightness(110%) !important;
+}
 
 /* --- Formulario --- */
 form#formularioAlbergue {
-    background-color: #FAFAFA;
-    border-radius: 8px;
-    padding: 25px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    max-width: 850px;
-    margin: auto;
-    text-align: left;
+  background-color: #FAFAFA;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  max-width: 850px;
+  margin: auto;
+  text-align: left;
 }
 
 form#formularioAlbergue h3 {
-    margin-bottom: 20px;
-    font-size: 2rem;
-    color: #00897B;
-    padding: 25px;
-    border: #00897B solid 2px;
-    text-align: center;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  color: #00897B;
+  padding: 25px;
+  border: #00897B solid 2px;
+  text-align: center;
 }
 
 /* Etiquetas */
 form#formularioAlbergue label,
 .accordion-body label {
-    font-weight: 600;
-    display: block;
-    margin-bottom: 6px;
-    color: #212529;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+  color: #212529;
 }
 
 /* Inputs, select, textarea */
@@ -777,14 +1768,14 @@ form#formularioAlbergue input[type="email"],
 form#formularioAlbergue select,
 form#formularioAlbergue textarea,
 form#formularioAlbergue input[type="tel"] {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    font-size: 1rem;
-    margin-bottom: 16px;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease;
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
 }
 
 form#formularioAlbergue input[type="text"]:focus,
@@ -795,44 +1786,44 @@ form#formularioAlbergue input[type="email"]:focus,
 form#formularioAlbergue select:focus,
 form#formularioAlbergue textarea:focus,
 form#formularioAlbergue input[type="tel"]:focus {
-    outline: none;
-    border-color: #00897B;
+  outline: none;
+  border-color: #00897B;
 }
 
 /* Inputs tipo checkbox y radio */
 form#formularioAlbergue input[type="checkbox"],
 form#formularioAlbergue input[type="radio"] {
-    margin-right: 6px;
-    cursor: pointer;
+  margin-right: 6px;
+  cursor: pointer;
 }
 
 
 form#preformularioAlbergue {
-    background-color: #FAFAFA;
-    border-radius: 8px;
-    padding: 25px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    max-width: 850px;
-    margin: auto;
-    text-align: left;
+  background-color: #FAFAFA;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  max-width: 850px;
+  margin: auto;
+  text-align: left;
 }
 
 form#preformularioAlbergue h3 {
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-    color: #00897B;
-    padding: 25px;
-    border: #00897B solid 2px;
-    text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #00897B;
+  padding: 25px;
+  border: #00897B solid 2px;
+  text-align: center;
 }
 
 /* Etiquetas */
 form#preformularioAlbergue label,
 .accordion-body label {
-    font-weight: 600;
-    display: block;
-    margin-bottom: 6px;
-    color: #212529;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+  color: #212529;
 }
 
 /* Inputs, select, textarea */
@@ -844,43 +1835,44 @@ form#preformularioAlbergue input[type="email"],
 form#preformularioAlbergue select,
 form#preformularioAlbergue textarea,
 form#preformularioAlbergue input[type="tel"] {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    font-size: 1rem;
-    margin-bottom: 16px;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease;
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
 }
 
 
 /* --- Formulario Asignación de Recursos --- */
 form#recursoForm {
-    background-color: #FAFAFA;
-    border-radius: 8px;
-    padding: 25px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    max-width: 850px;
-    margin: auto;
-    text-align: left;
+  background-color: #FAFAFA;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  max-width: 850px;
+  margin: auto;
+  text-align: left;
 }
 
 /* Etiquetas */
-form#recursoForm label{
-    font-weight: 600;
-    display: block;
-    margin-bottom: 6px;
-    color: #212529;
+form#recursoForm label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+  color: #212529;
 }
+
 form#recursoForm summary strong {
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: bold;
-    font-weight: 600;
-    display: block;
-    margin-bottom: 6px;
-    color: #fafafa;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+  color: #fafafa;
 }
 
 /* Inputs, select, textarea */
@@ -889,14 +1881,14 @@ form#recursoForm input[type="number"],
 form#recursoForm input[type="password"],
 form#recursoForm select,
 form#recursoForm textarea {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    font-size: 1rem;
-    margin-bottom: 16px;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease;
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
 }
 
 form#recursoForm input[type="text"]:focus,
@@ -904,42 +1896,26 @@ form#recursoForm input[type="password"]:focus,
 form#recursoForm input[type="number"]:focus,
 form#recursoForm select:focus,
 form#recursoForm textarea:focus {
-    outline: none;
-    border-color: #00897B;
+  outline: none;
+  border-color: #00897B;
 }
 
 /* Inputs tipo checkbox y radio */
 form#recursoForm input[type="checkbox"],
 form#recursoForm input[type="radio"] {
-    margin-right: 6px;
-    cursor: pointer;
+  margin-right: 6px;
+  cursor: pointer;
 }
 
 /* Para los botones */
 form#recursoForm button {
-    min-width: 100px;
-    margin-right: 10px;
+  min-width: 100px;
+  margin-right: 10px;
 }
 
 /* Contenedores de items */
 form#recursoForm .item {
-    margin-bottom: 20px;
-}
-
-/* Botones */
-.btn {
-    font-weight: 600;
-    padding: 10px 18px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.btn-primary {
-    background-color: #FBC02D;
-    color: black;
-
+  margin-bottom: 20px;
 }
 
 
@@ -947,189 +1923,178 @@ form#recursoForm .item {
 /* este de pre es para cambiar el color del form preformulario */
 
 .pre {
-    color: black;
+  color: black;
 }
 
 .btn-primary:hover {
-    background-color: #bd9122;
+  background-color: #bd9122;
 }
 
-.btn-secondary {
-    background-color: #FBC02D;
-    color: black;
-}
 
 .btn-secondary:hover {
-    background-color: #bd9122;
+  background-color: #bd9122;
 }
 
-.btn-link {
-    background: none;
-    border: none;
-    padding: 0;
-    font-weight: 600;
-    cursor: pointer;
-}
 
 /* Márgenes para botones */
 .mt-2 {
-    margin-top: 0.5rem !important;
+  margin-top: 0.5rem !important;
 }
 
 .mt-3 {
-    margin-top: 1rem !important;
+  margin-top: 1rem !important;
 }
 
 .mb-2 {
-    margin-bottom: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
 }
 
 /* --- Canvas Firma Digital --- */
 #signature-pad {
-    border: 2px solid #00897B;
-    border-radius: 8px;
-    background-color: #f5faff;
-    display: block;
-    margin-top: 8px;
+  border: 2px solid #00897B;
+  border-radius: 8px;
+  background-color: #f5faff;
+  display: block;
+  margin-top: 8px;
 }
 
 /* --- Accordion --- */
 .accordion-button {
-    font-weight: 600;
-    color: #00897B;
-    background-color: #e9f0ff;
+  font-weight: 600;
+  color: #00897B;
+  background-color: #e9f0ff;
 }
 
 .accordion-button:not(.collapsed) {
-    background-color: #cfe2ff;
-    color: #00897B;
+  background-color: #cfe2ff;
+  color: #00897B;
 }
 
 .accordion-body {
-    background-color: #FBC02D;
-    color: #212529;
-    padding: 15px;
+  background-color: #FBC02D;
+  color: #212529;
+  padding: 15px;
 }
 
 #usuariosSelect {
-    display: block;
-    margin: 0 auto 12px;
-    max-width: 400px;
+  display: block;
+  margin: 0 auto 12px;
+  max-width: 400px;
 }
 
 .btn-group {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 auto;
 }
 
+
 .btn-group .btn {
-    color: #212529;
-    background-color: #FBC02D;
-    min-width: 120px;
+  color: #212529;
+  background-color: var(--color-amarillo);
+  min-width: 120px;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+}
+
+.btn-group .btn:hover {
+  background-color: var(--color-amarillo-hover)
 }
 
 /* --- Responsive --- */
 @media (max-width: 600px) {
-    #signature-pad {
-        width: 100% !important;
-        height: 150px !important;
-    }
+  #signature-pad {
+    width: 100% !important;
+    height: 150px !important;
+  }
 
-    form#formularioAlbergue {
-        padding: 15px;
-        max-width: 100%;
-    }
-
-    .btn-group .btn {
-        text-align: center;
-        min-width: auto;
-        font-size: 0.9rem;
-        padding: 8px 10px;
-    }
+  form#formularioAlbergue {
+    padding: 15px;
+    max-width: 100%;
+  }
 }
 
 /* --- Accordion CSS (fuera de Bootstrap) --- */
 .accordion-css details {
-    border: 1px solid #ccc;
-    margin-bottom: 8px;
-    border-radius: 4px;
-    overflow: hidden;
+  border: 1px solid #ccc;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .accordion-css summary {
-    background-color: #00897B;
-    color: #212529;
-    padding: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    user-select: none;
+  background-color: #00897B;
+  color: #212529;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  user-select: none;
 }
 
 .accordion-css summary:hover {
-    background-color: #00897B;
+  background-color: #00897B;
 }
 
 .accordion-css details[open] summary {
-    border-bottom: 1px solid #212529;
+  border-bottom: 1px solid #212529;
 }
 
 .accordion-css details>div {
-    padding: 10px;
-    background-color: #f8f9fa;
+  padding: 10px;
+  background-color: #f8f9fa;
 }
 
 /* --- Panel de Accesibilidad --- */
 #accesibilidad-toggle {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #00897B;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 55px;
-    height: 55px;
-    font-size: 24px;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #00897B;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 55px;
+  height: 55px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
 }
 
 #accesibilidad-panel {
-    display: none;
-    position: fixed;
-    bottom: 90px;
-    right: 20px;
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    width: 240px;
-    z-index: 999;
+  display: none;
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  width: 240px;
+  z-index: 999;
 }
 
 #accesibilidad-panel.active {
-    display: block;
+  display: block;
 }
 
 #accesibilidad-panel button {
-    display: block;
-    width: 100%;
-    margin: 6px 0;
-    padding: 8px;
-    font-size: 14px;
-    background-color: #00897B;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    text-align: left;
-    cursor: pointer;
+  display: block;
+  width: 100%;
+  margin: 6px 0;
+  padding: 8px;
+  font-size: 14px;
+  background-color: #00897B;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-align: left;
+  cursor: pointer;
 }
 
 #accesibilidad-panel button:hover {
-    background-color: #00897B;
+  background-color: #00897B;
 }
 
 /* -------- ACCESIBILIDAD -------- */
@@ -1137,327 +2102,380 @@ form#recursoForm .item {
 /* CONTRASTE ALTO */
 .contraste,
 .contraste * {
-    background-color: #000 !important;
-    color: #FFF !important;
-    border-color: #FFF !important;
+  background-color: #000 !important;
+  color: #FFF !important;
+  border-color: #FFF !important;
 }
 
 .contraste a {
-    color: #00897B !important;
-    text-decoration: underline !important;
+  color: #00897B !important;
+  text-decoration: underline !important;
 }
 
 .contraste input,
 .contraste textarea,
 .contraste select,
 .contraste button {
-    background-color: #111 !important;
-    color: #FFF !important;
-    border: 1px solid #FFF !important;
+  background-color: #111 !important;
+  color: #FFF !important;
+  border: 1px solid #FFF !important;
 }
 
 /* RESALTADO DE ENLACES */
 .resaltado a {
-    background-color: #FBC02D !important;
-    color: red !important;
-    font-weight: bold;
+  background-color: #FBC02D !important;
+  color: red !important;
+  font-weight: bold;
 }
 
 /* ESPACIADO DE TEXTO */
 .espaciado-texto * {
-    letter-spacing: 0.12em !important;
-    line-height: 1.8 !important;
+  letter-spacing: 0.12em !important;
+  line-height: 1.8 !important;
 }
 
 /* FUENTE GRANDE */
 .fuente-grande {
-    font-size: 22px !important;
+  font-size: 22px !important;
 }
 
 /* CURSOR PERSONALIZADO */
 .cursor-grande * {
-    cursor: pointer !important;
+  cursor: pointer !important;
 }
 
 /* CENTRADO DE TEXTO */
 .texto-centrado {
-    text-align: center !important;
+  text-align: center !important;
 }
 
 /* ALTO DE LÍNEA EXTRA */
 .alto-linea {
-    line-height: 2 !important;
+  line-height: 2 !important;
 }
 
 /* SATURACIÓN (COLORES MÁS VIVOS) */
 .saturacion * {
-    filter: saturate(200%) contrast(130%) brightness(110%) !important;
+  filter: saturate(200%) contrast(130%) brightness(110%) !important;
 }
 
 /* --- Buscador de Albergues (ConsultaAlbergues) --- */
 .search-bar {
-    margin-bottom: 2rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
+  width: 100%;
+  margin-top: 40px;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-direction: row;
+  gap: 1rem;
+  background-color: var(--color-fondo);
 }
 
-.search-bar input[type="text"],.search-bar select {
-    padding: 0.5rem;
-    font-size: 1rem;
-    border-radius: 4px;
-    border: 1px solid #ced4da;
+.search-bar input[type="text"],
+.search-bar select {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  width: 16%;
 }
+
+.search-bar fieldset {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-top: none;
+}
+
 
 .albergue-resultado {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 1.5rem;
-    max-width: 600px;
-    margin: 0 auto 2rem auto;
-    text-align: left;
-    background: #fff;
-    font-size: large;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-width: 600px;
+  margin: 0 auto 2rem auto;
+  text-align: left;
+  background: #fff;
+  font-size: large;
 }
 
 .albergue-resultado h2 {
-    margin-top: 0;
+  margin-top: 0;
 }
 
 .albergue-resultado ul {
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
 }
 
 .albergue-resultado li {
-    margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
-/* Ajusta el contenido principal para dejar espacio al sidebar */
-
+/* --- Formulario Ayuda Revisión --- */
 
 .form-ayuda-revision {
-    background-color: #FAFAFA;
-    border: 1px solid #e0e0e0;
-    border-radius: 10px;
-    padding: 25px;
-    max-width: 850px;
-    margin: 2rem auto;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
-}
-
-.form-ayuda-revision summary {
-    background-color: #00897B;
-    color: #FAFAFA;
-    font-weight: bold;
-    padding: 14px 20px;
-    border-radius: 8px 8px 0 0;
-    font-size: 1.1rem;
-    cursor: pointer;
+  width: 100%;
+  background-color: var(--color-fondo);
+  border-radius: 10px;
+  height: 100%;
+  align-self: center;
 }
 
 .form-ayuda-revision fieldset {
-    border: none;
-    padding-top: 20px;
+  width: 97%;
+  border: none;
+  padding-top: 20px;
 }
 
-.form-ayuda-revision label {
-    font-weight: 600;
-    margin-top: 12px;
-    display: block;
-    color: #212121;
+.divAyudas {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 20px;
+  justify-content: space-around;
 }
 
-.form-ayuda-revision input,
-.form-ayuda-revision select,
-.form-ayuda-revision textarea {
-    width: 100%;
-    padding: 10px;
-    font-size: 1rem;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    margin-bottom: 16px;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease;
+
+.divAyuda {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  margin-bottom: 20px;
+  justify-content: space-around;
+  align-items: center;
 }
 
-.form-ayuda-revision input:focus,
-.form-ayuda-revision select:focus,
-.form-ayuda-revision textarea:focus {
-    outline: none;
-    border-color: #00897B;
+.divAyuda label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #212529;
+  font-family: var(--fuente-principal);
+
+
+}
+
+.divAyuda input[type="text"],
+.divAyuda input[type="date"],
+.divAyuda select {
+  width: 80%;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.btnsAyuda {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
 }
 
 .form-ayuda-revision button {
-    background-color: #FBC02D;
-    color: #212121;
-    font-weight: bold;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.form-ayuda-revision button:hover {
-    background-color: #e0ac27;
-}
-
-
-.hidden { display: none; }
-
-.integrante-section { display: none; }
-
-.integrante-section.active { display: block; }
-
-.principal-section { display: block; }
-
-.principal-section.hidden { display: none; }
-
-.main-content { transition: margin-left 0.3s; }
-
-
-footer {
-  width: 100%;
-  background: rgb(0, 119, 107);
-  color: #fff;
-  text-align: center;
-  padding: 18px 0 12px 0;
-  font-size: 1.05em;
-  letter-spacing: 0.5px;
-  box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
-  margin-top: 40px;
-  position: static;
-  left: unset;
-  bottom: unset;
-  z-index: 100;
-}
-
-/* Diferencias y utilidades específicas de formAbasteci.css para fusionar */
-/* filepath: c:\Users\Churry\Desktop\II-C\Integrador-1\IntegradorI-React\integradorI-react\src\styles\formulario_fusionado.css */
-
-/* Grid para lista de abarrotes y productos limpieza */
-.cuadro-grid,
-#productosLimpiezaDisponibles {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 15px;
-  padding: 20px;
-  background-color: var(--color-gris-claro);
-  border-radius: 8px;
-  margin-top: 15px;
-}
-
-.cuadro-grid .producto,
-#productosLimpiezaDisponibles .producto,
-.producto-limpieza-item {
-  background-color: var(--color-blanco);
-  border: 1px solid var(--color-gris-borde);
-  border-radius: 5px;
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.2s ease-in-out;
-  position: relative;
-  font-size: 0.9em;
-}
-
-.cuadro-grid .producto:hover,
-#productosLimpiezaDisponibles .producto:hover,
-.producto-limpieza-item:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.cuadro-grid .producto label,
-#productosLimpiezaDisponibles .producto label,
-.producto-limpieza-item label {
-  font-weight: normal;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  margin-bottom: 5px;
-  line-height: 1.2;
-  width: 100%;
-}
-
-.cuadro-grid .producto input[type="checkbox"],
-#productosLimpiezaDisponibles .producto input[type="checkbox"],
-.producto-limpieza-item input[type="checkbox"] {
-  margin-right: 8px;
-  transform: scale(0.9);
-}
-
-.cuadro-grid .producto .cantidad,
-#productosLimpiezaDisponibles .producto .cantidad,
-.producto-limpieza-item .cantidad,
-#productosLimpiezaDisponibles .producto .cantidad-limpieza,
-.producto-limpieza-item .cantidad-limpieza {
-  width: calc(100% - 16px);
-  padding: 5px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  margin-top: 5px;
-  font-size: 0.85em;
-  text-align: center;
-  box-sizing: border-box;
-}
-
-.producto-limpieza-item.oculto-en-lista {
-  transform: translateY(10px);
-  opacity: 0;
-  height: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-  margin-top: 0;
-  margin-bottom: 0;
+  background-color: #FBC02D;
+  color: #212121;
+  font-weight: bold;
+  padding: 10px 20px;
   border: none;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-/* Resultado y tablas de resumen de abarrotes */
-.resultado ul {
-  list-style: none;
-  padding: 0;
-  margin-top: 20px;
-}
-
-.resultado li {
-  background-color: #e9ecef;
-  border: 1px solid #dee2e6;
-  padding: 8px 12px;
-  margin-bottom: 5px;
-  border-radius: 4px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.9em;
-  line-height: 1.4;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-.resultado li .btn-eliminar-lista,
-.btn-eliminar {
-  background-color: var(--color-amarillo);
-  color: var(--color-blanco);
-  border: none;
-  border-radius: 4px;
-  padding: 6px 10px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 0.8em;
-  margin-left: 10px;
   transition: background-color 0.3s ease;
 }
 
-.resultado li .btn-eliminar-lista:hover,
-.btn-eliminar:hover {
-  background-color: var(--color-amarillo-hover);
+.form-ayuda-revision button:hover {
+  background-color: #e0ac27;
 }
 
+
+.hidden {
+  display: none;
+}
+
+.integrante-section {
+  display: none;
+}
+
+.integrante-section.active {
+  display: block;
+}
+
+.principal-section {
+  display: block;
+}
+
+.principal-section.hidden {
+  display: none;
+}
+
+.main-content {
+  transition: margin-left 0.3s;
+}
+
+
+
+
+
+-----PROPIEDADES DE LOS FORMULARIOS DE ABARROTES ------ .content-area {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+
+.top-header {
+  background-color: var(--color-verde-form);
+  color: var(--color-blanco);
+  padding: 20px 40px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.top-header h1 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.main-Content-abarrote {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem 1rem 3rem;
+  background-color: var(--color-fondo);
+  overflow-y: auto;
+}
+
+#formularioAbarrotes {
+  width: 100%;
+  max-width: 600px;
+  background-color: #FAFAFA;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Tarjetas blancas con sombra */
+.card {
+  background-color: var(--color-blanco);
+  width: 90%;
+  padding: 20px;
+  margin-bottom: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.labelAbarrote {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+.inputAbarrote,
+.selectAbarrote,
+.textArea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-verde-form);
+}
+
+.abarrote-item label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--color-gris-borde);
+  background-color: var(--color-blanco);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.abarrote-item label:hover {
+  background-color: var(--color-blanco);
+}
+
+.abarrote-item label input[type="checkbox"] {
+  order: 2;
+  cursor: pointer;
+}
+
+.abarrote-item label span {
+  order: 1;
+}
+
+*/
+
+/* Detalle (cantidad + unidad) dentro item */
+.abarrote-item .detalle {
+  display: flex;
+  gap: 10px;
+  margin-left: 10px;
+  margin-top: 6px;
+}
+
+.abarrote-item .detalle input[type="number"],
+.abarrote-item .detalle select {
+  width: 50%;
+  padding: 6px 10px;
+  font-size: 1rem;
+  border: 1px solid var(--color-blanco);
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.abarrote-item .detalle input[type="number"]:focus,
+.abarrote-item .detalle select:focus {
+  outline: none;
+  border-color: var(--color-verde-form);
+}
+
+.boton-resumen-final {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.boton-resumen-final a button {
+  width: auto;
+  padding: 10px 24px;
+  font-size: 16px;
+  background-color: var(--color-amarillo);
+  color: var(--color-blanco);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.boton-resumen-final a button:hover {
+  background-color: var(--color-amarillo-hover);
+}
 /* === FOOTER === */
 footer {
   width: 100%;
@@ -2086,4 +3104,129 @@ form#recursoForm .item {
   position: static !important;
   min-height: unset !important; /* <-- Esto es clave */
   height: auto !important;
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-contenido {
+  background-color: #FAFAFA;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    bottom: 10px;
+  }
+
+  10% {
+    opacity: 1;
+    bottom: 20px;
+  }
+
+  90% {
+    opacity: 1;
+    bottom: 20px;
+  }
+
+  100% {
+    opacity: 0;
+    bottom: 10px;
+  }
+}
+
+
+.back-button {
+  background-color: #fdd835;
+  color: black;
+  border-radius: 5px;
+  padding: 6px 8px;
+  text-decoration: none;
+  font-weight: bold;
+  /* Mantener en el flujo normal (a la derecha) */
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+.back-button .material-icons {
+  vertical-align: middle;
+  font-size: 24px;
+}
+
+#formularioAbarrotes {
+  width: 100%;
+  max-width: 600px;
+  background-color: #FAFAFA;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1,
+h2 {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.card a {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.containerLogin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: var(--color-fondo);
+  width: 100%;
+  position: fixed;
+
+}
+
+.login-wrapper {
+  width: 50%;
+  margin: 0 auto;
+  padding-bottom: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
+  background-color: var(--color-blanco);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  font-family: var(--fuente-principal);
+  color: var(--color-texto);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-50%);
+  text-align: center;
+  max-width: 400px;
+
+
+}
+
+.login-wrapper h2 {
+  width: 100%;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  color: var(--color-blanco);
+}
 }
