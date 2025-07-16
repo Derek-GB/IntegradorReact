@@ -17,8 +17,7 @@ import RegistroAlbergue from './components/RegistroAlbergue.jsx';
 import RegistroUsuario from './components/registroUsuario.jsx';
 import ListaProducto from './components/ListaProducto.jsx';
 import ListaAlbergue from './components/ListaAlbergue.jsx';
-import MenuPrincipal from './components/MenuPrincipal.jsx';
-import FormularioAbastecimiento from './components/formularioAbarrotes.jsx';
+import FormularioAbastecimiento from './components/FormularioAbarrotes.jsx';
 import ActualizarAlbergue from './components/ActualizarAlbergue.jsx';
 
 import AjusteInventario from './components/ajusteInventario.jsx';
