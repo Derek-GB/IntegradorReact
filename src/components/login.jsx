@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importa useNavigate
-import '../styles/formulario.css'; // Asegúrate de tener este archivo con tus estilos
-import authHelper from '../helpers/sesion'; // Asegúrate de importar correctamente tu helper
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import '../styles/formulario.css';
+import authHelper from '../helpers/sesion';
 
 const Login = () => {
   const [usuario, setUsuario] = useState('');
@@ -33,7 +32,12 @@ const Login = () => {
         setError('Inicio de sesión fallido. Token no generado.');
       }
     } catch (error) {
-      setError(error.message || 'Error al iniciar sesión. Verifica tus credenciales.');
+      // Aquí personalizamos el mensaje de error
+      if (error.response?.status === 401 || error.message?.toLowerCase().includes("unauthorized")) {
+        setError('Usuario o contraseña incorrecta');
+      } else {
+        setError(error.message || 'Error al iniciar sesión. Verifica tus credenciales.');
+      }
     }
   };
 
@@ -73,11 +77,12 @@ const Login = () => {
         />
 
         <div className="btn-group">
-          <button type="submit" className="btn btn-primary">Ingresar</button> 
+          <button type="submit" className="btn btn-primary">Ingresar</button>
         </div>
+
         <div className="recuperar-contrasena">
-        <Link to="/recuperarContrasena.jsx">¿Olvidaste tu contraseña?</Link> 
-      </div>
+          <Link to="/recuperarContrasena.jsx">¿Olvidaste tu contraseña?</Link>
+        </div>
       </form>
     </div>
   );
