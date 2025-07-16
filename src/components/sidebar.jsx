@@ -4,7 +4,7 @@ import '../styles/formularioFusionado.css'; // Asegúrate de que la ruta sea
 
 const Sidebar = () => {
   const links = [
-    { href: "/inicio.jsx", icon: "home", label: "Inicio" },
+    { href: "/inicio", icon: "home", label: "Inicio" },
     { href: "/preFormulario.jsx", icon: "groups", label: "Registro de Familias" },
     { href: "/registroSuministros.jsx", icon: "inventory_2", label: "Registros de Suministros" },
     { href: "/asignacionRecursos.jsx", icon: "volunteer_activism", label: "Asignación de Suministros" },

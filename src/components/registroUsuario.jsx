@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import customAxios from '../helpers/customAxios';
 import { useNavigate } from 'react-router-dom';
+import { municipalidadAPI, usuariosAPI } from '../helpers/api'; // Asegúrate del path correcto
 
 const RegistroUsuario = () => {
   const navigate = useNavigate();
@@ -10,27 +9,27 @@ const RegistroUsuario = () => {
     nombre: '',
     correo: '',
     contrasena: '',
-    numero: '',
     rol: '',
     activo: '',
     municipalidad: '',
     identificacion: ''
   });
 
-  useEffect(() => {
-    const fetchMunicipalidades = async () => {
-      try {
-        const res = await customAxios.get('https://apiintegrador-production-8ef8.up.railway.app/api/municipalidad/all');
-        const data = Array.isArray(res.data) ? res.data
-          : res.data.municipalidades ?? res.data.data ?? [];
-        setMunicipalidades(data || []);
-      } catch (error) {
-        console.error('Error al cargar municipalidades:', error);
-        setMunicipalidades([]);
-      }
-    };
-    fetchMunicipalidades();
-  }, []);
+useEffect(() => {
+  const fetchMunicipalidades = async () => {
+    try {
+      const data = await municipalidadAPI.getAll();
+      const lista = Array.isArray(data) ? data : data.data ?? [];
+      setMunicipalidades(lista || []);
+    } catch (error) {
+      console.error('Error al cargar municipalidades:', error);
+      setMunicipalidades([]);
+    }
+  };
+  fetchMunicipalidades();
+}, []);
+
+
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -40,7 +39,8 @@ const RegistroUsuario = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     const { nombre, correo, contrasena, rol, activo, municipalidad, identificacion } = form;
-    if (!nombre || !correo || !contrasena || !rol || !municipalidad || !identificacion) {
+
+    if (!nombre || !correo || !contrasena || !rol || !activo || !municipalidad || !identificacion) {
       alert("Por favor complete todos los campos.");
       return;
     }
@@ -50,16 +50,16 @@ const RegistroUsuario = () => {
       correo: correo.trim(),
       contrasenaHash: contrasena.trim(),
       rol: rol.trim(),
-      activo: activo.trim() === 'activo',
+      activo: activo === "activo",
       idMunicipalidad: parseInt(municipalidad),
       identificacion: identificacion.trim()
     };
 
     try {
-      await customAxios.post("https://apiintegrador-production-8ef8.up.railway.app/api/usuarios", payload);
+      await usuariosAPI.create(payload); // ✅ Usa el helper
       alert("Usuario registrado correctamente.");
       setForm({
-        nombre: '', correo: '', contrasena: '', numero: '',
+        nombre: '', correo: '', contrasena: '',
         rol: '', activo: '', municipalidad: '', identificacion: ''
       });
     } catch (error) {
@@ -73,136 +73,63 @@ const RegistroUsuario = () => {
   };
 
   return (
-    <>
-      <div className="header">
-        <h2>Registro Usuario</h2>
-        <button className="btn-header">
-          <span className="material-icons">arrow_back</span>
+    <div className="container main-content">
+      <h2>
+        <button
+          onClick={() => navigate('/')}
+          className="btn btn-secondary"
+          style={{ position: 'absolute', right: '1cm', top: '50%', transform: 'translateY(-50%)' }}
+        >
+          <span className="material-icons" style={{ fontSize: '24px' }}>arrow_back</span>
         </button>
-      </div>
+        Registro de Usuario
+      </h2>
 
-      <div className="formPreFormulario main-content" onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
+        <details open>
+          <summary><strong>Información del Usuario</strong></summary>
+          <fieldset className="mt-2">
+            <label>Nombre Completo:</label>
+            <input name="nombre" value={form.nombre} onChange={handleChange} required />
 
-        <div className="divAgrupado">
-          <fieldset className="fieldsetRegistroUSuario1 mt-2">
+            <label>Correo Electrónico:</label>
+            <input name="correo" type="email" value={form.correo} onChange={handleChange} required />
 
-            <div className="datosUsuario">
-              <div className="datoUsuario">
-                <label>Identificación:</label>
-                <input name="identificacion" value={form.identificacion} onChange={handleChange} required />
-              </div>
+            <label>Contraseña:</label>
+            <input name="contrasena" type="password" value={form.contrasena} onChange={handleChange} required />
 
-              <div className="datoUsuario">
-              <label>Municipalidad:</label>
-                <select name="municipalidad" value={form.municipalidad} onChange={handleChange} required>
-                  <option value="">Seleccione municipalidad</option>
-                  {municipalidades.map((m) => (
-                    <option key={m.id || m.ID} value={m.id || m.ID}>
-                      {m.nombre || m.Nombre || 'Sin nombre'}
-                    </option>
-                  ))}
-                </select>
+            <label>Rol:</label>
+            <select name="rol" value={form.rol} onChange={handleChange} required>
+              <option value="">Seleccione un rol</option>
+              <option value="admin">Administrador</option>
+              <option value="editor">Editor</option>
+              <option value="viewer">Visualizador</option>
+            </select>
 
+            <label>Estado:</label>
+            <select name="activo" value={form.activo} onChange={handleChange} required>
+              <option value="">Seleccione un estado</option>
+              <option value="activo">Activo</option>
+              <option value="inactivo">Inactivo</option>
+            </select>
 
-              </div>
+            <label>Municipalidad:</label>
+            <select name="municipalidad" value={form.municipalidad} onChange={handleChange} required>
+              <option value="">Seleccione municipalidad</option>
+              {municipalidades.map((m) => (
+                <option key={m.id || m.ID} value={m.id || m.ID}>
+                  {m.nombre || m.Nombre || 'Sin nombre'}
+                </option>
+              ))}
+            </select>
 
-              <div className="datoUsuario">
-
-                <label>Correo Electrónico:</label>
-              <input name="correo" value={form.correo} type="email" onChange={handleChange} required />
-          
-              </div>
-            </div>
+            <label>Identificación:</label>
+            <input name="identificacion" value={form.identificacion} onChange={handleChange} required />
           </fieldset>
-
-          <fieldset className="fieldsetRegistroUSuario2 mt-2">
-            <div className="datosUsuario">
-
-              <div className="datoUsuario">
-                 <label>Nombre Completo:</label>
-                <input name="nombre" value={form.nombre} onChange={handleChange} required />
-              
-                
-              </div>
-
-              <div className="datoUaurio">
-                <label>Rol:</label>
-                <select name="rol" value={form.rol} onChange={handleChange} required>
-                  <option value="">Seleccione un rol</option>
-                  <option value="admin">Administrador</option>
-                  <option value="editor">Editor</option>
-                  <option value="viewer">Visualizador</option>
-                </select>
-
-                
-              </div>
-
-              <div className="datoUsuario">
-
-                
-   
-              <label>Contraseña:</label>
-              <input name="contrasena" value={form.contrasena} type="password" onChange={handleChange} required />
-         
-               
-
-                
-              </div>
-
-              
-
-            </div>
-
-
-
-
-          </fieldset>
-
-          <fieldset className="fieldsetRegistroUSuario1 mt-2">
-
-          <div className="datosUsuario">
-            <div className="datoUsuario">
-               <label>Número de Teléfono:</label>
-                <input name="numero" value={form.numero} type="tel" pattern="[0-9]{4}-[0-9]{4}" onChange={handleChange} required />
-
-
-
-                </div>
-            <div className="datoUsuario">
-              <label>Estado:</label>
-                <select name="activo" value={form.activo} onChange={handleChange} required>
-                  <option value="">Seleccione un estado</option>
-                  <option value="activo">Activo</option>
-                  <option value="inactivo">Inactivo</option>
-                </select>
-                </div>
-            <div className="datoUsuario">
-              <label>Confirmar Contraseña:</label>
-              <input name="contrasena" value={form.contrasena} type="password" onChange={handleChange} required />
-            </div>
-          </div>
-        </fieldset>
-        </div>
-
-
-        
-
-        <fieldset className="mt-2">
-
-          <div className="datosUsuario">
-            
-            <div className="datoUsuario">
-              <button type="submit" className="btn btn-primary mt-3">Registrar</button>
-
-            </div>
-
-          </div>
-        </fieldset>
-
-      </div>
-
-    </>
-
+        </details>
+        <button type="submit" className="btn btn-primary mt-3">Registrar</button>
+      </form>
+    </div>
   );
 };
 
