@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom'
+import React from 'react';
+import '../styles/formularioFusionado.css'; // Asegúrate de que la ruta sea
 
 const Sidebar = () => {
   const links = [
@@ -14,11 +16,11 @@ const Sidebar = () => {
     { href: "/listaProducto.jsx", icon: "list", label: "Lista de Productos" },
     { href: "/listaAlbergue.jsx", icon: "list_alt", label: "Lista de Albergues" },
     { href: "/formularioAbarrotes.jsx", icon: "local_shipping", label: "Abastecimiento" },
-    { href: "/ActualizarAlbergue.jxs", icon: "edit", label: "Actualizar Albergue" } 
+{ href: "/ajusteInventario.jsx", icon: "warehouse", label: "Ajuste de inventario" }
   ];
 
   return (
-    <aside id="sidebar" className="sidebar">
+    <aside className="sidebar">
       <nav>
         <ul>
           {links.map((link, index) => (
