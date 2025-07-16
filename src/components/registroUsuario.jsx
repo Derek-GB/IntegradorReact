@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import customAxios from '../helpers/customAxios';
 import { useNavigate } from 'react-router-dom';
 
 const RegistroUsuario = () => {
@@ -20,7 +19,7 @@ const RegistroUsuario = () => {
   useEffect(() => {
     const fetchMunicipalidades = async () => {
       try {
-        const res = await customAxios.get('https://apiintegrador-production-8ef8.up.railway.app/api/municipalidad/all');
+        const res = await axios.get('https://apiintegrador-production-8ef8.up.railway.app/api/municipalidad/all');
         const data = Array.isArray(res.data) ? res.data
                   : res.data.municipalidades ?? res.data.data ?? [];
         setMunicipalidades(data || []);
@@ -56,7 +55,7 @@ const RegistroUsuario = () => {
     };
 
     try {
-      await customAxios.post("https://apiintegrador-production-8ef8.up.railway.app/api/usuarios", payload);
+      await axios.post("https://apiintegrador-production-8ef8.up.railway.app/api/usuarios", payload);
       alert("Usuario registrado correctamente.");
       setForm({
         nombre: '', correo: '', contrasena: '', numero: '',
