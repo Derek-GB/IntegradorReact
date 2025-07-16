@@ -33,7 +33,7 @@ const ResumenParcial = () => {
         </button>
       </header>
 
-      <main className="main-content">
+      <main className="main-Content-abarrote">
         <div className="card">
           <h2>Resumen Parcial de Productos</h2>
           <table>
@@ -77,7 +77,7 @@ const ResumenParcial = () => {
               <h3>Editar producto</h3>
               <p><strong>{items[modalIndex].tipo}</strong></p>
               <p>Unidad: {items[modalIndex].unidad}</p>
-              <input
+              <input className='inputAbarrote'
                 type="number"
                 min="0"
                 value={editCantidad}

@@ -52,8 +52,9 @@ const Limpieza = () => {
       <div className="cuadro-grid">
         {productosLimpieza.map(({ nombre, unidad }) => (
           <div key={nombre} className="producto">
-            <label>
+            <label className='labelAbarrote'>
               <input
+                className='inputAbarrote'
                 type="checkbox"
                 checked={selecciones[nombre]?.checked || false}
                 onChange={() => handleCheck(nombre)}
@@ -61,6 +62,7 @@ const Limpieza = () => {
               {nombre}
             </label>
             <input
+              className='inputAbarrote'
               type="number"
               min="1"
               value={selecciones[nombre]?.cantidad || ''}

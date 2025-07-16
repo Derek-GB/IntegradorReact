@@ -63,15 +63,15 @@ const Olores = () => {
       <div className="cuadro-grid">
         {productosOlores.map(({ nombre }) => (
           <div key={nombre} className="producto">
-            <label>
-              <input
+            <label className='labelAbarrote'>
+              <input className='inputAbarrote'
                 type="checkbox"
                 checked={selecciones[nombre]?.checked || false}
                 onChange={() => handleCheck(nombre)}
               />
               {nombre}
             </label>
-            <input
+            <input className='inputAbarrote'
               type="number"
               min="1"
               value={selecciones[nombre]?.cantidad || ''}
