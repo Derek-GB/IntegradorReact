@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 function FormularioAbastecimiento() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-
     fecha: '',
     comida: '',
     personas: '',
@@ -63,6 +62,12 @@ function FormularioAbastecimiento() {
 
   return (
     <div className="content-area">
+
+      {/* Aquí eliminé el import que estaba dentro del return, ya que no es válido */}
+      {/* Continuación del código que estaba dentro del return: */}
+
+      <div id="sidebar-container" dangerouslySetInnerHTML={{ __html: '' /* sidebarHTML no definido aquí */ }} />
+
       <header className="top-header">
         <h1>Formulario de Abastecimiento</h1>
         <a href="#" className="back-button">
@@ -72,7 +77,9 @@ function FormularioAbastecimiento() {
 
       <main className="main-content">
         <div className="card">
-          <form onSubmit={(e) => e.preventDefault()}>
+
+          <form id="formularioAbastecimiento" onSubmit={e => e.preventDefault()}>
+
             <div className="form-group">
               <label htmlFor="fecha">Fecha:</label>
               <input
@@ -157,11 +164,17 @@ function FormularioAbastecimiento() {
                 {guardado ? 'Guardado' : 'Guardar'}
               </button>
 
-              <button className="btn-enviar" onClick={() => navigate('/formularioAbarrotes')}>
+              <button
+                type="button"
+                className="btn-enviar"
+                onClick={() => navigate('/formularioAbarrotes')}
+              >
                 Enviar
               </button>
             </div>
+
           </form>
+
         </div>
       </main>
     </div>

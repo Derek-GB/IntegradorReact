@@ -42,25 +42,25 @@ const App = () => {
 
         <div className="container main-content">
           <Routes>
-            <Route path="/" element={<Login />} />
-
-            <Route path="/inicio" element={<Inicio />} />
-            <Route path="/preFormulario" element={<PreFormulario />} />
-            <Route path="/registroSuministros" element={<RegistroSuministros />} />
-            <Route path="/asignacionRecursos" element={<AsignacionRecursos />} />
-            <Route path="/busquedaAlbergue" element={<BusquedaAlbergue />} />
-            <Route path="/ayudaForm" element={<AyudaForm />} />
-            <Route path="/registrarProducto" element={<RegistrarProducto />} />
-            <Route path="/registroAlbergue" element={<RegistroAlbergue />} />
-            <Route path="/registroUsuario" element={<RegistroUsuario />} />
-            <Route path="/listaProducto" element={<ListaProducto />} />
-            <Route path="/listaAlbergue" element={<ListaAlbergue />} />
-            <Route path="/menuPrincipal" element={<MenuPrincipal />} />
-            <Route path="/formularioAbarrotes" element={<FormularioAbastecimiento />} />
-            <Route path="/ajusteInventario" element={<AjusteInventario />} />
-            <Route path="/ActualizarAlbergue" element={<ActualizarAlbergue idAlbergue={17} />} />
-            <Route path="/recuperarContrasena" element={<RecuperarContrasena />} />
-            <Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
+<Route path="/" element={<Login />} />
+<Route path="/inicio" element={<Inicio />} />
+<Route path="/preFormulario" element={<PreFormulario />} />
+<Route path="/registroSuministros" element={<RegistroSuministros />} />
+<Route path="/asignacionRecursos" element={<AsignacionRecursos />} />
+<Route path="/busquedaAlbergue" element={<BusquedaAlbergue />} />
+<Route path="/ayudaForm" element={<AyudaForm />} />
+<Route path="/registrarProducto" element={<RegistrarProducto />} />
+<Route path="/registroAlbergue" element={<RegistroAlbergue />} />
+<Route path="/registroUsuario" element={<RegistroUsuario />} />
+<Route path="/listaProducto" element={<ListaProducto />} />
+<Route path="/listaAlbergue" element={<ListaAlbergue />} />
+<Route path="/menuPrincipal" element={<MenuPrincipal />} />
+<Route path="/formularioAbarrotes" element={<FormularioAbastecimiento />} />
+<Route path="/confirmacion" element={<Confirmacion />} />
+<Route path="/ajusteInventario" element={<AjusteInventario />} />
+<Route path="/ActualizarAlbergue" element={<ActualizarAlbergue idAlbergue={17} />} />
+<Route path="/recuperarContrasena" element={<RecuperarContrasena />} />
+<Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
           </Routes>
         </div>
       

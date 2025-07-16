@@ -5,12 +5,13 @@ import Verduras from './Verduras';
 import Olores from './Olores';
 import Abarrotes from './Abarrotes';
 import Limpieza from './Limpieza';
+import { useNavigate } from 'react-router-dom';
 import { AbastecimientoProvider } from '../context/contextoAbastecimiento';
-import { BrowserRouter } from 'react-router-dom'; 
-import '../styles/formularioFusionado.css'; // Asegúrate de tener este archivo con tus estilos
+import '../styles/formAbasteci.css';
 
 
 const FormularioAbastecimiento = () => {
+  const navigate = useNavigate();
   return (
     <div className="container main-content">
       <h2>Formulario de Abastecimiento</h2>
@@ -21,6 +22,12 @@ const FormularioAbastecimiento = () => {
       <Olores />
       <Abarrotes />
       <Limpieza />
+      <div className="botones-accion">
+        <button onClick={() => navigate('/confirmacion')}>
+          Enviar formulario
+        </button>
+      </div>
+
     </div>
   );
 };
