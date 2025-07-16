@@ -15,7 +15,7 @@ import RegistroAlbergue from './components/RegistroAlbergue.jsx';
 import RegistroUsuario from './components/registroUsuario.jsx';
 import ListaProducto from './components/ListaProducto.jsx';
 import ListaAlbergue from './components/ListaAlbergue.jsx';
-import FormularioAbastecimiento from './components/FormularioAbarrotes.jsx';
+import FormularioAbastecimiento from './components/formularioAbarrotes.jsx';
 import AjusteInventario from "./components/ajusteInventario";// <--- nombre correcto
 import RecuperarContrasena from './components/recuperarContrasena';
 import RestablecerContrasena from './components/restablecerContrasena';

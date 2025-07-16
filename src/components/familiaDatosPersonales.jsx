@@ -54,7 +54,15 @@ const FamiliaDatosPersonales = ({ datos = {}, setDatos }) => {
   return (
     <details open>
       <summary><strong>Información Personal</strong></summary>
-      <fieldset className="mt-2">
+      <fieldset className="mt-2"><label htmlFor="idFamilia">ID Familia:</label>
+  <input
+  id="idFamilia"
+  name="idFamilia"
+  type="text"
+  value={datos.idFamilia || ""}
+  className="form-control mb-2"
+  readOnly
+  />
         <label htmlFor="nombre">Nombre:</label>
         <input
           id="nombre"
