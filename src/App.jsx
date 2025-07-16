@@ -19,10 +19,7 @@ import ListaProducto from './components/ListaProducto.jsx';
 import ListaAlbergue from './components/ListaAlbergue.jsx';
 import FormularioAbastecimiento from './components/formularioAbarrotes.jsx';
 import ActualizarAlbergue from './components/ActualizarAlbergue.jsx';
-import AjusteInventario from "./components/ajusteInventario";
-import RecuperarContrasena from './components/recuperarContrasena';
-import RestablecerContrasena from './components/restablecerContrasena';
-import FormularioAbastecimiento from './components/formularioAbarrotes.jsx';
+
 import AjusteInventario from './components/ajusteInventario.jsx';
 import RecuperarContrasena from './components/recuperarContrasena.jsx';
 import RestablecerContrasena from './components/restablecerContrasena.jsx';
@@ -45,7 +42,7 @@ const App = () => {
         <div className="container main-content">
           <Routes>
             <Route path="/" element={<Login />} />
-            
+
             <Route path="/inicio" element={<Inicio />} />
             <Route path="/preFormulario" element={<PreFormulario />} />
             <Route path="/registroSuministros" element={<RegistroSuministros />} />
@@ -64,9 +61,7 @@ const App = () => {
             <Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
           </Routes>
         </div>
-        <footer>
-          <p>© 2025 Integrador I - Todos los derechos reservados.</p>
-        </footer>
+      
       </div>
     </>
   );
