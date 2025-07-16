@@ -1,12 +1,8 @@
 import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-<<<<<<< Updated upstream
-import Sidebar from './components/Sidebar.jsx';
-import Login from './components/login.jsx';
-=======
 import Sidebar from './components/sidebar.jsx';
-import Login from './components/Login.jsx';
->>>>>>> Stashed changes
+import Login from './components/login.jsx';
+
 import Inicio from './components/Inicio.jsx';
 import PreFormulario from './components/PreFormulario.jsx';
 import RegistroSuministros from './components/RegistroSuministros.jsx';
@@ -20,12 +16,10 @@ import ListaProducto from './components/ListaProducto.jsx';
 import ListaAlbergue from './components/ListaAlbergue.jsx';
 import FormularioAbastecimiento from './components/FormularioAbarrotes.jsx';
 import AjusteInventario from "./components/ajusteInventario";// <--- nombre correcto
-<<<<<<< Updated upstream
 import RecuperarContrasena from './components/recuperarContrasena';
 import RestablecerContrasena from './components/restablecerContrasena';
-=======
 import FamiliaFormulario from './components/familiaFormulario.jsx';
->>>>>>> Stashed changes
+import FormularioIntegrantes from "./components/formularioIntegrantes";
 
 import './styles/formularioFusionado.css';
 
@@ -53,13 +47,11 @@ const App = () => {
             <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
             <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
             <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
-<<<<<<< Updated upstream
-            <Route path="/recuperarContrasena.jsx" element={<RecuperarContrasena />} />
-             <Route path="/restablecerContrasena.jsx" element={<restablecerContrasena />} />
-             <Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
-=======
             <Route path="/familiaFormulario.jsx" element={<FamiliaFormulario />} />
->>>>>>> Stashed changes
+            <Route path="/recuperarContrasena.jsx" element={<RecuperarContrasena />} />
+             <Route path="/restablecerContrasena.jsx" element={<RestablecerContrasena />} />
+             <Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
+             <Route path="/formularioIntegrantes.jsx" element={<FormularioIntegrantes />} />
           </Routes>
 
         </div>

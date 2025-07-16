@@ -112,11 +112,13 @@ const FormularioRegistro = () => {
       const idFamilia = res.data.idFamilia;
       localStorage.setItem("idFamilia", idFamilia);
       alert("Familia registrada correctamente.");
-      navigate("/formulario");
     } catch (error) {
       console.error("Error al crear familia:", error);
-      alert("Hubo un error al crear la familia.");
+      alert("Hubo un error al crear la familia, pero puede continuar con el registro de integrantes.");
     }
+    // Esto se ejecuta siempre, haya error o no:
+    localStorage.setItem("cantidadIntegrantes", integrantes);
+    navigate("/formularioIntegrantes.jsx");
   };
 
   return (

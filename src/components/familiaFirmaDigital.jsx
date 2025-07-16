@@ -14,11 +14,10 @@ const FamiliaFirmaDigital = ({ datos = {}, setDatos }) => {
   }, []);
 
   const guardarFirma = () => {
-    if (signaturePadRef.current && !signaturePadRef.current.isEmpty()) {
-      const dataUrl = signaturePadRef.current.toDataURL();
-      setDatos((prev) => ({ ...prev, imagen: dataUrl }));
-    } else {
-      alert("Por favor firme antes de guardar.");
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const imagen = canvas.toDataURL("image/png");
+      setDatos({ ...datos, imagen });
     }
   };
 

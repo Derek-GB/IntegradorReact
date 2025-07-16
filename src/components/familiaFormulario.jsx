@@ -48,15 +48,16 @@ const FamiliaFormulario = () => {
     }
 
     try {
+      // Armar el payload según el schema proporcionado
       const personaPayload = {
-        tieneCondicionSalud: true,
-        descripcionCondicionSalud: ce.otrasCondiciones || "",
-        discapacidad: ce.discapacidad || false,
+        tieneCondicionSalud: ce.tieneCondicionSalud ?? true,
+        descripcionCondicionSalud: ce.descripcionCondicionSalud || ce.otrasCondiciones || "",
+        discapacidad: ce.discapacidad ?? false,
         tipoDiscapacidad: ce.tipoDiscapacidad || "",
         subtipoDiscapacidad: ce.subtipoDiscapacidad || "",
-        paisOrigen: cp.paisOrigen || "",
-        autoidentificacionCultural: "",
-        puebloIndigena: cp.puebloIndigena || "",
+        paisOrigen: cp.paises || "",
+        autoidentificacionCultural: cp.autoidentificacionCultural || "",
+        puebloIndigena: cp.grupoIndigena || "",
         firma: fd.imagen || "",
         idFamilia: 1,
         nombre: dp.nombre || "",
@@ -66,36 +67,36 @@ const FamiliaFormulario = () => {
         numeroIdentificacion: dp.numeroIdentificacion || "",
         nacionalidad: dp.nacionalidad || "",
         parentesco: dp.parentesco || "",
-        esJefeFamilia: dp.esJefeFamilia || false,
+        esJefeFamilia: dp.esJefeFamilia ?? false,
         fechaNacimiento: dp.fechaNacimiento || "",
         genero: dp.genero || "",
         sexo: dp.sexo || "",
         telefono: dp.telefono || "",
         contactoEmergencia: dp.contactoEmergencia || "",
         observaciones: dp.observaciones || "",
-        estaACargoMenor: dp.estaACargoMenor || false,
+        estaACargoMenor: dp.estaACargoMenor ?? false,
         idUsuarioCreacion: 1,
       };
 
-console.log("Payload persona:", personaPayload);
-
-      const personaRes = await personasAPI.create(personaPayload);
+      // Enviar a la API principal
+      const personaRes = await personasAPI.create([personaPayload]);
       const personaId = personaRes.id || personaRes.data?.id;
       if (!personaId) throw new Error("No se recibió el ID de la persona");
 
+      // Enviar a las APIs relacionadas (opcional según tu lógica)
       await condicionesEspecialesAPI.create({
         idPersona: personaId,
-        discapacidad: ce.discapacidad || false,
+        discapacidad: ce.discapacidad ?? false,
         tipoDiscapacidad: ce.tipoDiscapacidad || "",
         subtipoDiscapacidad: ce.subtipoDiscapacidad || "",
-        tieneCondicionSalud: true,
+        tieneCondicionSalud: ce.tieneCondicionSalud ?? true,
         condicionSaludId: 1,
       });
 
       await caracteristicasPoblacionalesAPI.create({
         idPersona: personaId,
-        migrante: cp.migrante || false,
-        indigena: cp.indigena || false,
+        migrante: cp.migrante ?? false,
+        indigena: cp.indigena ?? false,
       });
 
       if (fd.imagen) {
@@ -106,6 +107,13 @@ console.log("Payload persona:", personaPayload);
       }
 
       setSuccess("¡Datos guardados correctamente!");
+      // Opcional: resetear el formulario
+      // setDatos({
+      //   FamiliaDatosPersonales: {},
+      //   FamiliaCondicionesEspeciales: {},
+      //   FamiliaCaracteristicasPoblacionales: {},
+      //   FamiliaFirmaDigital: {},
+      // });
     } catch (err) {
       setError("Error al guardar los datos: " + (err.message || err));
       console.error(err);
@@ -125,20 +133,6 @@ console.log("Payload persona:", personaPayload);
           }))
         }
       />
-
-      {/* Debug: muestra JSON */}
-      <pre
-        style={{
-          background: "#f0f0f0",
-          padding: "10px",
-          maxHeight: "150px",
-          overflow: "auto",
-          fontSize: "12px",
-          marginBottom: "1rem",
-        }}
-      >
-        {JSON.stringify(datos.FamiliaDatosPersonales, null, 2)}
-      </pre>
 
       <FamiliaCondicionesEspeciales
         datos={datos.FamiliaCondicionesEspeciales}
@@ -169,6 +163,20 @@ console.log("Payload persona:", personaPayload);
           }))
         }
       />
+
+      {/* Debug: muestra JSON */}
+      {/* <pre
+        style={{
+          background: "#f0f0f0",
+          padding: "10px",
+          maxHeight: "150px",
+          overflow: "auto",
+          fontSize: "12px",
+          marginBottom: "1rem",
+        }}
+      >
+        {JSON.stringify(datos, null, 2)}
+      </pre> */}
 
       {loading && <p>Guardando datos...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
