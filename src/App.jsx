@@ -18,18 +18,20 @@ import FormularioAbastecimiento from './components/FormularioAbarrotes.jsx';
 import AjusteInventario from "./components/ajusteInventario";// <--- nombre correcto
 import RecuperarContrasena from './components/recuperarContrasena';
 import RestablecerContrasena from './components/restablecerContrasena';
+import Prueba from './components/prueba';
+
 
 
 
 const App = () => {
   const location = useLocation();
-  const isLogin = location.pathname === '/'|| location.pathname === '/recuperarContrasena'|| location.pathname === '/restablecerContrasena';
+  const isLogin = location.pathname === '/' || location.pathname === '/recuperarContrasena' || location.pathname === '/restablecerContrasena';
 
   return (
     <>
       <div className="app-container">
 
-        {!isLogin && <Sidebar/>}
+        {!isLogin && <Sidebar />}
 
         <div className="container main-content">
           <Routes>
@@ -48,8 +50,9 @@ const App = () => {
             <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
             <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
             <Route path="/recuperarContrasena.jsx" element={<RecuperarContrasena />} />
-             <Route path="/restablecerContrasena.jsx" element={<restablecerContrasena />} />
-             <Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
+            <Route path="/restablecerContrasena.jsx" element={<restablecerContrasena />} />
+            <Route path="/prueba.jsx" element={<Prueba />} />
+
           </Routes>
 
         </div>
