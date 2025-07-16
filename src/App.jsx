@@ -1,7 +1,12 @@
 import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
+<<<<<<< Updated upstream
 import Sidebar from './components/Sidebar.jsx';
+import Login from './components/login.jsx';
+=======
+import Sidebar from './components/sidebar.jsx';
 import Login from './components/Login.jsx';
+>>>>>>> Stashed changes
 import Inicio from './components/Inicio.jsx';
 import PreFormulario from './components/PreFormulario.jsx';
 import RegistroSuministros from './components/RegistroSuministros.jsx';
@@ -10,17 +15,23 @@ import BusquedaAlbergue from './components/BusquedaAlbergue.jsx';
 import AyudaForm from './components/AyudaForm.jsx';
 import RegistrarProducto from './components/RegistrarProducto.jsx';
 import RegistroAlbergue from './components/RegistroAlbergue.jsx';
-import RegistroUsuario from './components/RegistroUsuario.jsx';
+import RegistroUsuario from './components/registroUsuario.jsx';
 import ListaProducto from './components/ListaProducto.jsx';
 import ListaAlbergue from './components/ListaAlbergue.jsx';
 import FormularioAbastecimiento from './components/FormularioAbarrotes.jsx';
 import AjusteInventario from "./components/ajusteInventario";// <--- nombre correcto
+<<<<<<< Updated upstream
+import RecuperarContrasena from './components/recuperarContrasena';
+import RestablecerContrasena from './components/restablecerContrasena';
+=======
+import FamiliaFormulario from './components/familiaFormulario.jsx';
+>>>>>>> Stashed changes
 
 import './styles/formularioFusionado.css';
 
 const App = () => {
   const location = useLocation();
-  const isLogin = location.pathname === '/';
+  const isLogin = location.pathname === '/'|| location.pathname === '/recuperarContrasena'|| location.pathname === '/restablecerContrasena';
 
   return (
     <>
@@ -42,6 +53,13 @@ const App = () => {
             <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
             <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
             <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
+<<<<<<< Updated upstream
+            <Route path="/recuperarContrasena.jsx" element={<RecuperarContrasena />} />
+             <Route path="/restablecerContrasena.jsx" element={<restablecerContrasena />} />
+             <Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
+=======
+            <Route path="/familiaFormulario.jsx" element={<FamiliaFormulario />} />
+>>>>>>> Stashed changes
           </Routes>
 
         </div>
