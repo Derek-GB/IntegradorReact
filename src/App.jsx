@@ -57,9 +57,6 @@ const App = () => {
 <Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
           </Routes>
         </div>
-        <footer>
-          <p>© 2025 Integrador I - Todos los derechos reservados.</p>
-        </footer>
       </div>
     </>
   );
