@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import customAxios from '../helpers/customAxios';
 import { useNavigate } from 'react-router-dom';
+import { municipalidadAPI, usuariosAPI } from '../helpers/api'; // Asegúrate del path correcto
 
 const RegistroUsuario = () => {
   const navigate = useNavigate();
@@ -10,20 +9,19 @@ const RegistroUsuario = () => {
     nombre: '',
     correo: '',
     contrasena: '',
-    numero: '',
     rol: '',
     activo: '',
     municipalidad: '',
     identificacion: ''
   });
 
+
   useEffect(() => {
     const fetchMunicipalidades = async () => {
       try {
-        const res = await customAxios.get('https://apiintegrador-production-8ef8.up.railway.app/api/municipalidad/all');
-        const data = Array.isArray(res.data) ? res.data
-          : res.data.municipalidades ?? res.data.data ?? [];
-        setMunicipalidades(data || []);
+        const data = await municipalidadAPI.getAll();
+        const lista = Array.isArray(data) ? data : data.data ?? [];
+        setMunicipalidades(lista || []);
       } catch (error) {
         console.error('Error al cargar municipalidades:', error);
         setMunicipalidades([]);
@@ -31,6 +29,9 @@ const RegistroUsuario = () => {
     };
     fetchMunicipalidades();
   }, []);
+
+
+
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -40,7 +41,8 @@ const RegistroUsuario = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     const { nombre, correo, contrasena, rol, activo, municipalidad, identificacion } = form;
-    if (!nombre || !correo || !contrasena || !rol || !municipalidad || !identificacion) {
+
+    if (!nombre || !correo || !contrasena || !rol || !activo || !municipalidad || !identificacion) {
       alert("Por favor complete todos los campos.");
       return;
     }
@@ -50,16 +52,16 @@ const RegistroUsuario = () => {
       correo: correo.trim(),
       contrasenaHash: contrasena.trim(),
       rol: rol.trim(),
-      activo: activo.trim() === 'activo',
+      activo: activo === "activo",
       idMunicipalidad: parseInt(municipalidad),
       identificacion: identificacion.trim()
     };
 
     try {
-      await customAxios.post("https://apiintegrador-production-8ef8.up.railway.app/api/usuarios", payload);
+      await usuariosAPI.create(payload); // ✅ Usa el helper
       alert("Usuario registrado correctamente.");
       setForm({
-        nombre: '', correo: '', contrasena: '', numero: '',
+        nombre: '', correo: '', contrasena: '',
         rol: '', activo: '', municipalidad: '', identificacion: ''
       });
     } catch (error) {
@@ -83,37 +85,25 @@ const RegistroUsuario = () => {
 
       <div className="formPreFormulario main-content" onSubmit={handleSubmit}>
 
-        <div className="divAgrupado">
-          <fieldset className="fieldsetRegistroUSuario1 mt-2">
 
-            <div className="datosUsuario">
-              <div className="datoUsuario">
-                <label>Identificación:</label>
-                <input name="identificacion" value={form.identificacion} onChange={handleChange} required />
-              </div>
+        <label>Correo Electrónico:</label>
+        <input name="correo" type="email" value={form.correo} onChange={handleChange} required />
 
-              <div className="datoUsuario">
-              <label>Municipalidad:</label>
-                <select name="municipalidad" value={form.municipalidad} onChange={handleChange} required>
-                  <option value="">Seleccione municipalidad</option>
-                  {municipalidades.map((m) => (
-                    <option key={m.id || m.ID} value={m.id || m.ID}>
-                      {m.nombre || m.Nombre || 'Sin nombre'}
-                    </option>
-                  ))}
-                </select>
+        <label>Contraseña:</label>
+        <input name="contrasena" type="password" value={form.contrasena} onChange={handleChange} required />
 
 
-              </div>
 
-              <div className="datoUsuario">
+      </div>
 
-                <label>Correo Electrónico:</label>
-              <input name="correo" value={form.correo} type="email" onChange={handleChange} required />
-          
-              </div>
-            </div>
-          </fieldset>
+      <div className="datoUsuario">
+
+        <label>Correo Electrónico:</label>
+        <input name="correo" value={form.correo} type="email" onChange={handleChange} required />
+
+      </div>
+    </div >
+          </fieldset >
 
           <fieldset className="fieldsetRegistroUSuario2 mt-2">
             <div className="datosUsuario">
@@ -182,24 +172,24 @@ const RegistroUsuario = () => {
             </div>
           </div>
         </fieldset>
-        </div>
+        </div >
 
 
-        
 
-        <fieldset className="mt-2">
 
-          <div className="datosUsuario">
-            
-            <div className="datoUsuario">
-              <button type="submit" className="btn btn-primary mt-3">Registrar</button>
+  <fieldset className="mt-2">
 
-            </div>
+    <div className="datosUsuario">
 
-          </div>
-        </fieldset>
+      <div className="datoUsuario">
+        <button type="submit" className="btn btn-primary mt-3">Registrar</button>
 
       </div>
+
+    </div>
+  </fieldset>
+
+      </div >
 
     </>
 
