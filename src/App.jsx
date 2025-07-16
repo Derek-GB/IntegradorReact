@@ -22,8 +22,10 @@ import './styles/formularioFusionado.css';
 
 const App = () => {
   const location = useLocation();
-  const isLogin = location.pathname === '/'|| location.pathname === '/recuperarContrasena'|| location.pathname === '/restablecerContrasena';
-
+  const isLogin = 
+  location.pathname === '/' || 
+  location.pathname === '/recuperarContrasena.jsx' || 
+  location.pathname === '/restablecerContrasena.jsx';
   return (
     <>
       <div className="app-container">
@@ -45,8 +47,7 @@ const App = () => {
             <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
             <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
             <Route path="/recuperarContrasena.jsx" element={<RecuperarContrasena />} />
-             <Route path="/restablecerContrasena.jsx" element={<restablecerContrasena />} />
-             <Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
+             <Route path="/restablecerContrasena.jsx" element={<RestablecerContrasena />} />
           </Routes>
 
         </div>
