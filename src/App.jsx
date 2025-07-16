@@ -55,9 +55,12 @@ const App = () => {
 <Route path="/recuperarContrasena.jsx" element={<RecuperarContrasena />} />
 <Route path="/restablecerContrasena.jsx" element={<RestablecerContrasena />} />
 <Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
-      <footer>
-        <p>© 2025 Integrador I - Todos los derechos reservados.</p>
-      </footer>
+          </Routes>
+        </div>
+        <footer>
+          <p>© 2025 Integrador I - Todos los derechos reservados.</p>
+        </footer>
+      </div>
     </>
   );
 };
