@@ -19,6 +19,8 @@ import ActualizarAlbergue from './components/ActualizarAlbergue.jsx';
 import AjusteInventario from "./components/ajusteInventario";
 import RecuperarContrasena from './components/recuperarContrasena';
 import RestablecerContrasena from './components/restablecerContrasena';
+import RegistroAmenazas from './components/registroAmenazas';
+
 
 
 const App = () => {
@@ -55,6 +57,7 @@ const App = () => {
 <Route path="/recuperarContrasena.jsx" element={<RecuperarContrasena />} />
 <Route path="/restablecerContrasena.jsx" element={<RestablecerContrasena />} />
 <Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
+<Route path="/registroAmenazas.jsx" element={<RegistroAmenazas />} />
           </Routes>
         </div>
       </div>
