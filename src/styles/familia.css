@@ -1,0 +1,127 @@
+.formPreFormulario {
+  min-height: 100vh;
+  width: 100vw;
+  background: var(--color-fondo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--fuente-principal);
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+/* Campo de formulario principal */
+#registroFamiliaField {
+  background: var(--color-blanco);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 650px;
+  border: 1px solid var(--color-gris-borde);
+  font-family: var(--fuente-principal);
+}
+
+/* Encabezado */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-blanco);
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.header h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--color-texto);
+  margin: 0;
+}
+
+.btn-header {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-texto);
+  font-size: 1.5rem;
+}
+
+/* Secciones de agrupación */
+#registroFamilia1,
+#registroFamiliaUbicacion {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.divFamiliaDireccion {
+  margin-top: 1.5rem;
+}
+
+.divFamiliaDireccion textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Campos individuales */
+#divFamilia {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Inputs y selects */
+input.form-control,
+select.form-select,
+textarea.form-control {
+  margin-top: 0.4rem;
+  padding: 0.6rem;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 6px;
+  font-size: 1rem;
+  background: var(--color-gris-claro);
+  transition: border 0.2s;
+  font-family: var(--fuente-principal);
+  color: var(--color-texto);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border: 1.5px solid var(--color-verde-form);
+  outline: none;
+}
+
+/* Botón principal */
+button.btn-success {
+  background: var(--color-amarillo);
+  color: var(--color-blanco);
+  border: none;
+  border-radius: 6px;
+  padding: 0.7rem 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: var(--fuente-principal);
+  width: 100%;
+}
+
+button.btn-success:hover {
+  background: var(--color-amarillo-hover);
+}
+
+/* Estilo para leyendas */
+legend {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--color-texto);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #registroFamilia1,
+  #registroFamiliaUbicacion {
+    grid-template-columns: 1fr;
+  }
+}
