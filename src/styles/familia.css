@@ -1,4 +1,5 @@
-.formPreFormulario {
+/* Contenedor principal centrado y con fondo */
+.formulario-registro-fullscreen {
   min-height: 100vh;
   width: 100vw;
   background: var(--color-fondo);
@@ -10,118 +11,101 @@
   box-sizing: border-box;
 }
 
-/* Campo de formulario principal */
-#registroFamiliaField {
+/* Tarjeta del formulario */
+.formulario-registro-container {
   background: var(--color-blanco);
-  padding: 2rem;
+  padding: 2.5rem 2rem;
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
   width: 100%;
-  max-width: 650px;
+  max-width: 600px;
   border: 1px solid var(--color-gris-borde);
   font-family: var(--fuente-principal);
 }
 
-/* Encabezado */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--color-blanco);
-  padding: 1rem 2rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-.header h2 {
+/* Título principal */
+.formulario-registro-container h2 {
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
   font-size: 1.5rem;
-  font-weight: bold;
+  min-height: 1em;
+  line-height: 1.4;
+  z-index: 1;
+}
+
+/* Etiquetas */
+.formulario-registro-container label,
+.formulario-registro-container legend {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
   color: var(--color-texto);
-  margin: 0;
-}
-
-.btn-header {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: var(--color-texto);
-  font-size: 1.5rem;
-}
-
-/* Secciones de agrupación */
-#registroFamilia1,
-#registroFamiliaUbicacion {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
-
-.divFamiliaDireccion {
-  margin-top: 1.5rem;
-}
-
-.divFamiliaDireccion textarea {
-  resize: vertical;
-  min-height: 100px;
-}
-
-/* Campos individuales */
-#divFamilia {
-  display: flex;
-  flex-direction: column;
 }
 
 /* Inputs y selects */
-input.form-control,
-select.form-select,
-textarea.form-control {
-  margin-top: 0.4rem;
+.formulario-registro-container input,
+.formulario-registro-container select,
+.formulario-registro-container textarea {
+  width: 100%;
   padding: 0.6rem;
+  margin-bottom: 1.2rem;
   border: 1px solid var(--color-gris-borde);
-  border-radius: 6px;
-  font-size: 1rem;
+  border-radius: 8px;
   background: var(--color-gris-claro);
+  font-size: 1rem;
   transition: border 0.2s;
   font-family: var(--fuente-principal);
   color: var(--color-texto);
+  box-sizing: border-box;
 }
 
-input:focus,
-select:focus,
-textarea:focus {
+.formulario-registro-container input:focus,
+.formulario-registro-container select:focus,
+.formulario-registro-container textarea:focus {
   border: 1.5px solid var(--color-verde-form);
   outline: none;
 }
 
 /* Botón principal */
-button.btn-success {
+.formulario-registro-container button[type="button"],
+.formulario-registro-container button[type="submit"] {
   background: var(--color-amarillo);
-  color: var(--color-blanco);
+  color: var( --color-texto);
   border: none;
-  border-radius: 6px;
-  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
   font-size: 1.1rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.2s;
-  font-family: var(--fuente-principal);
+  transition: background 0.2s ease;
   width: 100%;
+  margin-top: 1rem;
 }
 
-button.btn-success:hover {
+.formulario-registro-container button:hover {
   background: var(--color-amarillo-hover);
 }
 
-/* Estilo para leyendas */
-legend {
-  font-weight: 600;
-  font-size: 1rem;
-  color: var(--color-texto);
+/* Agrupaciones internas (fieldsets) */
+.formulario-registro-container fieldset {
+  border: none;
+  padding: 0;
+  margin-bottom: 1.5rem;
+}
+
+.divFamiliaUbicacion {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-  #registroFamilia1,
-  #registroFamiliaUbicacion {
-    grid-template-columns: 1fr;
+@media (min-width: 768px) {
+  .divFamiliaUbicacion {
+    flex-direction: row;
   }
 }
