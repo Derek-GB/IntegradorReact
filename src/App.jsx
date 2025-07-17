@@ -14,10 +14,12 @@ import RegistroAlbergue from './components/RegistroAlbergue.jsx';
 import RegistroUsuario from './components/registroUsuario.jsx';
 import ListaProducto from './components/ListaProducto.jsx';
 import ListaAlbergue from './components/ListaAlbergue.jsx';
-import FormularioAbastecimiento from './components/FormularioAbarrotes.jsx';
-import AjusteInventario from "./components/ajusteInventario";// <--- nombre correcto
+import FormularioAbastecimiento from './components/formularioAbarrotes.jsx';
+import ActualizarAlbergue from './components/ActualizarAlbergue.jsx';
+import AjusteInventario from "./components/ajusteInventario";
 import RecuperarContrasena from './components/recuperarContrasena';
 import RestablecerContrasena from './components/restablecerContrasena';
+import RegistroAmenazas from './components/registroAmenazas';
 
 
 
@@ -46,17 +48,19 @@ const App = () => {
             <Route path="/listaProducto.jsx" element={<ListaProducto />} />
             <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
             <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
-            <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
-            <Route path="/recuperarContrasena.jsx" element={<RecuperarContrasena />} />
-             <Route path="/restablecerContrasena.jsx" element={<restablecerContrasena />} />
-             <Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
-          </Routes>
 
+            <Route path="/ActualizarAlbergue.jxs" element={<ActualizarAlbergue idAlbergue={17} />} />
+
+            <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
+<Route path="/ActualizarAlbergue.jsx" element={<ActualizarAlbergue idAlbergue={17} />} />
+<Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
+<Route path="/recuperarContrasena.jsx" element={<RecuperarContrasena />} />
+<Route path="/restablecerContrasena.jsx" element={<RestablecerContrasena />} />
+<Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
+<Route path="/registroAmenazas.jsx" element={<RegistroAmenazas />} />
+          </Routes>
         </div>
       </div>
-      <footer>
-        <p>© 2025 Integrador I - Todos los derechos reservados.</p>
-      </footer>
     </>
   );
 };

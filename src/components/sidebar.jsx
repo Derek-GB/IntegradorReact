@@ -15,9 +15,9 @@ const Sidebar = () => {
     { href: "/registroUsuario.jsx", icon: "person_add", label: "Registrar un usuario" },
     { href: "/listaProducto.jsx", icon: "list", label: "Lista de Productos" },
     { href: "/listaAlbergue.jsx", icon: "list_alt", label: "Lista de Albergues" },
-    { href: "/formularioAbarrotes.jsx", icon: "local_shipping", label: "Abastecimiento" },
-    { href: "/ajusteInventario.jsx", icon: "warehouse", label: "Ajuste de inventario" }
-    
+{ href: "/formularioAbarrotes.jsx", icon: "local_shipping", label: "Abastecimiento" },
+{ href: "/ajusteInventario.jsx", icon: "warehouse", label: "Ajuste de inventario" },
+{ href: "/registroAmenazas.jsx", icon: "report", label: "Registro de Amenazas" }
   ];
 
   return (
