@@ -43,28 +43,30 @@ const RecuperarContrasena = () => {
   }, [mensaje, error]);
 
   return (
-    <div className="login-wrapper">
-      <h2>Recuperar Contraseña</h2>
-      <form onSubmit={handleSubmit} className="login">
-        {mensaje && <div className="success">{mensaje}</div>}
-        {error && <div className="error">{error}</div>}
+    <div className="containerLogin">
+      <div className="login-wrapper">
+        <h2>Recuperar Contraseña</h2>
+        <form onSubmit={handleSubmit} className="login">
+          {mensaje && <div className="success">{mensaje}</div>}
+          {error && <div className="error">{error}</div>}
 
-        <label htmlFor="correo">Correo Electrónico</label>
-        <input
-          type="email"
-          id="correo"
-          name="correo"
-          placeholder="Ingrese su correo"
-          value={correo}
-          onChange={(e) => setCorreo(e.target.value)}
-          required
-        />
+          <label htmlFor="correo">Correo Electrónico</label>
+          <input
+            type="email"
+            id="correo"
+            name="correo"
+            placeholder="Ingrese su correo"
+            value={correo}
+            onChange={(e) => setCorreo(e.target.value)}
+            required
+          />
 
-        <div className="btn-group">
-          <button type="submit" className="btn btn-primary">Enviar Instrucciones</button>
-          <button type="button" className="btn btn-secondary" onClick={() => navigate('/')}>Volver</button>
-        </div>
-      </form>
+          <div className="btn-group">
+            <button type="submit" className="btn btn-primary">Enviar Instrucciones</button>
+            <button type="button" className="btn btn-secondary" onClick={() => navigate('/')}>Volver</button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { productosAPI } from '../helpers/api';
-import '../styles/formularioFusionado.css'; // Asegúrate de que la ruta sea correcta';
+import '../styles/formularioFusionado.css'; 
 
 
 const RegistrarProducto = () => {
@@ -29,11 +29,11 @@ const RegistrarProducto = () => {
         nombre: form.producto,
         descripcion: form.descripcion,
         cantidad: parseInt(form.cantidad),
-        categoria: parseInt(form.categoria), // ✅ convertir a entero
-        unidadMedida: parseInt(form.unidad)  // ✅ convertir a entero
+        categoria: parseInt(form.categoria), 
+        unidadMedida: parseInt(form.unidad)  
       };
 
-      await productosAPI.create(data); // ✅ usa el helper
+      await productosAPI.create(data); 
       alert("Producto registrado correctamente");
       setForm({
         codigo: '',
