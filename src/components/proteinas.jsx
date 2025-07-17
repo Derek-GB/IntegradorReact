@@ -37,8 +37,8 @@ const Proteinas = () => {
     <details>
       <summary><strong>Proteínas</strong></summary>
       <div>
-        <label htmlFor="tipoProteina">Proteína:</label>
-        <select id="tipoProteina" value={tipoProteina} onChange={e => setTipoProteina(e.target.value)}>
+        <label className ='labelAbarrote' htmlFor="tipoProteina">Proteína:</label>
+        <select className='selectAbarrote' id="tipoProteina" value={tipoProteina} onChange={e => setTipoProteina(e.target.value)}>
           <option value="">Seleccione</option>
           <option value="Huevos">Huevos</option>
           <option value="Mortadela">Mortadela</option>

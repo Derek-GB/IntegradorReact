@@ -7,8 +7,7 @@ import Abarrotes from './Abarrotes';
 import Limpieza from './Limpieza';
 import { AbastecimientoProvider } from '../context/contextoAbastecimiento';
 import { BrowserRouter } from 'react-router-dom'; 
-import '../styles/formAbasteci.css';
-import '../styles/formulario.css';
+import '../styles/formularioFusionado.css'; // Asegúrate de tener este archivo con tus estilos
 
 
 const FormularioAbastecimiento = () => {
@@ -22,9 +21,6 @@ const FormularioAbastecimiento = () => {
       <Olores />
       <Abarrotes />
       <Limpieza />
-      <footer>
-        <p>© 2025 Integrador I - Todos los derechos reservados.</p>
-      </footer>
     </div>
   );
 };

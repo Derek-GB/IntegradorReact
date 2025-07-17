@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import '../styles/formulario.css'; // Usa el mismo estilo que tu login
 import authHelper from '../helpers/sesion'; // Asegúrate de tener esta función implementada
 
 

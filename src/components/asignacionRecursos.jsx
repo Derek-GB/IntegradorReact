@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/formulario.css';
-import '../styles/indexx.css';
+import '../styles/formularioFusionado.css'; // Asegúrate de tener este archivo con tus estilos
 
 const AsignacionRecursos = () => {
   const navigate = useNavigate();
@@ -44,33 +43,31 @@ const AsignacionRecursos = () => {
   };
 
   return (
-    <div className="container main-content">
-      <h2>
-        <button
-          onClick={() => navigate('/inicio')}
-          className="btn btn-secondary"
-          style={{ position: 'absolute', right: '1cm', top: '50%', transform: 'translateY(-50%)', padding: '8px' }}
-          aria-label="Regresar"
-        >
-          <span className="material-icons" style={{ fontSize: '24px' }}>arrow_back</span>
+    <>
+      <div className="header">
+        <h2>Asignacion de Recursos</h2>
+        <button className="btn-header">
+          <span className="material-icons">arrow_back</span>
         </button>
-        Asignación de Recursos
-      </h2>
+      </div>
 
-      <form onSubmit={handleSubmit} className="form-control">
-        <details open>
-          <summary><strong>Asignación de Recursos</strong></summary>
-          <fieldset className="mt-2">
-            <label>Código de Familia:</label>
-            <input
-              type="text"
-              value={codigoFamilia}
-              onChange={e => setCodigoFamilia(e.target.value)}
-              className="form-control mb-2"
-              required
-            />
+      <div className="asigContainer main-content" onSubmit={handleSubmit}>
+        <fieldset className="fieldset1 mt-2">
+          <legend>Recurso</legend>
 
-            <div>
+          <div id='asignacionSuministro'>
+            <div id='divProducto'>
+              <label>Código de Familia:</label>
+              <input
+                type="text"
+                value={codigoFamilia}
+                onChange={e => setCodigoFamilia(e.target.value)}
+                className="form-control mb-2"
+                required
+              />
+            </div>
+
+            <div id='divProducto'>
               <label>Artículo:</label>
               <select
                 value={articulo}
@@ -83,7 +80,8 @@ const AsignacionRecursos = () => {
                 <option value="Kit de cocina">Kit de cocina</option>
                 <option value="Agua embotellada">Agua embotellada</option>
               </select>
-
+            </div>
+            <div id="divProducto">
               <label>Cantidad:</label>
               <input
                 type="number"
@@ -94,10 +92,18 @@ const AsignacionRecursos = () => {
                 placeholder="Ingrese la cantidad"
               />
             </div>
+            <button
+              type="button"
+              className="btn mb-3"
+              onClick={agregarItem}
+            >
+              <span className="material-icons">add</span>
+            </button>
 
-            <button type="button" className="btn btn-warning mb-3" onClick={agregarItem}>+ Agregar otro artículo</button>
+          </div>
 
-            {asignaciones.length > 0 && (
+          {asignaciones.length > 0 && (
+            <>
               <table className="tabla-asignacion table-responsive mt-4">
                 <thead className="table-light">
                   <tr>
@@ -112,22 +118,42 @@ const AsignacionRecursos = () => {
                       <td>{item.articulo}</td>
                       <td>{item.cantidad}</td>
                       <td>
-                        <button type="button" className="btn btn-sm btn-danger" onClick={() => eliminarItem(index)}>
-                          Eliminar
+                        <button type="button" className="btnEliminarTabla" onClick={() => eliminarItem(index)}>
+                          <span className='material-icons'>delete</span>
+                        </button>
+                        <button type="button" className="btnModificarTabla" >
+                          <span className='material-icons'>edit</span>
                         </button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-            )}
-          </fieldset>
-        </details>
-        <button type="submit" className="btn btn-success mt-3">Guardar asignación</button>
-        <button type="reset" className="btn btn-secondary mt-3" onClick={() => setAsignaciones([])}>Limpiar</button>
-      </form>
+              <div className='fieldset2 mt-3'>
+                <div className='btn1Asig'>
+                  <button type="reset" className="btn btn-secondary mt-3" onClick={() => setAsignaciones([])}>
+                    Limpiar
+                    <span className='material-icons'>cleaning_services </span>
+                  </button>
+                </div>
+                <div className='btn2Asig'>
+                  <button type="submit" className="btn btn-success mt-3">
+                    Guardar asignación
+                  <span className='material-icons'>save</span>
+                  </button>
 
-    </div>
+                </div>
+
+              </div>
+            </>
+          )}
+        </fieldset>
+
+      </div>
+
+
+    </>
+
   );
 };
 

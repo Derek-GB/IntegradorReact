@@ -1,10 +1,26 @@
 import customAxios from "./customAxios";
 
 const handleError = (error) => {
-  throw new Error("Error al conectar con la API: " + error.message + "\n" + error);
+  const apiMessage =
+    error.response?.data?.message ||  // Mensaje principal del backend
+    error.response?.data?.error ||    // Otro campo de error
+    error.message ||                  // Mensaje genérico de Axios
+    "Error desconocido";
+
+  // Opcional: muestra toda la respuesta del backend en consola
+  console.error("Detalles del error:", error.response?.data);
+
+  throw new Error("Error al conectar con la API: " + apiMessage);
 };
 
-const createApiMethods = (endpoint) => ({
+const createApiMethods = (endpoint, extraMethods = {}) => {
+  return {
+    ...defaultMethods(endpoint),
+    ...extraMethods
+  };
+};
+
+const defaultMethods = (endpoint) => ({
   getAll: async () => {
     try {
       const res = await customAxios.get(`/${endpoint}/all`);
@@ -54,7 +70,24 @@ const createApiMethods = (endpoint) => ({
 // Generar todas las rutas de la API
 export const productosAPI = createApiMethods("productos");
 export const familiasAPI = createApiMethods("familias");
-export const alberguesAPI = createApiMethods("albergues");
+export const alberguesAPI = createApiMethods("albergues", {
+  getByNombre: async (nombre) => {
+    try {
+      const res = await customAxios.get(`/albergues/nombre/${nombre}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+  getByDistrito: async (distrito) => {
+    try {
+      const res = await customAxios.get(`/albergues/distrito/${distrito}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+});
 export const municipalidadAPI = createApiMethods("municipalidad");
 export const capacidadAlberguesAPI = createApiMethods("capacidadAlbergues");
 export const ubicacionesAPI = createApiMethods("ubicaciones");
@@ -68,10 +101,25 @@ export const firmasDigitalesAPI = createApiMethods("firmasDigitales");
 export const infraestructuraAlberguesAPI = createApiMethods("infraestructuraAlbergues");
 export const amenazasAPI = createApiMethods("amenazas");
 export const categoriaConsumiblesAPI = createApiMethods("categoriaConsumibles");
-export const usuariosAPI = createApiMethods("usuarios");
+export const usuariosAPI = createApiMethods("usuarios", {
+  validarCorreo: async (correo) => {
+    try {
+      const res = await customAxios.post(`/usuarios/validar/correo`, { correo });
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+  updateContrasena: async (correo, nuevaContrasena) => {
+    try {
+      const res = await customAxios.put(`/usuarios/contrasena`, { correo, nuevaContrasena });
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+});
 export const consumiblesAPI = createApiMethods("consumibles");
 export const detallePedidoConsumiblesAPI = createApiMethods("detallePedidoConsumibles");
 export const pedidoConsumiblesAPI = createApiMethods("pedidoConsumibles");
 export const unidadMedidasAPI = createApiMethods("unidadMedidas");
-
-
