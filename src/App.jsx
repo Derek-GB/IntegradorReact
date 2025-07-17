@@ -21,6 +21,7 @@ import RecuperarContrasena from './components/recuperarContrasena';
 import RestablecerContrasena from './components/restablecerContrasena';
 import FamiliaFormulario from './components/familiaFormulario.jsx';
 import FormularioIntegrantes from "./components/formularioIntegrantes";
+import RegistroMascotas from "./components/registroMascota.jsx";
 
 
 
@@ -60,6 +61,7 @@ const App = () => {
               <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
               <Route path="/familiaFormulario.jsx" element={<FamiliaFormulario />} />
               <Route path="/formularioIntegrantes.jsx" element={<FormularioIntegrantes />} />
+              <Route path="/registroMascota.jsx" element={<RegistroMascotas />} />
             </Routes>
           </div>
         </div>
