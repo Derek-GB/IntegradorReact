@@ -74,8 +74,8 @@
 
 .registro-usuario-form button[type="button"],
 .registro-usuario-form button[type="submit"] {
- background: var(--color-amarillo);
-  color: var( --color-texto);
+  background: var(--color-amarillo);
+  color: var(--color-texto) !important;
   border: none;
   border-radius: 8px;
   padding: 0.75rem 1.25rem;
@@ -84,8 +84,7 @@
   cursor: pointer;
   transition: background 0.2s ease;
   width: 100%;
-  margin-top: 1rem;
-
+  margin-top: 1rem;
 }
 
 
