@@ -24,7 +24,7 @@ const productosOlores = [
   { nombre: 'Consome', unidad: 'kg' }
 ];
 
-const olores = () => {
+const Olores = () => {
   const { agregarItem, eliminarItem, items } = useContext(contextoAbastecimiento);
   const [selecciones, setSelecciones] = useState({});
 
@@ -63,16 +63,23 @@ const olores = () => {
       <div className="cuadro-grid">
         {productosOlores.map(({ nombre }) => (
           <div key={nombre} className="producto">
-            <label>
-              <input
+            <label className='labelAbarrote'>
+              <input className='inputAbarrote'
                 type="checkbox"
                 checked={selecciones[nombre]?.checked || false}
                 onChange={() => handleCheck(nombre)}
               />
               {nombre}
-            </label>
-         
-          </div>
+  </label>
+  <input className='inputAbarrote'
+    type="number"
+    min="1"
+    value={selecciones[nombre]?.cantidad || ''}
+    onChange={(e) => handleCantidad(nombre, e.target.value)}
+    disabled={!selecciones[nombre]?.checked}
+    placeholder="Cantidad"
+  />
+</div>
         ))}
       </div>
 
@@ -100,4 +107,4 @@ const olores = () => {
   );
 };
 
-export default olores;
+export default Olores;

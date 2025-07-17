@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const listaProducto = () => {
+const ListaProducto = () => {
   const [productos, setProductos] = useState([]);
   const [productoId, setProductoId] = useState('');
   const [form, setForm] = useState({});
@@ -127,4 +127,4 @@ const listaProducto = () => {
   );
 };
 
-export default listaProducto;
+export default ListaProducto;
