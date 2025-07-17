@@ -18,7 +18,7 @@ const Inicio = () => {
         <button 
           onClick={handleLogout} 
           className="btn btn-danger" 
-          style={{ padding: '8px 16px', cursor: 'pointer' }}
+          style={{ padding: '8px 16px', cursor: 'pointer', background: '#f9b700', color: '#212529' }}
         >
           Cerrar Sesión
         </button>
