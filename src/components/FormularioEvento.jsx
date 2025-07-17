@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { alberguesAPI, amenazasAPI } from "../helpers/api.js";
 import obtenerTodos from "../helpers/obtenerUbicaciones.js";
 import customAxios from "../helpers/customAxios.js";
+import { generarCodigoFamilia } from "../helpers/generarCodigoFamilia";
+
 
 const FormularioRegistro = () => {
   const [integrantes, setIntegrantes] = useState("");
@@ -76,6 +78,16 @@ const FormularioRegistro = () => {
     };
     cargarDistritos();
   }, [cantonSeleccionado]);
+
+  // UseEffect para el codigo de familia
+  useEffect(() => {
+  if (nombreProvincia && nombreCanton && integrantes) {
+    const numeroFamilia = 1; // Aquí luego puedes hacer lógica para que sea incremental si quieres
+    const nuevoCodigo = generarCodigoFamilia(nombreProvincia, nombreCanton, numeroFamilia);
+    setCodigoFamilia(nuevoCodigo);
+  }
+}, [nombreProvincia, nombreCanton, integrantes]);
+
 
   const crearFamilia = async () => {
     const idUsuario = localStorage.getItem("idUsuario");
