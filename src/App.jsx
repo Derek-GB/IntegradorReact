@@ -5,7 +5,7 @@ import Sidebar from './components/sidebar.jsx';
 import Login from './components/login.jsx';
 
 import Inicio from './components/Inicio.jsx';
-import PreFormulario from './components/PreFormulario.jsx';
+import PreFormulario from './components/preFormulario.jsx';
 import RegistroSuministros from './components/registroSuministros.jsx';
 import AsignacionRecursos from './components/AsignacionRecursos.jsx';
 import BusquedaAlbergue from './components/BusquedaAlbergue.jsx';
@@ -21,7 +21,7 @@ import RecuperarContrasena from './components/recuperarContrasena';
 import RestablecerContrasena from './components/restablecerContrasena';
 import FamiliaFormulario from './components/familiaFormulario.jsx';
 import FormularioIntegrantes from "./components/formularioIntegrantes";
-
+import VistaFamilia from './components/VistaFamilia.jsx'; 
 
 
 const App = () => {
@@ -60,6 +60,8 @@ const App = () => {
               <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
               <Route path="/familiaFormulario.jsx" element={<FamiliaFormulario />} />
               <Route path="/formularioIntegrantes.jsx" element={<FormularioIntegrantes />} />
+              <Route path="/VistaFamilia.jsx" element={<VistaFamilia />} />              
+
             </Routes>
           </div>
         </div>
