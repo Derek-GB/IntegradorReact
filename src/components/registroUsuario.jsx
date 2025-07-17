@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { municipalidadAPI, usuariosAPI } from '../helpers/api'; // Asegúrate del path correcto
+import { municipalidadAPI, usuariosAPI } from '../helpers/api';
+import '../styles/registroUsuario.css'; 
 
 const RegistroUsuario = () => {
-  const navigate = useNavigate();
   const [municipalidades, setMunicipalidades] = useState([]);
   const [form, setForm] = useState({
     nombre: '',
@@ -15,21 +14,19 @@ const RegistroUsuario = () => {
     identificacion: ''
   });
 
-useEffect(() => {
-  const fetchMunicipalidades = async () => {
-    try {
-      const data = await municipalidadAPI.getAll();
-      const lista = Array.isArray(data) ? data : data.data ?? [];
-      setMunicipalidades(lista || []);
-    } catch (error) {
-      console.error('Error al cargar municipalidades:', error);
-      setMunicipalidades([]);
-    }
-  };
-  fetchMunicipalidades();
-}, []);
-
-
+  useEffect(() => {
+    const fetchMunicipalidades = async () => {
+      try {
+        const data = await municipalidadAPI.getAll();
+        const lista = Array.isArray(data) ? data : data.data ?? [];
+        setMunicipalidades(lista || []);
+      } catch (error) {
+        console.error('Error al cargar municipalidades:', error);
+        setMunicipalidades([]);
+      }
+    };
+    fetchMunicipalidades();
+  }, []);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -56,7 +53,7 @@ useEffect(() => {
     };
 
     try {
-      await usuariosAPI.create(payload); // ✅ Usa el helper
+      await usuariosAPI.create(payload);
       alert("Usuario registrado correctamente.");
       setForm({
         nombre: '', correo: '', contrasena: '',
@@ -73,61 +70,48 @@ useEffect(() => {
   };
 
   return (
-    <div className="container main-content">
-      <h2>
-        <button
-          onClick={() => navigate('/')}
-          className="btn btn-secondary"
-          style={{ position: 'absolute', right: '1cm', top: '50%', transform: 'translateY(-50%)' }}
-        >
-          <span className="material-icons" style={{ fontSize: '24px' }}>arrow_back</span>
-        </button>
-        Registro de Usuario
-      </h2>
+    <div className="ajuste-inventario-fullscreen sin-flecha-back">
+      <form className="ajuste-inventario-form" onSubmit={handleSubmit}>
+        <h2>Registro de Usuario</h2>
 
-      <form onSubmit={handleSubmit}>
-        <details open>
-          <summary><strong>Información del Usuario</strong></summary>
-          <fieldset className="mt-2">
-            <label>Nombre Completo:</label>
-            <input name="nombre" value={form.nombre} onChange={handleChange} required />
+        <label>Nombre Completo:</label>
+        <input name="nombre" value={form.nombre} onChange={handleChange} required />
 
-            <label>Correo Electrónico:</label>
-            <input name="correo" type="email" value={form.correo} onChange={handleChange} required />
+        <label>Correo Electrónico:</label>
+        <input name="correo" type="email" value={form.correo} onChange={handleChange} required />
 
-            <label>Contraseña:</label>
-            <input name="contrasena" type="password" value={form.contrasena} onChange={handleChange} required />
+        <label>Contraseña:</label>
+        <input name="contrasena" type="password" value={form.contrasena} onChange={handleChange} required />
 
-            <label>Rol:</label>
-            <select name="rol" value={form.rol} onChange={handleChange} required>
-              <option value="">Seleccione un rol</option>
-              <option value="admin">Administrador</option>
-              <option value="editor">Editor</option>
-              <option value="viewer">Visualizador</option>
-            </select>
+        <label>Rol:</label>
+        <select name="rol" value={form.rol} onChange={handleChange} required>
+          <option value="">Seleccione un rol</option>
+          <option value="admin">Administrador</option>
+          <option value="editor">Editor</option>
+          <option value="viewer">Visualizador</option>
+        </select>
 
-            <label>Estado:</label>
-            <select name="activo" value={form.activo} onChange={handleChange} required>
-              <option value="">Seleccione un estado</option>
-              <option value="activo">Activo</option>
-              <option value="inactivo">Inactivo</option>
-            </select>
+        <label>Estado:</label>
+        <select name="activo" value={form.activo} onChange={handleChange} required>
+          <option value="">Seleccione un estado</option>
+          <option value="activo">Activo</option>
+          <option value="inactivo">Inactivo</option>
+        </select>
 
-            <label>Municipalidad:</label>
-            <select name="municipalidad" value={form.municipalidad} onChange={handleChange} required>
-              <option value="">Seleccione municipalidad</option>
-              {municipalidades.map((m) => (
-                <option key={m.id || m.ID} value={m.id || m.ID}>
-                  {m.nombre || m.Nombre || 'Sin nombre'}
-                </option>
-              ))}
-            </select>
+        <label>Municipalidad:</label>
+        <select name="municipalidad" value={form.municipalidad} onChange={handleChange} required>
+          <option value="">Seleccione municipalidad</option>
+          {municipalidades.map((m) => (
+            <option key={m.id || m.ID} value={m.id || m.ID}>
+              {m.nombre || m.Nombre || 'Sin nombre'}
+            </option>
+          ))}
+        </select>
 
-            <label>Identificación:</label>
-            <input name="identificacion" value={form.identificacion} onChange={handleChange} required />
-          </fieldset>
-        </details>
-        <button type="submit" className="btn btn-primary mt-3">Registrar</button>
+        <label>Identificación:</label>
+        <input name="identificacion" value={form.identificacion} onChange={handleChange} required />
+
+        <button type="submit" className="">Registrar</button>
       </form>
     </div>
   );
