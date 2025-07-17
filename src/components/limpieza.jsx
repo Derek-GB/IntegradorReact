@@ -60,14 +60,7 @@ const Limpieza = () => {
               />
               {nombre}
             </label>
-            <input
-              type="number"
-              min="1"
-              value={selecciones[nombre]?.cantidad || ''}
-              onChange={e => handleCantidad(nombre, e.target.value)}
-              disabled={!selecciones[nombre]?.checked}
-              placeholder={unidad}
-            />
+          
           </div>
         ))}
       </div>

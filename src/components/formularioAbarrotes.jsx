@@ -14,17 +14,18 @@ import '../styles/formulario.css';
 const FormularioAbastecimiento = () => {
   return (
     <div className="container main-content">
-      <h2>Formulario de Abastecimiento</h2>
-      {/* Secciones independientes */}
-      <Carnes />
-      <Proteinas />
-      <Verduras />
-      <Olores />
-      <Abarrotes />
-      <Limpieza />
-      <footer>
-        <p>© 2025 Integrador I - Todos los derechos reservados.</p>
-      </footer>
+      <div id="formularioAbarrotes">
+        <h2>Formulario de Abastecimiento</h2>
+        
+        <Carnes />
+        <Proteinas />
+        <Verduras />
+        <Olores />
+        <Abarrotes />
+        <Limpieza />
+
+      
+      </div>
     </div>
   );
 };
