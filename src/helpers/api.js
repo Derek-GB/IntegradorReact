@@ -123,3 +123,4 @@ export const consumiblesAPI = createApiMethods("consumibles");
 export const detallePedidoConsumiblesAPI = createApiMethods("detallePedidoConsumibles");
 export const pedidoConsumiblesAPI = createApiMethods("pedidoConsumibles");
 export const unidadMedidasAPI = createApiMethods("unidadMedidas");
+export const ajusteInventarioAPI = createApiMethods("ajusteInventario");
