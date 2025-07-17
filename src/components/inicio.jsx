@@ -1,9 +1,28 @@
 import React from 'react';
-import '../styles/formularioFusionado.css'
+import { useNavigate } from 'react-router-dom';
+import authHelper from '../helpers/sesion'; // importa tu helper con login/logout
+import '../styles/formularioFusionado.css';
+
 const Inicio = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    authHelper.logout();  // limpia token e idUsuario
+    navigate('/');        // redirige a login
+  };
+
   return (
     <>
-     
+      {/* Botón cerrar sesión en la esquina superior derecha */}
+      <div style={{ position: 'absolute', top: 20, right: 20 }}>
+        <button 
+          onClick={handleLogout} 
+          className="btn btn-danger" 
+          style={{ padding: '8px 16px', cursor: 'pointer' }}
+        >
+          Cerrar Sesión
+        </button>
+      </div>
 
       {/* Contenido principal */}
       <div className="containerInicio main-content">
@@ -27,9 +46,6 @@ const Inicio = () => {
           </div>
         </div>
       </div>
-
-      {/* Footer */}
-     
     </>
   );
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import './styles/formularioFusionado.css'; // Asegúrate de que la ruta sea correcta
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Sidebar from './components/sidebar.jsx';
-import Login from './components/Login.jsx';
+import Login from './components/login.jsx';
 
 import Inicio from './components/Inicio.jsx';
 import PreFormulario from './components/PreFormulario.jsx';
@@ -27,44 +27,49 @@ import FormularioIntegrantes from "./components/formularioIntegrantes";
 const App = () => {
   const location = useLocation();
   const isLogin = 
-  location.pathname === '/' || 
-  location.pathname === '/recuperarContrasena.jsx' || 
-  location.pathname === '/restablecerContrasena.jsx';
+    location.pathname === '/' || 
+    location.pathname === '/recuperarContrasena.jsx' || 
+    location.pathname === '/restablecerContrasena.jsx';
+
   return (
     <>
-      <div className="app-container">
-
-        {!isLogin && <Sidebar/>}
-
-        <div className="container main-content">
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/inicio" element={<Inicio />} />
-            <Route path="/preFormulario.jsx" element={<PreFormulario />} />
-            <Route path="/registroSuministros.jsx" element={<RegistroSuministros />} />
-            <Route path="/asignacionRecursos.jsx" element={<AsignacionRecursos />} />
-            <Route path="/busquedaAlbergue.jsx" element={<BusquedaAlbergue />} />
-            <Route path="/ayudaForm.jsx" element={<AyudaForm />} />
-            <Route path="/registrarProducto.jsx" element={<RegistrarProducto />} />
-            <Route path="/registroAlbergue.jsx" element={<RegistroAlbergue />} />
-            <Route path="/registroUsuario.jsx" element={<RegistroUsuario />} />
-            <Route path="/listaProducto.jsx" element={<ListaProducto />} />
-            <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
-            <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
-            <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
-            <Route path="/familiaFormulario.jsx" element={<FamiliaFormulario />} />
-            <Route path="/recuperarContrasena.jsx" element={<RecuperarContrasena />} />
-             <Route path="/restablecerContrasena.jsx" element={<RestablecerContrasena />} />
-
-             <Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
-             <Route path="/formularioIntegrantes.jsx" element={<FormularioIntegrantes />} />
-          </Routes>
-
+      {isLogin ? (
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/recuperarContrasena.jsx" element={<RecuperarContrasena />} />
+          <Route path="/restablecerContrasena.jsx" element={<RestablecerContrasena />} />
+          <Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
+        </Routes>
+      ) : (
+        <div className="app-container">
+          <Sidebar />
+          <div className="container main-content">
+            <Routes>
+              <Route path="/inicio" element={<Inicio />} />
+              <Route path="/preFormulario.jsx" element={<PreFormulario />} />
+              <Route path="/registroSuministros.jsx" element={<RegistroSuministros />} />
+              <Route path="/asignacionRecursos.jsx" element={<AsignacionRecursos />} />
+              <Route path="/busquedaAlbergue.jsx" element={<BusquedaAlbergue />} />
+              <Route path="/ayudaForm.jsx" element={<AyudaForm />} />
+              <Route path="/registrarProducto.jsx" element={<RegistrarProducto />} />
+              <Route path="/registroAlbergue.jsx" element={<RegistroAlbergue />} />
+              <Route path="/registroUsuario.jsx" element={<RegistroUsuario />} />
+              <Route path="/listaProducto.jsx" element={<ListaProducto />} />
+              <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
+              <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
+              <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
+              <Route path="/familiaFormulario.jsx" element={<FamiliaFormulario />} />
+              <Route path="/formularioIntegrantes.jsx" element={<FormularioIntegrantes />} />
+            </Routes>
+          </div>
         </div>
-      </div>
-      <footer>
-        <p>© 2025 Integrador I - Todos los derechos reservados.</p>
-      </footer>
+      )}
+
+      {!isLogin && (
+        <footer>
+          <p>© 2025 Integrador I - Todos los derechos reservados.</p>
+        </footer>
+      )}
     </>
   );
 };

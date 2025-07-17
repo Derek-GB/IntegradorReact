@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { useNavigate, Link } from 'react-router-dom';
-import '../styles/formularioFusionado.css';
+import '../styles/login.css';
 import authHelper from '../helpers/sesion';
 
 
@@ -56,7 +56,7 @@ const Login = () => {
       <div className="login-wrapper">
       <h2>Iniciar Sesión</h2>
 
-      <form onSubmit={handleSubmit} className="login">
+      <form onSubmit={handleSubmit}>
         {error && <div className="error">{error}</div>}
 
         <label htmlFor="usuario">Usuario</label>
@@ -81,12 +81,13 @@ const Login = () => {
           onChange={(e) => setContrasena(e.target.value)}
           required
         />
-
+        <br />
         <div className="btn-group">
           <button type="submit" className="btn btn-primary">Ingresar</button>
         </div>
+        <br />
 
-        <div className="recuperar-contrasena">
+        <div>
           <Link to="/recuperarContrasena.jsx">¿Olvidaste tu contraseña?</Link>
         </div>
       </form>
