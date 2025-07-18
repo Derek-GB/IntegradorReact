@@ -32,7 +32,6 @@ const FormularioAbastecimiento = () => {
           Enviar formulario
         </button>
       </div>
-
     </div>
   );
 };

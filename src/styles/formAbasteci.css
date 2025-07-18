@@ -11,7 +11,6 @@
   --color-texto: #212529;
   --color-verde-form: #00897B;
 }
-
 /* --- Reset y body --- */
 body {
   margin: 0;
@@ -24,7 +23,6 @@ body {
   display: flex;
   height: 100vh;
 }
-
 /* Sidebar principal */
 .sidebar {
   width: 250px;
@@ -56,6 +54,22 @@ body {
   flex-grow: 1;
 }
 
+/* Sidebar - MODIFICACIONES */
+.sidebar {
+  width: 250px; 
+  background-color: var(--color-verde-form);
+  color: var(--color-blanco);
+  padding-top: 1rem; 
+  padding-bottom: 1rem; 
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; 
+  height: auto;
+  border-radius: 8px; 
+  overflow: hidden; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
 .nav li {
   padding: 14px 20px;
 }
@@ -67,6 +81,46 @@ body {
   align-items: center;
   gap: 10px;
   font-weight: bold;
+}
+
+#formularioAbarrotes h2 {
+    background-color: var(--color-verde-form);
+    color: var(--color-blanco);
+    text-align: center;
+    padding: 2rem 25px; 
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    letter-spacing: 0.05em;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    font-weight: 700;
+    font-size: 2rem;
+    box-sizing: border-box;
+    width: 100%; 
+    position: initial;
+   
+}
+
+
+/* Botones de categoría (Carnes, Proteínas, etc.) */
+.nav li a {
+    color: var(--color-blanco);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: bold;
+    padding: 12px 20px; 
+    border-radius: 8px;
+    background-color: var(--color-verde-form);
+    margin-bottom: 8px;
+    box-sizing: border-box;
+    width: calc(100% - 2rem);
+    margin-left: 1rem;
+    margin-right: 1rem;
+
 }
 
 .nav li a.active,
@@ -109,6 +163,23 @@ body.sidebar-hidden .main-content {
   flex-direction: column;
   height: 100vh;
   overflow-y: auto;
+
+}
+
+.material-icons {
+  font-size: 20px;
+  vertical-align: middle;
+}
+
+/* Contenedor general (header + main) */
+.content-area {
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: auto;
+    margin-left: 65px; 
+
 }
 
 /* Header */
@@ -116,7 +187,7 @@ body.sidebar-hidden .main-content {
   background-color: #00897B;
   color: white;
   padding: 20px 40px;
-  position: relative; 
+  position: relative;
   display: flex;
   align-items: center;
 }
@@ -134,10 +205,13 @@ body.sidebar-hidden .main-content {
   background-color: #fdd835;
   color: black;
   border-radius: 5px;
+.back-button {
+  background-color: #fdd835;
+  color: black;
+  border-radius: 5px;
   padding: 6px 8px;
   text-decoration: none;
   font-weight: bold;
-  /* Mantener en el flujo normal (a la derecha) */
   margin-left: auto;
   display: flex;
   align-items: center;
@@ -145,10 +219,6 @@ body.sidebar-hidden .main-content {
   width: 36px;
   height: 36px;
 }
-
-.back-button .material-icons {
-  vertical-align: middle;
-  font-size: 24px;
 }
 
 /* Área principal con el formulario centrado */
@@ -178,12 +248,20 @@ h1, h2 {
   margin-bottom: 16px;
 }
 
-/* H2 con fondo verde y texto blanco */
-h2 {
-  background-color: var(--color-verde-form);
+/* Pie de página del copyright dentro del sidebar */
+.sidebar-copyright {
+  background-color: var(--color-verde-oscuro);
   color: var(--color-blanco);
-  padding: 2rem 1rem;
-  border-radius: 8px;
+  padding: 1rem 1.5rem; 
+  text-align: center;
+  font-size: 0.9em;
+  margin-top: auto; 
+  box-sizing: border-box; 
+  width: calc(100% - 2rem); 
+  margin-left: 1rem; 
+  margin-right: 1rem; 
+  margin-bottom: 1rem; 
+
 }
 
 /* Tarjetas blancas con sombra */
@@ -197,24 +275,13 @@ h2 {
 
 /* Formularios */
 form {
-  margin: 0; /* Lo controlamos en #formularioAbarrotes */
+/* H2 con fondo verde y texto blanco */
+h2 {
+  background-color: var(--color-verde-form);
+  color: var(--color-blanco);
+  padding: 2rem 1rem;
+  border-radius: 8px;
 }
-
-/* Etiquetas */
-label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 600;
-  color: var(--color-texto);
-}
-
-/* Inputs, selects, textarea */
-input, select, textarea {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  font-size: 1rem;
   margin-bottom: 16px;
   box-sizing: border-box;
   transition: border-color 0.3s ease;
@@ -270,11 +337,16 @@ th {
 
 /* Detalles/Accordion */
 details {
+
   border: 1px solid var(--color-gris-borde);
+
+  border: none;
+
   border-radius: 4px;
   margin-bottom: 12px;
   overflow: hidden;
 }
+
 
 details summary {
   background-color: var(--color-verde-form);
@@ -284,6 +356,27 @@ details summary {
   font-weight: bold;
   user-select: none;
   transition: background-color 0.3s ease;
+
+
+details summary {
+    background-color: var(--color-verde-form);
+    color: var(--color-blanco);
+    padding: 2rem 25px; 
+    cursor: pointer;
+    font-weight: bold;
+    user-select: none;
+    transition: background-color 0.3s ease;
+    list-style: none;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; 
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 8px;
+   
+
 }
 
 details summary:hover {
@@ -292,16 +385,12 @@ details summary:hover {
 
 details[open] summary {
   border-bottom: 1px solid var(--color-gris-borde);
+details {
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 4px;
+  margin-bottom: 12px;
+  overflow: hidden;
 }
-
-details > *:not(summary) {
-  padding: 10px;
-  background-color: var(--color-gris-claro);
-}
-
-/* Grid para lista de abarrotes */
-.checkbox-grid {
-  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 12px;
   margin-top: 10px;
@@ -497,7 +586,9 @@ details > *:not(summary) {
   list-style: none;
   padding-left: 0;
 }
+
 /* ... (tu CSS existente) ... */
+
 
 /* Estilos para la sección de Abarrotes (cuadritos más pequeños) */
 .cuadro-grid {
@@ -894,6 +985,7 @@ th {
     font-size: 0.85em;
     text-align: center;
 }
+
 .boton-resumen-final a button:hover {
   background-color: var(--color-amarillo-hover);
 }
@@ -901,3 +993,293 @@ th {
 
 
 
+
+
+
+/* Estilos para la sección de Limpieza (orden vertical, cuadritos más pequeños, y nueva lógica) */
+#productosLimpiezaDisponibles {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    background-color: var(--color-gris-claro);
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.producto-limpieza-item {
+    background-color: var(--color-blanco);
+    border: 1px solid var(--color-gris-borde);
+    border-radius: 5px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    font-size: 0.9em;
+}
+
+.producto-limpieza-item.oculto-en-lista {
+    transform: translateY(10px);
+    opacity: 0;
+    height: 0;
+    padding: 0 12px;
+    margin: 0;
+    border: none;
+    pointer-events: none;
+}
+
+
+.producto-limpieza-item label {
+    flex-grow: 1;
+    margin-right: 10px;
+    font-weight: normal;
+}
+
+.producto-limpieza-item .cantidad-limpieza {
+    width: 70px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.8em;
+    text-align: center;
+    margin-right: 10px;
+}
+
+.producto-limpieza-item .btn-seleccionar-limpieza {
+    background-color: var(--color-verde);
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85em;
+}
+
+.producto-limpieza-item .btn-seleccionar-limpieza:hover {
+    background-color: var(--color-verde-oscuro);
+}
+
+/* Estilos para la lista de resumen de productos seleccionados */
+.resultado ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.resultado li {
+    background-color: #e9ecef;
+    border: 1px solid #dee2e6;
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9em;
+}
+
+.resultado li .btn-eliminar-lista {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    margin-left: 10px;
+}
+
+.resultado li .btn-eliminar-lista:hover {
+    background-color: #c82333;
+}
+
+
+/* Estilos para el elemento <summary> dentro de <details> (aplicado a abarrotes y limpieza) */
+details summary {
+    background-color: var(--color-verde-form);
+    color: var(--color-blanco);
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    user-select: none;
+    transition: background-color 0.3s ease;
+    list-style: none;
+    position: relative;
+}
+
+details summary::-webkit-details-marker {
+    display: none;
+}
+
+details summary::before {
+    content: '▼ ';
+    display: inline-block;
+    width: 1em;
+    margin-right: 0.5em;
+    transition: transform 0.2s;
+}
+
+details[open] summary::before {
+    transform: rotate(0deg);
+}
+
+details:not([open]) summary::before {
+    transform: rotate(-90deg);
+}
+
+
+/* Reutilizamos .cuadro-grid para #productosLimpiezaDisponibles */
+#productosLimpiezaDisponibles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    background-color: var(--color-gris-claro);
+    border-radius: 8px;
+    margin-top: 15px;
+    border: none;
+}
+
+/* Aplicamos los mismos estilos de tarjeta a los productos de Limpieza */
+#productosLimpiezaDisponibles .producto,
+.producto-limpieza-item {
+    background-color: var(--color-blanco);
+    border: 1px solid var(--color-gris-borde);
+    border-radius: 5px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease-in-out;
+    position: relative;
+    font-size: 0.9em;
+}
+
+#productosLimpiezaDisponibles .producto:hover,
+.producto-limpieza-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Ajustes para el label dentro del producto de Limpieza */
+#productosLimpiezaDisponibles .producto label,
+.producto-limpieza-item label {
+    font-weight: normal;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    line-height: 1.2;
+    width: 100%;
+}
+
+/* Ajustes para el checkbox dentro del producto de Limpieza */
+#productosLimpiezaDisponibles .producto input[type="checkbox"] {
+    margin-right: 8px;
+    transform: scale(0.9);
+}
+
+/* Ajustes para el input de cantidad de limpieza */
+#productosLimpiezaDisponibles .producto .cantidad-limpieza,
+.producto-limpieza-item .cantidad-limpieza {
+    width: calc(100% - 16px);
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 5px;
+    font-size: 0.85em;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+
+/* Ocultar el elemento del formulario cuando se selecciona (animación) */
+.producto-limpieza-item.oculto-en-lista {
+    transform: translateY(10px);
+    opacity: 0;
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    border: none;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* --- Estilos para las Tablas de Resumen (Abarrotes y Limpieza) --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    background-color: var(--color-blanco);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+th, td {
+    border: 1px solid var(--color-gris-borde);
+    padding: 10px;
+    text-align: center;
+    font-size: 0.95em;
+}
+
+th {
+    background-color: var(--color-gris-claro);
+    font-weight: bold;
+    color: var(--color-texto);
+}
+
+/* Estilo para el botón de eliminar dentro de la tabla */
+.btn-eliminar {
+    background-color: var(--color-amarillo);
+    color: var(--color-blanco);
+    border: none;
+    border-radius: 4px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: background-color 0.3s ease;
+}
+
+.btn-eliminar:hover {
+    background-color: var(--color-amarillo-hover);
+}
+
+.resultado ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.resultado li {
+    background-color: #e9ecef;
+    border: 1px solid #dee2e6;
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9em;
+    line-height: 1.4;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+details > *:not(summary) label {
+    text-align: left;
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: var(--color-texto);
+}
+
+details > *:not(summary) input,
+details > *:not(summary) select {
+    margin-left: 0;
+}
+}

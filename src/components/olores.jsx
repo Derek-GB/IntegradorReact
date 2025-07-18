@@ -70,16 +70,16 @@ const Olores = () => {
                 onChange={() => handleCheck(nombre)}
               />
               {nombre}
-            </label>
-            <input className='inputAbarrote'
-              type="number"
-              min="1"
-              value={selecciones[nombre]?.cantidad || ''}
-              onChange={(e) => handleCantidad(nombre, e.target.value)}
-              disabled={!selecciones[nombre]?.checked}
-              placeholder="Cantidad"
-            />
-          </div>
+  </label>
+  <input className='inputAbarrote'
+    type="number"
+    min="1"
+    value={selecciones[nombre]?.cantidad || ''}
+    onChange={(e) => handleCantidad(nombre, e.target.value)}
+    disabled={!selecciones[nombre]?.checked}
+    placeholder="Cantidad"
+  />
+</div>
         ))}
       </div>
 
