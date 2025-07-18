@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../styles/formularioFusionado.css'; // Asegúrate de tener este archivo con
+import '../styles/revisionAyudas.css'; // Asegúrate de tener este archivo con
 
 const AyudaForm = () => {
   const [formData, setFormData] = useState({
