@@ -109,7 +109,7 @@ body {
     flex-grow: 1; 
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 5100vh;
     overflow-y: auto;
     margin-left: 65px; 
 }
@@ -157,7 +157,7 @@ body {
 .main-content {
     flex-grow: 1;
     display: grid;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: colum; 
     align-items: center;   
     padding: 2rem 1rem 3rem;

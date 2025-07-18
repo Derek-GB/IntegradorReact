@@ -16,6 +16,7 @@ import RegistroAlbergue from './components/RegistroAlbergue.jsx';
 import RegistroUsuario from './components/registroUsuario.jsx';
 import ListaProducto from './components/ListaProducto.jsx';
 import ListaAlbergue from './components/ListaAlbergue.jsx';
+import MenuPrincipal from './components/menuPrincipal.jsx';
 import FormularioAbastecimiento from './components/formularioAbarrotes.jsx';
 import AjusteInventario from "./components/ajusteInventario.jsx";
 import RecuperarContrasena from './components/recuperarContrasena.jsx';
@@ -60,6 +61,7 @@ const App = () => {
               <Route path="/registroUsuario.jsx" element={<RegistroUsuario />} />
               <Route path="/listaProducto.jsx" element={<ListaProducto />} />
               <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
+              <Route path="/menuPrincipal" element={<MenuPrincipal />} />
               <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
               <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
               <Route path="/familiaFormulario.jsx" element={<FamiliaFormulario />} />
