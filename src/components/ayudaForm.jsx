@@ -1,82 +1,158 @@
-import React, { useState } from 'react';
-import '../styles/revisionAyudas.css'; // Asegúrate de tener este archivo con
+import React, { useState, useEffect } from "react";
+import "../styles/ajusteInventario.css";
+import { familiasAPI, referenciasAPI } from "../helpers/api";
 
 const AyudaForm = () => {
-  const [formData, setFormData] = useState({
-    codigo: '',
-    nombreCabeza: '',
-    tipoAyuda: '',
-    fecha: '',
-    responsable: ''
+   const idUsuario = localStorage.getItem("idUsuario");
+  const [familias, setFamilias] = useState([]);
+  const [form, setForm] = useState({
+    idFamilia: "",
+    tipoAyuda: "",
+    descripcion: "",
+    fechaEntrega: "",
+    responsable: "",
   });
 
-  const handleChange = e => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+
+  useEffect(() => {
+    const fetchFamilias = async () => {
+      try {
+        const res = await familiasAPI.getAll();
+        setFamilias(Array.isArray(res) ? res : res.data ?? []);
+      } catch  {
+        setError("Error al cargar familias");
+      }
+    };
+    fetchFamilias();
+  }, []);
+
+  const validarFormulario = () => {
+    if (!form.idFamilia) return "Debe seleccionar una familia";
+    if (!form.tipoAyuda) return "Debe seleccionar un tipo de ayuda";
+    if (!form.descripcion.trim()) return "Debe ingresar una descripción";
+    if (!form.fechaEntrega) return "Debe ingresar la fecha de entrega";
+    if (!form.responsable.trim()) return "Debe ingresar el responsable";
+    return null;
   };
 
-  const handleSubmit = e => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    setError(null);
+    setSuccess(null);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Consulta enviada:', formData);
+    setError(null);
+    setSuccess(null);
+
+    const validacion = validarFormulario();
+    if (validacion) {
+      setError(validacion);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const payload = {
+        idFamilia: Number(form.idFamilia),
+        tipoAyuda: form.tipoAyuda,
+        descripcion: form.descripcion,
+        fechaEntrega: form.fechaEntrega,
+        responsable: form.responsable,
+        idUsuarioCreacion: Number(idUsuario),
+      };
+
+      await referenciasAPI.create(payload);
+
+      setSuccess("Ayuda registrada correctamente");
+      setForm({
+        idFamilia: "",
+        tipoAyuda: "",
+        descripcion: "",
+        fechaEntrega: "",
+        responsable: "",
+      });
+    } catch (err) {
+      setError("Error al registrar la ayuda: " + (err.message || ""));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <>
-      <div className="header">
-        <h2>Revisión de ayudas</h2>
-        <button className="btn-header">
-          <span className="material-icons">arrow_back</span>
+    <div className="ajuste-inventario-fullscreen">
+      <form className="ajuste-inventario-form" onSubmit={handleSubmit}>
+        <h2>Registro de Ayuda Entregada</h2>
+
+        <label>
+          Código de Familia:
+          <select name="idFamilia" value={form.idFamilia} onChange={handleChange}>
+            <option value="">Seleccione familia</option>
+            {familias.map((f) => (
+              <option key={f.id || f.ID} value={f.id || f.ID}>
+                {f.codigoFamilia || f.codigo}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label>
+          Tipo de Ayuda:
+          <select name="tipoAyuda" value={form.tipoAyuda} onChange={handleChange}>
+            <option value="">Seleccione tipo de ayuda</option>
+            <option value="imas">IMAS</option>
+            <option value="cruzroja">Cruz Roja</option>
+            <option value="cne">CNE</option>
+            <option value="refugio">Refugio</option>
+            <option value="otros">Otros</option>
+          </select>
+        </label>
+
+        <label>
+          Descripción:
+          <input
+            type="text"
+            name="descripcion"
+            value={form.descripcion}
+            onChange={handleChange}
+            placeholder="Descripción de la ayuda"
+          />
+        </label>
+
+        <label>
+          Fecha de Entrega:
+          <input
+            type="date"
+            name="fechaEntrega"
+            value={form.fechaEntrega}
+            onChange={handleChange}
+          />
+        </label>
+
+        <label>
+          Responsable:
+          <input
+            type="text"
+            name="responsable"
+            value={form.responsable}
+            onChange={handleChange}
+            placeholder="Nombre del responsable"
+          />
+        </label>
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Registrando..." : "Registrar"}
         </button>
-      </div>
-      <div className="formPreFormulario main-content mt-4">
 
-        <div className='form-ayuda-revision' onSubmit={handleSubmit}>
-          <fieldset className=' mt-2'>
-            <div className="divAyudas">
-              <div className='divAyuda'>
-                <label>Código:</label>
-                <input id="codigo" name="codigo" type="text" value={formData.codigo} onChange={handleChange} />
-              </div>
-              <div className='divAyuda'>
-                <label>Nombre del Cabeza de Familia:</label>
-                <input id="nombreCabeza" name="nombreCabeza" type="text" value={formData.nombreCabeza} onChange={handleChange} />
-              </div>
-              
-              <div className="divAyuda">
-                <label htmlFor="fecha">Fecha:</label>
-                <input id="fecha" name="fecha" type="date" value={formData.fecha} onChange={handleChange} />
-              </div>
-            
-            </div>
-
-            <div className="divAyudas">
-
-              <div className="divAyuda">
-                <label>Tipo de ayuda:</label>
-                <select id="tipoAyuda" name="tipoAyuda" value={formData.tipoAyuda} onChange={handleChange}>
-                  <option value="">Seleccione el tipo de ayuda</option>
-                  <option value="imas">IMAS</option>
-                  <option value="cruzroja">Cruz Roja</option>
-                  <option value="cne">CNE</option>
-                  <option value="refugio">Refugio</option>
-                  <option value="otros">Otros</option>
-                </select>
-              </div>
-
-                <div className="divAyuda">
-                <label htmlFor="responsable">Funcionario responsable:</label>
-                <input id="responsable" name="responsable" type="text" value={formData.responsable} onChange={handleChange} />
-              </div>
-
-            </div>
-             <div className="btnsAyuda">
-                <button type="submit" className="btn btn-primary mt-2">Consultar</button>
-                <button type="button" className="btn btn-secondary mt-2">Agregar</button>
-              </div>
-          </fieldset>
-        </div>
-      </div>
-    </>
+        {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
+        {success && <p style={{ color: "green", marginTop: "1rem" }}>{success}</p>}
+      </form>
+    </div>
   );
 };
 

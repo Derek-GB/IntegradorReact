@@ -21,7 +21,6 @@ import RecuperarContrasena from './components/recuperarContrasena';
 import RestablecerContrasena from './components/restablecerContrasena';
 import FamiliaFormulario from './components/familiaFormulario.jsx';
 import FormularioIntegrantes from "./components/formularioIntegrantes";
-
 import RegistroMascotas from "./components/registroMascota.jsx";
 import VistaFamilia from './components/VistaFamilia.jsx'; 
 
@@ -52,7 +51,7 @@ const App = () => {
               <Route path="/asignacionRecursos.jsx" element={<AsignacionRecursos />} />
               <Route path="/busquedaAlbergue.jsx" element={<BusquedaAlbergue />} />
               <Route path="/ayudaForm.jsx" element={<AyudaForm />} />
-              <Route path="/registrarProducto.jsx" element={<RegistrarConsumible />} />
+              <Route path="/registrarConsumibles.jsx" element={<RegistrarConsumible />} />
               <Route path="/registroAlbergue.jsx" element={<RegistroAlbergue />} />
               <Route path="/registroUsuario.jsx" element={<RegistroUsuario />} />
               <Route path="/listaProducto.jsx" element={<ListaProducto />} />

@@ -1,79 +1,115 @@
-import React, { useState } from 'react';
-import '../styles/formularioFusionado.css';
+import React, { useState } from "react";
+import "../styles/ajusteInventario.css"; // reutiliza el mismo estilo
 
 const RegistroConsumibles = () => {
-
   const [form, setForm] = useState({
-    nombre: '',
-    descripcionProducto: '',
-    codigo: '',
-    categoriaProducto: '',
-    cantidad: ''
+    nombre: "",
+    descripcionProducto: "",
+    codigo: "",
+    categoriaProducto: "",
+    cantidad: "",
   });
 
-  const handleChange = e => {
+  const [mensaje, setMensaje] = useState("");
+
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Datos registrados:', form);
-    // Aquí podrías hacer un POST a tu backend
+
+    const camposIncompletos = Object.values(form).some((val) => val === "");
+    if (camposIncompletos) {
+      setMensaje("Por favor complete todos los campos.");
+      return;
+    }
+
+    try {
+      console.log("Datos registrados:", form);
+      setMensaje("Consumible registrado correctamente.");
+      setForm({
+        nombre: "",
+        descripcionProducto: "",
+        codigo: "",
+        categoriaProducto: "",
+        cantidad: "",
+      });
+    } catch {
+      setMensaje("Error al registrar consumible.");
+    }
   };
 
   return (
-    <>
-      <div className="header">
+    <div className="ajuste-inventario-fullscreen">
+      <form className="ajuste-inventario-form" onSubmit={handleSubmit}>
         <h2>Registro de Consumibles</h2>
-        <button className="btn-header">
-          <span className="material-icons">arrow_back</span>
-        </button>
-      </div>
 
-      <div className="formPreFormulario main-content" onSubmit={handleSubmit}>
-        
-          <fieldset id='registroSuministrosField' className=" mt-2">
+        <label>
+          Nombre del Producto:
+          <input
+            type="text"
+            name="nombre"
+            value={form.nombre}
+            onChange={handleChange}
+            placeholder="Ingrese el nombre"
+          />
+        </label>
 
-            <legend className="legendPrincipalProducto mt-3"><strong>Información del Producto</strong></legend>
+        <label>
+          Código:
+          <input
+            type="number"
+            name="codigo"
+            value={form.codigo}
+            onChange={handleChange}
+            placeholder="Ingrese el código"
+          />
+        </label>
 
-            <div id='registroSuministros1'>
-              <div id='divProducto'>
-                <label>Nombre del Producto:</label>
-                <input type='text' name="nombre" className=" mb-2" onChange={handleChange} placeholder="Ingrese el Nombre" />
-              </div>
-              <div id='divProducto'>
+        <label>
+          Categoría del Producto:
+          <select
+            name="categoriaProducto"
+            value={form.categoriaProducto}
+            onChange={handleChange}
+          >
+            <option value="">Seleccione una categoría</option>
+            <option value="alimentos">Alimentos</option>
+            <option value="higiene">Higiene</option>
+            <option value="ropa">Ropa</option>
+            <option value="medicamentos">Medicamentos</option>
+            <option value="otros">Otros</option>
+          </select>
+        </label>
 
-                <label>Código:</label>
-                <input type="number" name="codigo" className=" mb-2" onChange={handleChange} placeholder="Ingrese el código del producto" />
-              </div>
+        <label>
+          Cantidad:
+          <input
+            type="number"
+            name="cantidad"
+            value={form.cantidad}
+            onChange={handleChange}
+            placeholder="Ingrese la cantidad"
+          />
+        </label>
 
-              <div id='divProducto'>
-                <label>Categoría del Producto:</label>
-                <select name="categoriaProducto" className="form-select mb-2" onChange={handleChange}>
-                  <option>Seleccione una categoría</option>
-                  <option>Alimentos</option>
-                  <option>Higiene</option>
-                  <option>Ropa</option>
-                  <option>Medicamentos</option>
-                  <option>Otros</option>
-                </select>
-              </div>
+        <label>
+          Descripción del Producto:
+          <input
+            type="text"
+            name="descripcionProducto"
+            value={form.descripcionProducto}
+            onChange={handleChange}
+            placeholder="Descripción del producto"
+          />
+        </label>
 
-              <div id='divProducto'>
-                <label>Cantidad:</label>
-                <input type="number" name="cantidad" className="form-control mb-2" onChange={handleChange} placeholder="Ingrese la cantidad" />
-              </div>
+        <button type="submit">Registrar</button>
 
-            </div>
-            <label>Descripción del Producto:</label>
-            <input type='text' name="descripcionProducto" className="form-control mb-2" onChange={handleChange} placeholder="Descripción del producto" />
-            <button type="submit" className="btn btn-success mt-3">Registrar</button>
-          </fieldset>
-
-
-      </div>
-    </>
-
+        {mensaje && <p>{mensaje}</p>}
+      </form>
+    </div>
   );
 };
 
