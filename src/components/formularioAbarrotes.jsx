@@ -2,9 +2,9 @@ import React from 'react';
 import Carnes from './Carne';
 import Proteinas from './Proteinas';
 import Verduras from './Verduras';
-import Olores from './Olores';
-import Abarrotes from './Abarrotes';
-import Limpieza from './Limpieza';
+import Olores from './olores';
+import Abarrotes from './abarrotes';
+import Limpieza from './limpieza';
 import { AbastecimientoProvider } from '../context/contextoAbastecimiento';
 import { BrowserRouter } from 'react-router-dom'; 
 import '../styles/formularioFusionado.css'; // Asegúrate de tener este archivo con tus estilos
