@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import '../styles/formularioFusionado.css';
 
-const RegistroSuministros = () => {
-  const navigate = useNavigate();
+const RegistroConsumibles = () => {
 
   const [form, setForm] = useState({
     nombre: '',
@@ -26,7 +24,7 @@ const RegistroSuministros = () => {
   return (
     <>
       <div className="header">
-        <h2>Registro de Suministros</h2>
+        <h2>Registro de Consumibles</h2>
         <button className="btn-header">
           <span className="material-icons">arrow_back</span>
         </button>
@@ -79,4 +77,4 @@ const RegistroSuministros = () => {
   );
 };
 
-export default RegistroSuministros;
+export default RegistroConsumibles;

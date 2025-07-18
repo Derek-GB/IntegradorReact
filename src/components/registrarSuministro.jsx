@@ -3,7 +3,7 @@ import { productosAPI } from '../helpers/api';
 import '../styles/registroUsuario.css'; 
 
 
-const RegistrarProducto = () => {
+const RegistrarSuministro = () => {
   const [form, setForm] = useState({
     codigo: '',
     descripcion: '',
@@ -49,7 +49,7 @@ const RegistrarProducto = () => {
   return (
   <div className="ajuste-inventario-fullscreen sin-flecha-back">
     <form onSubmit={handleSubmit} className="ajuste-inventario-form">
-      <h2 className="text-center">Registro de Productos</h2>
+      <h2 className="text-center">Registrar Suministros</h2>
       <details open>
         <summary><strong>Formulario de Registro</strong></summary>
         <fieldset className="mt-2">
@@ -93,4 +93,4 @@ const RegistrarProducto = () => {
 );
 };
 
-export default RegistrarProducto;
+export default RegistrarSuministro;

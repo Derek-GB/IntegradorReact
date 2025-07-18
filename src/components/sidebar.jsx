@@ -10,7 +10,7 @@ const Sidebar = () => {
     { href: "/asignacionRecursos.jsx", icon: "volunteer_activism", label: "Asignación de Suministros" },
     { href: "/busquedaAlbergue.jsx", icon: "hotel", label: "Consulta Albergues" },
     { href: "/ayudaForm.jsx", icon: "fact_check", label: "Revisión de Ayudas" },
-    { href: "/registrarProducto.jsx", icon: "inventory", label: "Registrar un producto" },
+    { href: "/registrarConsumibles.jsx", icon: "inventory", label: "Registrar consumibles" },
     { href: "/registroAlbergue.jsx", icon: "business", label: "Registrar un albergue" },
     { href: "/registroUsuario.jsx", icon: "person_add", label: "Registrar un usuario" },
     { href: "/listaProducto.jsx", icon: "list", label: "Lista de Productos" },
