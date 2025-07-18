@@ -5,23 +5,28 @@ import Verduras from './Verduras';
 import Olores from './olores';
 import Abarrotes from './abarrotes';
 import Limpieza from './limpieza';
-import { AbastecimientoProvider } from '../context/contextoAbastecimiento';
-import { BrowserRouter } from 'react-router-dom'; 
-import '../styles/formularioFusionado.css'; // Asegúrate de tener este archivo con tus estilos
+import '../styles/formAbasteci.css';
 
 
 const FormularioAbastecimiento = () => {
   return (
-<div className="container main-content">
-  <h2>Formulario de Abastecimiento</h2>
-  {/* Secciones independientes */}
-  <Carnes />
-  <Proteinas />
-  <Verduras />
-  <Olores />
-  <Abarrotes />
-  <Limpieza />
-</div>
+    <div className="content-area">
+      <div className="top-header">
+        <h1>Formulario de Abastecimiento</h1>
+      </div>
+
+      <div className="main-content">
+        <div id="formularioAbarrotes">
+          {/* Secciones independientes */}
+          <Carnes />
+          <Proteinas />
+          <Verduras />
+          <Olores />
+          <Abarrotes />
+          <Limpieza />
+        </div>
+      </div>
+    </div>
   );
 };
 
