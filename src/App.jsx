@@ -18,7 +18,6 @@ import ListaAlbergue from './components/ListaAlbergue.jsx';
 import FormularioAbastecimiento from './components/FormularioAbarrotes.jsx';
 import AjusteInventario from "./components/ajusteInventario";// <--- nombre correcto
 import RecuperarContrasena from './components/recuperarContrasena';
-import RestablecerContrasena from './components/restablecerContrasena';
 import FamiliaFormulario from './components/familiaFormulario.jsx';
 import FormularioIntegrantes from "./components/formularioIntegrantes";
 import RegistroMascotas from "./components/registroMascota.jsx";
@@ -28,8 +27,7 @@ const App = () => {
   const location = useLocation();
   const isLogin = 
     location.pathname === '/' || 
-    location.pathname === '/recuperarContrasena.jsx' || 
-    location.pathname === '/restablecerContrasena.jsx';
+    location.pathname === '/recuperarContrasena.jsx';
 
   return (
     <>
@@ -37,8 +35,6 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/recuperarContrasena.jsx" element={<RecuperarContrasena />} />
-          <Route path="/restablecerContrasena.jsx" element={<RestablecerContrasena />} />
-          <Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
         </Routes>
       ) : (
         <div className="app-container">

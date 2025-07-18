@@ -104,13 +104,21 @@ export const mascotasAPI = createApiMethods("mascotas");
 export const categoriaConsumiblesAPI = createApiMethods("categoriaConsumibles");
 export const usuariosAPI = createApiMethods("usuarios", {
   validarCorreo: async (correo) => {
-    try {
-      const res = await customAxios.post(`/usuarios/validar/correo`, { correo });
-      return res.data;
-    } catch (error) {
-      handleError(error);
+  try {
+    const res = await customAxios.post(`/usuarios/validar/correo`, { correo });
+
+    return { existe: false };
+  } catch (error) {
+    if (error.response && error.response.status === 400) {
+      return { existe: true };
+    } else if (error.response && error.response.status === 500) {
+      throw new Error("Error del servidor. Contacta al soporte.");
+    } else {
+      console.error("Error desconocido:", error);
+      throw new Error("Ocurrió un error al validar el correo.");
     }
-  },
+  }
+},
   updateContrasena: async (correo, nuevaContrasena) => {
     try {
       const res = await customAxios.put(`/usuarios/contrasena`, { correo, nuevaContrasena });
