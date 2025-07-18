@@ -1,26 +1,29 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import Carnes from './Carne';
 import Proteinas from './Proteinas';
 import Verduras from './Verduras';
-import Olores from './olores';
-import Abarrotes from './abarrotes';
-import Limpieza from './limpieza';
+import Olores from './Olores';
+import Abarrotes from './Abarrotes';
+import Limpieza from './Limpieza';
 import ResumenParcial from './resumenParcial';
+
 import '../styles/formAbasteci.css';
 
 const FormularioAbastecimiento = () => {
   const [mostrarResumen, setMostrarResumen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="content-area">
       <div className="top-header">
         <h1>Formulario de Abastecimiento</h1>
-        {!mostrarResumen && (
+        {!mostrarResumen ? (
           <button onClick={() => setMostrarResumen(true)}>
             Ir a Resumen Parcial
           </button>
-        )}
-        {mostrarResumen && (
+        ) : (
           <button onClick={() => setMostrarResumen(false)}>
             Volver al Formulario
           </button>
@@ -29,13 +32,16 @@ const FormularioAbastecimiento = () => {
 
       {!mostrarResumen ? (
         <div className="main-content">
-          <div id="formularioAbarrotes">
-            <Carnes />
-            <Proteinas />
-            <Verduras />
-            <Olores />
-            <Abarrotes />
-            <Limpieza />
+          <Carnes />
+          <Proteinas />
+          <Verduras />
+          <Olores />
+          <Abarrotes />
+          <Limpieza />
+          <div className="botones-accion">
+            <button onClick={() => navigate('/confirmacion')}>
+              Enviar formulario
+            </button>
           </div>
         </div>
       ) : (

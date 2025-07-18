@@ -167,7 +167,11 @@ function FormularioAbastecimiento() {
               <button
                 type="button"
                 className="btn-enviar"
+
                 onClick={() => navigate('/formularioAbarrotes.jsx')}
+
+             
+
               >
                 Enviar
               </button>
@@ -181,4 +185,7 @@ function FormularioAbastecimiento() {
   );
 }
 
+
 export default FormularioAbastecimiento;
+
+

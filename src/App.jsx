@@ -13,6 +13,14 @@ import BusquedaAlbergue from './components/BusquedaAlbergue.jsx';
 import AyudaForm from './components/ayudaForm.jsx';
 import RegistrarProducto from './components/RegistrarProducto.jsx';
 import RegistroAlbergue from './components/RegistroAlbergue.jsx';
+import Inicio from './components/inicio.jsx';
+import PreFormulario from './components/preFormulario.jsx';
+import RegistroSuministros from './components/registroSuministros.jsx';
+import AsignacionRecursos from './components/AsignacionRecursos.jsx';
+import BusquedaAlbergue from './components/BusquedaAlbergue.jsx';
+import AyudaForm from './components/ayudaForm.jsx';
+import RegistrarProducto from './components/RegistrarProducto.jsx';
+import RegistroAlbergue from './components/RegistroAlbergue.jsx';
 import RegistroUsuario from './components/registroUsuario.jsx';
 import ListaProducto from './components/ListaProducto.jsx';
 import ListaAlbergue from './components/ListaAlbergue.jsx';
@@ -38,6 +46,7 @@ const App = () => {
 
   return (
     <>
+
       {isLogin ? (
         <Routes>
           <Route path="/" element={<Login />} />
@@ -80,6 +89,36 @@ const App = () => {
           <p>© 2025 Integrador I - Todos los derechos reservados.</p>
         </footer>
       )}
+
+      <div className="app-container">
+        {!isLogin && <Sidebar />}
+
+        <div className="container main-content">
+          <Routes>
+<Route path="/" element={<Login />} />
+<Route path="/inicio" element={<Inicio />} />
+<Route path="/preFormulario" element={<PreFormulario />} />
+<Route path="/registroSuministros" element={<RegistroSuministros />} />
+<Route path="/asignacionRecursos" element={<AsignacionRecursos />} />
+<Route path="/busquedaAlbergue" element={<BusquedaAlbergue />} />
+<Route path="/ayudaForm" element={<AyudaForm />} />
+<Route path="/registrarProducto" element={<RegistrarProducto />} />
+<Route path="/registroAlbergue" element={<RegistroAlbergue />} />
+<Route path="/registroUsuario" element={<RegistroUsuario />} />
+<Route path="/listaProducto" element={<ListaProducto />} />
+<Route path="/listaAlbergue" element={<ListaAlbergue />} />
+<Route path="/menuPrincipal" element={<MenuPrincipal />} />
+<Route path="/formularioAbarrotes" element={<FormularioAbastecimiento />} />
+<Route path="/confirmacion" element={<Confirmacion />} />
+<Route path="/ajusteInventario" element={<AjusteInventario />} />
+<Route path="/ActualizarAlbergue" element={<ActualizarAlbergue idAlbergue={17} />} />
+<Route path="/recuperarContrasena" element={<RecuperarContrasena />} />
+<Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
+          </Routes>
+        </div>
+      
+      </div>
+
     </>
   );
 };
