@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { contextoAbastecimiento } from '../context/contextoAbastecimiento';
 import { useNavigate } from 'react-router-dom';
-import '../styles/formAbasteci.css';
+import '../styles/resumenParcial.css';
 
 const ResumenParcial = () => {
   const { items, eliminarItem } = useContext(contextoAbastecimiento);

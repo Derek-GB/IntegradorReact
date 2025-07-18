@@ -1,4 +1,4 @@
-/* Variables para colores */
+/* --- Variables --- */
 :root {
   --color-fondo: #f3f4f6;
   --color-blanco: #fff;
@@ -11,6 +11,7 @@
   --color-texto: #212529;
   --color-verde-form: #00897B;
 }
+
 /* --- Reset y body --- */
 body {
     margin: 0;
@@ -20,104 +21,63 @@ body {
     font-size: 18px;
     line-height: 1.6;
     letter-spacing: 0.05em;
-    display: flex; 
-    /* height: 100vh; */
-    transition: all 0.3s ease; 
+    display: flex;
+    flex-direction: column; 
+    justify-content: flex-start; 
+    align-items: center; 
+    min-height: 100vh;
+    transition: all 0.3s ease;
     padding: 0;
-     overflow-x: hidden;
-
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: var(--color-fondo);
-  color: var(--color-texto);
-  font-size: 18px;
-  line-height: 1.6;
-  letter-spacing: 0.05em;
-  display: flex;
-  height: 100vh;
-}
-/* Sidebar principal */
-.sidebar {
-  width: 250px;
-  background-color: var(--color-verde-form);
-  color: var(--color-blanco);
-  padding-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+    overflow-x: hidden;
 }
 
-/* Botón del menú */
-#toggle-btn {
-  background-color: #ffc107;
-  color: #000;
-  border: none;
-  padding: 10px;
-  margin: 10px;
-  border-radius: 8px;
-  font-size: 18px;
-  cursor: pointer;
-}
 
-/* Lista del menú */
-.nav {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  flex-grow: 1;
-
-}
-
-/* Sidebar - MODIFICACIONES */
-.sidebar {
-  width: 250px; 
-  background-color: var(--color-verde-form);
-  color: var(--color-blanco);
-  padding-top: 1rem; 
-  padding-bottom: 1rem; 
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; 
-  height: auto;
-  border-radius: 8px; 
-  overflow: hidden; 
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-}
-
-.nav li {
-  padding: 14px 20px;
-}
-
-.nav li a {
-  color: var(--color-blanco);
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: bold;
-}
-
-#formularioAbarrotes h2 {
+.form-title-header {
     background-color: var(--color-verde-form);
     color: var(--color-blanco);
     text-align: center;
-    padding: 2rem 25px; 
+    padding: 20px 40px;
     margin-top: 0;
-    margin-bottom: 16px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    margin-bottom: 25px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     letter-spacing: 0.05em;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     font-weight: 700;
-    font-size: 2rem;
+    font-size: 2.2em; 
     box-sizing: border-box;
-    width: 100%; 
-    position: initial;
-   
+    width: fit-content; 
+    max-width: 90%; 
 }
 
 
-/* Botones de categoría (Carnes, Proteínas, etc.) */
+.sidebar {
+    width: 250px;
+    background-color: var(--color-verde-form);
+    color: var(--color-blanco);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    height: auto;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+   
+}
+
+.nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.nav li {
+    padding: 0;
+}
+
 .nav li a {
     color: var(--color-blanco);
     text-decoration: none;
@@ -126,7 +86,7 @@ body {
     justify-content: center;
     gap: 10px;
     font-weight: bold;
-    padding: 12px 20px; 
+    padding: 12px 20px;
     border-radius: 8px;
     background-color: var(--color-verde-form);
     margin-bottom: 8px;
@@ -134,162 +94,221 @@ body {
     width: calc(100% - 2rem);
     margin-left: 1rem;
     margin-right: 1rem;
-
 }
 
 .nav li a.active,
 .nav li a:hover {
-  background-color: var(--color-verde-oscuro);
-  border-radius: 6px;
-}
-
-/* Enlaces visitados */
-.nav li a:visited {
-  color: var(--color-blanco);
-}
-
-/* Íconos Font Awesome */
-.sidebar i {
-  width: 20px;
-  text-align: center;
-}
-/* Oculta completamente el sidebar */
-.sidebar.hidden {
-  display: none;
-}
-
-/* Contenido principal separado del sidebar */
-.main-content {
-  margin-left: 270px;
-  padding: 20px;
-  transition: margin-left 0.3s ease;
-}
-
-/* Cuando el sidebar está oculto, reducimos el margen */
-body.sidebar-hidden .main-content {
-  margin-left: 20px;
-}
-
-/* Contenedor de contenido */
-.content-area {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow-y: auto;
-
+    background-color: var(--color-verde-oscuro);
 }
 
 .material-icons {
-  font-size: 20px;
-  vertical-align: middle;
+    font-size: 20px;
+    vertical-align: middle;
 }
 
-/* Contenedor general (header + main) */
+
 .content-area {
-    flex-grow: 1; 
     display: flex;
     flex-direction: column;
-    height: 5100vh;
-    overflow-y: auto;
-    margin-left: 65px; 
-
+    max-width: 600px;
+    width: 100%;
+    background-color: var(--color-blanco);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 25px; 
+    margin: 0; 
+    box-sizing: border-box;
+    min-height: 500px;
+    
 }
 
-/* Header */
+
 .top-header {
-  background-color: #00897B;
-  color: white;
-  padding: 20px 40px;
-  position: relative;
-  display: flex;
-  align-items: center;
+    color: var(--color-texto);
+    padding: 40px 0; 
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto 16px auto; 
+    box-sizing: border-box;
 }
 
 .top-header h1 {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  margin: 0;
-  font-size: 24px;
-  font-weight: bold;
+    margin: 0; 
+    font-size: 24px;
+    font-weight: bold;
+    white-space: nowrap;
+    color: #FAFAFA;
 }
 
 .back-button {
-  background-color: #fdd835;
-  color: black;
-  border-radius: 5px;
-.back-button {
-  background-color: #fdd835;
-  color: black;
-  border-radius: 5px;
-  padding: 6px 8px;
-  text-decoration: none;
-  font-weight: bold;
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-}
+    background-color: #fdd835;
+    color: black;
+    border-radius: 5px;
+    padding: 6px 8px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
 }
 
-/* Área principal con el formulario centrado */
+.back-button .material-icons {
+    vertical-align: middle;
+    font-size: 24px;
+}
+
+
 .main-content {
-
-    flex-grow: 1;
-    display: grid;
-    flex-direction: row;
-    justify-content: colum; 
-    align-items: center;   
-    padding: 2rem 1rem 3rem;
-    background-color: var(--color-fondo);
+    flex-grow: initial;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 0;
+    background-color: transparent;
     overflow-x: hidden;
-
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 2rem 1rem 3rem;
-  background-color: var(--color-fondo);
-  overflow-y: auto;
-
+    margin-bottom: 0; 
 }
 
-/* Formulario centrado y con max-width */
-#formularioAbarrotes {
-  width: 100%;
-  max-width: 600px;
-  background-color: #FAFAFA;
-  border-radius: 8px;
-  padding: 25px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+
+.secciones-formulario {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 15px; 
+    margin-bottom: 20px; 
 }
 
-/* Titulos centrados */
-h1, h2 {
+
+.secciones-formulario button,
+details summary {
+    background-color: var(--color-verde-form);
+    color: var(--color-blanco);
+    padding: 15px 25px; 
+    border: none;
+    border-radius: 8px;
+    width: 100%;
+    max-width: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+}
+
+.secciones-formulario button:hover,
+details summary:hover {
+    background-color: var(--color-verde-oscuro);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.secciones-formulario button::before,
+details summary::before {
+    content: '▶';
+    font-size: 1em;
+    transition: transform 0.2s;
+    margin-right: 10px; 
+    flex-shrink: 0; 
+}
+
+details[open] summary::before {
+    transform: rotate(90deg);
+}
+
+details:not([open]) summary::before {
+    transform: rotate(0deg);
+}
+
+
+.botones-accion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding-top: 15px;
+    width: 100%;
+}
+
+
+.botones-accion .btn-toggle,
+.botones-accion .btn-submit {
+    background-color: var(--color-amarillo);
+    color: var(--color-blanco);
+    border: none;
+    border-radius: 8px;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    box-sizing: border-box;
+}
+
+.botones-accion .btn-toggle:hover,
+.botones-accion .btn-submit:hover {
+    background-color: var(--color-amarillo-hover);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+.btn-resumen-parcial {
+    background-color: var(--color-amarillo);
+    color: var(--color-blanco);
+    border: none;
+    border-radius: 8px;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    max-width: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    box-sizing: border-box;
+}
+
+.btn-resumen-parcial:hover {
+    background-color: var(--color-amarillo-hover);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+
+
+h1 { 
   text-align: center;
   margin-bottom: 16px;
 }
 
-/* Pie de página del copyright dentro del sidebar */
 .sidebar-copyright {
   background-color: var(--color-verde-oscuro);
   color: var(--color-blanco);
-  padding: 1rem 1.5rem; 
+  padding: 1rem 1.5rem;
   text-align: center;
   font-size: 0.9em;
-  margin-top: auto; 
-  box-sizing: border-box; 
-  width: calc(100% - 2rem); 
-  margin-left: 1rem; 
-  margin-right: 1rem; 
-  margin-bottom: 1rem; 
-
+  margin-top: auto;
+  box-sizing: border-box;
+  width: calc(100% - 2rem);
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
 }
 
-/* Tarjetas blancas con sombra */
 .card {
   background-color: var(--color-blanco);
   padding: 20px;
@@ -298,15 +317,23 @@ h1, h2 {
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-/* Formularios */
 form {
-/* H2 con fondo verde y texto blanco */
-h2 {
-  background-color: var(--color-verde-form);
-  color: var(--color-blanco);
-  padding: 2rem 1rem;
-  border-radius: 8px;
+  margin: 0;
 }
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
   margin-bottom: 16px;
   box-sizing: border-box;
   transition: border-color 0.3s ease;
@@ -317,12 +344,9 @@ input:focus, select:focus, textarea:focus {
   border-color: var(--color-verde-form);
 }
 
-/* Botones */
-button {
+button { /* Estilos genéricos para botones */
   width: 100%;
   padding: 12px;
-  background-color: var(--color-amarillo);
-  color: var(--color-blanco);
   border: none;
   border-radius: 6px;
   font-weight: bold;
@@ -336,7 +360,6 @@ button:hover {
   background-color: var(--color-amarillo-hover);
 }
 
-/* Tablas */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -354,74 +377,25 @@ th {
   font-weight: bold;
 }
 
-/* Enlaces dentro de tarjeta */
 .card a {
   display: block;
   margin-bottom: 10px;
 }
 
-/* Detalles/Accordion */
-details {
-
-  border: 1px solid var(--color-gris-borde);
-
-  border: none;
-
-  border-radius: 4px;
-  margin-bottom: 12px;
-  overflow: hidden;
-}
-
-
-details summary {
-  background-color: var(--color-verde-form);
-  color: var(--color-blanco);
+details > *:not(summary) {
   padding: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  user-select: none;
-  transition: background-color 0.3s ease;
-
-
-details summary {
-    background-color: var(--color-verde-form);
-    color: var(--color-blanco);
-    padding: 2rem 25px; 
-    cursor: pointer;
-    font-weight: bold;
-    user-select: none;
-    transition: background-color 0.3s ease;
-    list-style: none;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start; 
-    box-sizing: border-box;
-    width: 100%;
-    border-radius: 8px;
-    margin-bottom: 8px;
-   
-
+  background-color: var(--color-gris-claro);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 
-details summary:hover {
-  background-color: var(--color-verde-oscuro);
-}
-
-details[open] summary {
-  border-bottom: 1px solid var(--color-gris-borde);
-details {
-  border: 1px solid var(--color-gris-borde);
-  border-radius: 4px;
-  margin-bottom: 12px;
-  overflow: hidden;
-}
+.checkbox-grid {
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 12px;
   margin-top: 10px;
 }
 
-/* Items abarrotes con label flex */
 .abarrote-item label {
   display: flex;
   justify-content: space-between;
@@ -447,7 +421,6 @@ details {
   order: 1;
 }
 
-/* Detalle (cantidad + unidad) dentro item */
 .abarrote-item .detalle {
   display: flex;
   gap: 10px;
@@ -472,26 +445,6 @@ details {
   border-color: var(--color-verde-form);
 }
 
-.boton-resumen-final {
-  margin-top: 40px;
-  text-align: center;
-}
-
-.boton-resumen-final a button {
-  width: auto;
-  padding: 10px 24px;
-  font-size: 16px;
-  background-color: var(--color-amarillo);
-  color: var(--color-blanco);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.boton-resumen-final a button:hover {
-  background-color: var(--color-amarillo-hover);
-}
 .modal {
   position: fixed;
   top: 0;
@@ -561,7 +514,6 @@ details {
   background-color: #d1e7dd;
   border-color: #0f5132;
 }
-/* Inputs de cantidad ocultos por defecto */
 .cantidad {
   display: none;
   width: 70px;
@@ -573,7 +525,6 @@ details {
   box-sizing: border-box;
 }
 
-/* Cuando se muestran */
 .cantidad.mostrar {
   display: inline-block;
 }
@@ -612,352 +563,7 @@ details {
   padding-left: 0;
 }
 
-/* ... (tu CSS existente) ... */
-
-
 /* Estilos para la sección de Abarrotes (cuadritos más pequeños) */
-.cuadro-grid {
-    display: grid;
-    /* Ajusta minmax para hacer los cuadritos más pequeños. Por ejemplo, de 150px a 200px. */
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Más pequeño que 200px */
-    gap: 15px; /* Espacio entre los cuadritos */
-    padding: 20px;
-    background-color: var(--color-gris-claro);
-    border-radius: 8px;
-    margin-top: 15px;
-}
-
-.cuadro-grid .producto {
-    background-color: var(--color-blanco);
-    border: 1px solid var(--color-gris-borde);
-    border-radius: 5px;
-    padding: 8px; /* Reduce el padding para hacerlos más pequeños */
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.2s ease-in-out;
-    position: relative; /* Necesario para posicionar el input */
-    font-size: 0.9em; /* Fuente un poco más pequeña para el texto */
-}
-
-.cuadro-grid .producto:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.cuadro-grid .producto label {
-    font-weight: normal; /* Para que el texto no sea negrita */
-    cursor: pointer;
-    display: flex; /* Para alinear el checkbox y el texto */
-    align-items: center;
-    margin-bottom: 5px; /* Espacio entre el label y el input */
-    line-height: 1.2; /* Ajusta si el texto es largo y se corta */
-}
-
-.cuadro-grid .producto input[type="checkbox"] {
-    margin-right: 8px; /* Espacio entre el checkbox y el texto */
-    transform: scale(0.9); /* Hace el checkbox un poco más pequeño */
-}
-
-.cuadro-grid .producto .cantidad {
-    width: calc(100% - 16px); /* Ajusta el ancho */
-    padding: 5px; /* Reduce el padding del input */
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-top: 5px; /* Espacio superior */
-    font-size: 0.85em; /* Fuente más pequeña */
-    text-align: center;
-}
-
-
-/* Estilos para la sección de Limpieza (orden vertical, cuadritos más pequeños, y nueva lógica) */
-#productosLimpiezaDisponibles {
-    display: flex;
-    flex-direction: column; /* Orden vertical */
-    gap: 10px; /* Espacio entre los elementos */
-    padding: 15px;
-    background-color: var(--color-gris-claro);
-    border-radius: 8px;
-    margin-top: 15px;
-}
-
-.producto-limpieza-item {
-    background-color: var(--color-blanco);
-    border: 1px solid var(--color-gris-borde);
-    border-radius: 5px;
-    padding: 8px 12px; /* Padding más pequeño */
-    display: flex;
-    align-items: center; /* Centra verticalmente contenido */
-    justify-content: space-between; /* Espacio entre label, input y botón */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Transición para cuando desaparece */
-    font-size: 0.9em; /* Fuente un poco más pequeña */
-}
-
-/* Ocultar el elemento del formulario cuando se selecciona (animación) */
-.producto-limpieza-item.oculto-en-lista {
-    transform: translateY(10px); /* Pequeño movimiento antes de desaparecer */
-    opacity: 0;
-    height: 0;
-    padding: 0 12px; /* Mantén el padding horizontal si quieres la misma anchura durante la transición */
-    margin: 0;
-    border: none;
-    pointer-events: none; /* Deshabilita interacciones */
-}
-
-
-.producto-limpieza-item label {
-    flex-grow: 1; /* Permite que el label ocupe el espacio restante */
-    margin-right: 10px; /* Espacio entre el label y el input/botón */
-    font-weight: normal;
-}
-
-.producto-limpieza-item .cantidad-limpieza {
-    width: 70px; /* Ancho fijo para el input de cantidad, ajustado */
-    padding: 5px; /* Padding más pequeño */
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 0.8em; /* Fuente más pequeña */
-    text-align: center;
-    margin-right: 10px; /* Espacio antes del botón */
-}
-
-.producto-limpieza-item .btn-seleccionar-limpieza {
-    background-color: var(--color-verde);
-    color: white;
-    border: none;
-    padding: 6px 10px; /* Ajusta el padding del botón */
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.85em; /* Fuente del botón */
-}
-
-.producto-limpieza-item .btn-seleccionar-limpieza:hover {
-    background-color: var(--color-verde-oscuro);
-}
-
-/* Estilos para la lista de resumen de productos seleccionados */
-.resultado ul {
-    list-style: none;
-    padding: 0;
-    margin-top: 20px; /* Espacio superior para la lista de resultados */
-}
-
-.resultado li {
-    background-color: #e9ecef;
-    border: 1px solid #dee2e6;
-    padding: 8px 12px;
-    margin-bottom: 5px;
-    border-radius: 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.9em; /* Fuente para los elementos de la lista */
-}
-
-.resultado li .btn-eliminar-lista {
-    background-color: #dc3545; /* Rojo para eliminar */
-    color: white;
-    border: none;
-    padding: 5px 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.8em;
-    margin-left: 10px; /* Espacio a la izquierda del botón */
-}
-
-.resultado li .btn-eliminar-lista:hover {
-    background-color: #c82333;
-}
-/* --- ADAPTACIONES PARA QUE LIMPIEZA SE VEA COMO ABARROTES --- */
-
-/* Estilos para el elemento <summary> dentro de <details> (aplicado a abarrotes y limpieza) */
-/* Usamos el color de tu variable para verde-form */
-details summary {
-    background-color: var(--color-verde-form); /* Usa tu variable */
-    color: var(--color-blanco);
-    padding: 10px; /* Ajustado a tu padding de details summary existente */
-    cursor: pointer;
-    font-weight: bold;
-    user-select: none;
-    transition: background-color 0.3s ease;
-    /* Los estilos para la flecha se mantienen de tu CSS original */
-    list-style: none; /* Elimina la flecha de lista por defecto en algunos navegadores */
-    position: relative; /* Para posicionar el icono de flecha personalizado si se añade */
-}
-
-/* Para agregar la flecha de colapsar/expandir si list-style:none la eliminó */
-details summary::-webkit-details-marker {
-    display: none; /* Oculta la flecha por defecto en Webkit (Chrome, Edge, Safari) */
-}
-
-details summary::before {
-    content: '▼ '; /* Icono de flecha hacia abajo */
-    display: inline-block;
-    width: 1em;
-    margin-right: 0.5em;
-    transition: transform 0.2s; /* Transición para la rotación */
-}
-
-details[open] summary::before {
-    transform: rotate(0deg); /* Flecha hacia abajo cuando está abierto */
-}
-
-details:not([open]) summary::before {
-    transform: rotate(-90deg); /* Flecha girada cuando está cerrado (apuntando a la derecha) */
-}
-
-
-/* Reutilizamos .cuadro-grid para #productosLimpiezaDisponibles */
-/* Esto hará que la sección de Limpieza se vea como la de Abarrotes */
-#productosLimpiezaDisponibles {
-    display: grid;
-    /* Usa el mismo grid-template-columns que .cuadro-grid para consistencia */
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 15px; /* Mismo gap que .cuadro-grid */
-    padding: 20px; /* Mismo padding que .cuadro-grid */
-    background-color: var(--color-gris-claro); /* Mismo fondo que .cuadro-grid */
-    border-radius: 8px; /* Mismos bordes */
-    margin-top: 15px; /* Mismo margen */
-    /* Asegurarse de que no haya bordes dobles si el details ya tiene uno */
-    border: none; /* Quitamos el borde del #productosLimpiezaDisponibles si el details ya lo tiene */
-}
-
-/* Aplicamos los mismos estilos de tarjeta a los productos de Limpieza */
-/* .producto es la clase común, .producto-limpieza-item es específica */
-#productosLimpiezaDisponibles .producto,
-.producto-limpieza-item { /* Ambas clases apuntan al mismo estilo de tarjeta */
-    background-color: var(--color-blanco);
-    border: 1px solid var(--color-gris-borde);
-    border-radius: 5px;
-    padding: 8px; /* Reduce el padding para hacerlos más pequeños */
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* Alinea el contenido a la izquierda como en abarrotes */
-    justify-content: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.2s ease-in-out;
-    position: relative;
-    font-size: 0.9em; /* Fuente un poco más pequeña */
-}
-
-#productosLimpiezaDisponibles .producto:hover,
-.producto-limpieza-item:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Ajustes para el label dentro del producto de Limpieza */
-#productosLimpiezaDisponibles .producto label,
-.producto-limpieza-item label {
-    font-weight: normal; /* Para que el texto no sea negrita */
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-    line-height: 1.2;
-    width: 100%; /* Aseguramos que ocupe todo el ancho */
-}
-
-/* Ajustes para el checkbox dentro del producto de Limpieza */
-#productosLimpiezaDisponibles .producto input[type="checkbox"],
-.producto-limpieza-item input[type="checkbox"] {
-    margin-right: 8px;
-    transform: scale(0.9);
-}
-
-/* Ajustes para el input de cantidad de limpieza */
-#productosLimpiezaDisponibles .producto .cantidad-limpieza,
-.producto-limpieza-item .cantidad-limpieza {
-    width: calc(100% - 16px); /* Ajusta el ancho para que coincida con .cantidad de abarrotes */
-    padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-top: 5px;
-    font-size: 0.85em;
-    text-align: center;
-    box-sizing: border-box; /* Crucial para que el ancho sea correcto */
-}
-
-
-/* Ocultar el elemento del formulario cuando se selecciona (animación) */
-/* Esto se aplicará a los items de limpieza que desaparecen */
-.producto-limpieza-item.oculto-en-lista {
-    transform: translateY(10px);
-    opacity: 0;
-    height: 0;
-    padding-top: 0; /* Aseguramos que el padding se reduzca también */
-    padding-bottom: 0;
-    margin-top: 0; /* Aseguramos que el margen se reduzca también */
-    margin-bottom: 0;
-    border: none;
-    pointer-events: none;
-    overflow: hidden; /* Oculta cualquier contenido que se desborde durante la transición */
-}
-
-/* --- Estilos para las Tablas de Resumen (Abarrotes y Limpieza) --- */
-
-/* Reutiliza los estilos de tu tabla de resumen de carnes */
-table {
-    width: 100%;
-    border-collapse: collapse; /* Elimina el espacio entre celdas */
-    margin-top: 12px;
-    background-color: var(--color-blanco); /* Fondo blanco para la tabla */
-    border-radius: 8px; /* Bordes redondeados para la tabla */
-    overflow: hidden; /* Asegura que los bordes redondeados se vean bien */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra suave para la tabla */
-}
-
-th, td {
-    border: 1px solid var(--color-gris-borde); /* Bordes de celdas usando tu variable */
-    padding: 10px;
-    text-align: center; /* Centra el texto en las celdas */
-    font-size: 0.95em; /* Ajusta el tamaño de fuente si es necesario */
-}
-
-th {
-    background-color: var(--color-gris-claro); /* Fondo para los encabezados */
-    font-weight: bold;
-    color: var(--color-texto); /* Color del texto de los encabezados */
-}
-
-/* Estilo para el botón de eliminar dentro de la tabla */
-.btn-eliminar {
-    background-color: var(--color-amarillo); /* Color de tu botón de eliminar */
-    color: var(--color-blanco);
-    border: none;
-    border-radius: 4px;
-    padding: 6px 10px;
-    cursor: pointer;
-    font-size: 0.8em; /* Tamaño de fuente más pequeño para el botón */
-    transition: background-color 0.3s ease;
-}
-
-.btn-eliminar:hover {
-    background-color: var(--color-amarillo-hover); /* Color al pasar el ratón */
-}
-
-.resultado ul {
-    list-style: none;
-    padding: 0;
-    margin-top: 20px;
-}
-
-.resultado li {
-    background-color: #e9ecef;
-    border: 1px solid #dee2e6;
-    padding: 8px 12px;
-    margin-bottom: 5px;
-    border-radius: 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.9em;
-    line-height: 1.4;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-/* Tus estilos de .cuadro-grid (para abarrotes, olores, limpieza) */
 .cuadro-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -1010,15 +616,6 @@ th {
     font-size: 0.85em;
     text-align: center;
 }
-
-.boton-resumen-final a button:hover {
-  background-color: var(--color-amarillo-hover);
-}
-
-
-
-
-
 
 
 /* Estilos para la sección de Limpieza (orden vertical, cuadritos más pequeños, y nueva lógica) */
@@ -1086,7 +683,6 @@ th {
     background-color: var(--color-verde-oscuro);
 }
 
-/* Estilos para la lista de resumen de productos seleccionados */
 .resultado ul {
     list-style: none;
     padding: 0;
@@ -1120,40 +716,16 @@ th {
     background-color: #c82333;
 }
 
-
-/* Estilos para el elemento <summary> dentro de <details> (aplicado a abarrotes y limpieza) */
 details summary {
-    background-color: var(--color-verde-form);
-    color: var(--color-blanco);
-    padding: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    user-select: none;
-    transition: background-color 0.3s ease;
     list-style: none;
     position: relative;
+    box-sizing: border-box;
+    margin-bottom: 8px;
 }
 
 details summary::-webkit-details-marker {
     display: none;
 }
-
-details summary::before {
-    content: '▼ ';
-    display: inline-block;
-    width: 1em;
-    margin-right: 0.5em;
-    transition: transform 0.2s;
-}
-
-details[open] summary::before {
-    transform: rotate(0deg);
-}
-
-details:not([open]) summary::before {
-    transform: rotate(-90deg);
-}
-
 
 /* Reutilizamos .cuadro-grid para #productosLimpiezaDisponibles */
 #productosLimpiezaDisponibles {
@@ -1220,8 +792,6 @@ details:not([open]) summary::before {
     box-sizing: border-box;
 }
 
-
-/* Ocultar el elemento del formulario cuando se selecciona (animación) */
 .producto-limpieza-item.oculto-en-lista {
     transform: translateY(10px);
     opacity: 0;
@@ -1259,7 +829,6 @@ th {
     color: var(--color-texto);
 }
 
-/* Estilo para el botón de eliminar dentro de la tabla */
 .btn-eliminar {
     background-color: var(--color-amarillo);
     color: var(--color-blanco);
@@ -1306,5 +875,4 @@ details > *:not(summary) label {
 details > *:not(summary) input,
 details > *:not(summary) select {
     margin-left: 0;
-}
 }

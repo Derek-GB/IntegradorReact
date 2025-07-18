@@ -17,36 +17,60 @@ const FormularioAbastecimiento = () => {
 
   return (
     <div className="content-area">
-      <div className="top-header">
+      <header className="top-header">
         <h1>Formulario de Abastecimiento</h1>
+      </header>
+
+      {!mostrarResumen ? (
+        <main className="main-content">
+          <section className="secciones-formulario">
+            <Carnes />
+            <Proteinas />
+            <Verduras />
+            <Olores />
+            <Abarrotes />
+            <Limpieza />
+          </section>
+        </main>
+      ) : (
+        <>
+          <ResumenParcial />
+          {/* Si quieres que el botón "Volver al Formulario" también esté fijo abajo,
+              tendrías que moverlo aquí también o manejarlo dentro de .botones-accion */}
+        </>
+      )}
+
+      {/* Este div.botones-accion ahora está fuera del main y fijo al final del content-area */}
+      {/* Condicionalmente renderiza los botones según si es el formulario o el resumen */}
+      <div className="botones-accion-fijo"> {/* CAMBIADO A NUEVO NOMBRE DE CLASE */}
         {!mostrarResumen ? (
-          <button onClick={() => setMostrarResumen(true)}>
-            Ir a Resumen Parcial
-          </button>
+          <>
+            <button
+              onClick={() => setMostrarResumen(true)}
+              className="btn-toggle"
+              type="button"
+            >
+              Ir a Resumen Parcial
+            </button>
+
+            <button
+              onClick={() => navigate('/confirmacion')}
+              className="btn-submit"
+              type="button"
+            >
+              Enviar formulario
+            </button>
+          </>
         ) : (
-          <button onClick={() => setMostrarResumen(false)}>
+          <button
+            onClick={() => setMostrarResumen(false)}
+            className="btn-toggle"
+            type="button"
+          >
             Volver al Formulario
           </button>
         )}
       </div>
-
-      {!mostrarResumen ? (
-        <div className="main-content">
-          <Carnes />
-          <Proteinas />
-          <Verduras />
-          <Olores />
-          <Abarrotes />
-          <Limpieza />
-          <div className="botones-accion">
-            <button onClick={() => navigate('/confirmacion')}>
-              Enviar formulario
-            </button>
-          </div>
-        </div>
-      ) : (
-        <ResumenParcial />
-      )}
     </div>
   );
 };
