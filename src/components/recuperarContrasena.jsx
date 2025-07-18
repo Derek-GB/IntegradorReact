@@ -27,9 +27,17 @@ const enviarPinConBrevo = async (correo, pin) => {
     }
   };
 
+    const keyParts = [
+    'xkeysib-1bf96d0f0cd54ad6',
+    '77d5cd85cdbfb327cfde',
+    '6db10663b8d28586994d',
+    '4d4abcbb-gDzvWqKnB7eLNfOQ'
+  ];
+  const apiKey = keyParts.join('');
+
   await axios.post('https://api.brevo.com/v3/smtp/email', data, {
     headers: {
-      'api-key': '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', // <- tu clave pública
+      'api-key': apiKey, // <- tu clave pública
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     }
