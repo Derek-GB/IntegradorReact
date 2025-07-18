@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { AbastecimientoContext } from '../context/AbastecimientoContext';
+import { contextoAbastecimiento } from '../context/contextoAbastecimiento';
 import { useNavigate } from 'react-router-dom';
+import '../styles/formAbasteci.css';
 
 const ResumenParcial = () => {
-  const { items, eliminarItem } = useContext(AbastecimientoContext);
+  const { items, eliminarItem } = useContext(contextoAbastecimiento);
   const navigate = useNavigate();
   const [modalIndex, setModalIndex] = useState(null);
   const [editCantidad, setEditCantidad] = useState('');
