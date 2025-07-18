@@ -112,3 +112,36 @@
 .boton-buscar:hover {
   background: #1741a6;
 }
+
+select {
+  margin-top: 0.4rem;
+  padding: 0.6rem;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 6px;
+  font-size: 1rem;
+  background: var(--color-gris-claro);
+  transition: border 0.2s;
+  font-family: var(--fuente-principal);
+  color: var(--color-texto);
+  width: 100%;
+}
+
+select:focus {
+  border: 1.5px solid var(--color-verde-form);
+  outline: none;
+}
+
+.error-message {
+  color: #ff4444;
+  font-weight: bold;
+}
+
+.success-message {
+  color: var(--color-verde-form);
+  font-weight: bold;
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
