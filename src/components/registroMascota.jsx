@@ -1,39 +1,78 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { familiasAPI, mascotasAPI } from "../helpers/api";
 import "../styles/registroMascota.css";
 
 export default function RegistroMascotas() {
-  const [familia, setFamilia] = useState("");
+  const [familias, setFamilias] = useState([]);
+  const [selectedFamilia, setSelectedFamilia] = useState("");
   const [tipo, setTipo] = useState("");
   const [tamano, setTamano] = useState("");
-  const [nombre, setNombre] = useState("");
+  const [nombreMascota, setNombreMascota] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleBuscarFamilia = () => {
-    // Simulación de búsqueda
-    setFamilia("Canino");
-    setMensaje("Familia encontrada y seleccionada.");
+  const tiposMascota = ["Perro", "Gato", "Ave", "Roedor"];
+
+  const fetchFamilias = async () => {
+    try {
+      setLoading(true);
+      const data = await familiasAPI.getAll();
+      const lista = Array.isArray(data) ? data : data.data ?? [];
+      setFamilias(lista || []);
+    } catch (error) {
+      console.error('Error al cargar familias:', error);
+      setFamilias([]);
+      setMensaje("Error al cargar las familias disponibles");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleBuscarTipo = () => {
-    // Simulación de búsqueda
-    setTipo("Perro");
-    setMensaje("Tipo encontrado y seleccionado.");
-  };
+  useEffect(() => {
+    fetchFamilias();
+  }, []);
 
-  const handleRegistro = (e) => {
+  const handleRegistro = async (e) => {
     e.preventDefault();
-    if (!familia || !tipo || !tamano || !nombre) {
+    
+    if (!selectedFamilia || !tipo || !tamano|| !nombreMascota) {
       setMensaje("Completa todos los campos.");
       return;
     }
-    setMensaje("Mascota registrada correctamente.");
-    setFamilia("");
-    setTipo("");
-    setPelaje("");
-    setTamano("");
-    setNombre("");
-    setPeso("");
-    setEdad("");
+
+    try {
+      setLoading(true);
+      
+      const familiaSeleccionada = familias.find(fam => fam.codigoFamilia === selectedFamilia);
+      
+      if (!familiaSeleccionada) {
+        throw new Error("Familia seleccionada no válida");
+      }
+
+      const mascotaData = {
+        idFamilia: familiaSeleccionada.id || familiaSeleccionada._id,
+        tipo: tipo,
+        tamaño: tamano,
+        nombreMascota: nombreMascota
+      };
+
+      const response = await mascotasAPI.create(mascotaData);
+      
+      setMensaje("Mascota registrada correctamente.");
+
+      setSelectedFamilia("");
+      setTipo("");
+      setTamano("");
+      setNombreMascota("");
+      
+      fetchFamilias();
+      
+    } catch (error) {
+      console.error('Error al registrar mascota:', error);
+      setMensaje(error.response?.data?.message || error.message || "Error al registrar la mascota");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -43,68 +82,80 @@ export default function RegistroMascotas() {
         
         <label>
           Familia:
-          <div style={{ display: "flex", gap: "8px" }}>
-            <input
-              type="text"
-              value={familia}
-              onChange={(e) => setFamilia(e.target.value)}
-              placeholder="Familia a la que pertenece la mascota"
-              style={{ flex: 1 }}
-            />
-            <button
-              type="button"
-              onClick={handleBuscarFamilia}
-              title="Buscar familia"
-              className="boton-buscar"
-            >
-              +
-            </button>
-          </div>
+          <select
+            value={selectedFamilia}
+            onChange={(e) => setSelectedFamilia(e.target.value)}
+            disabled={loading || familias.length === 0}
+            required
+          >
+            <option value="">Seleccione una familia</option>
+            {familias.map((fam) => (
+              <option key={fam._id || fam.id} value={fam.codigoFamilia}>
+                {fam.codigoFamilia}
+              </option>
+            ))}
+          </select>
+          {loading && familias.length === 0 && (
+            <p>Cargando familias...</p>
+          )}
+          {!loading && familias.length === 0 && (
+            <p>No hay familias disponibles</p>
+          )}
         </label>
         
         <label>
           Tipo:
-          <div style={{ display: "flex", gap: "8px" }}>
-            <input
-              type="text"
-              value={tipo}
-              onChange={(e) => setTipo(e.target.value)}
-              placeholder="Ej: Canino, Felino, Ave, Roedor"
-              style={{ flex: 1 }}
-            />
-            <button
-              type="button"
-              onClick={handleBuscarTipo}
-              title="Buscar tipo"
-              className="boton-buscar"
-            >
-              +
-            </button>
-          </div>
+          <select
+            value={tipo}
+            onChange={(e) => setTipo(e.target.value)}
+            disabled={loading}
+            required
+          >
+            <option value="">Seleccione un tipo</option>
+            {tiposMascota.map((tipo) => (
+              <option key={tipo} value={tipo}>
+                {tipo}
+              </option>
+            ))}
+          </select>
         </label>
         
         <label>
           Tamaño:
-          <input
-            type="text"
+          <select
             value={tamano}
             onChange={(e) => setTamano(e.target.value)}
-            placeholder="Ej: Pequeño, Mediano, Grande"
-          />
+            disabled={loading}
+            required
+          >
+            <option value="">Seleccione un tamaño</option>
+            <option value="Pequeño">Pequeño</option>
+            <option value="Mediano">Mediano</option>
+            <option value="Grande">Grande</option>
+          </select>
         </label>
         
         <label>
           Nombre:
           <input
             type="text"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
+            value={nombreMascota}
+            onChange={(e) => setNombreMascota(e.target.value)}
             placeholder="Nombre de la mascota"
+            disabled={loading}
+            required
           />
         </label>
         
-        <button type="submit">Registrar Mascota</button>
-        {mensaje && <p>{mensaje}</p>}
+        <button type="submit" disabled={loading}>
+          {loading ? "Registrando..." : "Registrar Mascota"}
+        </button>
+        
+        {mensaje && (
+          <p className={mensaje.includes("Error") ? "error-message" : "success-message"}>
+            {mensaje}
+          </p>
+        )}
       </form>
     </div>
   );

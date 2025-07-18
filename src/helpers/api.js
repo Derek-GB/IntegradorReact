@@ -100,6 +100,7 @@ export const caracteristicasPoblacionalesAPI = createApiMethods("caracteristicas
 export const firmasDigitalesAPI = createApiMethods("firmasDigitales");
 export const infraestructuraAlberguesAPI = createApiMethods("infraestructuraAlbergues");
 export const amenazasAPI = createApiMethods("amenazas");
+export const mascotasAPI = createApiMethods("mascotas");
 export const categoriaConsumiblesAPI = createApiMethods("categoriaConsumibles");
 export const usuariosAPI = createApiMethods("usuarios", {
   validarCorreo: async (correo) => {
