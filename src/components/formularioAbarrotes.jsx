@@ -2,10 +2,11 @@ import React from 'react';
 import Carnes from './Carne';
 import Proteinas from './Proteinas';
 import Verduras from './Verduras';
-import Olores from './Olores';
-import Abarrotes from './Abarrotes';
-import Limpieza from './Limpieza';
+import Olores from './olores';
+import Abarrotes from './abarrotes';
+import Limpieza from './limpieza';
 import '../styles/formAbasteci.css';
+
 
 const FormularioAbastecimiento = () => {
   return (
