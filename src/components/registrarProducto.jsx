@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import '../styles/formularioFusionado.css'; // Asegúrate de tener este archivo con tus estilos
+import { productosAPI } from '../helpers/api';
+import '../styles/registroUsuario.css'; 
+
 
 const RegistrarProducto = () => {
   const [form, setForm] = useState({
@@ -12,8 +12,6 @@ const RegistrarProducto = () => {
     unidad: '',
     cantidad: ''
   });
-
-  const navigate = useNavigate();
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -28,11 +26,11 @@ const RegistrarProducto = () => {
         nombre: form.producto,
         descripcion: form.descripcion,
         cantidad: parseInt(form.cantidad),
-        categoria: form.categoria,
-        unidadMedida: form.unidad
+        categoria: parseInt(form.categoria), 
+        unidadMedida: parseInt(form.unidad)  
       };
 
-      await axios.post("https://apiintegrador-production-8ef8.up.railway.app/api/Productos", data);
+      await productosAPI.create(data); 
       alert("Producto registrado correctamente");
       setForm({
         codigo: '',
@@ -49,89 +47,50 @@ const RegistrarProducto = () => {
   };
 
   return (
-    <>
-      <div className="header">
-        <h2>Registro de Productos</h2>
-        <button className="btn-header">
-          <span className="material-icons">arrow_back</span>
-        </button>
-      </div>
+  <div className="ajuste-inventario-fullscreen sin-flecha-back">
+    <form onSubmit={handleSubmit} className="ajuste-inventario-form">
+      <h2 className="text-center">Registro de Productos</h2>
+      <details open>
+        <summary><strong>Formulario de Registro</strong></summary>
+        <fieldset className="mt-2">
+          <label>Código de Producto:</label>
+          <input name="codigo" value={form.codigo} onChange={handleChange} required />
 
-      <div className="containerRegistroProducto mt-4">
+          <label>Descripción:</label>
+          <input name="descripcion" value={form.descripcion} onChange={handleChange} required />
 
+          <label>Categoría:</label>
+          <select name="categoria" value={form.categoria} onChange={handleChange} required>
+            <option value="">Seleccione una opción</option>
+            <option value="1">Carne</option>
+            <option value="2">Proteina</option>
+            <option value="3">Verdura</option>
+            <option value="4">Reperte</option>
+            <option value="5">Olores</option>
+            <option value="6">Abarrotes</option>
+            <option value="7">Limpieza</option>
+            <option value="8">Mobiliario</option>
+          </select>
 
-        <div className='formRegistroProducto' onSubmit={handleSubmit} >
+          <label>Nombre del Producto:</label>
+          <input name="producto" value={form.producto} onChange={handleChange} required />
 
-          <fieldset className="fieldsetRegistroProducto mt-2">
+          <label>Unidad:</label>
+          <select name="unidad" value={form.unidad} onChange={handleChange} required>
+            <option value="">Seleccione una unidad</option>
+            <option value="1">Mililitros</option>
+            <option value="2">Gramos</option>
+            <option value="3">Unidades</option>
+          </select>
 
-            
-
-            <div className="divRegiProductos" id=''>
-              <div className="divRegiProducto1">
-                <label>Código de Producto:</label>
-                <input name="codigo" value={form.codigo} onChange={handleChange} required />
-              </div>
-
-              <div className="divRegiProducto1">
-                <label>Nombre del Producto:</label>
-                <input name="producto" value={form.producto} onChange={handleChange} required />
-
-              </div>
-
-              <div className="divRegiProducto1">
-                <label>Categoría:</label>
-                <select name="categoria" value={form.categoria} onChange={handleChange} required>
-                  <option value="">Seleccione una opción</option>
-                  {["Carne", "Proteina", "Verdura", "Reperte", "Olores", "Abarrotes", "Limpieza", "Mobiliario"]
-                    .map(cat => <option key={cat} value={cat}>{cat}</option>)}
-                </select>
-              </div>
-
-            </div>
-
-            <div className="divRegiProductos">
-
-              <div className="divRegiProducto2">
-                <label>Unidad:</label>
-                <select name="unidad" value={form.unidad} onChange={handleChange} required>
-                  <option value="">Seleccione una unidad</option>
-                  {["Mililitros", "Gramos", "Unidades"]
-                    .map(unit => <option key={unit} value={unit}>{unit}</option>)}
-                </select>
-              </div>
-
-              <div className="divRegiProducto2">
-                <label>Cantidad:</label>
-                <input name="cantidad" type="number" min="0" value={form.cantidad} onChange={handleChange} required />
-
-              </div>
-
-            </div>
-
-            <div className="divRegiProductosDescripcion">
-              <div className="divRegiProducto">
-                <label>Descripción:</label>
-                <input name="descripcion" value={form.descripcion} onChange={handleChange} required />
-              </div>
-
-            </div>
-
-
-            <fieldset className="fieldsetRegistroProducto2">
-              <button type="submit" className="btn btn-primary mt-3">Agregar</button>
-            </fieldset>
-
-
-
-          </fieldset>
-
-        </div>
-      </div>
-    </>
-
-
-
-  );
+          <label>Cantidad:</label>
+          <input name="cantidad" type="number" min="0" value={form.cantidad} onChange={handleChange} required />
+        </fieldset>
+      </details>
+      <button type="submit" className="btn btn-primary mt-3">Agregar</button>
+    </form>
+  </div>
+);
 };
 
 export default RegistrarProducto;

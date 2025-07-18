@@ -1,6 +1,6 @@
 
 import FormularioEvento from "./FormularioEvento";
-import "../styles/formularioFusionado.css";
+import "../styles/familia.css";
 
 
 const preFormulario = () => {
