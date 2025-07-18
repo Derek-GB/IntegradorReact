@@ -7,12 +7,12 @@ import Abarrotes from './Abarrotes';
 import Limpieza from './Limpieza';
 import { useNavigate } from 'react-router-dom';
 import { AbastecimientoProvider } from '../context/contextoAbastecimiento';
-<<<<<<< Updated upstream
+
 import '../styles/formAbasteci.css';
-=======
+
 import { BrowserRouter } from 'react-router-dom'; 
 import '../styles/formAbasteci.css'; // Asegúrate de tener este archivo con tus estilos
->>>>>>> Stashed changes
+
 
 
 const FormularioAbastecimiento = () => {
