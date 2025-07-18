@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import authHelper from '../helpers/sesion'; // Asegúrate de tener esta función implementada
 
 
-const restablecerContrasena = () => {
+const RestablecerContrasena = () => {
   const [correo, setCorreo] = useState('');
   const [nuevaContrasena, setNuevaContrasena] = useState('');
   const [confirmarContrasena, setConfirmarContrasena] = useState('');
@@ -95,4 +95,4 @@ const restablecerContrasena = () => {
   );
 };
 
-export default restablecerContrasena;
+export default RestablecerContrasena;
