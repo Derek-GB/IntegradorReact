@@ -22,7 +22,7 @@ body {
     line-height: 1.6;
     letter-spacing: 0.05em;
     display: flex; 
-    height: 100vh;
+    /* height: 100vh; */
     transition: all 0.3s ease; 
     padding: 0;
      overflow-x: hidden;
