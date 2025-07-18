@@ -12,16 +12,16 @@ import '../styles/formularioFusionado.css'; // Asegúrate de tener este archivo 
 
 const FormularioAbastecimiento = () => {
   return (
-    <div className="container main-content">
-      <h2>Formulario de Abastecimiento</h2>
-      {/* Secciones independientes */}
-      <Carnes />
-      <Proteinas />
-      <Verduras />
-      <Olores />
-      <Abarrotes />
-      <Limpieza />
-    </div>
+<div className="container main-content">
+  <h2>Formulario de Abastecimiento</h2>
+  {/* Secciones independientes */}
+  <Carnes />
+  <Proteinas />
+  <Verduras />
+  <Olores />
+  <Abarrotes />
+  <Limpieza />
+</div>
   );
 };
 
