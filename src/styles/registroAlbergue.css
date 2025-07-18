@@ -1,0 +1,128 @@
+.registro-albergue-fullscreen {
+  min-height: 100vh;
+  width: 100vw;
+  background: var(--color-fondo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--fuente-principal);
+  overflow: visible;
+}
+
+.registro-albergue-form {
+  background: var(--color-blanco);
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  min-width: 340px;
+  max-width: 400px;
+  width: 100%;
+  border: 1px solid var(--color-gris-borde);
+  font-family: var(--fuente-principal);
+  max-height: 80vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-gris-borde) var(--color-gris-claro);
+}
+
+.registro-albergue-form::-webkit-scrollbar {
+  width: 8px;
+}
+
+.registro-albergue-form::-webkit-scrollbar-track {
+  background: var(--color-gris-claro);
+  border-radius: 8px;
+}
+
+.registro-albergue-form::-webkit-scrollbar-thumb {
+  background: var(--color-gris-borde);
+  border-radius: 8px;
+}
+
+.registro-albergue-form::-webkit-scrollbar-thumb:hover {
+  background: var(--color-texto);
+}
+
+.registro-albergue-form h2 {
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  font-size: 1.5rem;
+  min-height: 1em;
+  line-height: 1.4;
+  z-index: 1;
+}
+
+.registro-albergue-form h3 {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--color-texto);
+  margin: 1.5rem 0 0.5rem;
+  padding: 0; /* Aseguramos que no haya padding que cree un "cuadrito" */
+  border: none; /* Eliminamos cualquier borde que pueda estar aplicado */
+  background: transparent; /* Aseguramos que no haya fondo */
+}
+
+.registro-albergue-form label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.1rem;
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+.registro-albergue-form input,
+.registro-albergue-form select,
+.registro-albergue-form textarea {
+  margin-top: 0.4rem;
+  padding: 0.6rem;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 6px;
+  font-size: 1rem;
+  background: var(--color-gris-claro);
+  transition: border 0.2s;
+  font-family: var(--fuente-principal);
+  color: var(--color-texto);
+}
+
+.registro-albergue-form input:focus,
+.registro-albergue-form select:focus,
+.registro-albergue-form textarea:focus {
+  border: 1.5px solid var(--color-verde-form);
+  outline: none;
+}
+
+.registro-albergue-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.registro-albergue-form button[type="submit"] {
+  background: var(--color-amarillo);
+  color: var(--color-blanco);
+  border: none;
+  border-radius: 6px;
+  padding: 0.7rem 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: var(--fuente-principal);
+  display: block;
+  margin: 1.5rem auto 0;
+}
+
+.registro-albergue-form button[type="submit"]:hover {
+  background: var(--color-amarillo-hover);
+}
+
+.registro-albergue-form p {
+  text-align: center;
+  margin-top: 1rem;
+  color: var(--color-verde-form);
+  font-weight: 600;
+  font-family: var(--fuente-principal);
+}
