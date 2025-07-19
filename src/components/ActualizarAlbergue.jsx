@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { alberguesAPI } from '../helpers/api';
 
 const ActualizarAlbergue = () => {
   const [albergues, setAlbergues] = useState([]);
@@ -8,12 +8,16 @@ const ActualizarAlbergue = () => {
   const [albergue, setAlbergue] = useState(null);
   const navigate = useNavigate();
 
-  const API_URL = 'https://apiintegrador-production-8ef8.up.railway.app/api/albergues';
-
   useEffect(() => {
-    axios.get(`${API_URL}/all`)
-      .then(res => setAlbergues(res.data.data || []))
-      .catch(err => console.error('Error cargando albergues:', err));
+    const fetchAlbergues = async () => {
+      try {
+        const data = await alberguesAPI.getAll();
+        setAlbergues(data.data || []);
+      } catch (err) {
+        console.error('Error cargando albergues:', err);
+      }
+    };
+    fetchAlbergues();
   }, []);
 
   useEffect(() => {
@@ -23,7 +27,7 @@ const ActualizarAlbergue = () => {
 
   const handleActualizar = async () => {
     try {
-      await axios.put(`${API_URL}/id/${albergue.id}`, albergue);
+      await alberguesAPI.update(albergue.id, albergue);
       alert('Albergue actualizado correctamente.');
     } catch (error) {
       console.error('Error al actualizar:', error);
@@ -34,9 +38,9 @@ const ActualizarAlbergue = () => {
   const handleEliminar = async () => {
     if (!window.confirm('¿Estás seguro de eliminar este albergue?')) return;
     try {
-      await axios.delete(`${API_URL}/id/${albergue.id}`);
+      await alberguesAPI.remove(albergue.id);
       alert('Albergue eliminado correctamente.');
-      window.location.reload(); // refresca lista
+      window.location.reload(); // Recarga la lista
     } catch (error) {
       console.error('Error al eliminar:', error);
       alert('No se pudo eliminar el albergue.');
