@@ -832,8 +832,7 @@ th, td {
     padding: 10px;
     text-align: center;
     font-size: 0.95em;
-     word-wrap: break-word; /* Permite que el texto largo se divida en múltiples líneas */
-    /* min-width: 50px; <-- Puedes añadir un min-width si las columnas se hacen muy estrechas */
+    
 }
   
 
