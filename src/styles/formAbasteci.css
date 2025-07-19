@@ -171,7 +171,7 @@ body {
     align-items: stretch;
     padding: 0;
     background-color: transparent;
-    overflow-x: hidden;
+
     margin-bottom: 0; 
 }
 
@@ -205,7 +205,7 @@ details summary {
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
     box-sizing: border-box;
     white-space: nowrap; 
-    overflow: hidden; 
+  
     text-overflow: ellipsis;
 }
 
@@ -403,7 +403,7 @@ details > *:not(summary) {
     grid-template-columns: repeat(3, 1fr); /* Esto creará exactamente 3 columnas de igual ancho */
     gap: 12px;
     margin-top: 10px;
-    overflow-x: hidden; /* Mantener esto para seguridad */
+
 }
 
 .abarrote-item label {
@@ -747,8 +747,7 @@ details summary::-webkit-details-marker {
     border-radius: 8px;
     margin-top: 15px;
     border: none;
-    /* Agregamos overflow-x: hidden para seguridad */
-    overflow-x: hidden;
+
 }
 
 /* Aplicamos los mismos estilos de tarjeta a los productos de Limpieza */
@@ -814,7 +813,7 @@ details summary::-webkit-details-marker {
     margin-bottom: 0;
     border: none;
     pointer-events: none;
-    overflow: hidden;
+
 }
 
 /* --- Estilos para las Tablas de Resumen (Abarrotes y Limpieza) --- */
@@ -824,7 +823,7 @@ table {
     margin-top: 12px;
     background-color: var(--color-blanco);
     border-radius: 8px;
-    overflow: hidden; /* Esto es para que el contenido de la tabla no desborde sus propias esquinas redondeadas */
+
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -901,7 +900,6 @@ details > *:not(summary) select {
 .formulario-container {
   max-width: 100%;
   padding: 20px;
-  overflow-x: hidden;
 }
 
 * {
