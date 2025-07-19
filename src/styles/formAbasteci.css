@@ -890,7 +890,7 @@ details > *:not(summary) label {
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
     box-sizing: border-box; /* Asegurado */
-    width: 100%; /* Asegurado para que ocupe el 100% de su contenedor */
+ 
 }
 
 details > *:not(summary) input,
