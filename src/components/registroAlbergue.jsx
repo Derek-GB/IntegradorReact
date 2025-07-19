@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import {
+  alberguesAPI,
+  ubicacionesAPI,
+  capacidadAlberguesAPI,
+  infraestructuraAlberguesAPI,
+  municipalidadAPI
+} from '../helpers/api';
 import '../styles/registroAlbergue.css';
 
 export default function RegistroAlbergue() {
+  const idUsuario = localStorage.getItem("idUsuario");
   const [form, setForm] = useState({});
   const [cantones, setCantones] = useState([]);
-  const [ubicaciones, setUbicaciones] = useState([]);
+const [ubicaciones, setUbicaciones] = useState([]);
   const [capacidades, setCapacidades] = useState([]);
   const [infraestructuras, setInfraestructuras] = useState([]);
   const [municipalidades, setMunicipalidades] = useState([]);
@@ -21,22 +28,28 @@ export default function RegistroAlbergue() {
     "Limón": ["Limón", "Pococí", "Siquirres", "Talamanca", "Matina", "Guácimo"]
   };
 
-  const llenarSelect = async (url, setter) => {
+useEffect(() => {
+  const cargarDatos = async () => {
     try {
-      const res = await axios.get(url);
-      const datos = Array.isArray(res.data) ? res.data : res.data.data || [];
-      setter(datos);
-    } catch (err) {
-      console.error('Error cargando datos:', err);
+      const [ubiRes, capRes, infraRes, muniRes] = await Promise.all([
+        ubicacionesAPI.getAll(),
+        capacidadAlberguesAPI.getAll(),
+        infraestructuraAlberguesAPI.getAll(),
+        municipalidadAPI.getAll()
+      ]);
+
+      setUbicaciones(ubiRes.data.ubicaciones || []);
+      setCapacidades(capRes.data.capacidades || []);
+      setInfraestructuras(infraRes.data.infraestructuras || []);
+      setMunicipalidades(muniRes.data.municipalidades || []);
+    } catch (error) {
+      console.error('Error al cargar datos:', error.message);
     }
   };
 
-  useEffect(() => {
-    llenarSelect('https://apiintegrador-production-8ef8.up.railway.app/api/Ubicaciones/all', setUbicaciones);
-    llenarSelect('https://apiintegrador-production-8ef8.up.railway.app/api/capacidadAlbergues/all', setCapacidades);
-    llenarSelect('https://apiintegrador-production-8ef8.up.railway.app/api/infraestructuraAlbergues/all', setInfraestructuras);
-    llenarSelect('https://apiintegrador-production-8ef8.up.railway.app/api/municipalidad/all', setMunicipalidades);
-  }, []);
+  cargarDatos();
+}, []);
+
 
   const handleProvinciaChange = (provincia) => {
     setForm(prev => ({ ...prev, provincia }));
@@ -48,66 +61,74 @@ export default function RegistroAlbergue() {
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.id || !form.nombreAlbergue || !form.especificacion || !form.tipoAlbergue || !form.tipoEstablecimiento ||
-        !form.estado || !form.regionCNE || !form.provincia || !form.canton || !form.distrito || !form.direccion ||
-        !form.coordenadaX || !form.coordenadaY || !form.idUbicacion || !form.idMunicipalidad || !form.capacidad ||
-        !form.capacidadColectiva || !form.ocupacion || !form.egresos || !form.sospechososSanos || !form.cantidadFamilias ||
-        !form.areaTotal || !form.idCapacidad || !form.detalle_condicion || !form.seccion || !form.requerimientos_tecnicos ||
-        !form.costo_requerimientos_tecnicos || !form.idInfraestructura || !form.cocina || !form.duchas ||
-        !form.serviciosSanitarios || !form.bodega || !form.menaje_mobiliario || !form.tanque_agua || !form.administrador ||
-        !form.telefono) {
+
+    const camposRequeridos = [
+      'id', 'nombreAlbergue', 'especificacion', 'tipoAlbergue', 'tipoEstablecimiento',
+      'estado', 'regionCNE', 'provincia', 'canton', 'distrito', 'direccion',
+      'coordenadaX', 'coordenadaY', 'idUbicacion', 'idMunicipalidad', 'capacidad',
+      'capacidadColectiva', 'ocupacion', 'egresos', 'sospechososSanos', 'cantidadFamilias',
+      'areaTotal', 'idCapacidad', 'detalle_condicion', 'seccion', 'requerimientos_tecnicos',
+      'costo_requerimientos_tecnicos', 'idInfraestructura', 'cocina', 'duchas',
+      'serviciosSanitarios', 'bodega', 'menaje_mobiliario', 'tanque_agua', 'administrador',
+      'telefono'
+    ];
+    const faltantes = camposRequeridos.filter(campo => !form[campo]);
+    if (faltantes.length > 0) {
       setMensaje("Completa todos los campos.");
       return;
     }
 
     const payload = {
-      idAlbergue: form.id,
-      nombre: form.nombreAlbergue,
-      region: form.regionCNE,
-      coordenadaX: parseFloat(form.coordenadaX),
-      coordenadaY: parseFloat(form.coordenadaY),
-      idUbicacion: parseInt(form.idUbicacion),
-      tipo_establecimiento: form.tipoEstablecimiento || "defecto",
-      tipo_albergue: form.tipoAlbergue,
-      condicion_albergue: form.estado,
-      especificacion: form.especificacion,
-      detalle_condicion: form.detalle_condicion,
-      administrador: form.administrador,
-      telefono: form.telefono,
-      idCapacidad: parseInt(form.idCapacidad),
-      seccion: form.seccion,
-      requerimientos_tecnicos: form.requerimientos_tecnicos,
-      costo_requerimientos_tecnicos: parseFloat(form.costo_requerimientos_tecnicos),
-      idInfraestructura: parseInt(form.idInfraestructura),
-      idMunicipalidad: parseInt(form.idMunicipalidad),
-      capacidad: parseInt(form.capacidad),
-      capacidadColectiva: parseInt(form.capacidadColectiva),
-      ocupacion: parseInt(form.ocupacion),
-      egresos: parseInt(form.egresos),
-      sospechososSanos: parseInt(form.sospechososSanos),
-      cantidadFamilias: parseInt(form.cantidadFamilias),
-      areaTotal: parseInt(form.areaTotal),
-      cocina: form.cocina === "true",
-      duchas: form.duchas === "true",
-      serviciosSanitarios: form.serviciosSanitarios === "true",
-      bodega: form.bodega === "true",
-      menaje_mobiliario: form.menaje_mobiliario === "true",
-      tanque_agua: form.tanque_agua === "true",
-      otros: form.otros || "",
-      color: "verde"
-    };
+  idAlbergue: parseInt(form.id),
+  nombre: form.nombreAlbergue,
+  region: form.regionCNE,
+  coordenadaX: parseFloat(form.coordenadaX),
+  coordenadaY: parseFloat(form.coordenadaY),
+  provincia: form.provincia,
+  canton: form.canton,
+  distrito: form.distrito,
+  direccion: form.direccion,
+  tipoEstablecimiento: form.tipoEstablecimiento || "defecto",
+  tipoAlbergue: form.tipoAlbergue,
+  condicionAlbergue: form.estado,
+  especificacion: form.especificacion,
+  detalleCondicion: form.detalle_condicion,
+  administrador: form.administrador,
+  telefono: form.telefono,
+  seccion: form.seccion,
+  requerimientosTecnicos: form.requerimientos_tecnicos,
+  costoRequerimientosTecnicos: parseFloat(form.costo_requerimientos_tecnicos),
+  idMunicipalidad: parseInt(form.idMunicipalidad),
+  capacidadPersonas: parseInt(form.capacidad),
+  capacidadColectiva: parseInt(form.capacidadColectiva),
+  ocupacion: parseInt(form.ocupacion),
+  egresos: parseInt(form.egresos),
+  sospechososSanos: parseInt(form.sospechososSanos),
+  cantidadFamilias: parseInt(form.cantidadFamilias),
+  areaTotalM2: parseInt(form.areaTotal),
+  cocina: form.cocina === "true",
+  duchas: form.duchas === "true",
+  serviciosSanitarios: form.serviciosSanitarios === "true",
+  bodega: form.bodega === "true",
+  menajeMobiliario: form.menaje_mobiliario === "true",
+  tanqueAgua: form.tanque_agua === "true",
+  otros: form.otros || "",
+  color: "verde",
+  idPedidoAbarrote: null,       // si no tienes estos datos, puedes enviarlos como 0 o quitarlos según API
+  idUsuarioCreacion: idUsuario
+};
 
-    axios.post("https://apiintegrador-production-8ef8.up.railway.app/api/albergues", payload)
-      .then(() => {
-        setMensaje("Albergue registrado correctamente");
-        setForm({});
-      })
-      .catch(err => {
-        console.error("Error al registrar:", err);
-        setMensaje("Error al registrar albergue.");
-      });
+
+    try {
+      await alberguesAPI.create(payload);
+      setMensaje("Albergue registrado correctamente");
+      setForm({});
+    } catch (error) {
+      console.error("Error al registrar:", error.message);
+      setMensaje("Error al registrar albergue.");
+    }
   };
 
   return (
@@ -137,7 +158,7 @@ export default function RegistroAlbergue() {
           </select>
         </label>
         <label>Tipo de Establecimiento:
-          <select name="tipoEstablecimiento" className="form-control mb-2" value={form.tipoEstablecimiento || ''} onChange={handleChange}>
+          <select name="tipoEstablecimiento" className="form-control mb-2" value={form.tipoEstablecimiento || ''} onChange={handleChange} required>
             <option value="">Seleccione el tipo de establecimiento</option>
           </select>
         </label>
@@ -196,7 +217,7 @@ export default function RegistroAlbergue() {
         </label>
         <label>Ubicación:
           <select id="selectUbicacion" name="idUbicacion" className="form-control mb-2" value={form.idUbicacion || ''} onChange={handleChange} required>
-            <option value="">Cargando ubicaciones...</option>
+            <option value="">Seleccione una ubicación</option>
             {ubicaciones.map(u => (
               <option key={u.id} value={u.id}>
                 {`${u.provincia} / ${u.canton} / ${u.distrito} / ${u.ubicacion}`}
@@ -206,7 +227,7 @@ export default function RegistroAlbergue() {
         </label>
         <label>Municipalidad:
           <select id="selectMunicipalidad" name="idMunicipalidad" className="form-control mb-2" value={form.idMunicipalidad || ''} onChange={handleChange} required>
-            <option value="">Cargando municipalidades...</option>
+            <option value="">Seleccione una municipalidad</option>
             {municipalidades.map(m => (
               <option key={m.id} value={m.id}>
                 {`ID ${m.id} - ${m.nombre}`}
@@ -243,7 +264,7 @@ export default function RegistroAlbergue() {
         </label>
         <label>Capacidad Detallada:
           <select id="selectCapacidad" name="idCapacidad" className="form-control mb-2" value={form.idCapacidad || ''} onChange={handleChange} required>
-            <option value="">Cargando capacidades...</option>
+            <option value="">Seleccione una capacidad</option>
             {capacidades.map(c => (
               <option key={c.id} value={c.id}>
                 {`ID ${c.id} - Personas: ${c.capacidadPersonas}, Colectiva: ${c.capacidadColectiva}, Familias: ${c.cantidadFamilias}`}
@@ -271,7 +292,7 @@ export default function RegistroAlbergue() {
         <legend><strong>Infraestructura</strong></legend>
         <label>Infraestructura Asociada:
           <select id="selectInfraestructura" name="idInfraestructura" className="form-control mb-2" value={form.idInfraestructura || ''} onChange={handleChange} required>
-            <option value="">Cargando infraestructuras...</option>
+            <option value="">Seleccione una infraestructura</option>
             {infraestructuras.map(i => (
               <option key={i.id} value={i.id}>
                 {`ID ${i.id} - Cocina: ${i.cocina}, Ducha: ${i.duchas}, SS: ${i.serviciosSanitarios}, Área: ${i.areaTotalM2} m²`}
@@ -281,59 +302,60 @@ export default function RegistroAlbergue() {
         </label>
         <label>Cocina:
           <select name="cocina" className="form-control mb-2" value={form.cocina || ''} onChange={handleChange} required>
-            <option value="">¿Tiene cocina?</option>
+            <option value="">Seleccione</option>
             <option value="true">Sí</option>
             <option value="false">No</option>
           </select>
         </label>
         <label>Duchas:
           <select name="duchas" className="form-control mb-2" value={form.duchas || ''} onChange={handleChange} required>
-            <option value="">¿Tiene duchas?</option>
+            <option value="">Seleccione</option>
             <option value="true">Sí</option>
             <option value="false">No</option>
           </select>
         </label>
         <label>Servicios Sanitarios:
           <select name="serviciosSanitarios" className="form-control mb-2" value={form.serviciosSanitarios || ''} onChange={handleChange} required>
-            <option value="">¿Tiene servicios sanitarios?</option>
+            <option value="">Seleccione</option>
             <option value="true">Sí</option>
             <option value="false">No</option>
           </select>
         </label>
         <label>Bodega:
           <select name="bodega" className="form-control mb-2" value={form.bodega || ''} onChange={handleChange} required>
-            <option value="">¿Tiene bodega?</option>
+            <option value="">Seleccione</option>
             <option value="true">Sí</option>
             <option value="false">No</option>
           </select>
         </label>
-        <label>Menaje / Mobiliario:
+        <label>Menaje Mobiliario:
           <select name="menaje_mobiliario" className="form-control mb-2" value={form.menaje_mobiliario || ''} onChange={handleChange} required>
-            <option value="">¿Tiene menaje?</option>
+            <option value="">Seleccione</option>
             <option value="true">Sí</option>
             <option value="false">No</option>
           </select>
         </label>
         <label>Tanque de Agua:
           <select name="tanque_agua" className="form-control mb-2" value={form.tanque_agua || ''} onChange={handleChange} required>
-            <option value="">¿Tiene tanque de agua?</option>
+            <option value="">Seleccione</option>
             <option value="true">Sí</option>
             <option value="false">No</option>
           </select>
         </label>
         <hr />
 
-        <legend><strong>Administración y Contacto</strong></legend>
-        <label>Administrador:
+        <legend><strong>Administrador</strong></legend>
+        <label>Nombre del Administrador:
           <input name="administrador" type="text" className="form-control mb-2" value={form.administrador || ''} onChange={handleChange} required />
         </label>
         <label>Teléfono:
-          <input name="telefono" type="tel" className="form-control mb-2" placeholder="Ej: 8888-8888" pattern="[0-9]{4}-[0-9]{4}" value={form.telefono || ''} onChange={handleChange} required />
+          <input name="telefono" type="text" className="form-control mb-2" value={form.telefono || ''} onChange={handleChange} required />
         </label>
+        <hr />
 
-        <button type="submit">Registrar Albergue</button>
-        {mensaje && <p>{mensaje}</p>}
+        <button type="submit" className="btn btn-primary">Registrar Albergue</button>
       </form>
+      {mensaje && <p className="mensaje">{mensaje}</p>}
     </div>
   );
 }
