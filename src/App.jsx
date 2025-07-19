@@ -26,7 +26,13 @@ import FamiliaFormulario from './components/familiaFormulario.jsx';
 import FormularioIntegrantes from "./components/formularioIntegrantes.jsx";
 import RegistroMascotas from "./components/registroMascota.jsx";
 import VistaFamilia from './components/VistaFamilia.jsx';
+import ResumenFinal from './components/resumenFinal';
+
 import ActualizarAlbergue from './components/ActualizarAlbergue.jsx';
+
+
+// Importa el proveedor de contexto aquí
+import { AbastecimientoProvider } from './context/contextoAbastecimiento';
 
 const App = () => {
   const location = useLocation();
@@ -46,33 +52,37 @@ const App = () => {
           <Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
         </Routes>
       ) : (
-        <div className="app-container">
-          <Sidebar />
-          <div className="container main-content">
-            <Routes>
-              <Route path="/inicio" element={<Inicio />} />
-              <Route path="/preFormulario.jsx" element={<PreFormulario />} />
-              <Route path="/registroSuministros.jsx" element={<RegistroSuministros />} />
-              <Route path="/asignacionRecursos.jsx" element={<AsignacionRecursos />} />
-              <Route path="/busquedaAlbergue.jsx" element={<BusquedaAlbergue />} />
-              <Route path="/ayudaForm.jsx" element={<AyudaForm />} />
-              <Route path="/registrarProducto.jsx" element={<RegistrarProducto />} />
-              <Route path="/registroAlbergue.jsx" element={<RegistroAlbergue />} />
-              <Route path="/registroUsuario.jsx" element={<RegistroUsuario />} />
-              <Route path="/listaProducto.jsx" element={<ListaProducto />} />
-              <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
-              <Route path="/menuPrincipal" element={<MenuPrincipal />} />
-              <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
-              <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
-              <Route path="/familiaFormulario.jsx" element={<FamiliaFormulario />} />
-              <Route path="/formularioIntegrantes.jsx" element={<FormularioIntegrantes />} />
-              <Route path="/registroMascota.jsx" element={<RegistroMascotas />} />
-              <Route path="/VistaFamilia.jsx" element={<VistaFamilia />} />
-              <Route path="/ActualizarAlbergue.jsx" element={<ActualizarAlbergue idAlbergue={17} />} />
-              <Route path="/registroAmenazas.jsx" element={<RegistroAmenazas />} />
-            </Routes>
+        // Envuelve aquí con el proveedor para que todos los componentes hijos tengan acceso al contexto
+        <AbastecimientoProvider>
+          <div className="app-container">
+            <Sidebar />
+            <div className="container main-content">
+              <Routes>
+                <Route path="/inicio" element={<Inicio />} />
+                <Route path="/preFormulario.jsx" element={<PreFormulario />} />
+                <Route path="/registroSuministros.jsx" element={<RegistroSuministros />} />
+                <Route path="/asignacionRecursos.jsx" element={<AsignacionRecursos />} />
+                <Route path="/busquedaAlbergue.jsx" element={<BusquedaAlbergue />} />
+                <Route path="/ayudaForm.jsx" element={<AyudaForm />} />
+                <Route path="/registrarProducto.jsx" element={<RegistrarProducto />} />
+                <Route path="/registroAlbergue.jsx" element={<RegistroAlbergue />} />
+                <Route path="/registroUsuario.jsx" element={<RegistroUsuario />} />
+                <Route path="/listaProducto.jsx" element={<ListaProducto />} />
+                <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
+                <Route path="/menuPrincipal" element={<MenuPrincipal />} />
+                <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
+                <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
+                <Route path="/familiaFormulario.jsx" element={<FamiliaFormulario />} />
+                <Route path="/formularioIntegrantes.jsx" element={<FormularioIntegrantes />} />
+                <Route path="/registroMascota.jsx" element={<RegistroMascotas />} />
+                <Route path="/VistaFamilia.jsx" element={<VistaFamilia />} />
+                <Route path="/ActualizarAlbergue.jsx" element={<ActualizarAlbergue idAlbergue={17} />} />
+                <Route path="/registroAmenazas.jsx" element={<RegistroAmenazas />} />
+               <Route path="/resumenFinal" element={<ResumenFinal />} />
+              </Routes>
+            </div>
           </div>
-        </div>
+        </AbastecimientoProvider>
       )}
 
       {!isLogin && (

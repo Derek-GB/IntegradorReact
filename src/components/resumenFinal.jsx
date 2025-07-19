@@ -1,10 +1,11 @@
 // src/components/ResumenFinal.jsx
 import React, { useContext } from 'react';
-import { AbastecimientoContext } from '../context/contextoAbastecimiento'; // Asegúrate de que esta ruta coincida con tu archivo real
+import { contextoAbastecimiento } from '../context/contextoAbastecimiento';
 import { useNavigate } from 'react-router-dom';
+import '../styles/resumenFinal.css'; // Asegúrate de tener o crear este archivo CSS
 
 const ResumenFinal = () => {
-  const { items } = useContext(AbastecimientoContext);
+  const { items, datosFormulario } = useContext(contextoAbastecimiento);
   const navigate = useNavigate();
 
   const agrupados = items.reduce((acc, item) => {
@@ -14,12 +15,14 @@ const ResumenFinal = () => {
   }, {});
 
   const guardarDatos = () => {
-    console.log('Datos enviados:', items);
     alert('Datos guardados exitosamente.');
+    console.log('Datos:', { datosFormulario, productos: items });
   };
 
   const descargarResumen = () => {
-    const texto = items.map(i => `${i.seccion},${i.tipo},${i.unidad},${i.cantidad}`).join('\n');
+    const texto = items.map(i =>
+      `${i.seccion},${i.tipo},${i.unidad},${i.cantidad}`
+    ).join('\n');
     const blob = new Blob([texto], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -30,46 +33,59 @@ const ResumenFinal = () => {
   };
 
   return (
-    <div className="content-area">
-      <header className="top-header">
-        <h1>Resumen Total de Abastecimiento</h1>
-        <button className="back-button" onClick={() => navigate('/formulario')}>
-          <span className="material-icons">arrow_back</span>
-        </button>
-      </header>
+    <div className="resumen-container">
+      <section className="seccion">
+        <h2>Datos del Formulario</h2>
+        <table className="tabla">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Tipo de Comida</th>
+              <th>Cantidad de Personas</th>
+              <th>Nombre del Albergue</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{datosFormulario?.fecha || '-'}</td>
+              <td>{datosFormulario?.tipo || '-'}</td>
+              <td>{datosFormulario?.cantidad || '-'}</td>
+              <td>{datosFormulario?.albergue || '-'}</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
 
-      <main className="main-Content-abarrote">
-        <div className="card" style={{ maxWidth: '800px', width: '100%' }}>
-          <h2 style={{ marginTop: '2rem' }}>Productos Registrados</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Categoría</th>
-                <th>Producto</th>
-                <th>Unidad</th>
-                <th>Cantidad</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.entries(agrupados).map(([categoria, productos]) =>
-                productos.map((item, index) => (
-                  <tr key={index}>
-                    <td>{categoria}</td>
-                    <td>{item.tipo}</td>
-                    <td>{item.unidad}</td>
-                    <td>{item.cantidad}</td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+      <section className="seccion">
+        <h2>Productos Registrados</h2>
+        <table className="tabla">
+          <thead>
+            <tr>
+              <th>Categoría</th>
+              <th>Producto</th>
+              <th>Unidad</th>
+              <th>Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.entries(agrupados).map(([categoria, productos]) =>
+              productos.map((item, index) => (
+                <tr key={`${categoria}-${index}`}>
+                  <td>{categoria}</td>
+                  <td>{item.tipo}</td>
+                  <td>{item.unidad}</td>
+                  <td>{item.cantidad}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </section>
 
-          <div className="boton-resumen-final">
-            <button onClick={guardarDatos}>Guardar datos</button>
-            <button onClick={descargarResumen}>Descargar Formulario</button>
-          </div>
-        </div>
-      </main>
+      <div className="botones">
+        <button onClick={guardarDatos} className="btn-amarillo">Guardar datos</button>
+        <button onClick={descargarResumen} className="btn-amarillo">Descargar Formulario</button>
+      </div>
     </div>
   );
 };

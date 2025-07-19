@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Carnes from './Carne';
+import Carnes from './carne';
 import Proteinas from './Proteinas';
 import Verduras from './Verduras';
 import Olores from './olores';
