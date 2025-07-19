@@ -1,4 +1,4 @@
-.ajuste-inventario-fullscreen {
+.registro-mascotas-fullscreen {
   min-height: 100vh;
   width: 100vw;
   background: var(--color-fondo);
@@ -9,7 +9,7 @@
   overflow: visible;
 }
 
-.ajuste-inventario-form {
+.registro-mascotas-form {
   background: var(--color-blanco);
   padding: 2.5rem 2rem;
   border-radius: 16px;
@@ -21,7 +21,7 @@
   font-family: var(--fuente-principal);
 }
 
-.ajuste-inventario-form h2 {
+.registro-mascotas-form h2 {
   display: block;
   visibility: visible;
   opacity: 1;
@@ -34,7 +34,7 @@
   z-index: 1;
 }
 
-.ajuste-inventario-form label {
+.registro-mascotas-form label {
   display: flex;
   flex-direction: column;
   margin-bottom: 1.1rem;
@@ -42,7 +42,7 @@
   color: var(--color-texto);
 }
 
-.ajuste-inventario-form input {
+.registro-mascotas-form input {
   margin-top: 0.4rem;
   padding: 0.6rem;
   border: 1px solid var(--color-gris-borde);
@@ -54,15 +54,15 @@
   color: var(--color-texto);
 }
 
-.ajuste-inventario-form input:focus {
+.registro-mascotas-form input:focus {
   border: 1.5px solid var(--color-verde-form);
   outline: none;
 }
 
-.ajuste-inventario-form button[type="button"],
-.ajuste-inventario-form button[type="submit"] {
+.registro-mascotas-form button[type="button"],
+.registro-mascotas-form button[type="submit"] {
   background: var(--color-amarillo);
-  color: var(--color-texto);
+  color: var(--color-blanco);
   border: none;
   border-radius: 6px;
   padding: 0.7rem 1rem;
@@ -73,17 +73,17 @@
   font-family: var(--fuente-principal);
 }
 
-.ajuste-inventario-form button[type="button"]:hover,
-.ajuste-inventario-form button[type="submit"]:hover {
+.registro-mascotas-form button[type="button"]:hover,
+.registro-mascotas-form button[type="submit"]:hover {
   background: var(--color-amarillo-hover);
 }
 
-.ajuste-inventario-form button[type="button"] {
+.registro-mascotas-form button[type="button"] {
   margin-left: 8px;
   font-size: 1.1rem;
 }
 
-.ajuste-inventario-form p {
+.registro-mascotas-form p {
   text-align: center;
   margin-top: 1rem;
   color: var(--color-verde-form);
@@ -91,14 +91,14 @@
   font-family: var(--fuente-principal);
 }
 
-.boton-buscar-id {
+.boton-buscar {
   width: 32px;
   height: 32px;
   padding: 0;
   font-size: 18px;
   font-weight: bold;
   border-radius: 50%;
-  background: #2563eb; /* Color principal de tus botones */
+  background: #2563eb;
   color: #fff;
   border: none;
   display: flex;
@@ -109,6 +109,6 @@
   box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);
 }
 
-.boton-buscar-id:hover {
+.boton-buscar:hover {
   background: #1741a6;
 }

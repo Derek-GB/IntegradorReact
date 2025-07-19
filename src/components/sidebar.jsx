@@ -4,7 +4,7 @@ import '../styles/formularioFusionado.css'; // Asegúrate de que la ruta sea
 
 const Sidebar = () => {
   const links = [
-    { href: "/inicio.jsx", icon: "home", label: "Inicio" },
+    { href: "/inicio", icon: "home", label: "Inicio" },
     { href: "/preFormulario.jsx", icon: "groups", label: "Registro de Familias" },
     { href: "/registroSuministros.jsx", icon: "inventory_2", label: "Registros de Suministros" },
     { href: "/asignacionRecursos.jsx", icon: "volunteer_activism", label: "Asignación de Suministros" },
@@ -15,11 +15,15 @@ const Sidebar = () => {
     { href: "/registroUsuario.jsx", icon: "person_add", label: "Registrar un usuario" },
     { href: "/listaProducto.jsx", icon: "list", label: "Lista de Productos" },
     { href: "/listaAlbergue.jsx", icon: "list_alt", label: "Lista de Albergues" },
-{ href: "/formularioAbarrotes.jsx", icon: "local_shipping", label: "Abastecimiento" },
-{ href: "/ajusteInventario.jsx", icon: "warehouse", label: "Ajuste de inventario" },
-{ href: "/registroAmenazas.jsx", icon: "report", label: "Registro de Amenazas" },
-{ href: "/ActualizarAlbergue.jsx", icon: "report", label: "Actualizar Albergue" }
-  ];
+  { href: "/menuPrincipal", icon: "warehouse", label: "menu Principal" },
+  { href: "/formularioAbarrotes.jsx", icon: "local_shipping", label: "Abastecimiento" },
+  { href: "/familiaFormulario.jsx", icon: "local_shipping", label: "Familia" },
+  { href: "/ajusteInventario.jsx", icon: "warehouse", label: "Ajuste de inventario" },
+  { href: "/registroMascota.jsx", icon: "pets", label: "Registro de Mascotas" },
+  { href: "/VistaFamilia.jsx", icon: "warehouse", label: "Consultar familias" },
+  { href: "/registroAmenazas.jsx", icon: "report", label: "Registro de Amenazas" },
+  { href: "/ActualizarAlbergue.jsx", icon: "report", label: "Actualizar Albergue" }
+];
 
   return (
     <aside className="sidebar">

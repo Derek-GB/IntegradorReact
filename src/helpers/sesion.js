@@ -27,8 +27,19 @@ const login = async (correo, contrasena) => {
   }
 };
 
-const logout = () => {
+const logout = async () => {
   localStorage.removeItem("token");
+  if (!localStorage.getItem("idUsuario")) {
+    console.warn("No se encontró un usuario autenticado para cerrar sesión");
+    return;
+  }
+  axios.post("https://apiintegrador-production-8ef8.up.railway.app/api/auth/logout", {id: localStorage.getItem("idUsuario")})
+    .then((response) => {
+      console.log("Sesión cerrada correctamente", response.data);
+    })
+    .catch((error) => {
+      console.error("Error al cerrar sesión", error);
+    });
   localStorage.removeItem("idUsuario");
 };
 

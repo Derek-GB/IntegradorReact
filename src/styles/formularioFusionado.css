@@ -770,6 +770,8 @@ body {
   flex-direction: row;
   min-height: 100vh;
   width: 100%;
+  margin-left: auto;
+  margin-right: auto;
   background-color: var(--color-fondo);
   font-family: var(--fuente-principal);
   overflow: hidden;
@@ -937,12 +939,6 @@ body {
   transition: border-color 0.3s ease;
   align-self: center;
 }
-
-
-
-
-
-
 /* === Registro Albergue=== */
 
 .containerRegiAlbergue {
@@ -1371,7 +1367,9 @@ form#recursoForm {
   border-radius: 8px;
   padding: 25px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  max-width: 850px;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
   margin: 2rem auto;
   text-align: left;
   font-family: var(--fuente-principal);
@@ -2472,6 +2470,634 @@ textarea:focus {
 .boton-resumen-final a button:hover {
   background-color: var(--color-amarillo-hover);
 }
+/* === FOOTER === */
+footer {
+  width: 100%;
+  background: var(--color-verde-form);
+  color: var(--color-blanco);
+  text-align: center;
+  padding: 18px 0 12px 0;
+  font-size: 1.05em;
+  letter-spacing: 0.5px;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+  margin-top: 40px;
+  position: static;
+  left: unset;
+  bottom: unset;
+  z-index: 100;
+  font-family: var(--fuente-principal);
+}
+
+/* === UTILIDADES === */
+.mt-2 { margin-top: 0.5rem !important; }
+.mt-3 { margin-top: 1rem !important; }
+.mb-2 { margin-bottom: 0.5rem !important; }
+.hidden { display: none; }
+.texto-centrado { text-align: center !important; }
+.fuente-grande { font-size: 22px !important; }
+.alto-linea { line-height: 2 !important; }
+.saturacion * { filter: saturate(200%) contrast(130%) brightness(110%) !important; }
+
+/* --- Formulario --- */
+form#formularioAlbergue {
+    background-color: #FAFAFA;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    max-width: 850px;
+    margin: auto;
+    text-align: left;
+}
+
+form#formularioAlbergue h3 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #00897B;
+    padding: 25px;
+    border: #00897B solid 2px;
+    text-align: center;
+}
+
+/* Etiquetas */
+form#formularioAlbergue label,
+.accordion-body label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+    color: #212529;
+}
+
+/* Inputs, select, textarea */
+form#formularioAlbergue input[type="text"],
+form#formularioAlbergue input[type="number"],
+form#formularioAlbergue input[type="password"],
+form#formularioAlbergue input[type="date"],
+form#formularioAlbergue input[type="email"],
+form#formularioAlbergue select,
+form#formularioAlbergue textarea,
+form#formularioAlbergue input[type="tel"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+form#formularioAlbergue input[type="text"]:focus,
+form#formularioAlbergue input[type="number"]:focus,
+form#formularioAlbergue input[type="password"]:focus,
+form#formularioAlbergue input[type="date"]:focus,
+form#formularioAlbergue input[type="email"]:focus,
+form#formularioAlbergue select:focus,
+form#formularioAlbergue textarea:focus,
+form#formularioAlbergue input[type="tel"]:focus {
+    outline: none;
+    border-color: #00897B;
+}
+
+/* Inputs tipo checkbox y radio */
+form#formularioAlbergue input[type="checkbox"],
+form#formularioAlbergue input[type="radio"] {
+    margin-right: 6px;
+    cursor: pointer;
+}
+
+
+form#preformularioAlbergue {
+    background-color: #FAFAFA;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    max-width: 850px;
+    margin: auto;
+    text-align: left;
+}
+
+form#preformularioAlbergue h3 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #00897B;
+    padding: 25px;
+    border: #00897B solid 2px;
+    text-align: center;
+}
+
+/* Etiquetas */
+form#preformularioAlbergue label,
+.accordion-body label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+    color: #212529;
+}
+
+/* Inputs, select, textarea */
+form#preformularioAlbergue input[type="text"],
+form#preformularioAlbergue input[type="number"],
+form#preformularioAlbergue input[type="password"],
+form#preformularioAlbergue input[type="date"],
+form#preformularioAlbergue input[type="email"],
+form#preformularioAlbergue select,
+form#preformularioAlbergue textarea,
+form#preformularioAlbergue input[type="tel"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+
+/* --- Formulario Asignación de Recursos --- */
+form#recursoForm {
+    background-color: #FAFAFA;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    max-width: 850px;
+    margin: auto;
+    text-align: left;
+}
+
+/* Etiquetas */
+form#recursoForm label{
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+    color: #212529;
+}
+form#recursoForm summary strong {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+    color: #fafafa;
+}
+
+/* Inputs, select, textarea */
+form#recursoForm input[type="text"],
+form#recursoForm input[type="number"],
+form#recursoForm input[type="password"],
+form#recursoForm select,
+form#recursoForm textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+form#recursoForm input[type="text"]:focus,
+form#recursoForm input[type="password"]:focus,
+form#recursoForm input[type="number"]:focus,
+form#recursoForm select:focus,
+form#recursoForm textarea:focus {
+    outline: none;
+    border-color: #00897B;
+}
+
+/* Inputs tipo checkbox y radio */
+form#recursoForm input[type="checkbox"],
+form#recursoForm input[type="radio"] {
+    margin-right: 6px;
+    cursor: pointer;
+}
+
+/* Para los botones */
+form#recursoForm button {
+    min-width: 100px;
+    margin-right: 10px;
+}
+
+/* Contenedores de items */
+form#recursoForm .item {
+    margin-bottom: 20px;
+}
+
+/* Botones */
+.btn {
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #FBC02D;
+    color: black;
+
+}
+
+
+
+/* este de pre es para cambiar el color del form preformulario */
+
+.pre {
+    color: black;
+}
+
+.btn-primary:hover {
+    background-color: #bd9122;
+}
+
+.btn-secondary {
+    background-color: #FBC02D;
+    color: black;
+}
+
+.btn-secondary:hover {
+    background-color: #bd9122;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Márgenes para botones */
+.mt-2 {
+    margin-top: 0.5rem !important;
+}
+
+.mt-3 {
+    margin-top: 1rem !important;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem !important;
+}
+
+/* --- Canvas Firma Digital --- */
+#signature-pad {
+    border: 2px solid #00897B;
+    border-radius: 8px;
+    background-color: #f5faff;
+    display: block;
+    margin-top: 8px;
+}
+
+/* --- Accordion --- */
+.accordion-button {
+    font-weight: 600;
+    color: #00897B;
+    background-color: #e9f0ff;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #cfe2ff;
+    color: #00897B;
+}
+
+.accordion-body {
+    background-color: #FBC02D;
+    color: #212529;
+    padding: 15px;
+}
+
+#usuariosSelect {
+    display: block;
+    margin: 0 auto 12px;
+    max-width: 400px;
+}
+
+.btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 0 auto;
+}
+
+.btn-group .btn {
+    color: #212529;
+    background-color: #FBC02D;
+    min-width: 120px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 600px) {
+    #signature-pad {
+        width: 100% !important;
+        height: 150px !important;
+    }
+
+    form#formularioAlbergue {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    .btn-group .btn {
+        text-align: center;
+        min-width: auto;
+        font-size: 0.9rem;
+        padding: 8px 10px;
+    }
+}
+
+/* --- Accordion CSS (fuera de Bootstrap) --- */
+.accordion-css details {
+    border: 1px solid #ccc;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.accordion-css summary {
+    background-color: #00897B;
+    color: #212529;
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    user-select: none;
+}
+
+.accordion-css summary:hover {
+    background-color: #00897B;
+}
+
+.accordion-css details[open] summary {
+    border-bottom: 1px solid #212529;
+}
+
+.accordion-css details>div {
+    padding: 10px;
+    background-color: #f8f9fa;
+}
+
+/* --- Panel de Accesibilidad --- */
+#accesibilidad-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #00897B;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+#accesibilidad-panel {
+    display: none;
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 240px;
+    z-index: 999;
+}
+
+#accesibilidad-panel.active {
+    display: block;
+}
+
+#accesibilidad-panel button {
+    display: block;
+    width: 100%;
+    margin: 6px 0;
+    padding: 8px;
+    font-size: 14px;
+    background-color: #00897B;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-align: left;
+    cursor: pointer;
+}
+
+#accesibilidad-panel button:hover {
+    background-color: #00897B;
+}
+
+/* -------- ACCESIBILIDAD -------- */
+
+/* CONTRASTE ALTO */
+.contraste,
+.contraste * {
+    background-color: #000 !important;
+    color: #FFF !important;
+    border-color: #FFF !important;
+}
+
+.contraste a {
+    color: #00897B !important;
+    text-decoration: underline !important;
+}
+
+.contraste input,
+.contraste textarea,
+.contraste select,
+.contraste button {
+    background-color: #111 !important;
+    color: #FFF !important;
+    border: 1px solid #FFF !important;
+}
+
+/* RESALTADO DE ENLACES */
+.resaltado a {
+    background-color: #FBC02D !important;
+    color: red !important;
+    font-weight: bold;
+}
+
+/* ESPACIADO DE TEXTO */
+.espaciado-texto * {
+    letter-spacing: 0.12em !important;
+    line-height: 1.8 !important;
+}
+
+/* FUENTE GRANDE */
+.fuente-grande {
+    font-size: 22px !important;
+}
+
+/* CURSOR PERSONALIZADO */
+.cursor-grande * {
+    cursor: pointer !important;
+}
+
+/* CENTRADO DE TEXTO */
+.texto-centrado {
+    text-align: center !important;
+}
+
+/* ALTO DE LÍNEA EXTRA */
+.alto-linea {
+    line-height: 2 !important;
+}
+
+/* SATURACIÓN (COLORES MÁS VIVOS) */
+.saturacion * {
+    filter: saturate(200%) contrast(130%) brightness(110%) !important;
+}
+
+/* --- Buscador de Albergues (ConsultaAlbergues) --- */
+.search-bar {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.search-bar input[type="text"],.search-bar select {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+}
+
+.albergue-resultado {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1.5rem;
+    max-width: 600px;
+    margin: 0 auto 2rem auto;
+    text-align: left;
+    background: #fff;
+    font-size: large;
+}
+
+.albergue-resultado h2 {
+    margin-top: 0;
+}
+
+.albergue-resultado ul {
+    list-style: none;
+    padding: 0;
+}
+
+.albergue-resultado li {
+    margin-bottom: 0.5rem;
+}
+
+/* Ajusta el contenido principal para dejar espacio al sidebar */
+
+
+.form-ayuda-revision {
+    background-color: #FAFAFA;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 25px;
+    max-width: 850px;
+    margin: 2rem auto;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+.form-ayuda-revision summary {
+    background-color: #00897B;
+    color: #FAFAFA;
+    font-weight: bold;
+    padding: 14px 20px;
+    border-radius: 8px 8px 0 0;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.form-ayuda-revision fieldset {
+    border: none;
+    padding-top: 20px;
+}
+
+.form-ayuda-revision label {
+    font-weight: 600;
+    margin-top: 12px;
+    display: block;
+    color: #212121;
+}
+
+.form-ayuda-revision input,
+.form-ayuda-revision select,
+.form-ayuda-revision textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.form-ayuda-revision input:focus,
+.form-ayuda-revision select:focus,
+.form-ayuda-revision textarea:focus {
+    outline: none;
+    border-color: #00897B;
+}
+
+.form-ayuda-revision button {
+    background-color: #FBC02D;
+    color: #212121;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-ayuda-revision button:hover {
+    background-color: #e0ac27;
+}
+
+
+/* Solo el contenedor principal ocupa toda la pantalla */
+#root,
+.app-container {
+  width: 100vw !important;
+  min-height: 100vh !important;
+  height: auto;
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+/* Los demás contenedores solo se centran horizontalmente */
+.main-content,
+.container,
+.containerIndex,
+.container1,
+.preContainer,
+.listaContainer {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100%;
+  max-width: 900px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  left: unset !important;
+  position: static !important;
+  min-height: unset !important; /* <-- Esto es clave */
+  height: auto !important;
 
 .modal {
   position: fixed;
@@ -2596,4 +3222,5 @@ h2 {
   margin-bottom: 20px;
   font-size: 1.8rem;
   color: var(--color-blanco);
+}
 }
