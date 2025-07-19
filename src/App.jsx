@@ -49,7 +49,6 @@ const App = () => {
             <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
             <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
 
-            <Route path="/ActualizarAlbergue.jxs" element={<ActualizarAlbergue idAlbergue={17} />} />
 
             <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
 <Route path="/ActualizarAlbergue.jsx" element={<ActualizarAlbergue idAlbergue={17} />} />
