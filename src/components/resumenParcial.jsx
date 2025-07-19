@@ -64,7 +64,7 @@ const ResumenParcial = () => {
           </table>
 
           <div className="boton-resumen-final">
-            <button onClick={() => navigate('/resumen-final')}>Ver resumen final</button>
+            <button onClick={() => navigate('/resumenFinal')}>Ver resumen final</button>
           </div>
 
           <div className="boton-volver-formulario">
