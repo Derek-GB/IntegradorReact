@@ -160,6 +160,7 @@ useEffect(() => {
         <label>Tipo de Establecimiento:
           <select name="tipoEstablecimiento" className="form-control mb-2" value={form.tipoEstablecimiento || ''} onChange={handleChange} required>
             <option value="">Seleccione el tipo de establecimiento</option>
+            
           </select>
         </label>
         <label>Estado del Albergue:
