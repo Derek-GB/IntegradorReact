@@ -79,7 +79,16 @@ export const productosAPI = createApiMethods("productos", {
   }
 });
 
-export const familiasAPI = createApiMethods("familias");
+export const familiasAPI = createApiMethods("familias", {
+getById: async (identificacion) => {
+  try {
+    const res = await customAxios.get(`/familias/consulta/familiaConJefe/${identificacion}`);
+    return res.data;
+  } catch (error) {
+    handleError(error);
+  }
+}
+});
 export const alberguesAPI = createApiMethods("albergues", {
   getById: async (id) => {
     try {
