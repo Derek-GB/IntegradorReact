@@ -28,7 +28,7 @@ body {
     min-height: 100vh;
     transition: all 0.3s ease;
     padding: 0;
-    overflow-x: hidden;
+    
 }
 
 
@@ -62,7 +62,7 @@ body {
     min-height: 100vh;
     height: auto;
     border-radius: 8px;
-    overflow: hidden;
+   
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
    
 }
@@ -139,7 +139,6 @@ body {
     margin: 0; 
     font-size: 24px;
     font-weight: bold;
-    white-space: nowrap;
     color: #FAFAFA;
 }
 
@@ -361,8 +360,8 @@ button:hover {
 }
 
 table {
-  width: 100%;
-  border-collapse: collapse;
+  width: 900px;
+
   margin-top: 12px;
 }
 
@@ -875,4 +874,9 @@ details > *:not(summary) label {
 details > *:not(summary) input,
 details > *:not(summary) select {
     margin-left: 0;
+}
+.formulario-container {
+  max-width: 100%;
+  padding: 20px;
+  overflow-x: hidden;
 }
