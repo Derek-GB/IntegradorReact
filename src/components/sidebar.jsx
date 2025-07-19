@@ -17,7 +17,8 @@ const Sidebar = () => {
     { href: "/listaAlbergue.jsx", icon: "list_alt", label: "Lista de Albergues" },
 { href: "/formularioAbarrotes.jsx", icon: "local_shipping", label: "Abastecimiento" },
 { href: "/ajusteInventario.jsx", icon: "warehouse", label: "Ajuste de inventario" },
-{ href: "/registroAmenazas.jsx", icon: "report", label: "Registro de Amenazas" }
+{ href: "/registroAmenazas.jsx", icon: "report", label: "Registro de Amenazas" },
+{ href: "/ActualizarAlbergue.jsx", icon: "report", label: "Actualizar Albergue" }
   ];
 
   return (
