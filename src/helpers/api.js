@@ -1,7 +1,16 @@
 import customAxios from "./customAxios";
 
 const handleError = (error) => {
-  throw new Error("Error al conectar con la API: " + error.message + "\n" + error);
+  const apiMessage =
+    error.response?.data?.message ||  // Mensaje principal del backend
+    error.response?.data?.error ||    // Otro campo de error
+    error.message ||                  // Mensaje genérico de Axios
+    "Error desconocido";
+
+  // Opcional: muestra toda la respuesta del backend en consola
+  console.error("Detalles del error:", error.response?.data);
+
+  throw new Error("Error al conectar con la API: " + apiMessage);
 };
 
 const createApiMethods = (endpoint, extraMethods = {}) => {
@@ -114,5 +123,3 @@ export const consumiblesAPI = createApiMethods("consumibles");
 export const detallePedidoConsumiblesAPI = createApiMethods("detallePedidoConsumibles");
 export const pedidoConsumiblesAPI = createApiMethods("pedidoConsumibles");
 export const unidadMedidasAPI = createApiMethods("unidadMedidas");
-
-

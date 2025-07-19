@@ -4,7 +4,7 @@ import '../styles/formularioFusionado.css'; // Asegúrate de que la ruta sea
 
 const Sidebar = () => {
   const links = [
-    { href: "/inicio.jsx", icon: "home", label: "Inicio" },
+    { href: "/inicio", icon: "home", label: "Inicio" },
     { href: "/preFormulario.jsx", icon: "groups", label: "Registro de Familias" },
     { href: "/registroSuministros.jsx", icon: "inventory_2", label: "Registros de Suministros" },
     { href: "/asignacionRecursos.jsx", icon: "volunteer_activism", label: "Asignación de Suministros" },
@@ -17,7 +17,12 @@ const Sidebar = () => {
     { href: "/listaAlbergue.jsx", icon: "list_alt", label: "Lista de Albergues" },
     { href: "/formularioAbarrotes.jsx", icon: "local_shipping", label: "Abastecimiento" },
     { href: "/ajusteInventario.jsx", icon: "warehouse", label: "Ajuste de inventario" },
-    { href: "/prueba.jsx", icon: "pets", label: "Registro Mascotas" }
+    { href: "/prueba.jsx", icon: "pets", label: "Registro Mascotas" },
+    { href: "/familiaFormulario.jsx", icon: "local_shipping", label: "Familia" },
+    { href: "/ajusteInventario.jsx", icon: "warehouse", label: "Ajuste de inventario" },
+    { href: "/registroMascota.jsx", icon: "pets", label: "Registro de Mascotas" },
+    { href: "/VistaFamilia.jsx", icon: "warehouse", label: "Consultar familias" }
+
     
   ];
 
