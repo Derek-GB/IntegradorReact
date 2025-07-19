@@ -152,7 +152,7 @@
 
 .registro-albergue-form button[type="submit"]:hover {
   background: var(--color-amarillo-hover, #e0a800);
-   color: black;
+    color: black;
 }
 
 .registro-albergue-form p {
