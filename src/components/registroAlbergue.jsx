@@ -67,10 +67,10 @@ useEffect(() => {
     const camposRequeridos = [
       'id', 'nombreAlbergue', 'especificacion', 'tipoAlbergue', 'tipoEstablecimiento',
       'estado', 'regionCNE', 'provincia', 'canton', 'distrito', 'direccion',
-      'coordenadaX', 'coordenadaY', 'idUbicacion', 'idMunicipalidad', 'capacidad',
+      'coordenadaX', 'coordenadaY', 'idMunicipalidad', 'capacidad',
       'capacidadColectiva', 'ocupacion', 'egresos', 'sospechososSanos', 'cantidadFamilias',
-      'areaTotal', 'idCapacidad', 'detalle_condicion', 'seccion', 'requerimientos_tecnicos',
-      'costo_requerimientos_tecnicos', 'idInfraestructura', 'cocina', 'duchas',
+      'areaTotal', 'detalle_condicion', 'seccion', 'requerimientos_tecnicos',
+      'costo_requerimientos_tecnicos', 'cocina', 'duchas',
       'serviciosSanitarios', 'bodega', 'menaje_mobiliario', 'tanque_agua', 'administrador',
       'telefono'
     ];
@@ -115,8 +115,8 @@ useEffect(() => {
   menajeMobiliario: form.menaje_mobiliario === "true",
   tanqueAgua: form.tanque_agua === "true",
   otros: form.otros || "",
-  color: "verde",
-  idPedidoAbarrote: null,       // si no tienes estos datos, puedes enviarlos como 0 o quitarlos según API
+   color: "verde",
+  idPedidoAbarrote: null,      
   idUsuarioCreacion: idUsuario
 };
 
@@ -160,7 +160,7 @@ useEffect(() => {
         <label>Tipo de Establecimiento:
           <select name="tipoEstablecimiento" className="form-control mb-2" value={form.tipoEstablecimiento || ''} onChange={handleChange} required>
             <option value="">Seleccione el tipo de establecimiento</option>
-            
+             <option>Albergue temporal o de emergencia</option>
           </select>
         </label>
         <label>Estado del Albergue:
@@ -216,19 +216,10 @@ useEffect(() => {
         <label>Coordenada Y:
           <input name="coordenadaY" type="number" step="any" className="form-control mb-2" value={form.coordenadaY || ''} onChange={handleChange} required />
         </label>
-        <label>Ubicación:
-          <select id="selectUbicacion" name="idUbicacion" className="form-control mb-2" value={form.idUbicacion || ''} onChange={handleChange} required>
-            <option value="">Seleccione una ubicación</option>
-            {ubicaciones.map(u => (
-              <option key={u.id} value={u.id}>
-                {`${u.provincia} / ${u.canton} / ${u.distrito} / ${u.ubicacion}`}
-              </option>
-            ))}
-          </select>
-        </label>
         <label>Municipalidad:
           <select id="selectMunicipalidad" name="idMunicipalidad" className="form-control mb-2" value={form.idMunicipalidad || ''} onChange={handleChange} required>
             <option value="">Seleccione una municipalidad</option>
+             <option>Municipalidad de Cañas</option>
             {municipalidades.map(m => (
               <option key={m.id} value={m.id}>
                 {`ID ${m.id} - ${m.nombre}`}
@@ -240,8 +231,8 @@ useEffect(() => {
 
         <legend><strong>Capacidad y Ocupación</strong></legend>
         <label>Capacidad Total de Personas:
-          <input name="capacidad" type="number" className="form-control mb-2" min="0" placeholder="Ej: 150" value={form.capacidad || ''} onChange={handleChange} required />
-        </label>
+          <input name="capacidad" type="number" className="form-control mb-2" min="0" value={form.capacidad || ''} onChange={handleChange} required />
+        </label> 
         <label>Capacidad Colectiva:
           <input name="capacidadColectiva" type="number" className="form-control mb-2" min="0" value={form.capacidadColectiva || ''} onChange={handleChange} required />
         </label>
@@ -263,16 +254,6 @@ useEffect(() => {
         <label>Área Total (m²):
           <input name="areaTotal" type="number" className="form-control mb-2" min="0" value={form.areaTotal || ''} onChange={handleChange} required />
         </label>
-        <label>Capacidad Detallada:
-          <select id="selectCapacidad" name="idCapacidad" className="form-control mb-2" value={form.idCapacidad || ''} onChange={handleChange} required>
-            <option value="">Seleccione una capacidad</option>
-            {capacidades.map(c => (
-              <option key={c.id} value={c.id}>
-                {`ID ${c.id} - Personas: ${c.capacidadPersonas}, Colectiva: ${c.capacidadColectiva}, Familias: ${c.cantidadFamilias}`}
-              </option>
-            ))}
-          </select>
-        </label>
         <hr />
 
         <legend><strong>Condición y Requerimientos Técnicos</strong></legend>
@@ -291,33 +272,23 @@ useEffect(() => {
         <hr />
 
         <legend><strong>Infraestructura</strong></legend>
-        <label>Infraestructura Asociada:
-          <select id="selectInfraestructura" name="idInfraestructura" className="form-control mb-2" value={form.idInfraestructura || ''} onChange={handleChange} required>
-            <option value="">Seleccione una infraestructura</option>
-            {infraestructuras.map(i => (
-              <option key={i.id} value={i.id}>
-                {`ID ${i.id} - Cocina: ${i.cocina}, Ducha: ${i.duchas}, SS: ${i.serviciosSanitarios}, Área: ${i.areaTotalM2} m²`}
-              </option>
-            ))}
-          </select>
-        </label>
         <label>Cocina:
           <select name="cocina" className="form-control mb-2" value={form.cocina || ''} onChange={handleChange} required>
-            <option value="">Seleccione</option>
+            <option value="">¿Tiene cocina?</option>
             <option value="true">Sí</option>
             <option value="false">No</option>
           </select>
         </label>
         <label>Duchas:
           <select name="duchas" className="form-control mb-2" value={form.duchas || ''} onChange={handleChange} required>
-            <option value="">Seleccione</option>
+            <option value="">¿Tiene ducha?</option>
             <option value="true">Sí</option>
             <option value="false">No</option>
           </select>
         </label>
         <label>Servicios Sanitarios:
           <select name="serviciosSanitarios" className="form-control mb-2" value={form.serviciosSanitarios || ''} onChange={handleChange} required>
-            <option value="">Seleccione</option>
+            <option value="">Tiene servicios sanitarios?</option>
             <option value="true">Sí</option>
             <option value="false">No</option>
           </select>
@@ -331,14 +302,14 @@ useEffect(() => {
         </label>
         <label>Menaje Mobiliario:
           <select name="menaje_mobiliario" className="form-control mb-2" value={form.menaje_mobiliario || ''} onChange={handleChange} required>
-            <option value="">Seleccione</option>
+            <option value="">¿Tiene menaje?</option>
             <option value="true">Sí</option>
             <option value="false">No</option>
           </select>
         </label>
         <label>Tanque de Agua:
           <select name="tanque_agua" className="form-control mb-2" value={form.tanque_agua || ''} onChange={handleChange} required>
-            <option value="">Seleccione</option>
+            <option value="">¿Tiene tanque de agua?</option>
             <option value="true">Sí</option>
             <option value="false">No</option>
           </select>
@@ -353,7 +324,6 @@ useEffect(() => {
           <input name="telefono" type="text" className="form-control mb-2" value={form.telefono || ''} onChange={handleChange} required />
         </label>
         <hr />
-
         <button type="submit" className="btn btn-primary">Registrar Albergue</button>
       </form>
       {mensaje && <p className="mensaje">{mensaje}</p>}
