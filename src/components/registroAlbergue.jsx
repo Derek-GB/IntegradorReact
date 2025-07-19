@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   alberguesAPI,
-  ubicacionesAPI,
-  capacidadAlberguesAPI,
-  infraestructuraAlberguesAPI,
   municipalidadAPI
 } from '../helpers/api';
 import '../styles/registroAlbergue.css';
@@ -12,9 +9,6 @@ export default function RegistroAlbergue() {
   const idUsuario = localStorage.getItem("idUsuario");
   const [form, setForm] = useState({});
   const [cantones, setCantones] = useState([]);
-const [ubicaciones, setUbicaciones] = useState([]);
-  const [capacidades, setCapacidades] = useState([]);
-  const [infraestructuras, setInfraestructuras] = useState([]);
   const [municipalidades, setMunicipalidades] = useState([]);
   const [mensaje, setMensaje] = useState('');
 
@@ -28,36 +22,35 @@ const [ubicaciones, setUbicaciones] = useState([]);
     "Limón": ["Limón", "Pococí", "Siquirres", "Talamanca", "Matina", "Guácimo"]
   };
 
-useEffect(() => {
-  const cargarDatos = async () => {
-    try {
-      const [ubiRes, capRes, infraRes, muniRes] = await Promise.all([
-        ubicacionesAPI.getAll(),
-        capacidadAlberguesAPI.getAll(),
-        infraestructuraAlberguesAPI.getAll(),
-        municipalidadAPI.getAll()
-      ]);
+  useEffect(() => {
+    const cargarDatos = async () => {
+      try {
+        const muniRes = await municipalidadAPI.getAll();
+        console.log('Respuesta de municipalidadAPI.getAll():', muniRes);
+        // Manejo robusto de la respuesta
+        const lista = Array.isArray(muniRes) ? muniRes : muniRes.data ?? [];
+        console.log('Lista de municipalidades después de procesamiento:', lista);
+        setMunicipalidades(lista);
+      } catch (error) {
+        console.error('Error al cargar datos:', error.message);
+        setMunicipalidades([]);
+      }
+    };
 
-      setUbicaciones(ubiRes.data.ubicaciones || []);
-      setCapacidades(capRes.data.capacidades || []);
-      setInfraestructuras(infraRes.data.infraestructuras || []);
-      setMunicipalidades(muniRes.data.municipalidades || []);
-    } catch (error) {
-      console.error('Error al cargar datos:', error.message);
-    }
-  };
-
-  cargarDatos();
-}, []);
-
+    cargarDatos();
+  }, []);
 
   const handleProvinciaChange = (provincia) => {
-    setForm(prev => ({ ...prev, provincia }));
-    setCantones(cantonesPorProvincia[provincia] || []);
+    console.log('Provincia seleccionada:', provincia);
+    setForm(prev => ({ ...prev, provincia, canton: '', distrito: '' }));
+    const nuevosCantones = cantonesPorProvincia[provincia] || [];
+    console.log('Cantones cargados para provincia:', nuevosCantones);
+    setCantones(nuevosCantones);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(`Campo cambiado: ${name} = ${value}`);
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
@@ -65,71 +58,125 @@ useEffect(() => {
     e.preventDefault();
 
     const camposRequeridos = [
-      'id', 'nombreAlbergue', 'especificacion', 'tipoAlbergue', 'tipoEstablecimiento',
-      'estado', 'regionCNE', 'provincia', 'canton', 'distrito', 'direccion',
-      'coordenadaX', 'coordenadaY', 'idMunicipalidad', 'capacidad',
-      'capacidadColectiva', 'ocupacion', 'egresos', 'sospechososSanos', 'cantidadFamilias',
-      'areaTotal', 'detalle_condicion', 'seccion', 'requerimientos_tecnicos',
-      'costo_requerimientos_tecnicos', 'cocina', 'duchas',
-      'serviciosSanitarios', 'bodega', 'menaje_mobiliario', 'tanque_agua', 'administrador',
-      'telefono'
+      'idAlbergue',                       // para idAlbergue (aunque es un poco inconsistente que el payload sea idAlbergue y aquí id)
+      'nombreAlbergue',
+      'especificacion',
+      'tipoAlbergue',
+      'tipoEstablecimiento',
+      'estado',                   // para condicionAlbergue
+      'regionCNE',                // region
+      'provincia',
+      'canton',
+      'distrito',
+      'direccion',
+      'coordenadaX',
+      'coordenadaY',
+      'idMunicipalidad',
+      'capacidad',
+      'capacidadColectiva',
+      'ocupacion',
+      'egresos',
+      'sospechososSanos',
+      'cantidadFamilias',
+      'areaTotal',
+      'detalle_condicion',
+      'seccion',
+      'requerimientos_tecnicos',
+      'costo_requerimientos_tecnicos',
+      'cocina',
+      'duchas',
+      'serviciosSanitarios',
+      'bodega',
+      'menaje_mobiliario',
+      'tanque_agua',
+      'administrador',
+      'telefono',
+      'color',
+      'otros',
+      'idPedidoAbarrote',
+      'idUsuarioCreacion'
     ];
-    const faltantes = camposRequeridos.filter(campo => !form[campo]);
+
+    // Asegúrate que idPedidoAbarrote e idUsuarioCreacion tengan valor en form o validalos aparte
+    // Por ejemplo, si idPedidoAbarrote es null y permites eso, quítalo de los requeridos
+
+    const faltantes = camposRequeridos.filter(campo => {
+      // Permitamos que idPedidoAbarrote sea null o undefined si es válido
+      if (campo === 'idPedidoAbarrote') return false;
+      if (campo === 'idUsuarioCreacion') return !idUsuario; // Si no hay idUsuario definido, marca como faltante
+      return form[campo] === undefined || form[campo] === '';
+    });
+
     if (faltantes.length > 0) {
       setMensaje("Completa todos los campos.");
+      console.log('Campos faltantes:', faltantes);
       return;
     }
 
     const payload = {
-  idAlbergue: parseInt(form.id),
-  nombre: form.nombreAlbergue,
-  region: form.regionCNE,
-  coordenadaX: parseFloat(form.coordenadaX),
-  coordenadaY: parseFloat(form.coordenadaY),
-  provincia: form.provincia,
-  canton: form.canton,
-  distrito: form.distrito,
-  direccion: form.direccion,
-  tipoEstablecimiento: form.tipoEstablecimiento || "defecto",
-  tipoAlbergue: form.tipoAlbergue,
-  condicionAlbergue: form.estado,
-  especificacion: form.especificacion,
-  detalleCondicion: form.detalle_condicion,
-  administrador: form.administrador,
-  telefono: form.telefono,
-  seccion: form.seccion,
-  requerimientosTecnicos: form.requerimientos_tecnicos,
-  costoRequerimientosTecnicos: parseFloat(form.costo_requerimientos_tecnicos),
-  idMunicipalidad: parseInt(form.idMunicipalidad),
-  capacidadPersonas: parseInt(form.capacidad),
-  capacidadColectiva: parseInt(form.capacidadColectiva),
-  ocupacion: parseInt(form.ocupacion),
-  egresos: parseInt(form.egresos),
-  sospechososSanos: parseInt(form.sospechososSanos),
-  cantidadFamilias: parseInt(form.cantidadFamilias),
-  areaTotalM2: parseInt(form.areaTotal),
-  cocina: form.cocina === "true",
-  duchas: form.duchas === "true",
-  serviciosSanitarios: form.serviciosSanitarios === "true",
-  bodega: form.bodega === "true",
-  menajeMobiliario: form.menaje_mobiliario === "true",
-  tanqueAgua: form.tanque_agua === "true",
-  otros: form.otros || "",
-   color: "verde",
-  idPedidoAbarrote: null,      
-  idUsuarioCreacion: idUsuario
-};
+      cocina: form.cocina === "true" || form.cocina === true,
+      duchas: form.duchas === "true" || form.duchas === true,
+      serviciosSanitarios: form.serviciosSanitarios === "true" || form.serviciosSanitarios === true,
+      bodega: form.bodega === "true" || form.bodega === true,
+      menajeMobiliario: form.menaje_mobiliario === "true" || form.menaje_mobiliario === true,
+      tanqueAgua: form.tanque_agua === "true" || form.tanque_agua === true,
 
+      areaTotalM2: parseFloat(form.areaTotal) || 0,
+      capacidadPersonas: parseInt(form.capacidad, 10) || 0,
+      capacidadColectiva: parseInt(form.capacidadColectiva, 10) || 0,
+      cantidadFamilias: parseInt(form.cantidadFamilias, 10) || 0,
+      ocupacion: parseInt(form.ocupacion, 10) || 0,
+      egresos: parseInt(form.egresos, 10) || 0,
+      sospechososSanos: parseInt(form.sospechososSanos, 10) || 0,
+      otros: form.otros || "",
+
+      provincia: form.provincia || "",
+      canton: form.canton || "",
+      distrito: form.distrito || "",
+      direccion: form.direccion || "",
+
+      idAlbergue: parseInt(form.idAlbergue) || 0,
+      nombre: form.nombreAlbergue || "",
+      region: form.regionCNE || "",
+      coordenadaX: parseFloat(form.coordenadaX) || 0,
+      coordenadaY: parseFloat(form.coordenadaY) || 0,
+      tipoEstablecimiento: form.tipoEstablecimiento || "",
+      tipoAlbergue: form.tipoAlbergue || "",
+      condicionAlbergue: form.estado || "",
+      especificacion: form.especificacion || "",
+      detalleCondicion: form.detalle_condicion || "",
+      administrador: form.administrador || "",
+      telefono: form.telefono || "",
+      seccion: form.seccion || "",
+      requerimientosTecnicos: form.requerimientos_tecnicos || "",
+      costoRequerimientosTecnicos: parseFloat(form.costo_requerimientos_tecnicos) || 0,
+
+      idMunicipalidad: parseInt(form.idMunicipalidad, 10) || 0,
+      color: form.color || "",
+      idPedidoAbarrote: null,
+      idUsuarioCreacion: parseInt(idUsuario, 10) || 0
+    };
+
+
+    console.log('Payload para envío:', payload);
 
     try {
       await alberguesAPI.create(payload);
       setMensaje("Albergue registrado correctamente");
       setForm({});
+      setCantones([]);
     } catch (error) {
       console.error("Error al registrar:", error.message);
-      setMensaje("Error al registrar albergue.");
+      if (error.response) {
+        console.error("Respuesta del servidor:", error.response.data);
+        setMensaje("Error del servidor: " + JSON.stringify(error.response.data));
+      } else {
+        setMensaje("Error al registrar albergue.");
+      }
     }
+
   };
+
 
   return (
     <div className="registro-albergue-fullscreen">
@@ -137,7 +184,7 @@ useEffect(() => {
         <legend><strong>Registro de Albergue</strong></legend>
         <legend><strong>Identificación del Albergue</strong></legend>
         <label>ID:
-          <input name="id" type="number" className="form-control mb-2" placeholder="ID numérico" value={form.id || ''} onChange={handleChange} required />
+          <input name="idAlbergue" type="text" className="form-control mb-2" placeholder="ID numérico" value={form.idAlbergue || ''} onChange={handleChange} required />
         </label>
         <label>Nombre del Albergue:
           <input name="nombreAlbergue" type="text" className="form-control mb-2" placeholder="Nombre del albergue" value={form.nombreAlbergue || ''} onChange={handleChange} required />
@@ -160,7 +207,7 @@ useEffect(() => {
         <label>Tipo de Establecimiento:
           <select name="tipoEstablecimiento" className="form-control mb-2" value={form.tipoEstablecimiento || ''} onChange={handleChange} required>
             <option value="">Seleccione el tipo de establecimiento</option>
-             <option>Albergue temporal o de emergencia</option>
+            <option>Albergue temporal o de emergencia</option>
           </select>
         </label>
         <label>Estado del Albergue:
@@ -218,11 +265,10 @@ useEffect(() => {
         </label>
         <label>Municipalidad:
           <select id="selectMunicipalidad" name="idMunicipalidad" className="form-control mb-2" value={form.idMunicipalidad || ''} onChange={handleChange} required>
-            <option value="">Seleccione una municipalidad</option>
-             <option>Municipalidad de Cañas</option>
-            {municipalidades.map(m => (
-              <option key={m.id} value={m.id}>
-                {`ID ${m.id} - ${m.nombre}`}
+            <option value="">Seleccione municipalidad</option>
+            {municipalidades.map((m) => (
+              <option key={m.id || m.ID} value={m.id || m.ID}>
+                {m.nombre || m.Nombre || 'Sin nombre'}
               </option>
             ))}
           </select>
@@ -232,7 +278,7 @@ useEffect(() => {
         <legend><strong>Capacidad y Ocupación</strong></legend>
         <label>Capacidad Total de Personas:
           <input name="capacidad" type="number" className="form-control mb-2" min="0" value={form.capacidad || ''} onChange={handleChange} required />
-        </label> 
+        </label>
         <label>Capacidad Colectiva:
           <input name="capacidadColectiva" type="number" className="form-control mb-2" min="0" value={form.capacidadColectiva || ''} onChange={handleChange} required />
         </label>
@@ -316,17 +362,22 @@ useEffect(() => {
         </label>
         <hr />
 
-        <legend><strong>Administrador</strong></legend>
-        <label>Nombre del Administrador:
+        <legend><strong>Administrador y Contacto</strong></legend>
+        <label>Administrador:
           <input name="administrador" type="text" className="form-control mb-2" value={form.administrador || ''} onChange={handleChange} required />
         </label>
         <label>Teléfono:
-          <input name="telefono" type="text" className="form-control mb-2" value={form.telefono || ''} onChange={handleChange} required />
+          <input name="telefono" type="tel" className="form-control mb-2" value={form.telefono || ''} onChange={handleChange} required />
+        </label>
+        <label>Color:
+          <input name="color" type="text" className="form-control mb-2" value={form.color} onChange={handleChange} required />
         </label>
         <hr />
+
         <button type="submit" className="btn btn-primary">Registrar Albergue</button>
+
+        {mensaje && <p className="mensaje">{mensaje}</p>}
       </form>
-      {mensaje && <p className="mensaje">{mensaje}</p>}
     </div>
   );
 }
