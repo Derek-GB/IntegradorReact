@@ -54,16 +54,7 @@ const ActualizarAlbergue = () => {
 
   return (
     <div className="container mt-4">
-      <h2>
-        <button
-          onClick={() => navigate('/')}
-          className="btn btn-secondary"
-          style={{ position: 'absolute', right: '1cm', top: '50%', transform: 'translateY(-50%)' }}
-        >
-          <span className="material-icons">arrow_back</span>
-        </button>
-        Actualizar Albergue
-      </h2>
+      <h2>Actualizar Albergue</h2>
 
       <form>
         <details open>
