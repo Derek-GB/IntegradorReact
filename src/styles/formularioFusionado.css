@@ -939,6 +939,7 @@ body {
   transition: border-color 0.3s ease;
   align-self: center;
 }
+<<<<<<< HEAD
 /* === Registro Albergue=== */
 
 .containerRegiAlbergue {
@@ -1124,6 +1125,8 @@ body {
   display: flex;
   flex-direction: column;
 }
+=======
+>>>>>>> keizel
 
 /*  Formulario Usuario  */
 

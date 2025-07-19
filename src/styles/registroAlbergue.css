@@ -1,0 +1,169 @@
+.registro-albergue-fullscreen {
+  min-height: 100vh;
+  width: 100vw;
+  background: var(--color-fondo, #f0f0f0); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--fuente-principal, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif); 
+  overflow: visible;
+}
+
+.registro-albergue-form {
+  background: var(--color-blanco, #ffffff);
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  min-width: 340px;
+  max-width: 400px;
+  width: 100%;
+  border: 1px solid var(--color-gris-borde, #d3d3d3);
+  font-family: var(--fuente-principal, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif); 
+  max-height: 80vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-gris-borde, #d3d3d3) var(--color-gris-claro, #e0e0e0);
+}
+
+.registro-albergue-form::-webkit-scrollbar {
+  width: 8px;
+}
+
+.registro-albergue-form::-webkit-scrollbar-track {
+  background: var(--color-gris-claro, #e0e0e0);
+  border-radius: 8px;
+}
+
+.registro-albergue-form::-webkit-scrollbar-thumb {
+  background: var(--color-gris-borde, #d3d3d3);
+  border-radius: 8px;
+}
+
+.registro-albergue-form::-webkit-scrollbar-thumb:hover {
+  background: var(--color-texto, #333333);
+}
+
+.registro-albergue-form legend {
+  font-size: 1.2rem;
+  color: var(--color-texto, #333333);
+  margin: 1.5rem 0 0.5rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  text-align: center; 
+  font-family: var(--fuente-principal, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif); 
+}
+
+.registro-albergue-form legend strong {
+  display: block;
+}
+
+.registro-albergue-form legend:first-of-type {
+  font-size: 1.5rem; 
+  text-align: center;
+  margin: 0 0 1.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--color-verde-form, #00897B); 
+  color: var(--color-blanco, #ffffff);
+  border-radius: 8px;
+  border-bottom: 2px solid var(--color-gris-borde, #d3d3d3);
+  font-family: var(--fuente-principal, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif); 
+}
+
+.registro-albergue-form hr {
+  border: none;
+  border-top: 1px solid var(--color-gris-borde, #d3d3d3);
+  margin: 1rem 0;
+}
+
+.registro-albergue-form h2 {
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  min-height: 1em;
+  line-height: 1.4;
+  z-index: 1;
+  font-family: var(--fuente-principal, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif); 
+}
+
+.registro-albergue-form h3 {
+  font-size: 1.2rem;
+  color: var(--color-texto, #333333);
+  margin: 1.5rem 0 0.5rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  text-align: center; 
+  font-family: var(--fuente-principal, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif); 
+}
+
+.registro-albergue-form label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.1rem;
+  font-weight: 600;
+  color: var(--color-texto, #333333);
+  font-family: var(--fuente-principal, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif); 
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid var(--color-gris-borde, #d3d3d3);
+  border-radius: 6px;
+  font-size: 1rem;
+  background: var(--color-gris-claro, #f5f5f5);
+  transition: border 0.2s;
+  font-family: var(--fuente-principal, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif); 
+  color: var(--color-texto, #333333);
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.registro-albergue-form .form-control:focus {
+  border: 1.5px solid var(--color-verde-form, #00897B); 
+  outline: none;
+}
+
+.registro-albergue-form textarea.form-control {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.registro-albergue-form button[type="submit"] {
+  background: var(--color-amarillo, #ffc107);
+   color: black;
+  border: none;
+  border-radius: 6px;
+  padding: 0.7rem 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: var(--fuente-principal, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif); 
+  display: block;
+  margin: 1.5rem auto 0;
+}
+
+.registro-albergue-form button[type="submit"]:hover {
+  background: var(--color-amarillo-hover, #e0a800);
+    color: black;
+}
+
+.registro-albergue-form p {
+  text-align: center;
+  margin-top: 1rem;
+  color: var(--color-verde-form, #00897B);
+  font-weight: 600;
+  font-family: var(--fuente-principal, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif); 
+}
+
+.registro-albergue-form p.error {
+  color: var(--color-rojo-error, #dc3545);
+  font-family: var(--fuente-principal, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif);
+}
