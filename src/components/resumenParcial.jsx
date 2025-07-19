@@ -66,10 +66,6 @@ const ResumenParcial = () => {
           <div className="boton-resumen-final">
             <button onClick={() => navigate('/resumenFinal')}>Ver resumen final</button>
           </div>
-
-          <div className="boton-volver-formulario">
-            <button onClick={() => navigate('/formulario')}>Volver al formulario</button>
-          </div>
         </div>
 
         {modalIndex !== null && (
