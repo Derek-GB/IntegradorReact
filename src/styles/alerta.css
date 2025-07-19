@@ -1,0 +1,41 @@
+.alerta {
+  position: fixed;
+  top: 20px;
+  left: 50%;          /* Mueve el origen al centro horizontal */
+  transform: translateX(-50%); /* Ajusta para que quede centrado realmente */
+  z-index: 9999;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  font-weight: bold;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  opacity: 1;
+  animation: fadeOut 0.5s ease-out forwards;
+  animation-delay: 2.5s;
+}
+
+/* Estilo según el tipo */
+.alerta-info {
+  background-color: #00796B;
+}
+
+.alerta-exito {
+  background-color: #4CAF50;
+}
+
+.alerta-error {
+  background-color: #d32f2f;
+}
+
+.alerta-advertencia {
+  background-color: #f9b700;
+  color: #212529;
+}
+
+/* Desvanecimiento */
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
