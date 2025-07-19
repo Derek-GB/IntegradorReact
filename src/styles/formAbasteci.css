@@ -771,8 +771,7 @@ details summary::-webkit-details-marker {
     border-radius: 8px;
     margin-top: 15px;
     border: none;
-    /* Agregamos overflow-x: hidden para seguridad */
-    overflow-x: hidden;
+
 }
 
 /* Aplicamos los mismos estilos de tarjeta a los productos de Limpieza */
@@ -838,7 +837,7 @@ details summary::-webkit-details-marker {
     margin-bottom: 0;
     border: none;
     pointer-events: none;
-    overflow: hidden;
+
 }
 
 /* --- Estilos para las Tablas de Resumen (Abarrotes y Limpieza) --- */
@@ -914,7 +913,7 @@ details > *:not(summary) label {
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
     box-sizing: border-box; /* Asegurado */
-    width: 100%; /* Asegurado para que ocupe el 100% de su contenedor */
+ 
 }
 
 details > *:not(summary) input,
@@ -924,7 +923,6 @@ details > *:not(summary) select {
 .formulario-container {
   /* max-width: 100%; */
   padding: 20px;
-  overflow-x: hidden;
 }
 
 * {
