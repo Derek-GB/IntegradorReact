@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { personasAPI, productosAPI, recursosAsignadosAPI } from '../helpers/api';
 import '../styles/registroUsuario.css';
+import Alerta from '../components/Alerta.jsx';
 
 const AsignarRecurso = () => {
   const [personas, setPersonas] = useState([]);
@@ -11,6 +12,9 @@ const AsignarRecurso = () => {
     cantidad: ''
   });
   const [mensaje, setMensaje] = useState('');
+  const [error, setError] = useState('');
+  const [mostrarAlertaMensaje, setMostrarAlertaMensaje] = useState(false);
+  const [mostrarAlertaError, setMostrarAlertaError] = useState(false);
 
   // Obtener personas
   useEffect(() => {
@@ -42,6 +46,14 @@ const AsignarRecurso = () => {
     fetchProductos();
   }, []);
 
+  useEffect(() => {
+    if (mensaje) setMostrarAlertaMensaje(true);
+  }, [mensaje]);
+
+  useEffect(() => {
+    if (error) setMostrarAlertaError(true);
+  }, [error]);
+
   // Manejar cambios del formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,11 +64,12 @@ const AsignarRecurso = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMensaje('');
+    setError('');
 
     const { idPersona, idProducto, cantidad } = form;
 
     if (!idPersona || !idProducto || !cantidad) {
-      alert('Por favor complete todos los campos.');
+      setError('Por favor complete todos los campos.');
       return;
     }
 
@@ -68,11 +81,10 @@ const AsignarRecurso = () => {
 
     try {
       await recursosAsignadosAPI.create(payload);
-      alert('Recurso asignado correctamente.');
+      setMensaje('Recurso asignado correctamente.');
       setForm({ idPersona: '', idProducto: '', cantidad: '' });
     } catch {
-       alert('Recurso asignado correctamente.');
-   
+      setMensaje('Recurso asignado correctamente.');
     }
   };
 
@@ -80,6 +92,23 @@ const AsignarRecurso = () => {
     <div className="ajuste-inventario-fullscreen sin-flecha-back">
       <form className="ajuste-inventario-form" onSubmit={handleSubmit}>
         <h2>Asignación de Recursos</h2>
+
+        {mostrarAlertaMensaje && (
+          <Alerta 
+            mensaje={mensaje} 
+            tipo="exito" 
+            duracion={4000} 
+            onClose={() => setMostrarAlertaMensaje(false)} 
+          />
+        )}
+        {mostrarAlertaError && (
+          <Alerta 
+            mensaje={error} 
+            tipo="error" 
+            duracion={4000} 
+            onClose={() => setMostrarAlertaError(false)} 
+          />
+        )}
 
         <label>Persona (Identificación):</label>
         <select
@@ -122,9 +151,6 @@ const AsignarRecurso = () => {
         />
 
         <button type="submit">Asignar Recurso</button>
-
-        {/* Mensaje opcional de estado */}
-        {mensaje && <p className="mensaje">{mensaje}</p>}
       </form>
     </div>
   );

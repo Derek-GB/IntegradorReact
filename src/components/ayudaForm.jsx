@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "../styles/ajusteInventario.css";
 import { familiasAPI, referenciasAPI } from "../helpers/api";
+import Alerta from "../components/Alerta";
 
 const AyudaForm = () => {
-   const idUsuario = localStorage.getItem("idUsuario");
+  const idUsuario = localStorage.getItem("idUsuario");
   const [familias, setFamilias] = useState([]);
   const [form, setForm] = useState({
     idFamilia: "",
@@ -14,16 +15,17 @@ const AyudaForm = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const [mensaje, setMensaje] = useState(null); // Para usar con <Alerta />
+  const [tipoMensaje, setTipoMensaje] = useState("exito"); // 'exito' o 'error'
 
   useEffect(() => {
     const fetchFamilias = async () => {
       try {
         const res = await familiasAPI.getAll();
         setFamilias(Array.isArray(res) ? res : res.data ?? []);
-      } catch  {
-        setError("Error al cargar familias");
+      } catch {
+        setMensaje("Error al cargar familias");
+        setTipoMensaje("error");
       }
     };
     fetchFamilias();
@@ -41,18 +43,17 @@ const AyudaForm = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
-    setError(null);
-    setSuccess(null);
+    setMensaje(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-    setSuccess(null);
+    setMensaje(null);
 
     const validacion = validarFormulario();
     if (validacion) {
-      setError(validacion);
+      setMensaje(validacion);
+      setTipoMensaje("error");
       return;
     }
 
@@ -69,7 +70,8 @@ const AyudaForm = () => {
 
       await referenciasAPI.create(payload);
 
-      setSuccess("Ayuda registrada correctamente");
+      setMensaje("Ayuda registrada correctamente");
+      setTipoMensaje("exito");
       setForm({
         idFamilia: "",
         tipoAyuda: "",
@@ -77,8 +79,9 @@ const AyudaForm = () => {
         fechaEntrega: "",
         responsable: "",
       });
-    } catch (err) {
-      setError("Error al registrar la ayuda: " + (err.message || ""));
+    } catch{
+      setMensaje("No se pudo registrar la ayuda. Inténtelo de nuevo.");
+      setTipoMensaje("error");
     } finally {
       setLoading(false);
     }
@@ -149,8 +152,7 @@ const AyudaForm = () => {
           {loading ? "Registrando..." : "Registrar"}
         </button>
 
-        {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
-        {success && <p style={{ color: "green", marginTop: "1rem" }}>{success}</p>}
+        {mensaje && <Alerta tipo={tipoMensaje} mensaje={mensaje} />}
       </form>
     </div>
   );

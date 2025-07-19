@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { productosAPI } from '../helpers/api';
 import '../styles/registroUsuario.css'; 
-
+import Alerta from '../components/Alerta.jsx';
 
 const RegistrarSuministro = () => {
   const [form, setForm] = useState({
@@ -12,6 +12,19 @@ const RegistrarSuministro = () => {
     unidad: '',
     cantidad: ''
   });
+
+  const [mensaje, setMensaje] = useState('');
+  const [error, setError] = useState('');
+  const [mostrarAlertaMensaje, setMostrarAlertaMensaje] = useState(false);
+  const [mostrarAlertaError, setMostrarAlertaError] = useState(false);
+
+  useEffect(() => {
+    if (mensaje) setMostrarAlertaMensaje(true);
+  }, [mensaje]);
+
+  useEffect(() => {
+    if (error) setMostrarAlertaError(true);
+  }, [error]);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -31,7 +44,8 @@ const RegistrarSuministro = () => {
       };
 
       await productosAPI.create(data); 
-      alert("Producto registrado correctamente");
+      setMensaje("Producto registrado correctamente");
+      setError('');
       setForm({
         codigo: '',
         descripcion: '',
@@ -42,55 +56,74 @@ const RegistrarSuministro = () => {
       });
     } catch (err) {
       console.error("Error al registrar producto:", err);
-      alert("Hubo un error al registrar el producto. Intente de nuevo.");
+      setError("Hubo un error al registrar el producto. Intente de nuevo.");
+      setMensaje('');
     }
   };
 
   return (
-  <div className="ajuste-inventario-fullscreen sin-flecha-back">
-    <form onSubmit={handleSubmit} className="ajuste-inventario-form">
-      <h2 className="text-center">Registrar Suministros</h2>
-      <details open>
-        <summary><strong>Formulario de Registro</strong></summary>
-        <fieldset className="mt-2">
-          <label>Código de Producto:</label>
-          <input name="codigo" value={form.codigo} onChange={handleChange} required />
+    <div className="ajuste-inventario-fullscreen sin-flecha-back">
+      <form onSubmit={handleSubmit} className="ajuste-inventario-form">
+        <h2 className="text-center">Registrar Suministros</h2>
 
-          <label>Descripción:</label>
-          <input name="descripcion" value={form.descripcion} onChange={handleChange} required />
+        {mostrarAlertaMensaje && (
+          <Alerta 
+            mensaje={mensaje} 
+            tipo="exito" 
+            duracion={4000} 
+            onClose={() => setMostrarAlertaMensaje(false)} 
+          />
+        )}
+        {mostrarAlertaError && (
+          <Alerta 
+            mensaje={error} 
+            tipo="error" 
+            duracion={4000} 
+            onClose={() => setMostrarAlertaError(false)} 
+          />
+        )}
 
-          <label>Categoría:</label>
-          <select name="categoria" value={form.categoria} onChange={handleChange} required>
-            <option value="">Seleccione una opción</option>
-            <option value="1">Carne</option>
-            <option value="2">Proteina</option>
-            <option value="3">Verdura</option>
-            <option value="4">Reperte</option>
-            <option value="5">Olores</option>
-            <option value="6">Abarrotes</option>
-            <option value="7">Limpieza</option>
-            <option value="8">Mobiliario</option>
-          </select>
+        <details open>
+          <summary><strong>Formulario de Registro</strong></summary>
+          <fieldset className="mt-2">
+            <label>Código de Producto:</label>
+            <input name="codigo" value={form.codigo} onChange={handleChange} required />
 
-          <label>Nombre del Producto:</label>
-          <input name="producto" value={form.producto} onChange={handleChange} required />
+            <label>Descripción:</label>
+            <input name="descripcion" value={form.descripcion} onChange={handleChange} required />
 
-          <label>Unidad:</label>
-          <select name="unidad" value={form.unidad} onChange={handleChange} required>
-            <option value="">Seleccione una unidad</option>
-            <option value="1">Mililitros</option>
-            <option value="2">Gramos</option>
-            <option value="3">Unidades</option>
-          </select>
+            <label>Categoría:</label>
+            <select name="categoria" value={form.categoria} onChange={handleChange} required>
+              <option value="">Seleccione una opción</option>
+              <option value="1">Carne</option>
+              <option value="2">Proteina</option>
+              <option value="3">Verdura</option>
+              <option value="4">Reperte</option>
+              <option value="5">Olores</option>
+              <option value="6">Abarrotes</option>
+              <option value="7">Limpieza</option>
+              <option value="8">Mobiliario</option>
+            </select>
 
-          <label>Cantidad:</label>
-          <input name="cantidad" type="number" min="0" value={form.cantidad} onChange={handleChange} required />
-        </fieldset>
-      </details>
-      <button type="submit" className="btn btn-primary mt-3">Agregar</button>
-    </form>
-  </div>
-);
+            <label>Nombre del Producto:</label>
+            <input name="producto" value={form.producto} onChange={handleChange} required />
+
+            <label>Unidad:</label>
+            <select name="unidad" value={form.unidad} onChange={handleChange} required>
+              <option value="">Seleccione una unidad</option>
+              <option value="1">Mililitros</option>
+              <option value="2">Gramos</option>
+              <option value="3">Unidades</option>
+            </select>
+
+            <label>Cantidad:</label>
+            <input name="cantidad" type="number" min="0" value={form.cantidad} onChange={handleChange} required />
+          </fieldset>
+        </details>
+        <button type="submit" className="btn btn-primary mt-3">Agregar</button>
+      </form>
+    </div>
+  );
 };
 
 export default RegistrarSuministro;

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useUbicaciones } from "../hooks/useUbicaciones";
 import { alberguesAPI } from "../helpers/api";
+import Alerta from "../components/Alerta"; // <- importa tu componente Alerta
 import "../styles/busquedaAlbergue.css";
 
 const BusquedaAlbergue = () => {
@@ -18,7 +19,6 @@ const BusquedaAlbergue = () => {
     setResultados([]);
 
     try {
-      // Ejemplo de búsqueda: prioriza id, luego nombre y luego filtros de ubicación
       if (idAlbergue.trim() !== "") {
         const res = await alberguesAPI.getById(idAlbergue.trim());
         if (res?.data?.length > 0) {
@@ -34,16 +34,18 @@ const BusquedaAlbergue = () => {
           setError("No se encontró albergue con ese nombre.");
         }
       } else if (provincias.length > 0) {
-        // Aquí podrías hacer una búsqueda con provincia, cantón y distrito si quieres
-        // Ejemplo ficticio:
-        // const res = await alberguesAPI.getByUbicacion(provinciaId, cantonId, distritoId);
-        // setResultados(res.data);
-        setError("Por favor ingrese ID o Nombre para buscar."); // Por ahora limitamos búsqueda
+        setError("Por favor ingrese ID o Nombre para buscar.");
       } else {
         setError("Por favor ingrese ID o Nombre para buscar.");
       }
     } catch (err) {
-      setError(String(err) || "Error al buscar albergue.");
+      if (err.response && err.response.status === 404) {
+        setError("No se encontró un albergue con esos datos.");
+      } else if (err.message && err.message.includes("Albergue no encontrado")) {
+        setError("No se encontró un albergue con esos datos.");
+      } else {
+        setError(String(err) || "Error al buscar albergue.");
+      }
     }
   };
 
@@ -128,7 +130,8 @@ const BusquedaAlbergue = () => {
         </div>
       </form>
 
-      {error && <p className="error">{error}</p>}
+      {/* Aquí usas el componente Alerta para errores */}
+      {error && <Alerta tipo="error" mensaje={error} />}
 
       {!error && resultados.length === 0 && (
         <p style={{ marginTop: "1rem", textAlign: "center", color: "#666" }}>
