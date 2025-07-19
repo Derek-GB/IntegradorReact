@@ -97,14 +97,20 @@ export const alberguesAPI = createApiMethods("albergues", {
       handleError(error);
     }
   },
-  getByUbicacion: async (ubicacion) => {
-  try {
-    const res = await customAxios.get(`/albergues/consulta/ubicacion/${ubicacion}`);
-    return res.data;
-  } catch (error) {
-    handleError(error);
-  }
-},
+  getByUbicacion: async ({ provincia = "", canton = "", distrito = "" }) => {
+    try {
+      const params = new URLSearchParams();
+
+      if (distrito) params.append("distrito", distrito);
+      else if (canton) params.append("canton", canton);
+      else if (provincia) params.append("provincia", provincia);
+
+      const res = await customAxios.get(`/albergues/ubicacion?${params.toString()}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
 
 });
 export const municipalidadAPI = createApiMethods("municipalidad");
