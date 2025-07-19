@@ -1,17 +1,45 @@
 import React, { useState } from "react";
 import { useUbicaciones } from "../hooks/useUbicaciones";
 import { alberguesAPI } from "../helpers/api";
-import Alerta from "../components/Alerta"; // <- importa tu componente Alerta
+import Alerta from "../components/Alerta";
 import "../styles/busquedaAlbergue.css";
 
 const BusquedaAlbergue = () => {
-  const { provincias, cantones, distritos, setProvinciaId, setCantonId } = useUbicaciones();
+  const {
+    provincias,
+    cantones,
+    distritos,
+    setProvinciaId: setProvinciaIdHook,
+    setCantonId: setCantonIdHook,
+  } = useUbicaciones();
 
   const [idAlbergue, setIdAlbergue] = useState("");
   const [nombre, setNombre] = useState("");
+  const [provinciaId, setProvinciaId] = useState("");
+  const [cantonId, setCantonId] = useState("");
   const [distritoId, setDistritoId] = useState("");
   const [resultados, setResultados] = useState([]);
   const [error, setError] = useState("");
+
+  const handleProvinciaChange = (e) => {
+    const value = e.target.value;
+    setProvinciaId(value);
+    setProvinciaIdHook(value);
+
+    // Limpiar cantón y distrito si cambia provincia
+    setCantonId("");
+    setDistritoId("");
+    setCantonIdHook("");
+  };
+
+  const handleCantonChange = (e) => {
+    const value = e.target.value;
+    setCantonId(value);
+    setCantonIdHook(value);
+
+    // Limpiar distrito si cambia cantón
+    setDistritoId("");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,10 +61,34 @@ const BusquedaAlbergue = () => {
         } else {
           setError("No se encontró albergue con ese nombre.");
         }
-      } else if (provincias.length > 0) {
-        setError("Por favor ingrese ID o Nombre para buscar.");
+      } else if (provinciaId || cantonId || distritoId) {
+        // Obtener los nombres descriptivos según IDs seleccionados
+        const provinciaObj = provincias.find(
+          (p) => String(p.idProvincia) === String(provinciaId)
+        );
+        const cantonObj = cantones.find(
+          (c) => String(c.idCanton) === String(cantonId)
+        );
+        const distritoObj = distritos.find(
+          (d) => String(d.idDistrito) === String(distritoId)
+        );
+
+        // Prioridad distrito > cantón > provincia según tu SP
+        const params = {
+          distrito: distritoObj?.descripcion || "",
+          canton: distritoObj ? "" : cantonObj?.descripcion || "",
+          provincia: distritoObj || cantonObj ? "" : provinciaObj?.descripcion || "",
+        };
+
+        const res = await alberguesAPI.getByUbicacion(params);
+
+        if (res?.data?.length > 0) {
+          setResultados(res.data);
+        } else {
+          setError("No se encontraron albergues en esa ubicación.");
+        }
       } else {
-        setError("Por favor ingrese ID o Nombre para buscar.");
+        setError("Por favor ingrese al menos un criterio de búsqueda.");
       }
     } catch (err) {
       if (err.response && err.response.status === 404) {
@@ -69,8 +121,8 @@ const BusquedaAlbergue = () => {
         <div className="campo-horizontal">
           <select
             className="form-select"
-            onChange={(e) => setProvinciaId(e.target.value)}
-            defaultValue=""
+            onChange={handleProvinciaChange}
+            value={provinciaId}
           >
             <option value="">Provincia</option>
             {provincias.map((p) => (
@@ -84,9 +136,9 @@ const BusquedaAlbergue = () => {
         <div className="campo-horizontal">
           <select
             className="form-select"
-            onChange={(e) => setCantonId(e.target.value)}
+            onChange={handleCantonChange}
             disabled={!cantones.length}
-            defaultValue=""
+            value={cantonId}
           >
             <option value="">Cantón</option>
             {cantones.map((c) => (
@@ -130,7 +182,6 @@ const BusquedaAlbergue = () => {
         </div>
       </form>
 
-      {/* Aquí usas el componente Alerta para errores */}
       {error && <Alerta tipo="error" mensaje={error} />}
 
       {!error && resultados.length === 0 && (
