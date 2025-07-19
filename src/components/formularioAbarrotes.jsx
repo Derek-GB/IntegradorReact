@@ -20,38 +20,40 @@ const FormularioAbastecimiento = () => {
   };
 
   return (
-    <div className="contenedor-formulario">
-      {!mostrarResumen ? (
-        <>
-          <h1 className="titulo-formulario">Formulario de Abastecimiento</h1>
-          <div className="form-seccion">
-            <Carnes />
-            <Proteinas />
-            <Verduras />
-            <Olores />
-            <Abarrotes />
-            <Limpieza />
-          </div>
-          <div className="botones-formulario">
-            <button onClick={handleIrAResumen} className="btn-resumen">
-              Ver Resumen Parcial
-            </button>
-            <button className="btn-enviar">
-              Enviar Formulario
-            </button>
-          </div>
-        </>
-      ) : (
-        <>
-          <ResumenParcial />
-          <div className="botones-formulario">
-            <button onClick={handleVolverFormulario} className="btn-volver">
-              Volver al Formulario
-            </button>
-          </div>
-        </>
-      )}
-    </div>
+      <div className="contenedor-formulario">
+        {/* El resto de tu contenido del formulario */}
+        {!mostrarResumen ? (
+          <>
+            <h1 className="titulo-formulario">Formulario de Abastecimiento</h1>
+            <div className="form-seccion">
+              <Carnes />
+              <Proteinas />
+              <Verduras />
+              <Olores />
+              <Abarrotes />
+              <Limpieza />
+            </div>
+            <div className="botones-formulario">
+              <button onClick={handleIrAResumen} className="btn-resumen">
+                Ver Resumen Parcial
+              </button>
+              <button className="btn-enviar">
+                Enviar Formulario
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <ResumenParcial />
+            <div className="botones-formulario">
+              <button onClick={handleVolverFormulario} className="btn-volver">
+                Volver al Formulario
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+
   );
 };
 
