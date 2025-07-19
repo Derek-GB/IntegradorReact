@@ -71,9 +71,17 @@ const defaultMethods = (endpoint) => ({
 export const productosAPI = createApiMethods("productos");
 export const familiasAPI = createApiMethods("familias");
 export const alberguesAPI = createApiMethods("albergues", {
+  getById: async (id) => {
+    try {
+      const res = await customAxios.get(`/albergues/consulta/id/${id}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
   getByNombre: async (nombre) => {
     try {
-      const res = await customAxios.get(`/albergues/nombre/${nombre}`);
+      const res = await customAxios.get(`/albergues/consulta/nombre/${nombre}`);
       return res.data;
     } catch (error) {
       handleError(error);
@@ -104,21 +112,20 @@ export const mascotasAPI = createApiMethods("mascotas");
 export const categoriaConsumiblesAPI = createApiMethods("categoriaConsumibles");
 export const usuariosAPI = createApiMethods("usuarios", {
   validarCorreo: async (correo) => {
-  try {
-    const res = await customAxios.post(`/usuarios/validar/correo`, { correo });
-
-    return { existe: false };
-  } catch (error) {
-    if (error.response && error.response.status === 400) {
-      return { existe: true };
-    } else if (error.response && error.response.status === 500) {
-      throw new Error("Error del servidor. Contacta al soporte.");
-    } else {
-      console.error("Error desconocido:", error);
-      throw new Error("Ocurrió un error al validar el correo.");
+    try {
+      const res = await customAxios.post(`/usuarios/validar/correo`, { correo });
+      return { existe: false };
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        return { existe: true };
+      } else if (error.response && error.response.status === 500) {
+        throw new Error("Error del servidor. Contacta al soporte.");
+      } else {
+        console.error("Error desconocido:", error);
+        throw new Error("Ocurrió un error al validar el correo.");
+      }
     }
-  }
-},
+  },
   updateContrasena: async (correo, nuevaContrasena) => {
     try {
       const res = await customAxios.put(`/usuarios/contrasena`, { correo, nuevaContrasena });

@@ -1,14 +1,14 @@
-/* Contenedor general */
 .busqueda-container {
   padding: 1.5rem;
-  max-width: 1200px;
-  margin: auto;
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
   background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow-x: hidden;
 }
 
-/* Header sin botón */
 .header {
   display: flex;
   justify-content: center;
@@ -27,49 +27,104 @@
 }
 
 .formulario-horizontal {
+  position: relative; /* necesario para los absolutos hijos */
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-end;
+  max-width: 100%;
+  margin: 0 auto;
   overflow-x: hidden;
+  padding-bottom: 60px; /* espacio para input nombre y botón absolutos */
 }
 
-/* Campo alineado horizontalmente */
 .campo-horizontal {
-  flex: 1;
-  min-width: 150px;
+  flex: 1 1 200px;
+  min-width: 180px;
+  max-width: 300px;
   display: flex;
   flex-direction: column;
 }
 
-/* Inputs y selects */
+/* Input Nombre con posición absoluta */
+.nombre-busqueda {
+  position: absolute;
+  top: 70px;
+  left: 20%;
+  width: 300px;
+  z-index: 10;
+}
+
+/* Inputs y selects generales (excepto el nombre que es absoluto) */
 .form-select,
 .form-control {
   padding: 0.45rem 0.5rem;
   border-radius: 8px;
   border: 1px solid #ccc;
+  font-size: 1rem;
 }
 
-/* Botón amarillo con texto negro */
 .btn-buscar {
-  background-color:  #f9b700;
+  position: absolute;
+  top: 70px;
+  left: 57%;
+  width: 140px;
+  height: 42px;
+  margin: 0;
+  padding: 0.4rem 1rem;
+  background-color: #f9b700;
   color: #212529;
-  padding: 0.3rem 1rem;
   font-weight: bold;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.3s ease;
   white-space: nowrap;
-  height: 38px;
-  margin-top: 0;
-  width: 100px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+  z-index: 10;
 }
 
 .btn-buscar:hover {
   background-color: #f0a500;
+}
+
+.tabla-container {
+  margin-top: 20px;
+  overflow-x: auto;
+  max-width: 100%;
+  background: white;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.tabla-albergues {
+  min-width: 900px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-albergues th,
+.tabla-albergues td {
+  border: 1px solid #ddd;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.tabla-albergues th:nth-child(2),
+.tabla-albergues td:nth-child(2) {
+  min-width: 180px;
+}
+
+.tabla-albergues th:nth-child(7),
+.tabla-albergues td:nth-child(7) {
+  min-width: 220px;
+}
+
+.error {
+  color: red;
+  margin-top: 0.5rem;
+  font-weight: bold;
+  text-align: center;
 }
