@@ -13,7 +13,7 @@ const Sidebar = () => {
     { href: "/registrarConsumibles.jsx", icon: "inventory", label: "Registrar consumibles" },
     { href: "/registroAlbergue.jsx", icon: "business", label: "Registrar un albergue" },
     { href: "/registroUsuario.jsx", icon: "person_add", label: "Registrar un usuario" },
-    { href: "/listaProducto.jsx", icon: "list", label: "Lista de Productos" },
+    { href: "/listaProducto.jsx", icon: "list", label: "Lista de Suministros" },
     { href: "/listaAlbergue.jsx", icon: "list_alt", label: "Lista de Albergues" },
     { href: "/formularioAbarrotes.jsx", icon: "local_shipping", label: "Abastecimiento" },
     { href: "/familiaFormulario.jsx", icon: "local_shipping", label: "Familia" },

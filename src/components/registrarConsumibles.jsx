@@ -1,16 +1,28 @@
-import React, { useState } from "react";
-import "../styles/ajusteInventario.css"; // reutiliza el mismo estilo
+import React, { useState, useEffect } from "react";
+import { consumiblesAPI } from "../helpers/api";
+import "../styles/ajusteInventario.css";
+import Alerta from "../components/Alerta.jsx";
 
 const RegistroConsumibles = () => {
   const [form, setForm] = useState({
     nombre: "",
-    descripcionProducto: "",
-    codigo: "",
     categoriaProducto: "",
+    unidadMedida: "",
     cantidad: "",
   });
 
   const [mensaje, setMensaje] = useState("");
+  const [error, setError] = useState("");
+  const [mostrarAlertaMensaje, setMostrarAlertaMensaje] = useState(false);
+  const [mostrarAlertaError, setMostrarAlertaError] = useState(false);
+
+  useEffect(() => {
+    if (mensaje) setMostrarAlertaMensaje(true);
+  }, [mensaje]);
+
+  useEffect(() => {
+    if (error) setMostrarAlertaError(true);
+  }, [error]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -21,22 +33,32 @@ const RegistroConsumibles = () => {
 
     const camposIncompletos = Object.values(form).some((val) => val === "");
     if (camposIncompletos) {
-      setMensaje("Por favor complete todos los campos.");
+      setError("Por favor complete todos los campos.");
+      setMensaje("");
       return;
     }
 
     try {
-      console.log("Datos registrados:", form);
+      const payload = {
+        nombre: form.nombre,
+        unidadMedidaNombre: form.unidadMedida,
+        categoriaNombre: form.categoriaProducto,
+        cantidad: parseInt(form.cantidad),
+      };
+
+      await consumiblesAPI.create(payload);
       setMensaje("Consumible registrado correctamente.");
+      setError("");
       setForm({
         nombre: "",
-        descripcionProducto: "",
-        codigo: "",
         categoriaProducto: "",
+        unidadMedida: "",
         cantidad: "",
       });
-    } catch {
-      setMensaje("Error al registrar consumible.");
+    } catch (err) {
+      console.error("Error al registrar consumible:", err);
+      setError("Error al registrar consumible.");
+      setMensaje("");
     }
   };
 
@@ -44,6 +66,23 @@ const RegistroConsumibles = () => {
     <div className="ajuste-inventario-fullscreen">
       <form className="ajuste-inventario-form" onSubmit={handleSubmit}>
         <h2>Registro de Consumibles</h2>
+
+        {mostrarAlertaMensaje && (
+          <Alerta
+            mensaje={mensaje}
+            tipo="exito"
+            duracion={4000}
+            onClose={() => setMostrarAlertaMensaje(false)}
+          />
+        )}
+        {mostrarAlertaError && (
+          <Alerta
+            mensaje={error}
+            tipo="error"
+            duracion={4000}
+            onClose={() => setMostrarAlertaError(false)}
+          />
+        )}
 
         <label>
           Nombre del Producto:
@@ -57,17 +96,6 @@ const RegistroConsumibles = () => {
         </label>
 
         <label>
-          Código:
-          <input
-            type="number"
-            name="codigo"
-            value={form.codigo}
-            onChange={handleChange}
-            placeholder="Ingrese el código"
-          />
-        </label>
-
-        <label>
           Categoría del Producto:
           <select
             name="categoriaProducto"
@@ -75,11 +103,25 @@ const RegistroConsumibles = () => {
             onChange={handleChange}
           >
             <option value="">Seleccione una categoría</option>
-            <option value="alimentos">Alimentos</option>
-            <option value="higiene">Higiene</option>
-            <option value="ropa">Ropa</option>
-            <option value="medicamentos">Medicamentos</option>
-            <option value="otros">Otros</option>
+            <option value="Alimentos">Alimentos</option>
+            <option value="Higiene">Higiene</option>
+            <option value="Ropa">Ropa</option>
+            <option value="Medicamentos">Medicamentos</option>
+            <option value="Otros">Otros</option>
+          </select>
+        </label>
+
+        <label>
+          Unidad de Medida:
+          <select
+            name="unidadMedida"
+            value={form.unidadMedida}
+            onChange={handleChange}
+          >
+            <option value="">Seleccione una unidad</option>
+            <option value="Gramos">Gramos</option>
+            <option value="Mililitros">Mililitros</option>
+            <option value="Unidades">Unidades</option>
           </select>
         </label>
 
@@ -94,20 +136,7 @@ const RegistroConsumibles = () => {
           />
         </label>
 
-        <label>
-          Descripción del Producto:
-          <input
-            type="text"
-            name="descripcionProducto"
-            value={form.descripcionProducto}
-            onChange={handleChange}
-            placeholder="Descripción del producto"
-          />
-        </label>
-
         <button type="submit">Registrar</button>
-
-        {mensaje && <p>{mensaje}</p>}
       </form>
     </div>
   );

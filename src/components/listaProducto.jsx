@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { productosAPI } from '../helpers/api'; // Asegúrate de tener esta API configurada
+import { productosAPI } from '../helpers/api';
 
 const ListaProducto = () => {
   const [productos, setProductos] = useState([]);
@@ -26,6 +26,8 @@ const ListaProducto = () => {
     if (seleccionado) {
       setForm(seleccionado);
       setIsDetailsOpen(true);
+    } else {
+      setForm({});
     }
   }, [productoId, productos]);
 
@@ -36,8 +38,21 @@ const ListaProducto = () => {
 
   const actualizarProducto = async () => {
     try {
-      await productosAPI.update(form.id, form);
+      const cantidadNum = Number(form.cantidad);
+      if (isNaN(cantidadNum) || cantidadNum < 0) {
+        alert('Cantidad debe ser un número válido mayor o igual a 0');
+        return;
+      }
+      const payload = {
+        id: form.id,
+        descripcion: form.descripcion || '',
+        cantidad: cantidadNum,
+      };
+      await productosAPI.update(payload);
       alert("Producto actualizado con éxito.");
+      setProductos(prev =>
+        prev.map(p => (p.id === form.id ? { ...p, descripcion: payload.descripcion, cantidad: payload.cantidad } : p))
+      );
     } catch (error) {
       console.error("Error al actualizar:", error);
       alert("Error al actualizar el producto.");
@@ -62,15 +77,19 @@ const ListaProducto = () => {
   return (
     <div className="registro-usuario-container">
       <div className="registro-usuario-form">
-        <h2>Lista de Productos</h2>
+        <h2>Lista de Suministros</h2>
 
         <form>
           <details open={isDetailsOpen} onToggle={(e) => setIsDetailsOpen(e.target.open)}>
-            <summary><strong>Seleccionar Producto</strong></summary>
+            <summary><strong>Seleccionar Suministro</strong></summary>
             <fieldset className="mt-2">
-              <label>Producto:</label>
-              <select value={productoId} onChange={(e) => setProductoId(e.target.value)} className="form-control mb-2">
-                <option value="">Seleccione un producto</option>
+              <label>Suministro:</label>
+              <select
+                value={productoId}
+                onChange={(e) => setProductoId(e.target.value)}
+                className="form-control mb-2"
+              >
+                <option value="">Seleccione un suministro</option>
                 {productos.map(p => (
                   <option key={p.id} value={p.id}>
                     {`Código: ${p.codigoProducto} - ${p.nombre}`}
@@ -81,22 +100,60 @@ const ListaProducto = () => {
               {form.id && (
                 <>
                   <label>ID:</label>
-                  <input type="text" name="id" value={form.id} className="form-control mb-2" readOnly />
+                  <input
+                    type="text"
+                    name="id"
+                    value={form.id}
+                    className="form-control mb-2"
+                    readOnly
+                  />
 
                   <label>Código del Producto:</label>
-                  <input type="text" name="codigoProducto" value={form.codigoProducto || ''} onChange={handleChange} className="form-control mb-2" required />
+                  <input
+                    type="text"
+                    name="codigoProducto"
+                    value={form.codigoProducto || ''}
+                    className="form-control mb-2"
+                    readOnly
+                  />
 
                   <label>Nombre:</label>
-                  <input type="text" name="nombre" value={form.nombre || ''} onChange={handleChange} className="form-control mb-2" required />
+                  <input
+                    type="text"
+                    name="nombre"
+                    value={form.nombre || ''}
+                    className="form-control mb-2"
+                    readOnly
+                  />
 
                   <label>Descripción:</label>
-                  <textarea name="descripcion" value={form.descripcion || ''} onChange={handleChange} className="form-control mb-2" rows="3" />
+                  <textarea
+                    name="descripcion"
+                    value={form.descripcion || ''}
+                    onChange={handleChange}
+                    className="form-control mb-2"
+                    rows="3"
+                    required
+                  />
 
                   <label>Cantidad:</label>
-                  <input type="number" name="cantidad" value={form.cantidad || 0} onChange={handleChange} className="form-control mb-2" min="0" required />
+                  <input
+                    type="number"
+                    name="cantidad"
+                    value={form.cantidad !== undefined && form.cantidad !== null ? form.cantidad : ''}
+                    onChange={handleChange}
+                    className="form-control mb-2"
+                    min="0"
+                    required
+                  />
 
                   <label>Categoría:</label>
-                  <select name="categoria" value={form.categoria || ''} onChange={handleChange} className="form-control mb-2" required>
+                  <select
+                    name="categoria"
+                    value={form.categoria || ''}
+                    className="form-control mb-2"
+                    disabled
+                  >
                     <option value="">Seleccione una categoría</option>
                     <option value="1">Carne</option>
                     <option value="2">Proteína</option>
@@ -109,7 +166,12 @@ const ListaProducto = () => {
                   </select>
 
                   <label>Unidad de Medida:</label>
-                  <select name="unidadMedida" value={form.unidadMedida || ''} onChange={handleChange} className="form-control mb-3" required>
+                  <select
+                    name="unidadMedida"
+                    value={form.unidadMedida || ''}
+                    className="form-control mb-3"
+                    disabled
+                  >
                     <option value="">Seleccione una unidad</option>
                     <option value="1">Mililitros</option>
                     <option value="2">Gramos</option>
@@ -117,8 +179,20 @@ const ListaProducto = () => {
                   </select>
 
                   <div className="mt-3">
-                    <button type="button" className="btn btn-success me-2" onClick={actualizarProducto}>Actualizar</button>
-                    <button type="button" className="btn btn-danger" onClick={eliminarProducto}>Eliminar</button>
+                    <button
+                      type="button"
+                      className="btn btn-success me-2"
+                      onClick={actualizarProducto}
+                    >
+                      Actualizar
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-danger"
+                      onClick={eliminarProducto}
+                    >
+                      Eliminar
+                    </button>
                   </div>
                 </>
               )}

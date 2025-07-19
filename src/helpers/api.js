@@ -67,8 +67,18 @@ const defaultMethods = (endpoint) => ({
   },
 });
 
-// Generar todas las rutas de la API
-export const productosAPI = createApiMethods("productos");
+// Aquí modificamos SOLO productosAPI para corregir update
+export const productosAPI = createApiMethods("productos", {
+  update: async (data) => {
+    try {
+      const res = await customAxios.put(`/productos`, data);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+});
+
 export const familiasAPI = createApiMethods("familias");
 export const alberguesAPI = createApiMethods("albergues", {
   getById: async (id) => {
@@ -87,14 +97,15 @@ export const alberguesAPI = createApiMethods("albergues", {
       handleError(error);
     }
   },
-  getByDistrito: async (distrito) => {
-    try {
-      const res = await customAxios.get(`/albergues/distrito/${distrito}`);
-      return res.data;
-    } catch (error) {
-      handleError(error);
-    }
-  },
+  getByUbicacion: async (ubicacion) => {
+  try {
+    const res = await customAxios.get(`/albergues/consulta/ubicacion/${ubicacion}`);
+    return res.data;
+  } catch (error) {
+    handleError(error);
+  }
+},
+
 });
 export const municipalidadAPI = createApiMethods("municipalidad");
 export const capacidadAlberguesAPI = createApiMethods("capacidadAlbergues");
