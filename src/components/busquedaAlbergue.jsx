@@ -1,6 +1,6 @@
 import React from 'react';
 import { useUbicaciones } from '../hooks/useUbicaciones';
-import '../styles/formularioFusionado.css'; // Asegúrate de tener este archivo con tus estilos
+import '../styles/busquedaAlbergue.css';
 
 const BusquedaAlbergue = () => {
   const {
@@ -9,41 +9,53 @@ const BusquedaAlbergue = () => {
   } = useUbicaciones();
 
   return (
-    <>
+    <div className="busqueda-container">
       <div className="header">
-        <h2>Busqueda de Albergue</h2>
-        <button className="btn-header">
-          <span className="material-icons">arrow_back</span>
-        </button>
+        <h2 className="titulo">Búsqueda de Albergue</h2>
       </div>
-      <div className="formPreFormulario main-content">
-        <div className="search-bar">
-          <fieldset>
-            <select className="form-select mb-2" onChange={e => setProvinciaId(e.target.value)}>
-          <option value="">Seleccione provincia</option>
-          {provincias.map(p => <option key={p.idProvincia} value={p.idProvincia}>{p.descripcion}</option>)}
-        </select>
 
-        <select className="form-select mb-2" onChange={e => setCantonId(e.target.value)} disabled={!cantones.length}>
-          <option value="">Seleccione cantón</option>
-          {cantones.map(c => <option key={c.idCanton} value={c.idCanton}>{c.descripcion}</option>)}
-        </select>
+      <form className="formulario-horizontal">
+        <div className="campo-horizontal">
+          <input type="text" className="form-control" placeholder="ID Albergue" />
+        </div>
 
-        <select className="form-select mb-2" disabled={!distritos.length}>
-          <option value="">Seleccione distrito</option>
-          {distritos.map(d => <option key={d.idDistrito} value={d.idDistrito}>{d.descripcion}</option>)}
-        </select>
+        <div className="campo-horizontal">
+          <select className="form-select" onChange={e => setProvinciaId(e.target.value)}>
+            <option value="">Provincia</option>
+            {provincias.map(p => (
+              <option key={p.idProvincia} value={p.idProvincia}>{p.descripcion}</option>
+            ))}
+          </select>
+        </div>
 
-        <input type="text" className="form-control mb-2" placeholder="ID de albergue" />
-        <input type="text" className="form-control mb-2" placeholder="Nombre de albergue" />
-        <button type="submit" className="btn btn-primary">Buscar</button>
-          </fieldset>
-        
-      </div>
-      </div>
-      
-    </>
+        <div className="campo-horizontal">
+          <select className="form-select" onChange={e => setCantonId(e.target.value)} disabled={!cantones.length}>
+            <option value="">Cantón</option>
+            {cantones.map(c => (
+              <option key={c.idCanton} value={c.idCanton}>{c.descripcion}</option>
+            ))}
+          </select>
+        </div>
 
+        <div className="campo-horizontal">
+          <select className="form-select" disabled={!distritos.length}>
+            <option value="">Distrito</option>
+            {distritos.map(d => (
+              <option key={d.idDistrito} value={d.idDistrito}>{d.descripcion}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="campo-horizontal nombre-busqueda">
+          <input type="text" className="form-control" placeholder="Nombre" />
+        </div>
+
+        <div className="campo-horizontal">
+          <button type="submit" className="btn-buscar">Buscar</button>
+        </div>
+
+      </form>
+    </div>
   );
 };
 
