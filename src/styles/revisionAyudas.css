@@ -1,0 +1,155 @@
+/* Contenedor principal de pantalla completa */
+.formPreFormulario-pantalla-completa {
+  min-height: 100vh;
+  width: 100vw;
+  background: var(--color-fondo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--fuente-principal);
+  overflow: visible;
+}
+
+/* Contenedor del formulario */
+.formPreFormulario {
+  background: var(--color-blanco);
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  min-width: 500px;
+  max-width: 700px;
+  width: 100%;
+  border: 1px solid var(--color-gris-borde);
+  font-family: var(--fuente-principal);
+}
+
+/* Encabezado del formulario */
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.encabezado h2 {
+  visibility: visible;
+  opacity: 1;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.4;
+  color: var(--color-texto);
+}
+
+/* Botón del encabezado */
+.btn-encabezado {
+  background: var(--color-amarillo);
+  color: var(--color-blanco);
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-encabezado:hover {
+  background: var(--color-amarillo-hover);
+}
+
+/* Estilo del fieldset */
+.form-ayuda-revision fieldset {
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+/* Estilo de la leyenda del fieldset */
+.form-ayuda-revision legend {
+  font-weight: 600;
+  color: var(--color-texto);
+  font-size: 1.2rem;
+}
+
+/* Contenedor de los campos de ayuda */
+.divAyudas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+/* Contenedor de cada campo */
+.divAyuda {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* Etiquetas de los campos */
+.form-ayuda-revision label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+/* Estilo de los select e input */
+.form-ayuda-revision select,
+.form-ayuda-revision input {
+  margin-top: 0.4rem;
+  padding: 0.6rem;
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 6px;
+  font-size: 1rem;
+  background: var(--color-gris-claro);
+  transition: border 0.2s;
+  font-family: var(--fuente-principal);
+  color: var(--color-texto);
+}
+
+.form-ayuda-revision select:focus,
+.form-ayuda-revision input:focus {
+  border: 1.5px solid var(--color-verde-form);
+  outline: none;
+}
+
+/* Contenedor de los botones */
+.btnsAyuda {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Botones de consultar y agregar */
+.btnsAyuda .btn-primary,
+.btnsAyuda .btn-secondary {
+  padding: 0.7rem 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btnsAyuda .btn-primary {
+  background: var(--color-verde-form);
+  color: var(--color-blanco);
+}
+
+.btnsAyuda .btn-primary:hover {
+  background: var(--color-verde-form-hover, darken(var(--color-verde-form), 10%));
+}
+
+.btnsAyuda .btn-secondary {
+  background: var(--color-gris-borde);
+  color: var(--color-texto);
+}
+
+.btnsAyuda .btn-secondary:hover {
+  background: var(--color-gris-claro);
+}

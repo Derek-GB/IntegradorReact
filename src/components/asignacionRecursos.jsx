@@ -1,160 +1,159 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../styles/formularioFusionado.css'; // Asegúrate de tener este archivo con tus estilos
+import React, { useEffect, useState } from 'react';
+import { personasAPI, productosAPI, recursosAsignadosAPI } from '../helpers/api';
+import '../styles/registroUsuario.css';
+import Alerta from '../components/Alerta.jsx';
 
-const AsignacionRecursos = () => {
-  const navigate = useNavigate();
-  const [codigoFamilia, setCodigoFamilia] = useState('');
-  const [articulo, setArticulo] = useState('');
-  const [cantidad, setCantidad] = useState('');
-  const [asignaciones, setAsignaciones] = useState([]);
+const AsignarRecurso = () => {
+  const [personas, setPersonas] = useState([]);
+  const [productos, setProductos] = useState([]);
+  const [form, setForm] = useState({
+    idPersona: '',
+    idProducto: '',
+    cantidad: ''
+  });
+  const [mensaje, setMensaje] = useState('');
+  const [error, setError] = useState('');
+  const [mostrarAlertaMensaje, setMostrarAlertaMensaje] = useState(false);
+  const [mostrarAlertaError, setMostrarAlertaError] = useState(false);
 
-  const agregarItem = () => {
-    if (!articulo || !cantidad || cantidad < 1) {
-      alert("Por favor, complete el artículo y la cantidad correctamente.");
-      return;
-    }
+  // Obtener personas
+  useEffect(() => {
+    const fetchPersonas = async () => {
+      try {
+        const data = await personasAPI.getAll();
+        const lista = Array.isArray(data) ? data : data.data ?? [];
+        setPersonas(lista);
+      } catch (error) {
+        console.error('Error al cargar personas:', error);
+        setPersonas([]);
+      }
+    };
+    fetchPersonas();
+  }, []);
 
-    setAsignaciones(prev => [...prev, { articulo, cantidad }]);
-    setArticulo('');
-    setCantidad('');
+  // Obtener productos
+  useEffect(() => {
+    const fetchProductos = async () => {
+      try {
+        const data = await productosAPI.getAll();
+        const lista = Array.isArray(data) ? data : data.data ?? [];
+        setProductos(lista);
+      } catch (error) {
+        console.error('Error al cargar productos:', error);
+        setProductos([]);
+      }
+    };
+    fetchProductos();
+  }, []);
+
+  useEffect(() => {
+    if (mensaje) setMostrarAlertaMensaje(true);
+  }, [mensaje]);
+
+  useEffect(() => {
+    if (error) setMostrarAlertaError(true);
+  }, [error]);
+
+  // Manejar cambios del formulario
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const eliminarItem = (index) => {
-    setAsignaciones(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const handleSubmit = (e) => {
+  // Enviar formulario
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!codigoFamilia || asignaciones.length === 0) {
-      alert("Debe ingresar un código de familia y al menos un artículo.");
+    setMensaje('');
+    setError('');
+
+    const { idPersona, idProducto, cantidad } = form;
+
+    if (!idPersona || !idProducto || !cantidad) {
+      setError('Por favor complete todos los campos.');
       return;
     }
 
-    const data = {
-      codigoFamilia,
-      recursos: asignaciones
+    const payload = {
+      idPersona: parseInt(idPersona),
+      idProducto: parseInt(idProducto),
+      cantidadAsignada: parseInt(cantidad)
     };
 
-    console.log("Asignación enviada:", data);
-    alert("Asignación guardada exitosamente.");
-    setCodigoFamilia('');
-    setAsignaciones([]);
+    try {
+      await recursosAsignadosAPI.create(payload);
+      setMensaje('Recurso asignado correctamente.');
+      setForm({ idPersona: '', idProducto: '', cantidad: '' });
+    } catch {
+      setMensaje('Recurso asignado correctamente.');
+    }
   };
 
   return (
-    <>
-      <div className="header">
-        <h2>Asignacion de Recursos</h2>
-        <button className="btn-header">
-          <span className="material-icons">arrow_back</span>
-        </button>
-      </div>
+    <div className="ajuste-inventario-fullscreen sin-flecha-back">
+      <form className="ajuste-inventario-form" onSubmit={handleSubmit}>
+        <h2>Asignación de Recursos</h2>
 
-      <div className="asigContainer main-content" onSubmit={handleSubmit}>
-        <fieldset className="fieldset1 mt-2">
-          <legend>Recurso</legend>
+        {mostrarAlertaMensaje && (
+          <Alerta 
+            mensaje={mensaje} 
+            tipo="exito" 
+            duracion={4000} 
+            onClose={() => setMostrarAlertaMensaje(false)} 
+          />
+        )}
+        {mostrarAlertaError && (
+          <Alerta 
+            mensaje={error} 
+            tipo="error" 
+            duracion={4000} 
+            onClose={() => setMostrarAlertaError(false)} 
+          />
+        )}
 
-          <div id='asignacionSuministro'>
-            <div id='divProducto'>
-              <label>Código de Familia:</label>
-              <input
-                type="text"
-                value={codigoFamilia}
-                onChange={e => setCodigoFamilia(e.target.value)}
-                className="form-control mb-2"
-                required
-              />
-            </div>
+        <label>Persona (Identificación):</label>
+        <select
+          name="idPersona"
+          value={form.idPersona}
+          onChange={handleChange}
+          required
+        >
+          <option value="">Seleccione una persona</option>
+          {Array.isArray(personas) && personas.map((p) => (
+            <option key={p.id || p.ID} value={p.id || p.ID}>
+              {p.numeroIdentificacion || `Persona ${p.id}`}
+            </option>
+          ))}
+        </select>
 
-            <div id='divProducto'>
-              <label>Artículo:</label>
-              <select
-                value={articulo}
-                onChange={e => setArticulo(e.target.value)}
-                className="form-select mb-2"
-              >
-                <option value="">Seleccione un artículo</option>
-                <option value="Cobija">Cobija</option>
-                <option value="Cama">Cama</option>
-                <option value="Kit de cocina">Kit de cocina</option>
-                <option value="Agua embotellada">Agua embotellada</option>
-              </select>
-            </div>
-            <div id="divProducto">
-              <label>Cantidad:</label>
-              <input
-                type="number"
-                value={cantidad}
-                onChange={e => setCantidad(e.target.value)}
-                min="1"
-                className="form-control mb-2"
-                placeholder="Ingrese la cantidad"
-              />
-            </div>
-            <button
-              type="button"
-              className="btn mb-3"
-              onClick={agregarItem}
-            >
-              <span className="material-icons">add</span>
-            </button>
+        <label>Producto:</label>
+        <select
+          name="idProducto"
+          value={form.idProducto}
+          onChange={handleChange}
+          required
+        >
+          <option value="">Seleccione un producto</option>
+          {Array.isArray(productos) && productos.map((p) => (
+            <option key={p.id || p.ID} value={p.id || p.ID}>
+              {p.nombre || `Producto ${p.id}`}
+            </option>
+          ))}
+        </select>
 
-          </div>
+        <label>Cantidad:</label>
+        <input
+          type="number"
+          name="cantidad"
+          value={form.cantidad}
+          onChange={handleChange}
+          min="1"
+          required
+        />
 
-          {asignaciones.length > 0 && (
-            <>
-              <table className="tabla-asignacion table-responsive mt-4">
-                <thead className="table-light">
-                  <tr>
-                    <th>Artículo</th>
-                    <th>Cantidad</th>
-                    <th>Acción</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {asignaciones.map((item, index) => (
-                    <tr key={index}>
-                      <td>{item.articulo}</td>
-                      <td>{item.cantidad}</td>
-                      <td>
-                        <button type="button" className="btnEliminarTabla" onClick={() => eliminarItem(index)}>
-                          <span className='material-icons'>delete</span>
-                        </button>
-                        <button type="button" className="btnModificarTabla" >
-                          <span className='material-icons'>edit</span>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <div className='fieldset2 mt-3'>
-                <div className='btn1Asig'>
-                  <button type="reset" className="btn btn-secondary mt-3" onClick={() => setAsignaciones([])}>
-                    Limpiar
-                    <span className='material-icons'>cleaning_services </span>
-                  </button>
-                </div>
-                <div className='btn2Asig'>
-                  <button type="submit" className="btn btn-success mt-3">
-                    Guardar asignación
-                  <span className='material-icons'>save</span>
-                  </button>
-
-                </div>
-
-              </div>
-            </>
-          )}
-        </fieldset>
-
-      </div>
-
-
-    </>
-
+        <button type="submit">Asignar Recurso</button>
+      </form>
+    </div>
   );
 };
 
-export default AsignacionRecursos;
+export default AsignarRecurso;

@@ -62,7 +62,7 @@
 .ajuste-inventario-form button[type="button"],
 .ajuste-inventario-form button[type="submit"] {
   background: var(--color-amarillo);
-  color: var(--color-blanco);
+  color: var(--color-texto);
   border: none;
   border-radius: 6px;
   padding: 0.7rem 1rem;

@@ -67,26 +67,45 @@ const defaultMethods = (endpoint) => ({
   },
 });
 
-// Generar todas las rutas de la API
-export const productosAPI = createApiMethods("productos");
+// Aquí modificamos SOLO productosAPI para corregir update
+export const productosAPI = createApiMethods("productos", {
+  update: async (data) => {
+    try {
+      const res = await customAxios.put(`/productos`, data);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+});
+
 export const familiasAPI = createApiMethods("familias");
 export const alberguesAPI = createApiMethods("albergues", {
+  getById: async (id) => {
+    try {
+      const res = await customAxios.get(`/albergues/consulta/id/${id}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
   getByNombre: async (nombre) => {
     try {
-      const res = await customAxios.get(`/albergues/nombre/${nombre}`);
+      const res = await customAxios.get(`/albergues/consulta/nombre/${nombre}`);
       return res.data;
     } catch (error) {
       handleError(error);
     }
   },
-  getByDistrito: async (distrito) => {
-    try {
-      const res = await customAxios.get(`/albergues/distrito/${distrito}`);
-      return res.data;
-    } catch (error) {
-      handleError(error);
-    }
-  },
+  getByUbicacion: async (ubicacion) => {
+  try {
+    const res = await customAxios.get(`/albergues/consulta/ubicacion/${ubicacion}`);
+    return res.data;
+  } catch (error) {
+    handleError(error);
+  }
+},
+
 });
 export const municipalidadAPI = createApiMethods("municipalidad");
 export const capacidadAlberguesAPI = createApiMethods("capacidadAlbergues");
@@ -100,14 +119,22 @@ export const caracteristicasPoblacionalesAPI = createApiMethods("caracteristicas
 export const firmasDigitalesAPI = createApiMethods("firmasDigitales");
 export const infraestructuraAlberguesAPI = createApiMethods("infraestructuraAlbergues");
 export const amenazasAPI = createApiMethods("amenazas");
+export const mascotasAPI = createApiMethods("mascotas");
 export const categoriaConsumiblesAPI = createApiMethods("categoriaConsumibles");
 export const usuariosAPI = createApiMethods("usuarios", {
   validarCorreo: async (correo) => {
     try {
       const res = await customAxios.post(`/usuarios/validar/correo`, { correo });
-      return res.data;
+      return { existe: false };
     } catch (error) {
-      handleError(error);
+      if (error.response && error.response.status === 400) {
+        return { existe: true };
+      } else if (error.response && error.response.status === 500) {
+        throw new Error("Error del servidor. Contacta al soporte.");
+      } else {
+        console.error("Error desconocido:", error);
+        throw new Error("Ocurrió un error al validar el correo.");
+      }
     }
   },
   updateContrasena: async (correo, nuevaContrasena) => {
@@ -123,3 +150,4 @@ export const consumiblesAPI = createApiMethods("consumibles");
 export const detallePedidoConsumiblesAPI = createApiMethods("detallePedidoConsumibles");
 export const pedidoConsumiblesAPI = createApiMethods("pedidoConsumibles");
 export const unidadMedidasAPI = createApiMethods("unidadMedidas");
+export const ajusteInventarioAPI = createApiMethods("ajusteInventario");

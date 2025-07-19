@@ -5,11 +5,11 @@ import Sidebar from './components/sidebar.jsx';
 import Login from './components/login.jsx';
 import Inicio from './components/Inicio.jsx';
 import PreFormulario from './components/preFormulario.jsx';
-import RegistroSuministros from './components/registroSuministros.jsx';
+import RegistroSuministros from './components/registrarSuministro.jsx';
 import AsignacionRecursos from './components/AsignacionRecursos.jsx';
 import BusquedaAlbergue from './components/BusquedaAlbergue.jsx';
 import AyudaForm from './components/ayudaForm.jsx';
-import RegistrarProducto from './components/RegistrarProducto.jsx';
+import RegistrarConsumible from './components/registrarConsumibles.jsx';
 import RegistroAlbergue from './components/RegistroAlbergue.jsx';
 import RegistroUsuario from './components/registroUsuario.jsx';
 import ListaProducto from './components/ListaProducto.jsx';
@@ -17,10 +17,8 @@ import ListaAlbergue from './components/ListaAlbergue.jsx';
 import FormularioAbastecimiento from './components/formularioAbarrotes.jsx';
 import AjusteInventario from "./components/ajusteInventario";// <--- nombre correcto
 import RecuperarContrasena from './components/recuperarContrasena';
-import RestablecerContrasena from './components/restablecerContrasena';
 import FamiliaFormulario from './components/familiaFormulario.jsx';
 import FormularioIntegrantes from "./components/formularioIntegrantes";
-
 import RegistroMascotas from "./components/registroMascota.jsx";
 import VistaFamilia from './components/VistaFamilia.jsx'; 
 
@@ -28,8 +26,7 @@ const App = () => {
   const location = useLocation();
   const isLogin = 
     location.pathname === '/' || 
-    location.pathname === '/recuperarContrasena.jsx' || 
-    location.pathname === '/restablecerContrasena.jsx';
+    location.pathname === '/recuperarContrasena.jsx';
 
   return (
     <>
@@ -37,8 +34,6 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/recuperarContrasena.jsx" element={<RecuperarContrasena />} />
-          <Route path="/restablecerContrasena.jsx" element={<RestablecerContrasena />} />
-          <Route path="/restablecerContrasena" element={<RestablecerContrasena />} />
         </Routes>
       ) : (
         <div className="app-container">
@@ -51,7 +46,7 @@ const App = () => {
               <Route path="/asignacionRecursos.jsx" element={<AsignacionRecursos />} />
               <Route path="/busquedaAlbergue.jsx" element={<BusquedaAlbergue />} />
               <Route path="/ayudaForm.jsx" element={<AyudaForm />} />
-              <Route path="/registrarProducto.jsx" element={<RegistrarProducto />} />
+              <Route path="/registrarConsumibles.jsx" element={<RegistrarConsumible />} />
               <Route path="/registroAlbergue.jsx" element={<RegistroAlbergue />} />
               <Route path="/registroUsuario.jsx" element={<RegistroUsuario />} />
               <Route path="/listaProducto.jsx" element={<ListaProducto />} />
