@@ -1,5 +1,6 @@
+// src/components/ResumenFinal.jsx
 import React, { useContext } from 'react';
-import { AbastecimientoContext } from '../context/AbastecimientoContext';
+import { AbastecimientoContext } from '../context/contextoAbastecimiento'; // Asegúrate de que esta ruta coincida con tu archivo real
 import { useNavigate } from 'react-router-dom';
 
 const ResumenFinal = () => {
@@ -13,7 +14,6 @@ const ResumenFinal = () => {
   }, {});
 
   const guardarDatos = () => {
-    // Simula envío a backend
     console.log('Datos enviados:', items);
     alert('Datos guardados exitosamente.');
   };
