@@ -5,41 +5,15 @@ import Alerta from "../components/Alerta";
 import "../styles/busquedaAlbergue.css";
 
 const BusquedaAlbergue = () => {
-  const {
-    provincias,
-    cantones,
-    distritos,
-    setProvinciaId: setProvinciaIdHook,
-    setCantonId: setCantonIdHook,
-  } = useUbicaciones();
+  const { provincias, cantones, distritos, setProvinciaId, setCantonId } = useUbicaciones();
 
   const [idAlbergue, setIdAlbergue] = useState("");
   const [nombre, setNombre] = useState("");
-  const [provinciaId, setProvinciaId] = useState("");
-  const [cantonId, setCantonId] = useState("");
-  const [distritoId, setDistritoId] = useState("");
   const [resultados, setResultados] = useState([]);
   const [error, setError] = useState("");
-
-  const handleProvinciaChange = (e) => {
-    const value = e.target.value;
-    setProvinciaId(value);
-    setProvinciaIdHook(value);
-
-    // Limpiar cantón y distrito si cambia provincia
-    setCantonId("");
-    setDistritoId("");
-    setCantonIdHook("");
-  };
-
-  const handleCantonChange = (e) => {
-    const value = e.target.value;
-    setCantonId(value);
-    setCantonIdHook(value);
-
-    // Limpiar distrito si cambia cantón
-    setDistritoId("");
-  };
+  const [provinciaSeleccionada, setProvinciaSeleccionada] = useState("");
+  const [cantonSeleccionado, setCantonSeleccionado] = useState("");
+  const [distritoSeleccionado, setDistritoSeleccionado] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,34 +35,29 @@ const BusquedaAlbergue = () => {
         } else {
           setError("No se encontró albergue con ese nombre.");
         }
-      } else if (provinciaId || cantonId || distritoId) {
-        // Obtener los nombres descriptivos según IDs seleccionados
-        const provinciaObj = provincias.find(
-          (p) => String(p.idProvincia) === String(provinciaId)
-        );
-        const cantonObj = cantones.find(
-          (c) => String(c.idCanton) === String(cantonId)
-        );
-        const distritoObj = distritos.find(
-          (d) => String(d.idDistrito) === String(distritoId)
-        );
-
-        // Prioridad distrito > cantón > provincia según tu SP
-        const params = {
-          distrito: distritoObj?.descripcion || "",
-          canton: distritoObj ? "" : cantonObj?.descripcion || "",
-          provincia: distritoObj || cantonObj ? "" : provinciaObj?.descripcion || "",
-        };
-
-        const res = await alberguesAPI.getByUbicacion(params);
-
+      } else if (distritoSeleccionado) {
+        const res = await alberguesAPI.getByDistrito(distritoSeleccionado);
         if (res?.data?.length > 0) {
           setResultados(res.data);
         } else {
-          setError("No se encontraron albergues en esa ubicación.");
+          setError("No se encontró albergue en ese distrito.");
+        }
+      } else if (cantonSeleccionado) {
+        const res = await alberguesAPI.getByCanton(cantonSeleccionado);
+        if (res?.data?.length > 0) {
+          setResultados(res.data);
+        } else {
+          setError("No se encontró albergue en ese cantón.");
+        }
+      } else if (provinciaSeleccionada) {
+        const res = await alberguesAPI.getByProvincia(provinciaSeleccionada);
+        if (res?.data?.length > 0) {
+          setResultados(res.data);
+        } else {
+          setError("No se encontró albergue en esa provincia.");
         }
       } else {
-        setError("Por favor ingrese al menos un criterio de búsqueda.");
+        setError("Por favor ingrese ID, Nombre o seleccione una ubicación.");
       }
     } catch (err) {
       if (err.response && err.response.status === 404) {
@@ -121,8 +90,13 @@ const BusquedaAlbergue = () => {
         <div className="campo-horizontal">
           <select
             className="form-select"
-            onChange={handleProvinciaChange}
-            value={provinciaId}
+            onChange={(e) => {
+              const idSeleccionado = parseInt(e.target.value, 10);
+              setProvinciaId(idSeleccionado);
+              const provincia = provincias.find((p) => p.idProvincia === idSeleccionado);
+              setProvinciaSeleccionada(provincia?.descripcion || "");
+            }}
+            defaultValue=""
           >
             <option value="">Provincia</option>
             {provincias.map((p) => (
@@ -136,9 +110,13 @@ const BusquedaAlbergue = () => {
         <div className="campo-horizontal">
           <select
             className="form-select"
-            onChange={handleCantonChange}
-            disabled={!cantones.length}
-            value={cantonId}
+            onChange={(e) => {
+              const idSeleccionado = parseInt(e.target.value, 10);
+              setCantonId(idSeleccionado);
+              const canton = cantones.find((c) => c.idCanton === idSeleccionado);
+              setCantonSeleccionado(canton?.descripcion || "");
+            }}
+            defaultValue=""
           >
             <option value="">Cantón</option>
             {cantones.map((c) => (
@@ -152,9 +130,12 @@ const BusquedaAlbergue = () => {
         <div className="campo-horizontal">
           <select
             className="form-select"
-            onChange={(e) => setDistritoId(e.target.value)}
-            disabled={!distritos.length}
-            value={distritoId}
+            onChange={(e) => {
+              const idSeleccionado = parseInt(e.target.value, 10);
+              const distrito = distritos.find((d) => d.idDistrito === idSeleccionado);
+              setDistritoSeleccionado(distrito?.descripcion || "");
+            }}
+            defaultValue=""
           >
             <option value="">Distrito</option>
             {distritos.map((d) => (
