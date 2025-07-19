@@ -27,50 +27,50 @@ const FormularioAbastecimiento = () => {
   };
 
   return (
-    <div className="contenedor-formulario">
-      {mostrarResumenParcial ? (
-        <>
-          <ResumenParcial />
-          <div className="botones-formulario">
-            <button onClick={handleVolverFormulario} className="btn-volver">
-              Volver al Formulario
-            </button>
-          </div>
-        </>
-      ) : mostrarResumenFinal ? (
-        <>
-          <ResumenFinal />
-          <div className="botones-formulario">
-            <button onClick={handleVolverFormulario} className="btn-volver">
-              Volver al Formulario
-            </button>
-          </div>
-        </>
-      ) : (
-        <>
-          <h1 className="titulo-formulario">Formulario de Abastecimiento</h1>
-          <div className="form-seccion">
-            <Carnes />
-            <Proteinas />
-            <Verduras />
-            <Olores />
-            <Abarrotes />
-            <Limpieza />
-          </div>
-          <div className="botones-formulario">
-            <button onClick={handleIrAResumenParcial} className="btn-resumen">
-              Ver Resumen Parcial
-            </button>
-            <button onClick={handleVerResumenFinal} className="btn-resumen-final">
-              Ver Resumen Final
-            </button>
-            <button className="btn-enviar">
-              Enviar Formulario
-            </button>
-          </div>
-        </>
-      )}
-    </div>
+<div className="contenedor-formulario">
+  {mostrarResumenParcial ? (
+    <>
+      <ResumenParcial />
+      <div className="botones-formulario">
+        <button onClick={handleVolverFormulario} className="btn-volver">
+          Volver al Formulario
+        </button>
+      </div>
+    </>
+  ) : mostrarResumenFinal ? (
+    <>
+      <ResumenFinal />
+      <div className="botones-formulario">
+        <button onClick={handleVolverFormulario} className="btn-volver">
+          Volver al Formulario
+        </button>
+      </div>
+    </>
+  ) : (
+    <>
+      <h1 className="titulo-formulario">Formulario de Abastecimiento</h1>
+      <div className="form-seccion">
+        <Carnes />
+        <Proteinas />
+        <Verduras />
+        <Olores />
+        <Abarrotes />
+        <Limpieza />
+      </div>
+      <div className="botones-formulario">
+        <button onClick={handleIrAResumenParcial} className="btn-resumen">
+          Ver Resumen Parcial
+        </button>
+        <button onClick={handleVerResumenFinal} className="btn-resumen-final">
+          Ver Resumen Final
+        </button>
+        <button className="btn-enviar">
+          Enviar Formulario
+        </button>
+      </div>
+    </>
+  )}
+</div>
   );
 };
 
