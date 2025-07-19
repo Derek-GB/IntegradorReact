@@ -110,8 +110,8 @@ body {
 .content-area {
     display: flex;
     flex-direction: column;
-    max-width: 600px;
-    width: 100%;
+    max-width: 700px;
+    width: 200%;
     background-color: var(--color-blanco);
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -289,9 +289,17 @@ details:not([open]) summary::before {
 
 
 
-h1 { 
-  text-align: center;
-  margin-bottom: 16px;
+h1 {
+    text-align: center;
+    margin-bottom: 16px;
+    background-color: var(--color-verde-form);
+    color: var(--color-blanco);
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    user-select: none;
+    transition: background-color 0.3s ease;
+     
 }
 
 .sidebar-copyright {
@@ -360,7 +368,7 @@ button:hover {
 }
 
 table {
-  width: 900px;
+  /* width: 900px; */
 
   margin-top: 12px;
 }
@@ -388,11 +396,14 @@ details > *:not(summary) {
   border-bottom-right-radius: 8px;
 }
 
+/* Grid para lista de abarrotes (y Olores y Otros) */
 .checkbox-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px;
-  margin-top: 10px;
+   display: grid;
+    /* CAMBIO CLAVE: Forzar a 3 columnas */
+    grid-template-columns: repeat(3, 1fr); /* Esto creará exactamente 3 columnas de igual ancho */
+    gap: 12px;
+    margin-top: 10px;
+    overflow-x: hidden; /* Mantener esto para seguridad */
 }
 
 .abarrote-item label {
@@ -565,9 +576,9 @@ details > *:not(summary) {
 /* Estilos para la sección de Abarrotes (cuadritos más pequeños) */
 .cuadro-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 15px;
-    padding: 20px;
+    padding: 10px;
     background-color: var(--color-gris-claro);
     border-radius: 8px;
     margin-top: 15px;
@@ -619,13 +630,13 @@ details > *:not(summary) {
 
 /* Estilos para la sección de Limpieza (orden vertical, cuadritos más pequeños, y nueva lógica) */
 #productosLimpiezaDisponibles {
-    display: flex;
+    /* display: flex; */
     flex-direction: column;
     gap: 10px;
     padding: 15px;
     background-color: var(--color-gris-claro);
     border-radius: 8px;
-    margin-top: 15px;
+    margin-top: 15px;
 }
 
 .producto-limpieza-item {
@@ -729,13 +740,15 @@ details summary::-webkit-details-marker {
 /* Reutilizamos .cuadro-grid para #productosLimpiezaDisponibles */
 #productosLimpiezaDisponibles {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(105px, 1fr)); /* AJUSTADO: Igual que checkbox-grid para consistencia */
     gap: 15px;
     padding: 20px;
     background-color: var(--color-gris-claro);
     border-radius: 8px;
     margin-top: 15px;
     border: none;
+    /* Agregamos overflow-x: hidden para seguridad */
+    overflow-x: hidden;
 }
 
 /* Aplicamos los mismos estilos de tarjeta a los productos de Limpieza */
@@ -806,12 +819,12 @@ details summary::-webkit-details-marker {
 
 /* --- Estilos para las Tablas de Resumen (Abarrotes y Limpieza) --- */
 table {
-    width: 100%;
+   width: 100%; /* CAMBIO CLAVE: La tabla ocupará el 100% del ancho de su contenedor (max 600px del formulario) */
     border-collapse: collapse;
     margin-top: 12px;
     background-color: var(--color-blanco);
     border-radius: 8px;
-    overflow: hidden;
+    overflow: hidden; /* Esto es para que el contenido de la tabla no desborde sus propias esquinas redondeadas */
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -820,7 +833,11 @@ th, td {
     padding: 10px;
     text-align: center;
     font-size: 0.95em;
+     word-wrap: break-word; /* Permite que el texto largo se divida en múltiples líneas */
+    /* min-width: 50px; <-- Puedes añadir un min-width si las columnas se hacen muy estrechas */
 }
+  
+
 
 th {
     background-color: var(--color-gris-claro);
@@ -869,6 +886,12 @@ details > *:not(summary) label {
     margin-bottom: 6px;
     font-weight: 600;
     color: var(--color-texto);
+     padding: 10px;
+    background-color: var(--color-gris-claro);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    box-sizing: border-box; /* Asegurado */
+    width: 100%; /* Asegurado para que ocupe el 100% de su contenedor */
 }
 
 details > *:not(summary) input,
@@ -879,4 +902,8 @@ details > *:not(summary) select {
   max-width: 100%;
   padding: 20px;
   overflow-x: hidden;
+}
+
+* {
+    box-sizing: border-box;
 }

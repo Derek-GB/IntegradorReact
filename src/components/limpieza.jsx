@@ -61,7 +61,7 @@ const Limpieza = () => {
               />
               {nombre}
   </label>
-  <input
+  {/* <input
     className='inputAbarrote'
     type="number"
     min="1"
@@ -69,7 +69,7 @@ const Limpieza = () => {
     onChange={e => handleCantidad(nombre, e.target.value)}
     disabled={!selecciones[nombre]?.checked}
     placeholder={unidad}
-  />
+  /> */}
 </div>
         ))}
       </div>
