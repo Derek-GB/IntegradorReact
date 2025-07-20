@@ -46,7 +46,7 @@
 .familiaFormulario input {
   margin-top: 0.4rem;
   padding: 0.6rem;
-  border: none;
+  border: 1px solid var;
   border-bottom: 1px solid var(--color-gris-borde); /* 👈 Línea inferior */
   font-size: 1rem;
   background: transparent;
@@ -103,4 +103,42 @@
   color: var(--color-verde-form);
   font-weight: 600;
   font-family: var(--fuente-principal);
+}
+
+.ficha-persona summary {
+    
+  padding: 0.75rem 1rem;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;              /* Aquí controlás la redondez */
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Sombra suave opcional */
+}
+
+.ficha-persona details {
+  background-color: white;
+  border: none;
+  box-shadow: none;
+  padding: 1 px;
+  margin: -10px;
+}
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #0d6efd;      /* Cambiá este color por uno institucional */
+  border-radius: 4px;         /* Opcional para esquinas suavizadas */
+}
+.checkbox-group {
+  display: flex;
+  align-items: center;     /* Alinea verticalmente el checkbox y el texto */
+  gap: 0.7rem;             /* Espacio horizontal entre el checkbox y el label */
+  margin-bottom: 2rem;
+}
+
+
+
+
+.ficha-persona legend {
+  display: none;
 }

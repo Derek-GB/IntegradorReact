@@ -5,6 +5,7 @@ import FamiliaCaracteristicasPoblacionales from "./FamiliaCaracteristicasPoblaci
 import FamiliaFirmaDigital from "./FamiliaFirmaDigital.jsx";
 import { personasAPI } from "../helpers/api";
 import "../styles/familiaFormulario.css";
+import "../styles/familiaFormulario.css";
 
 const FamiliaFormulario = () => {
   const [datos, setDatos] = useState({
