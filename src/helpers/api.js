@@ -164,7 +164,7 @@ export const categoriaConsumiblesAPI = createApiMethods("categoriaConsumibles");
 export const usuariosAPI = createApiMethods("usuarios", {
   validarCorreo: async (correo) => {
     try {
-      await customAxios.post(`/usuarios/validar/correo`, { correo });
+      await customAxios.post(`public/usuarios/validar/correo`, { correo });
       return { existe: false };
     } catch (error) {
       if (error.response?.status === 400) {
@@ -179,7 +179,7 @@ export const usuariosAPI = createApiMethods("usuarios", {
   },
   updateContrasena: async (correo, nuevaContrasena) => {
     try {
-      const res = await customAxios.put(`/usuarios/contrasena`, { correo, nuevaContrasena });
+      const res = await customAxios.put(`public/usuarios/contrasena`, { correo, nuevaContrasena });
       return res.data;
     } catch (error) {
       handleError(error);
