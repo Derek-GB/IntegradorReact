@@ -62,7 +62,7 @@
 .ajuste-inventario-form button[type="button"],
 .ajuste-inventario-form button[type="submit"] {
   background: var(--color-amarillo);
-  color: var(--color-blanco);
+  color: var(--color-negro);
   border: none;
   border-radius: 6px;
   padding: 0.7rem 1rem;
@@ -91,23 +91,7 @@
   font-family: var(--fuente-principal);
 }
 
-.boton-buscar-id {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  font-size: 18px;
-  font-weight: bold;
-  border-radius: 50%;
-  background: #2563eb; /* Color principal de tus botones */
-  color: #fff;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);
-}
+
 
 .boton-buscar-id:hover {
   background: #1741a6;
