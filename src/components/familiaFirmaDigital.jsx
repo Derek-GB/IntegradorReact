@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import SignaturePad from "signature_pad";
+import "../styles/familiaFormulario.css"; // Asegúrate de que este CSS esté creado
 
 const FamiliaFirmaDigital = ({ datos = {}, setDatos }) => {
   const canvasRef = useRef(null);

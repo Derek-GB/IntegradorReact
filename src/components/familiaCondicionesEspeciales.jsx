@@ -1,4 +1,5 @@
 import React from "react";
+import "../styles/familiaFormulario.css"; // Asegúrate de que este CSS esté creado
 
 const FamiliaCondicionesEspeciales = ({ datos = {}, setDatos }) => {
   const handleChange = (e) => {
