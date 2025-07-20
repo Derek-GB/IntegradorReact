@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { municipalidadAPI, usuariosAPI } from '../helpers/api';
-import '../styles/registroUsuario.css'; 
+import '../styles/registroUsuario.css';
+import Alerta from '../components/Alerta'; // Asegúrate que esta ruta sea correcta
 
 const RegistroUsuario = () => {
   const [municipalidades, setMunicipalidades] = useState([]);
@@ -14,6 +15,8 @@ const RegistroUsuario = () => {
     identificacion: ''
   });
 
+  const [alerta, setAlerta] = useState(null); // { mensaje: '', tipo: 'success' | 'error' | 'info' }
+
   useEffect(() => {
     const fetchMunicipalidades = async () => {
       try {
@@ -23,6 +26,7 @@ const RegistroUsuario = () => {
       } catch (error) {
         console.error('Error al cargar municipalidades:', error);
         setMunicipalidades([]);
+        setAlerta({ mensaje: 'Error al cargar municipalidades.', tipo: 'error' });
       }
     };
     fetchMunicipalidades();
@@ -38,7 +42,7 @@ const RegistroUsuario = () => {
     const { nombre, correo, contrasena, rol, activo, municipalidad, identificacion } = form;
 
     if (!nombre || !correo || !contrasena || !rol || !activo || !municipalidad || !identificacion) {
-      alert("Por favor complete todos los campos.");
+      setAlerta({ mensaje: 'Por favor complete todos los campos.', tipo: 'error' });
       return;
     }
 
@@ -47,14 +51,14 @@ const RegistroUsuario = () => {
       correo: correo.trim(),
       contrasenaHash: contrasena.trim(),
       rol: rol.trim(),
-      activo: activo === "activo",
+      activo: activo === 'activo',
       idMunicipalidad: parseInt(municipalidad),
       identificacion: identificacion.trim()
     };
 
     try {
       await usuariosAPI.create(payload);
-      alert("Usuario registrado correctamente.");
+      setAlerta({ mensaje: 'Usuario registrado correctamente.', tipo: 'success' });
       setForm({
         nombre: '', correo: '', contrasena: '',
         rol: '', activo: '', municipalidad: '', identificacion: ''
@@ -62,15 +66,24 @@ const RegistroUsuario = () => {
     } catch (error) {
       console.error("Error al registrar usuario:", error);
       if (error.response) {
-        alert("Error del servidor: " + JSON.stringify(error.response.data));
+        setAlerta({ mensaje: 'Error del servidor: ' + JSON.stringify(error.response.data), tipo: 'error' });
       } else {
-        alert("Error al conectar con el servidor.");
+        setAlerta({ mensaje: 'Error al conectar con el servidor.', tipo: 'error' });
       }
     }
   };
 
   return (
     <div className="ajuste-inventario-fullscreen sin-flecha-back">
+      {alerta && (
+        <Alerta
+          mensaje={alerta.mensaje}
+          tipo={alerta.tipo}
+          duracion={4000}
+          onClose={() => setAlerta(null)}
+        />
+      )}
+
       <form className="ajuste-inventario-form" onSubmit={handleSubmit}>
         <h2>Registro de Usuario</h2>
 
@@ -111,7 +124,7 @@ const RegistroUsuario = () => {
         <label>Identificación:</label>
         <input name="identificacion" value={form.identificacion} onChange={handleChange} required />
 
-        <button type="submit" className="">Registrar</button>
+        <button type="submit">Registrar</button>
       </form>
     </div>
   );
