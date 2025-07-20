@@ -8,6 +8,7 @@ import { generarCodigoFamilia } from "../helpers/generarCodigoFamilia";
 
 import "../styles/familia.css"; // Asegúrate de que este CSS esté creado
 
+
 const FormularioRegistro = () => {
   const [integrantes, setIntegrantes] = useState("");
   const [provinciaSeleccionada, setProvinciaSeleccionada] = useState("");
@@ -19,6 +20,7 @@ const FormularioRegistro = () => {
   const [nombreProvincia, setNombreProvincia] = useState("");
   const [nombreCanton, setNombreCanton] = useState("");
   const [nombreDistrito, setNombreDistrito] = useState("");
+
   const [albergues, setAlbergues] = useState([]);
   const [amenazas, setAmenazas] = useState([]);
   const [provincias, setProvincias] = useState([]);
@@ -45,9 +47,7 @@ const FormularioRegistro = () => {
 
   useEffect(() => {
     const cargarProvincias = async () => {
-      const datos = await obtenerTodos(
-        "https://api-geo-cr.vercel.app/provincias"
-      );
+      const datos = await obtenerTodos("https://api-geo-cr.vercel.app/provincias");
       setProvincias(datos);
     };
     cargarProvincias();
@@ -84,16 +84,13 @@ const FormularioRegistro = () => {
 
   // UseEffect para el codigo de familia
   useEffect(() => {
-    if (nombreProvincia && nombreCanton && integrantes) {
-      const numeroFamilia = 1; // Aquí luego puedes hacer lógica para que sea incremental si quieres
-      const nuevoCodigo = generarCodigoFamilia(
-        nombreProvincia,
-        nombreCanton,
-        numeroFamilia
-      );
-      setCodigoFamilia(nuevoCodigo);
-    }
-  }, [nombreProvincia, nombreCanton, integrantes]);
+  if (nombreProvincia && nombreCanton && integrantes) {
+    const numeroFamilia = 1; // Aquí luego puedes hacer lógica para que sea incremental si quieres
+    const nuevoCodigo = generarCodigoFamilia(nombreProvincia, nombreCanton, numeroFamilia);
+    setCodigoFamilia(nuevoCodigo);
+  }
+}, [nombreProvincia, nombreCanton, integrantes]);
+
 
   const crearFamilia = async () => {
     const idUsuario = localStorage.getItem("idUsuario");
@@ -110,7 +107,7 @@ const FormularioRegistro = () => {
       !idUsuario
     ) {
       alert("Complete todos los campos obligatorios.");
-      return Promise.reject("Campos incompletos");
+      return;
     }
 
     const datos = {
@@ -126,28 +123,16 @@ const FormularioRegistro = () => {
     };
 
     try {
-      console.log("Datos enviados:", datos);
       const res = await customAxios.post("/familias", datos);
       const idFamilia = res.data.idFamilia;
       localStorage.setItem("idFamilia", idFamilia);
-      localStorage.setItem("cantidadIntegrantes", integrantes);
       alert("Familia registrada correctamente.");
-      return true; // éxito
     } catch (error) {
-      console.error("Error al registrar familia:", error.message);
-      alert("Error al registrar familia.");
-      throw error; // propaga error
+      console.error("Error al crear familia:", error);
+      alert("Hubo un error al crear la familia, pero puede continuar con el registro de integrantes.");
     }
-  };
-
-  const handleRegistrar = async () => {
-    try {
-      await crearFamilia();
-      navigate("/formularioIntegrantes");
-    } catch (error) {
-      // Aquí puedes manejar el error, ya alertó en crearFamilia
-      console.log("No se pudo registrar familia, no se navega.", error);
-    }
+    localStorage.setItem("cantidadIntegrantes", integrantes);
+    navigate("/formularioIntegrantes.jsx");
   };
 
   return (
@@ -166,9 +151,7 @@ const FormularioRegistro = () => {
             >
               <option value="">Seleccione</option>
               {albergues.map((a) => (
-                <option key={a.id} value={a.id}>
-                  {a.nombre}
-                </option>
+                <option key={a.id} value={a.id}>{a.nombre}</option>
               ))}
             </select>
           </label>
@@ -201,9 +184,7 @@ const FormularioRegistro = () => {
             >
               <option value="">Seleccione</option>
               {amenazas.map((e) => (
-                <option key={e.id} value={e.id}>
-                  {e.evento}
-                </option>
+                <option key={e.id} value={e.id}>{e.evento}</option>
               ))}
             </select>
           </label>
@@ -225,9 +206,7 @@ const FormularioRegistro = () => {
             >
               <option value="">Seleccione</option>
               {provincias.map((p) => (
-                <option key={p.idProvincia} value={p.idProvincia}>
-                  {p.descripcion}
-                </option>
+                <option key={p.idProvincia} value={p.idProvincia}>{p.descripcion}</option>
               ))}
             </select>
           </label>
@@ -245,9 +224,7 @@ const FormularioRegistro = () => {
             >
               <option value="">Seleccione</option>
               {cantones.map((c) => (
-                <option key={c.idCanton} value={c.idCanton}>
-                  {c.descripcion}
-                </option>
+                <option key={c.idCanton} value={c.idCanton}>{c.descripcion}</option>
               ))}
             </select>
           </label>
@@ -263,9 +240,7 @@ const FormularioRegistro = () => {
             >
               <option value="">Seleccione</option>
               {distritos.map((d) => (
-                <option key={d.idDistrito} value={d.idDistrito}>
-                  {d.descripcion}
-                </option>
+                <option key={d.idDistrito} value={d.idDistrito}>{d.descripcion}</option>
               ))}
             </select>
           </label>
@@ -280,10 +255,7 @@ const FormularioRegistro = () => {
           </label>
         </fieldset>
 
-        {/* Aquí se cambia la función llamada al hacer clic */}
-        <button type="button" onClick={handleRegistrar}>
-          Registrar
-        </button>
+        <button type="button" onClick={crearFamilia}>Registrar</button>
       </form>
     </div>
   );

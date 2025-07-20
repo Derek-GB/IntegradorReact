@@ -20,7 +20,7 @@ import RecuperarContrasena from './components/recuperarContrasena';
 import FamiliaFormulario from './components/familiaFormulario.jsx';
 import FormularioIntegrantes from "./components/formularioIntegrantes";
 import RegistroMascotas from "./components/registroMascota.jsx";
-import BusquedaFamilia from './components/BusquedaFamilia.jsx';
+import VistaFamilia from './components/VistaFamilia.jsx'; 
 
 const App = () => {
   const location = useLocation();
@@ -53,10 +53,10 @@ const App = () => {
               <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
               <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
               <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
-              <Route path="/familiaFormulario" element={<FamiliaFormulario />} />
-              <Route path="/formularioIntegrantes" element={<FormularioIntegrantes />} />
+              <Route path="/familiaFormulario.jsx" element={<FamiliaFormulario />} />
+              <Route path="/formularioIntegrantes.jsx" element={<FormularioIntegrantes />} />
               <Route path="/registroMascota.jsx" element={<RegistroMascotas />} />
-              <Route path="/busquedaFamilia.jsx" element={<BusquedaFamilia />} />            
+              <Route path="/VistaFamilia.jsx" element={<VistaFamilia />} />              
 
 
             </Routes>
