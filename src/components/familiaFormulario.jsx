@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
 import FamiliaDatosPersonales from "./familiaDatosPersonales.jsx";
 import FamiliaCondicionesEspeciales from "./FamiliaCondicionesEspeciales.jsx";
-import FamiliaCaracteristicasPoblacionales from "./familiaCaracteristicasPoblacionales.jsx";
+import FamiliaCaracteristicasPoblacionales from "./FamiliaCaracteristicasPoblacionales.jsx";
 import FamiliaFirmaDigital from "./FamiliaFirmaDigital.jsx";
-import {
-  personasAPI,
-  condicionesEspecialesAPI,
-  caracteristicasPoblacionalesAPI,
-  firmasDigitalesAPI,
-} from "../helpers/api";
+import { personasAPI } from "../helpers/api";
 import "../styles/familiaFormulario.css";
 
 const FamiliaFormulario = () => {
@@ -23,10 +18,8 @@ const FamiliaFormulario = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
-  // Código de familia dinámico desde input
   const codigoFamilia = datos.FamiliaDatosPersonales.idFamilia || "";
 
-  // Guardar en localStorage automáticamente si el usuario lo modifica
   useEffect(() => {
     if (codigoFamilia) {
       localStorage.setItem("codigoFamilia", codigoFamilia);
@@ -44,12 +37,12 @@ const FamiliaFormulario = () => {
 
   const construirPersonaPayload = (dp, ce, cp, fd, codigoFamilia, idUsuarioCreacion) => ({
     tieneCondicionSalud: ce.tieneCondicionSalud ?? true,
-    descripcionCondicionSalud: ce.descripcionCondicionSalud || ce.otrasCondiciones || "",
+    descripcionCondicionSalud: ce.descripcionCondicionSalud || ce.otrasCondiciones || "prueba",
     discapacidad: ce.discapacidad ?? false,
     tipoDiscapacidad: ce.tipoDiscapacidad || "",
     subtipoDiscapacidad: ce.subtipoDiscapacidad || "",
     paisOrigen: cp.paises || "",
-    autoidentificacionCultural: cp.autoidentificacionCultural || "",
+    autoidentificacionCultural: cp.autoidentificacionCultural || "prueba",
     puebloIndigena: cp.grupoIndigena || "",
     firma: fd.imagen || "",
     idFamilia: codigoFamilia,
@@ -72,49 +65,26 @@ const FamiliaFormulario = () => {
   });
 
   const crearPersonas = async (payloadArray) => {
+    console.log("Payload a enviar:", payloadArray);
+    const res = await personasAPI.create(payloadArray);
+    console.log("Respuesta API:", res);
 
-  console.log("Payload a enviar", payloadArray);  
-    
-  const res = await personasAPI.create(payloadArray);
-  console.log("Respuesta API", res);
+    const resultados = res?.resultados || [];
+    const ids = resultados.map(r => r.id);
 
-  const resultados = res.resultados || [];
-  const ids = resultados.map(r => r.id);
+    if (ids.length !== payloadArray.length) {
+      if (res.success && ids.length === 0) {
+        console.warn("Advertencia: No se devolvieron IDs, pero la inserción fue exitosa.");
+      } else {
+        throw new Error("No se pudieron insertar todas las personas");
+      }
+    }
 
-  if (ids.length !== payloadArray.length) {
-    throw new Error("No se pudieron insertar todas las personas");
-  }
-  // Guardás el primer ID o los guardás todos (según lo que necesités)
-  localStorage.setItem("idPersona", ids[0]);
-  return ids;
-};
+    if (ids.length > 0) {
+      localStorage.setItem("idPersona", ids[0]);
+    }
 
-
-  const crearCondicionesEspeciales = async (idPersona, ce) => {
-    return condicionesEspecialesAPI.create({
-      idPersona,
-      discapacidad: ce.discapacidad ?? false,
-      tipoDiscapacidad: ce.tipoDiscapacidad || "",
-      subtipoDiscapacidad: ce.subtipoDiscapacidad || "",
-      tieneCondicionSalud: ce.tieneCondicionSalud ?? true,
-      condicionSaludId: 1,
-    });
-  };
-
-  const crearCaracteristicasPoblacionales = async (idPersona, cp) => {
-    return caracteristicasPoblacionalesAPI.create({
-      idPersona,
-      migrante: cp.migrante ?? false,
-      indigena: cp.indigena ?? false,
-    });
-  };
-
-  const crearFirmaDigital = async (idPersona, fd) => {
-    if (!fd.imagen) return;
-    return firmasDigitalesAPI.create({
-      idPersona,
-      firma: fd.imagen,
-    });
+    return ids;
   };
 
   const handleSubmit = async (e) => {
@@ -150,16 +120,8 @@ const FamiliaFormulario = () => {
 
     try {
       const personaPayload = construirPersonaPayload(dp, ce, cp, fd, codigoFamilia, idUsuarioCreacion);
-      const [personaId] = await crearPersonas([personaPayload]);
 
-      console.log("Payload enviado", [personaPayload]);
-      console.log("Respuesta completa", res);
-      console.log("Resultados:", res.data?.resultados);
-
-
-      await crearCondicionesEspeciales(personaId, ce);
-      await crearCaracteristicasPoblacionales(personaId, cp);
-      await crearFirmaDigital(personaId, fd);
+      await crearPersonas([personaPayload]);
 
       setSuccess("¡Datos guardados correctamente!");
     } catch (err) {
@@ -226,6 +188,7 @@ const FamiliaFormulario = () => {
         {loading && <p className="mensaje-cargando">Guardando datos...</p>}
         {error && <p className="error">{error}</p>}
         {success && <p className="success">{success}</p>}
+
         <button type="submit" disabled={loading}>Guardar Datos</button>
       </form>
     </div>
