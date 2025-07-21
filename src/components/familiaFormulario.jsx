@@ -74,6 +74,7 @@ const FamiliaFormulario = () => {
 
 
   const crearPersonas = async (payloadArray) => {
+    console.log("Creando personas con payload:", payloadArray);
     const res = await personasAPI.create({personas: payloadArray});
     console.log("Respuesta API:", res);
 

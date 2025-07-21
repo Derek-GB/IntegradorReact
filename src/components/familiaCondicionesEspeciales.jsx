@@ -15,29 +15,35 @@ const FamiliaCondicionesEspeciales = ({ datos = {}, setDatos }) => {
   return (
     <details open>
       <summary><strong>Condiciones Especiales</strong></summary>
+
       <fieldset className="mt-2">
+
         <label>¿Tiene alguna condición especial?</label>
         <br />
-        <label className="me-3">
+        <div className="radio-group">
           <input
+            id="discapacidad-si"
             type="radio"
             name="discapacidad"
             value={true}
             checked={datos.discapacidad === true}
             onChange={() => setDatos({ ...datos, discapacidad: true })}
-          />{" "}
-          Sí
-        </label>
-        <label>
+
+          />
+          <label htmlFor="discapacidad-si">Sí</label>
+
           <input
+            id="discapacidad-no"
             type="radio"
             name="discapacidad"
             value={false}
             checked={datos.discapacidad === false}
             onChange={() => setDatos({ ...datos, discapacidad: false })}
-          />{" "}
-          No
-        </label>
+
+          />
+          <label htmlFor="discapacidad-no">No</label>
+        </div>
+
 
         {mostrarCondiciones && (
           <>

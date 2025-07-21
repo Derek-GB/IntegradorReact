@@ -35,15 +35,19 @@ const FamiliaCaracteristicasPoblacionales = ({ datos = {}, setDatos }) => {
     <details open>
       <summary><strong>Características Poblacionales</strong></summary>
 <fieldset className="mt-2">
-  <label>
-    <input
+ 
+  <div className="checkbox-group">
+    <input 
       type="checkbox"
       name="indigena"
       checked={datos.indigena || false}
       onChange={handleChange}
+      className="form-check-input"
     />
-    Población Indígena
-  </label>
+    <label htmlFor="checkbox1">Población Indígena</label>
+  </div>
+
+
 
   {datos.indigena && (
     <>

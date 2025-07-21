@@ -17,7 +17,7 @@ const Sidebar = () => {
     { href: "/listaProducto.jsx", icon: "list", label: "Lista de Suministros" },
     { href: "/listaAlbergue.jsx", icon: "list_alt", label: "Lista de Albergues" },
     { href: "/formularioAbarrotes.jsx", icon: "local_shipping", label: "Abastecimiento" },
-    { href: "/familiaFormulario", icon: "local_shipping", label: "Familia" },
+    { href: "/familiaFormulario.jsx", icon: "local_shipping", label: "Familia" },
     { href: "/ajusteInventario.jsx", icon: "warehouse", label: "Ajuste de inventario" },
     { href: "/registroMascota.jsx", icon: "pets", label: "Registrar Mascotas" },
     { href: "/BusquedaFamilia.jsx", icon: "warehouse", label: "Consultar familias" }
