@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "../styles/familiaFormulario.css"; // Asegúrate de que este CSS esté creado
 
 const FamiliaDatosPersonales = ({ datos = {}, setDatos }) => {
   const [edad, setEdad] = useState("");
@@ -177,9 +178,12 @@ const FamiliaDatosPersonales = ({ datos = {}, setDatos }) => {
             onChange={handleChange}
             className="form-select"
           >
-            <option>Masculino</option>
-            <option>No binario</option>
-            <option>Femenino</option>
+            <option>Hombre</option>
+            <option>Mujer</option>
+            <option>Hombre trans/Transmasculino</option>
+            <option>Mujer trans/Transfemenina</option>
+            <option>No se identifica con ninguna de las anteriores</option>
+            <option>Prefiere no decir</option>
             <option>Otro</option>
           </select>
 

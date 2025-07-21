@@ -36,37 +36,44 @@ const FamiliaFormulario = () => {
     return null;
   };
 
-  const construirPersonaPayload = (dp, ce, cp, fd, codigoFamilia, idUsuarioCreacion) => ({
-    tieneCondicionSalud: ce.tieneCondicionSalud ?? true,
-    descripcionCondicionSalud: ce.descripcionCondicionSalud || ce.otrasCondiciones || "prueba",
-    discapacidad: ce.discapacidad ?? false,
-    tipoDiscapacidad: ce.tipoDiscapacidad || "",
-    subtipoDiscapacidad: ce.subtipoDiscapacidad || "",
-    paisOrigen: cp.paises || "",
-    autoidentificacionCultural: cp.autoidentificacionCultural || "prueba",
-    puebloIndigena: cp.grupoIndigena || "",
-    firma: fd.imagen || "",
-    idFamilia: codigoFamilia,
-    nombre: dp.nombre || "",
-    primerApellido: dp.primerApellido || "",
-    segundoApellido: dp.segundoApellido || "",
-    tipoIdentificacion: dp.tipoIdentificacion || "Cédula",
-    numeroIdentificacion: dp.numeroIdentificacion || "",
-    nacionalidad: dp.nacionalidad || "",
-    parentesco: dp.parentesco || "",
-    esJefeFamilia: dp.esJefeFamilia ?? false,
-    fechaNacimiento: dp.fechaNacimiento || "",
-    genero: dp.genero || "",
-    sexo: dp.sexo || "Otro",
-    telefono: dp.telefono || "",
-    contactoEmergencia: dp.contactoEmergencia || "",
-    observaciones: dp.observaciones || "",
-    estaACargoMenor: dp.estaACargoMenor ?? false,
-    idUsuarioCreacion,
-  });
+  const construirPersonaPayload = (
+  dp,
+  ce,
+  cp,
+  fd,
+  codigoFamilia,
+  idUsuarioCreacion
+) => ({
+  tieneCondicionSalud: ce.tieneCondicionSalud ?? true,
+  descripcionCondicionSalud: ce.descripcionCondicionSalud || ce.otrasCondiciones || "",
+  discapacidad: ce.discapacidad ?? false,
+  tipoDiscapacidad: ce.tipoDiscapacidad || "",
+  subtipoDiscapacidad: ce.subtipoDiscapacidad || "",
+  paisOrigen: cp.paises || "",
+  autoidentificacionCultural: cp.autoidentificacionCultural || "",
+  puebloIndigena: cp.grupoIndigena || "",
+  firma: fd.imagen || "",
+  idFamilia: codigoFamilia,
+  nombre: dp.nombre || "",
+  primerApellido: dp.primerApellido || "",
+  segundoApellido: dp.segundoApellido || "",
+  tipoIdentificacion: dp.tipoIdentificacion || "Cédula",
+  numeroIdentificacion: dp.numeroIdentificacion || "",
+  nacionalidad: dp.nacionalidad || "",
+  parentesco: dp.parentesco || "",
+  esJefeFamilia: dp.esJefeFamilia ?? false,
+  fechaNacimiento: dp.fechaNacimiento || "",
+  genero: dp.genero || "",
+  sexo: dp.sexo || "",
+  telefono: dp.telefono || "",
+  contactoEmergencia: dp.contactoEmergencia || "",
+  observaciones: dp.observaciones || "",
+  estaACargoMenor: dp.estaACargoMenor ?? false,
+  idUsuarioCreacion,
+});
+
 
   const crearPersonas = async (payloadArray) => {
-    console.log("Payload a enviar:", payloadArray);
     const res = await personasAPI.create({personas: payloadArray});
     console.log("Respuesta API:", res);
 

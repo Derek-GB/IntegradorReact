@@ -96,7 +96,20 @@ const FamiliaCondicionesEspeciales = ({ datos = {}, setDatos }) => {
                 className="form-control mb-2"
               />
             )}
+            <label className="form-label mt-2">
+              Describa brevemente la condición especial:
+            </label>
+            <textarea
+              name="descripcionCondicionSalud"
+              value={datos.descripcionCondicionSalud || ""}
+              onChange={handleChange}
+              className="form-control mb-2"
+              rows={3}
+              placeholder="Ejemplo: Hipertensión controlada con medicamento diario"
+            ></textarea>
+
           </>
+
         )}
       </fieldset>
     </details>
