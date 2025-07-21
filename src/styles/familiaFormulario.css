@@ -167,3 +167,36 @@ input[type="radio"] {
 .ficha-persona legend {
   display: none;
 }
+.formulario-integrantes-container {
+  position: relative;
+  z-index: 5; /* más alto que el aside */
+  padding: 2rem;
+  background-color: var(--color-blanco);
+  border-radius: 12px;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.06);
+  max-width: 900px;
+  margin: 0 auto;
+}
+.btn-familia-paso {
+  background-color: var(--color-amarillo);
+  color: var(--color-texto);
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 6px;
+  padding: 0.75rem 1.4rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  font-family: var(--fuente-principal);
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  margin-left: 580px;
+  
+  transition: background 0.3s ease;
+  cursor: pointer;
+  display: inline-block;
+  z-index: 2;
+}
+
+.btn-familia-paso:hover {
+  background-color: var(--color-amarillo-hover);
+}
+
