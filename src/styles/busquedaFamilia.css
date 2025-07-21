@@ -69,7 +69,7 @@
 .btn-buscar {
   width: 140px;
   height: 42px;
-  margin: auto 0 auto auto; /* Empuja a la derecha */
+  margin: auto  auto auto; /* Empuja a la derecha */
   padding: 0.4rem 1rem;
   background-color: #f9b700;
   color: #212529;

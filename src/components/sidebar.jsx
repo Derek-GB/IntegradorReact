@@ -1,31 +1,27 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import '../styles/formularioFusionado.css'; // Asegúrate de que la ruta sea
+import '../styles/sidebar.css'; // Asegúrate de que la ruta sea
 
 const Sidebar = () => {
   const links = [
     // Enlaces principales
     { href: "/inicio", icon: "home", label: "Inicio" },
-    { href: "/preFormulario.jsx", icon: "groups", label: "Registrar Familias" },
-    { href: "/registroSuministros.jsx", icon: "inventory_2", label: "Registrar Suministros" },
-    { href: "/asignacionRecursos.jsx", icon: "volunteer_activism", label: "Asignación de Suministros" },
-    { href: "/busquedaAlbergue.jsx", icon: "hotel", label: "Consulta Albergues" },
-    { href: "/ayudaForm.jsx", icon: "fact_check", label: "Revisión de Ayudas" },
-    { href: "/registrarConsumibles.jsx", icon: "inventory", label: "Registrar consumibles" },
-    { href: "/registroAlbergue.jsx", icon: "business", label: "Registrar un albergue" },
-    { href: "/registroUsuario.jsx", icon: "person_add", label: "Registrar un usuario" },
-    { href: "/listaProducto.jsx", icon: "list", label: "Lista de Suministros" },
-    { href: "/listaAlbergue.jsx", icon: "list_alt", label: "Lista de Albergues" },
+    { href: "/preFormulario.jsx", icon: "groups", label: "Familia" },
+    { href: "/registroSuministros.jsx", icon: "inventory_2", label: "Suministros" },
+    { href: "/asignacionRecursos.jsx", icon: "volunteer_activism", label: "Asignación" },
+    { href: "/busquedaAlbergue.jsx", icon: "hotel", label: "Albergues" },
+    { href: "/ayudaForm.jsx", icon: "fact_check", label: "Referencias" },
+    { href: "/registrarConsumibles.jsx", icon: "inventory", label: "Consumibles" },
+    { href: "/registroAlbergue.jsx", icon: "business", label: "Albergue" },
+    { href: "/registroUsuario.jsx", icon: "person_add", label: "Usuario" },
+    { href: "/listaProducto.jsx", icon: "list", label: "Suministros" },
     { href: "/menuPrincipal", icon: "local_shipping", label: "Abastecimiento" },
-    { href: "/familiaFormulario.jsx", icon: "family_restroom", label: "Familia" },
-    { href: "/ajusteInventario.jsx", icon: "warehouse", label: "Ajuste de inventario" },
-    { href: "/registroMascota.jsx", icon: "pets", label: "Registro de Mascotas" },
-    { href: "/VistaFamilia.jsx", icon: "warehouse", label: "Consultar familias" },
-    { href: "/registroAmenazas.jsx", icon: "report", label: "Registro de Amenazas" },
-    { href: "/ActualizarAlbergue.jsx", icon: "report", label: "Actualizar Albergue" },
-    { href: "/ajusteInventario.jsx", icon: "warehouse", label: "Ajuste de inventario" }, //
-    { href: "/registroMascota.jsx", icon: "pets", label: "Registrar Mascotas" }, //
-    { href: "/BusquedaFamilia.jsx", icon: "warehouse", label: "Consultar familias" }//
+    { href: "/familiaFormulario.jsx", icon: "family_restroom", label: "Integrante" },
+    { href: "/registroMascota.jsx", icon: "pets", label: "Mascotas" },
+    { href: "/registroAmenazas.jsx", icon: "report", label: "Amenazas" },
+    { href: "/ActualizarAlbergue.jsx", icon: "report", label: "Albergue" },
+    { href: "/ajusteInventario.jsx", icon: "warehouse", label: "Ajuste inventario" },
+    { href: "/BusquedaFamilia.jsx", icon: "search", label: "Familias" }
   ];
 
 
@@ -34,40 +30,66 @@ const Sidebar = () => {
 
   // Agrupar los enlaces por categorías
   const groupedLinks = [
-
-
     {
-      label: "Registros",
+      label: "Registrar",
       icon: "inventory_2",
       items: links.filter(link =>
-        link.label.toLowerCase().includes("registrar")
-      ),
+        [
+          "registrar",
+          "suministros",
+          "asignacion",
+          "referencias",
+          "integrante",
+          "consumibles",
+          "usuario",
+          "mascotas",
+          "amenazas",
+          "abastecimiento"
+        ].some(keyword =>
+          link.label.toLowerCase().includes(keyword)
+        ) ||
+        ["/preformulario.jsx", "/registroalbergue.jsx"].some(path =>
+          link.href.toLowerCase().includes(path)
+        )
+      )
     },
     {
-      label: "Listas",
+      label: "Listar",
       icon: "list",
       items: links.filter(link =>
-        link.label.toLowerCase().includes("lista")
-      ),
+        [
+          "/listaproducto.jsx",
+          "/actualizaralbergue.jsx"
+        ].some(keyword =>
+          link.href.toLowerCase().includes(keyword)
+        )
+      )
     },
     {
-      label: "Ajustes",
-      icon: "warehouse",
+      label: "Consultar",
+      icon: "search",
       items: links.filter(link =>
-        link.label.toLowerCase().includes("ajuste")
-      ),
+        [
+          "/busquedaalbergue.jsx",
+          "/busquedafamilia.jsx"
+        ].some(keyword =>
+          link.href.toLowerCase().includes(keyword)
+        )
+      )
     },
     {
       label: "Otros",
-      icon: "trash",
+      icon: "more_horiz",
       items: links.filter(link =>
-        !link.label.toLowerCase().includes("inicio") &&
-        !link.label.toLowerCase().includes("registrar") &&
-        !link.label.toLowerCase().includes("lista") &&
-        !link.label.toLowerCase().includes("ajuste")
-      ),
-    },
+        [
+          "ajuste inventario"
+        ].some(keyword =>
+          link.label.toLowerCase().includes(keyword)
+        )
+      )
+    }
   ];
+
 
   const [openGroup, setOpenGroup] = useState(null);
 
@@ -97,7 +119,7 @@ const Sidebar = () => {
                 onClick={() => handleGroupClick(idx)}
               >
                 <div className="sidebar-group-header">
-                  <span className="material-icons">{group.items[0].icon}</span>
+                  <span className="material-icons">{group.icon}</span>
                   <span className="spanTitulo">{group.label}</span>
                   <span className="material-icons expand-icon">
                     {openGroup === idx ? "expand_less" : "expand_more"}

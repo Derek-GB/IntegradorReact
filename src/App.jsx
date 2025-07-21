@@ -3,6 +3,7 @@ import './styles/formularioFusionado.css';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Sidebar from './components/sidebar.jsx';
 import Login from './components/login.jsx';
+
 import Inicio from './components/inicio.jsx';
 import PreFormulario from './components/preFormulario.jsx';
 import RegistroSuministros from './components/registrarSuministro.jsx';
@@ -22,7 +23,7 @@ import RegistroAmenazas from './components/registroAmenazas.jsx';
 import FamiliaFormulario from './components/familiaFormulario.jsx';
 import FormularioIntegrantes from "./components/formularioIntegrantes.jsx";
 import RegistroMascotas from "./components/registroMascota.jsx";
-import VistaFamilia from './components/VistaFamilia.jsx';
+import BusquedaFamilia from './components/BusquedaFamilia.jsx';
 import ResumenFinal from './components/resumenFinal';
 
 import ActualizarAlbergue from './components/ActualizarAlbergue.jsx';
@@ -33,9 +34,10 @@ import { AbastecimientoProvider } from './context/contextoAbastecimiento';
 
 const App = () => {
   const location = useLocation();
-  const isLogin =
-    location.pathname === '/' ||
+  const isLogin = 
+    location.pathname === '/' || 
     location.pathname === '/recuperarContrasena.jsx';
+
   return (
     <>
       {isLogin ? (
@@ -67,7 +69,7 @@ const App = () => {
                 <Route path="/familiaFormulario.jsx" element={<FamiliaFormulario />} />
                 <Route path="/formularioIntegrantes.jsx" element={<FormularioIntegrantes />} />
                 <Route path="/registroMascota.jsx" element={<RegistroMascotas />} />
-                <Route path="/VistaFamilia.jsx" element={<VistaFamilia />} />
+                <Route path="/BusquedaFamilia.jsx" element={<BusquedaFamilia />} />
                 <Route path="/ActualizarAlbergue.jsx" element={<ActualizarAlbergue idAlbergue={17} />} />
                 <Route path="/registroAmenazas.jsx" element={<RegistroAmenazas />} />
                 <Route path="/resumenFinal" element={<ResumenFinal />} />

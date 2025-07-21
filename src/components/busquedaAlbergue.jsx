@@ -77,89 +77,88 @@ const BusquedaAlbergue = () => {
       </div>
 
       <form className="formulario-horizontal" onSubmit={handleSubmit} noValidate>
-        <div className="campo-horizontal">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="ID Albergue"
-            value={idAlbergue}
-            onChange={(e) => setIdAlbergue(e.target.value)}
-          />
+        <div className="fila-formulario">
+          <div className="campo-horizontal campo-pequeno">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="ID Albergue"
+              value={idAlbergue}
+              onChange={(e) => setIdAlbergue(e.target.value)}
+            />
+          </div>
+          <div className="campo-horizontal campo-pequeno">
+            <select
+              className="form-select"
+              onChange={(e) => {
+                const idSeleccionado = parseInt(e.target.value, 10);
+                setProvinciaId(idSeleccionado);
+                const provincia = provincias.find((p) => p.idProvincia === idSeleccionado);
+                setProvinciaSeleccionada(provincia?.descripcion || "");
+              }}
+              value={provincias.find(p => p.descripcion === provinciaSeleccionada)?.idProvincia || ""}
+            >
+              <option value="">Provincia</option>
+              {provincias.map((p) => (
+                <option key={p.idProvincia} value={p.idProvincia}>
+                  {p.descripcion}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="campo-horizontal campo-pequeno">
+            <select
+              className="form-select"
+              onChange={(e) => {
+                const idSeleccionado = parseInt(e.target.value, 10);
+                setCantonId(idSeleccionado);
+                const canton = cantones.find((c) => c.idCanton === idSeleccionado);
+                setCantonSeleccionado(canton?.descripcion || "");
+              }}
+              value={cantones.find(c => c.descripcion === cantonSeleccionado)?.idCanton || ""}
+            >
+              <option value="">Cantón</option>
+              {cantones.map((c) => (
+                <option key={c.idCanton} value={c.idCanton}>
+                  {c.descripcion}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="campo-horizontal campo-pequeno">
+            <select
+              className="form-select"
+              onChange={(e) => {
+                const idSeleccionado = parseInt(e.target.value, 10);
+                const distrito = distritos.find((d) => d.idDistrito === idSeleccionado);
+                setDistritoSeleccionado(distrito?.descripcion || "");
+              }}
+              value={distritos.find(d => d.descripcion === distritoSeleccionado)?.idDistrito || ""}
+            >
+              <option value="">Distrito</option>
+              {distritos.map((d) => (
+                <option key={d.idDistrito} value={d.idDistrito}>
+                  {d.descripcion}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-
-        <div className="campo-horizontal">
-          <select
-            className="form-select"
-            onChange={(e) => {
-              const idSeleccionado = parseInt(e.target.value, 10);
-              setProvinciaId(idSeleccionado);
-              const provincia = provincias.find((p) => p.idProvincia === idSeleccionado);
-              setProvinciaSeleccionada(provincia?.descripcion || "");
-            }}
-            defaultValue=""
-          >
-            <option value="">Provincia</option>
-            {provincias.map((p) => (
-              <option key={p.idProvincia} value={p.idProvincia}>
-                {p.descripcion}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="campo-horizontal">
-          <select
-            className="form-select"
-            onChange={(e) => {
-              const idSeleccionado = parseInt(e.target.value, 10);
-              setCantonId(idSeleccionado);
-              const canton = cantones.find((c) => c.idCanton === idSeleccionado);
-              setCantonSeleccionado(canton?.descripcion || "");
-            }}
-            defaultValue=""
-          >
-            <option value="">Cantón</option>
-            {cantones.map((c) => (
-              <option key={c.idCanton} value={c.idCanton}>
-                {c.descripcion}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="campo-horizontal">
-          <select
-            className="form-select"
-            onChange={(e) => {
-              const idSeleccionado = parseInt(e.target.value, 10);
-              const distrito = distritos.find((d) => d.idDistrito === idSeleccionado);
-              setDistritoSeleccionado(distrito?.descripcion || "");
-            }}
-            defaultValue=""
-          >
-            <option value="">Distrito</option>
-            {distritos.map((d) => (
-              <option key={d.idDistrito} value={d.idDistrito}>
-                {d.descripcion}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="campo-horizontal nombre-busqueda">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Nombre"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-          />
-        </div>
-
-        <div className="campo-horizontal">
-          <button type="submit" className="btn-buscar">
-            Buscar
-          </button>
+        <div className="fila-formulario fila-formulario-centro">
+          <div className="campo-horizontal">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Nombre"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+            />
+          </div>
+          <div className="campo-horizontal">
+            <button type="submit" className="btn-buscar">
+              Buscar
+            </button>
+          </div>
         </div>
       </form>
 

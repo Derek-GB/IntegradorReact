@@ -27,52 +27,53 @@
 }
 
 .formulario-horizontal {
-  position: relative; /* necesario para los absolutos hijos */
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: flex-start;
-  align-items: flex-end;
+  flex-direction: column;
+  gap: 0.5rem;
   max-width: 100%;
   margin: 0 auto;
-  overflow-x: hidden;
-  padding-bottom: 60px; /* espacio para input nombre y botón absolutos */
+  padding-bottom: 0;
+}
+
+.fila-formulario {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: flex-end;
 }
 
 .campo-horizontal {
-  flex: 1 1 200px;
-  min-width: 180px;
-  max-width: 300px;
   display: flex;
   flex-direction: column;
+  margin-bottom: 0;
 }
 
-/* Input Nombre con posición absoluta */
-.nombre-busqueda {
-  position: absolute;
-  top: 70px;
-  left: 20%;
-  width: 300px;
-  z-index: 10;
+.campo-pequeno {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: none;
 }
 
-/* Inputs y selects generales (excepto el nombre que es absoluto) */
-.form-select,
+.form-select {
+  width: 170px;
+  min-width: 60px;
+  max-width: 170px;
+  padding: 0.2rem 0.3rem;
+  font-size: 0.9rem;
+  height: 28px;
+}
+
 .form-control {
-  padding: 0.45rem 0.5rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
+  padding: 0.2rem 0.3rem;
+  font-size: 0.9rem;
+  height: 28px;
 }
 
 .btn-buscar {
-  position: absolute;
-  top: 70px;
-  left: 57%;
-  width: 140px;
-  height: 42px;
-  margin: 0;
-  padding: 0.4rem 1rem;
+  width: 40px;
+  height: 28px;
   background-color: #f9b700;
   color: #212529;
   font-weight: bold;
@@ -81,50 +82,35 @@
   cursor: pointer;
   transition: background 0.3s ease;
   white-space: nowrap;
-  z-index: 10;
+  margin-left: 0;
 }
-
 .btn-buscar:hover {
   background-color: #f0a500;
 }
 
+/* Elimina estilos absolutos previos */
+.nombre-busqueda {
+  position: static;
+  width: auto;
+  z-index: auto;
+}
+
 .tabla-container {
-  margin-top: 20px;
+  width: 100%;
   overflow-x: auto;
-  max-width: 100%;
-  background: white;
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
 }
 
 .tabla-albergues {
-  min-width: 900px;
+  min-width: 900px; /* Ajusta según la cantidad de columnas */
   width: 100%;
   border-collapse: collapse;
 }
-
-.tabla-albergues th,
-.tabla-albergues td {
-  border: 1px solid #ddd;
-  padding: 0.5rem 1rem;
-  text-align: left;
-  white-space: nowrap;
+.fila-formulario-centro {
+  justify-content: center;
 }
 
-.tabla-albergues th:nth-child(2),
-.tabla-albergues td:nth-child(2) {
-  min-width: 180px;
-}
-
-.tabla-albergues th:nth-child(7),
-.tabla-albergues td:nth-child(7) {
-  min-width: 220px;
-}
-
-.error {
-  color: red;
-  margin-top: 0.5rem;
-  font-weight: bold;
-  text-align: center;
+.campo-grande {
+  flex: 1 1 170px;
+  min-width: 170px;
+  max-width: 170px;
 }
