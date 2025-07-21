@@ -3,7 +3,6 @@ import './styles/formularioFusionado.css'; // Asegúrate de que la ruta sea corr
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Sidebar from './components/sidebar.jsx';
 import Login from './components/login.jsx';
-
 import Inicio from './components/Inicio.jsx';
 import PreFormulario from './components/preFormulario.jsx';
 import RegistroSuministros from './components/registrarSuministro.jsx';
@@ -15,13 +14,13 @@ import RegistroAlbergue from './components/RegistroAlbergue.jsx';
 import RegistroUsuario from './components/registroUsuario.jsx';
 import ListaProducto from './components/ListaProducto.jsx';
 import ListaAlbergue from './components/ListaAlbergue.jsx';
-import FormularioAbastecimiento from './components/FormularioAbarrotes.jsx';
+import FormularioAbastecimiento from './components/formularioAbarrotes.jsx';
 import AjusteInventario from "./components/ajusteInventario";// <--- nombre correcto
 import RecuperarContrasena from './components/recuperarContrasena';
 import FamiliaFormulario from './components/familiaFormulario.jsx';
 import FormularioIntegrantes from "./components/formularioIntegrantes";
 import RegistroMascotas from "./components/registroMascota.jsx";
-import BusquedaFamilia from './components/BusquedaFamilia.jsx';
+import VistaFamilia from './components/VistaFamilia.jsx'; 
 
 const App = () => {
   const location = useLocation();
@@ -54,10 +53,10 @@ const App = () => {
               <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
               <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
               <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
-              <Route path="/familiaFormulario" element={<FamiliaFormulario />} />
-              <Route path="/formularioIntegrantes" element={<FormularioIntegrantes />} />
+              <Route path="/familiaFormulario.jsx" element={<FamiliaFormulario />} />
+              <Route path="/formularioIntegrantes.jsx" element={<FormularioIntegrantes />} />
               <Route path="/registroMascota.jsx" element={<RegistroMascotas />} />
-              <Route path="/busquedaFamilia.jsx" element={<BusquedaFamilia />} />            
+              <Route path="/VistaFamilia.jsx" element={<VistaFamilia />} />              
 
 
             </Routes>

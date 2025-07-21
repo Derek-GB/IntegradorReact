@@ -2476,6 +2476,7 @@ textarea:focus {
 .boton-resumen-final a button:hover {
   background-color: var(--color-amarillo-hover);
 }
+
 /* === FOOTER === */
 footer {
   width: 100%;
@@ -3228,5 +3229,4 @@ h2 {
   margin-bottom: 20px;
   font-size: 1.8rem;
   color: var(--color-blanco);
-}
-}
+}}

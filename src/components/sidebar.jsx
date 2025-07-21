@@ -19,7 +19,7 @@ const Sidebar = () => {
     { href: "/familiaFormulario.jsx", icon: "local_shipping", label: "Familia" },
     { href: "/ajusteInventario.jsx", icon: "warehouse", label: "Ajuste de inventario" },
     { href: "/registroMascota.jsx", icon: "pets", label: "Registro de Mascotas" },
-    { href: "/BusquedaFamilia.jsx", icon: "warehouse", label: "Consultar familias" }
+    { href: "/VistaFamilia.jsx", icon: "warehouse", label: "Consultar familias" }
 
     
   ];
