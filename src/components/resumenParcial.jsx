@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { AbastecimientoContext } from '../context/AbastecimientoContext';
+import { contextoAbastecimiento } from '../context/contextoAbastecimiento';
 import { useNavigate } from 'react-router-dom';
+import '../styles/resumenParcial.css';
 
 const ResumenParcial = () => {
-  const { items, eliminarItem } = useContext(AbastecimientoContext);
+  const { items, eliminarItem } = useContext(contextoAbastecimiento);
   const navigate = useNavigate();
   const [modalIndex, setModalIndex] = useState(null);
   const [editCantidad, setEditCantidad] = useState('');
@@ -63,11 +64,7 @@ const ResumenParcial = () => {
           </table>
 
           <div className="boton-resumen-final">
-            <button onClick={() => navigate('/resumen-final')}>Ver resumen final</button>
-          </div>
-
-          <div className="boton-volver-formulario">
-            <button onClick={() => navigate('/formulario')}>Volver al formulario</button>
+            <button onClick={() => navigate('/resumenFinal')}>Ver resumen final</button>
           </div>
         </div>
 

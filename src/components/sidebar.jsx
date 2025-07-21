@@ -16,12 +16,21 @@ const Sidebar = () => {
     { href: "/registroUsuario.jsx", icon: "person_add", label: "Registrar un usuario" },
     { href: "/listaProducto.jsx", icon: "list", label: "Lista de Suministros" },
     { href: "/listaAlbergue.jsx", icon: "list_alt", label: "Lista de Albergues" },
-    { href: "/formularioAbarrotes.jsx", icon: "local_shipping", label: "Abastecimiento" },
-    { href: "/familiaFormulario.jsx", icon: "local_shipping", label: "Familia" },
+    { href: "/menuPrincipal", icon: "local_shipping", label: "Abastecimiento" },
+    { href: "/familiaFormulario.jsx", icon: "family_restroom", label: "Familia" },
     { href: "/ajusteInventario.jsx", icon: "warehouse", label: "Ajuste de inventario" },
-    { href: "/registroMascota.jsx", icon: "pets", label: "Registrar Mascotas" },
-    { href: "/BusquedaFamilia.jsx", icon: "warehouse", label: "Consultar familias" }
+    { href: "/registroMascota.jsx", icon: "pets", label: "Registro de Mascotas" },
+    { href: "/VistaFamilia.jsx", icon: "warehouse", label: "Consultar familias" },
+    { href: "/registroAmenazas.jsx", icon: "report", label: "Registro de Amenazas" },
+    { href: "/ActualizarAlbergue.jsx", icon: "report", label: "Actualizar Albergue" },
+    { href: "/ajusteInventario.jsx", icon: "warehouse", label: "Ajuste de inventario" }, //
+    { href: "/registroMascota.jsx", icon: "pets", label: "Registrar Mascotas" }, //
+    { href: "/BusquedaFamilia.jsx", icon: "warehouse", label: "Consultar familias" }//
   ];
+
+
+
+
 
   // Agrupar los enlaces por categorías
   const groupedLinks = [
@@ -73,9 +82,9 @@ const Sidebar = () => {
 
 
           <li>
-            <Link to={links[0].href}> 
-                <span className="material-icons">{links[0].icon}</span>
-                <span className="spanTitulo">{links[0].label}</span>
+            <Link to={links[0].href}>
+              <span className="material-icons">{links[0].icon}</span>
+              <span className="spanTitulo">{links[0].label}</span>
 
             </Link>
           </li>
