@@ -57,7 +57,7 @@ const FamiliaFormulario = () => {
     esJefeFamilia: dp.esJefeFamilia ?? false,
     fechaNacimiento: dp.fechaNacimiento || "",
     genero: dp.genero || "",
-    sexo: dp.sexo || "",
+    sexo: dp.sexo || "Otro",
     telefono: dp.telefono || "",
     contactoEmergencia: dp.contactoEmergencia || "",
     observaciones: dp.observaciones || "",
@@ -67,7 +67,7 @@ const FamiliaFormulario = () => {
 
   const crearPersonas = async (payloadArray) => {
     console.log("Payload a enviar:", payloadArray);
-    const res = await personasAPI.create(payloadArray);
+    const res = await personasAPI.create({personas: payloadArray});
     console.log("Respuesta API:", res);
 
     const resultados = res?.resultados || [];
