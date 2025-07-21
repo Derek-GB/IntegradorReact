@@ -36,7 +36,6 @@ const Sidebar = () => {
       items: links.filter(link =>
         [
           "registrar",
-          "suministros",
           "asignacion",
           "referencias",
           "integrante",
@@ -48,7 +47,7 @@ const Sidebar = () => {
         ].some(keyword =>
           link.label.toLowerCase().includes(keyword)
         ) ||
-        ["/preformulario.jsx", "/registroalbergue.jsx"].some(path =>
+        ["/preformulario.jsx", "/registroalbergue.jsx", "/registrosuministros.jsx"].some(path =>
           link.href.toLowerCase().includes(path)
         )
       )
