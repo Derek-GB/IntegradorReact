@@ -25,6 +25,7 @@ body {
   display: flex;
   margin: 0;
   transition: all 0.3s ease;
+  overflow-x: hidden;
 }
 
 /* === APP CONTAINER === */
@@ -52,23 +53,19 @@ body {
   color: var(--color-texto);
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
-  padding: 30px 30px 30px 30px;
-  margin: 0px auto 30px auto;
+  padding: 30px;
+  margin: 30px auto;
   max-width: 1050px;
-  min-height: 420px;
-  height: 790px;
-  position: relative;
-  top: 20px;
-  left: 20%;
-  margin-bottom: 12%;
-  text-align: center;
   background: linear-gradient(135deg, var(--color-verde-form) 0%, var(--color-verde-oscuro) 100%);
-
+  text-align: center;
+  max-height: calc(100vh - 60px); 
+  overflow-y: auto;
 }
 
 .bienvenida {
   width: 100%;
   height: fit-content;
+  overflow: hidden;
 
 }
 

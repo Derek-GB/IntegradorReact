@@ -5,21 +5,21 @@ const Sidebar = () => {
   const links = [
     { href: "/inicio", icon: "home", label: "Inicio" },
     { href: "/preFormulario.jsx", icon: "groups", label: "Familia" },
-    { href: "/registroSuministros.jsx", icon: "inventory_2", label: "Suministros" },
+    { href: "/registroSuministros.jsx", icon: "shelves", label: "Suministros" },
     { href: "/asignacionRecursos.jsx", icon: "volunteer_activism", label: "Asignación" },
     { href: "/busquedaAlbergue.jsx", icon: "hotel", label: "Albergues" },
     { href: "/ayudaForm.jsx", icon: "fact_check", label: "Referencias" },
-    { href: "/registrarConsumibles.jsx", icon: "inventory", label: "Consumibles" },
-    { href: "/registroAlbergue.jsx", icon: "business", label: "Albergue" },
+    { href: "/registrarConsumibles.jsx", icon: "local_dining", label: "Consumibles" },
+    { href: "/registroAlbergue.jsx", icon: "hotel", label: "Albergue" },
     { href: "/registroUsuario.jsx", icon: "person_add", label: "Usuario" },
-    { href: "/listaProducto.jsx", icon: "list", label: "Suministros" },
+    { href: "/listaProducto.jsx", icon: "shelves", label: "Suministros" },
     { href: "/menuPrincipal", icon: "local_shipping", label: "Abastecimiento" },
     { href: "/familiaFormulario.jsx", icon: "family_restroom", label: "Integrante" },
     { href: "/registroMascota.jsx", icon: "pets", label: "Mascotas" },
     { href: "/registroAmenazas.jsx", icon: "report", label: "Amenazas" },
-    { href: "/ActualizarAlbergue.jsx", icon: "report", label: "Albergue" },
+    { href: "/ActualizarAlbergue.jsx", icon: "business", label: "Albergue" },
     { href: "/ajusteInventario.jsx", icon: "warehouse", label: "Ajuste inventario" },
-    { href: "/BusquedaFamilia.jsx", icon: "search", label: "Familias" }
+    { href: "/BusquedaFamilia.jsx", icon: "groups", label: "Familias" }
   ];
 
   const groupedLinks = [
