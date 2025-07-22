@@ -1,5 +1,4 @@
-import React from 'react';
-import './styles/sidebar.css'; // asegúrate de que esta ruta sea correcta desde App.jsx
+import React from 'react';// asegúrate de que esta ruta sea correcta desde App.jsx
 import './styles/formularioFusionado.css';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Sidebar from './components/sidebar.jsx';
