@@ -58,7 +58,7 @@ const RegistroUsuario = () => {
 
     try {
       await usuariosAPI.create(payload);
-      setAlerta({ mensaje: 'Usuario registrado correctamente.', tipo: 'success' });
+      setAlerta({ mensaje: 'Usuario registrado correctamente.', tipo: 'exito' });
       setForm({
         nombre: '', correo: '', contrasena: '',
         rol: '', activo: '', municipalidad: '', identificacion: ''

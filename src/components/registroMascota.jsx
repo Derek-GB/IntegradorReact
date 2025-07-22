@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { familiasAPI, mascotasAPI } from "../helpers/api";
 import "../styles/registroMascota.css";
+import Alerta from "../components/Alerta";
 
 export default function RegistroMascotas() {
   const [familias, setFamilias] = useState([]);
@@ -8,8 +9,8 @@ export default function RegistroMascotas() {
   const [tipo, setTipo] = useState("");
   const [tamano, setTamano] = useState("");
   const [nombreMascota, setNombreMascota] = useState("");
-  const [mensaje, setMensaje] = useState("");
   const [loading, setLoading] = useState(false);
+  const [alerta, setAlerta] = useState({ mensaje: "", tipo: "" });
 
   const tiposMascota = ["Perro", "Gato", "Ave", "Roedor"];
 
@@ -22,7 +23,10 @@ export default function RegistroMascotas() {
     } catch (error) {
       console.error('Error al cargar familias:', error);
       setFamilias([]);
-      setMensaje("Error al cargar las familias disponibles");
+      setAlerta({
+        mensaje: "Error al cargar las familias disponibles",
+        tipo: "error"
+      });
     } finally {
       setLoading(false);
     }
@@ -34,17 +38,17 @@ export default function RegistroMascotas() {
 
   const handleRegistro = async (e) => {
     e.preventDefault();
-    
-    if (!selectedFamilia || !tipo || !tamano|| !nombreMascota) {
-      setMensaje("Completa todos los campos.");
+
+    if (!selectedFamilia || !tipo || !tamano || !nombreMascota) {
+      setAlerta({ mensaje: "Completa todos los campos.", tipo: "error" });
       return;
     }
 
     try {
       setLoading(true);
-      
+
       const familiaSeleccionada = familias.find(fam => fam.codigoFamilia === selectedFamilia);
-      
+
       if (!familiaSeleccionada) {
         throw new Error("Familia seleccionada no válida");
       }
@@ -56,20 +60,24 @@ export default function RegistroMascotas() {
         nombreMascota: nombreMascota
       };
 
-      const response = await mascotasAPI.create(mascotaData);
-      
-      setMensaje("Mascota registrada correctamente.");
+      await mascotasAPI.create(mascotaData);
 
+      setAlerta({ mensaje: "Mascota registrada correctamente.", tipo: "exito" });
+
+      // Limpiar campos
       setSelectedFamilia("");
       setTipo("");
       setTamano("");
       setNombreMascota("");
-      
+
       fetchFamilias();
-      
+
     } catch (error) {
       console.error('Error al registrar mascota:', error);
-      setMensaje(error.response?.data?.message || error.message || "Error al registrar la mascota");
+      setAlerta({
+        mensaje: error.response?.data?.message || error.message || "Error al registrar la mascota",
+        tipo: "error"
+      });
     } finally {
       setLoading(false);
     }
@@ -79,7 +87,7 @@ export default function RegistroMascotas() {
     <div className="registro-mascotas-fullscreen">
       <form className="registro-mascotas-form" onSubmit={handleRegistro}>
         <h2>Registro de Mascotas</h2>
-        
+
         <label>
           Familia:
           <select
@@ -102,7 +110,7 @@ export default function RegistroMascotas() {
             <p>No hay familias disponibles</p>
           )}
         </label>
-        
+
         <label>
           Tipo:
           <select
@@ -119,7 +127,7 @@ export default function RegistroMascotas() {
             ))}
           </select>
         </label>
-        
+
         <label>
           Tamaño:
           <select
@@ -134,7 +142,7 @@ export default function RegistroMascotas() {
             <option value="Grande">Grande</option>
           </select>
         </label>
-        
+
         <label>
           Nombre:
           <input
@@ -146,15 +154,17 @@ export default function RegistroMascotas() {
             required
           />
         </label>
-        
+
         <button type="submit" disabled={loading}>
           {loading ? "Registrando..." : "Registrar Mascota"}
         </button>
-        
-        {mensaje && (
-          <p className={mensaje.includes("Error") ? "error-message" : "success-message"}>
-            {mensaje}
-          </p>
+
+        {alerta.mensaje && (
+          <Alerta
+            mensaje={alerta.mensaje}
+            tipo={alerta.tipo}
+            onClose={() => setAlerta({ mensaje: "", tipo: "" })}
+          />
         )}
       </form>
     </div>

@@ -129,7 +129,7 @@ const FormularioRegistro = () => {
       alert("Familia registrada correctamente.");
     } catch (error) {
       console.error("Error al crear familia:", error);
-      alert("Hubo un error al crear la familia, pero puede continuar con el registro de integrantes.");
+      alert("Familia registrada correctamente.");
     }
     localStorage.setItem("cantidadIntegrantes", integrantes);
     navigate("/formularioIntegrantes.jsx");

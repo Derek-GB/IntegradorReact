@@ -147,7 +147,6 @@ const Sidebar = () => {
           width: fit-content;
         }
         .sidebar nav ul li ul li:hover {
-          background: var(--color-amarillo-hover);
           color: var(--color-texto);
         }
         .sidebar nav ul li ul li a {

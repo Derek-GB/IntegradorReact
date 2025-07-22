@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { productosAPI } from '../helpers/api';
+import Alerta from '../components/Alerta'; // Asegúrate de tener este import
+import '../styles/registroMascota.css'; // o el CSS general que uses
 
 const ListaProducto = () => {
   const [productos, setProductos] = useState([]);
   const [productoId, setProductoId] = useState('');
   const [form, setForm] = useState({});
   const [isDetailsOpen, setIsDetailsOpen] = useState(true);
+  const [alerta, setAlerta] = useState({ mensaje: "", tipo: "" });
 
   useEffect(() => {
     const fetchProductos = async () => {
@@ -15,7 +18,10 @@ const ListaProducto = () => {
         setProductos(lista);
       } catch (err) {
         console.error('Error al cargar productos:', err);
-        alert('Error al cargar productos. Verifica si tu sesión expiró.');
+        setAlerta({
+          mensaje: 'Error al cargar productos. Verifica si tu sesión expiró.',
+          tipo: 'error'
+        });
       }
     };
     fetchProductos();
@@ -40,7 +46,10 @@ const ListaProducto = () => {
     try {
       const cantidadNum = Number(form.cantidad);
       if (isNaN(cantidadNum) || cantidadNum < 0) {
-        alert('Cantidad debe ser un número válido mayor o igual a 0');
+        setAlerta({
+          mensaje: 'Cantidad debe ser un número válido mayor o igual a 0',
+          tipo: 'error'
+        });
         return;
       }
       const payload = {
@@ -49,28 +58,43 @@ const ListaProducto = () => {
         cantidad: cantidadNum,
       };
       await productosAPI.update(payload);
-      alert("Producto actualizado con éxito.");
+      setAlerta({
+        mensaje: "Producto actualizado con éxito.",
+        tipo: "exito"
+      });
       setProductos(prev =>
-        prev.map(p => (p.id === form.id ? { ...p, descripcion: payload.descripcion, cantidad: payload.cantidad } : p))
+        prev.map(p =>
+          p.id === form.id ? { ...p, descripcion: payload.descripcion, cantidad: payload.cantidad } : p
+        )
       );
     } catch (error) {
       console.error("Error al actualizar:", error);
-      alert("Error al actualizar el producto.");
+      setAlerta({
+        mensaje: "Error al actualizar el producto.",
+        tipo: "error"
+      });
     }
   };
 
   const eliminarProducto = async () => {
-    if (!window.confirm("¿Seguro que deseas eliminar este producto?")) return;
+    const confirmar = window.confirm("¿Seguro que deseas eliminar este producto?");
+    if (!confirmar) return;
 
     try {
       await productosAPI.remove(form.id);
-      alert("Producto eliminado con éxito.");
+      setAlerta({
+        mensaje: "Producto eliminado con éxito.",
+        tipo: "exito"
+      });
       setProductos(prev => prev.filter(p => p.id !== form.id));
       setProductoId('');
       setForm({});
     } catch (error) {
       console.error("Error al eliminar:", error);
-      alert("Error al eliminar el producto.");
+      setAlerta({
+        mensaje: "Error al eliminar el producto.",
+        tipo: "error"
+      });
     }
   };
 
@@ -199,6 +223,14 @@ const ListaProducto = () => {
             </fieldset>
           </details>
         </form>
+
+        {alerta.mensaje && (
+          <Alerta
+            mensaje={alerta.mensaje}
+            tipo={alerta.tipo}
+            onClose={() => setAlerta({ mensaje: "", tipo: "" })}
+          />
+        )}
       </div>
     </div>
   );
