@@ -64,9 +64,12 @@ const FormularioAbastecimiento = () => {
         <button onClick={handleVerResumenFinal} className="btn-resumen-final">
           Ver Resumen Final
         </button>
+
         <button className="btn-enviar">
           Enviar Formulario
         </button>
+
+
       </div>
     </>
   )}

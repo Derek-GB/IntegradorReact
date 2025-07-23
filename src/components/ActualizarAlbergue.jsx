@@ -1,254 +1,108 @@
 import React, { useEffect, useState } from 'react';
-import { alberguesAPI, ubicacionesAPI, infraestructuraAlberguesAPI, municipalidadAPI } from '../helpers/api';
+import { useNavigate } from 'react-router-dom';
+import { alberguesAPI } from '../helpers/api';
 
-const ActualizarAlbergue = ({ idAlbergue }) => {
-  const [form, setForm] = useState({});
-  const [cantones, setCantones] = useState([]);
-  const [ubicaciones, setUbicaciones] = useState([]);
-  const [capacidades, setCapacidades] = useState([]);
-  const [infraestructuras, setInfraestructuras] = useState([]);
-  const [municipalidades, setMunicipalidades] = useState([]);
+const ActualizarAlbergue = () => {
+  const [albergues, setAlbergues] = useState([]);
+  const [selectedId, setSelectedId] = useState('');
+  const [albergue, setAlbergue] = useState(null);
+  const navigate = useNavigate();
 
-  const cantonesPorProvincia = {
-    "San José": ["San José", "Escazú", "Desamparados", "Puriscal", "Tarrazú", "Aserrí", "Mora", "Goicoechea", "Santa Ana", "Alajuelita", "Vázquez de Coronado", "Acosta", "Tibás", "Moravia", "Montes de Oca", "Turrubares", "Dota", "Curridabat", "Pérez Zeledón", "León Cortés Castro"],
-    "Alajuela": ["Alajuela", "San Ramón", "Grecia", "San Mateo", "Atenas", "Naranjo", "Palmares", "Poás", "Orotina", "San Carlos", "Zarcero", "Sarchí", "Upala", "Los Chiles", "Guatuso", "Río Cuarto"],
-    "Cartago": ["Cartago", "Paraíso", "La Unión", "Jiménez", "Turrialba", "Alvarado", "Oreamuno", "El Guarco"],
-    "Heredia": ["Heredia", "Barva", "Santo Domingo", "Santa Bárbara", "San Rafael", "San Isidro", "Belén", "Flores", "San Pablo", "Sarapiquí"],
-    "Guanacaste": ["Liberia", "Nicoya", "Santa Cruz", "Bagaces", "Carrillo", "Cañas", "Abangares", "Tilarán", "Nandayure", "La Cruz", "Hojancha"],
-    "Puntarenas": ["Puntarenas", "Esparza", "Buenos Aires", "Montes de Oro", "Osa", "Quepos", "Golfito", "Coto Brus", "Parrita", "Corredores", "Garabito"],
-    "Limón": ["Limón", "Pococí", "Siquirres", "Talamanca", "Matina", "Guácimo"]
-  };
+  useEffect(() => {
+    const fetchAlbergues = async () => {
+      try {
+        const data = await alberguesAPI.getAll();
+        setAlbergues(data.data || []);
+      } catch (err) {
+        console.error('Error cargando albergues:', err);
+      }
+    };
+    fetchAlbergues();
+  }, []);
 
-  const llenarSelect = async (url, setter) => {
+  useEffect(() => {
+    const selected = albergues.find(a => a.id === parseInt(selectedId));
+    setAlbergue(selected || null);
+  }, [selectedId, albergues]);
+
+  const handleActualizar = async () => {
     try {
-      const res = await url();
-      const datos = Array.isArray(res.data) ? res.data : res.data.data || [];
-      setter(datos);
-    } catch (err) {
-      console.error('Error cargando datos:', err);
+      await alberguesAPI.update(albergue.id, albergue);
+      alert('Albergue actualizado correctamente.');
+    } catch (error) {
+      console.error('Error al actualizar:', error);
+      alert('No se pudo actualizar el albergue.');
     }
   };
 
-  useEffect(() => {
-    llenarSelect(ubicacionesAPI.getAll, setUbicaciones);
-    llenarSelect(alberguesAPI.getAll, setCapacidades);
-    llenarSelect(infraestructuraAlberguesAPI.getAll, setInfraestructuras);
-    llenarSelect(municipalidadAPI.getAll, setMunicipalidades);
-
-    alberguesAPI.getById(idAlbergue)
-      .then(res => {
-        setForm(res.data);
-        if (res.data.provincia) {
-          setCantones(cantonesPorProvincia[res.data.provincia] || []);
-        }
-      });
-  }, [idAlbergue]);
-
-  const handleProvinciaChange = (provincia) => {
-    setForm(prev => ({ ...prev, provincia }));
-    setCantones(cantonesPorProvincia[provincia] || []);
+  const handleEliminar = async () => {
+    if (!window.confirm('¿Estás seguro de eliminar este albergue?')) return;
+    try {
+      await alberguesAPI.remove(albergue.id);
+      alert('Albergue eliminado correctamente.');
+      window.location.reload(); // Recarga la lista
+    } catch (error) {
+      console.error('Error al eliminar:', error);
+      alert('No se pudo eliminar el albergue.');
+    }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+    setAlbergue(prev => ({ ...prev, [name]: value }));
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const payload = {
-      idAlbergue: form.id,
-      nombre: form.nombreAlbergue,
-      region: form.regionCNE,
-      coordenadaX: parseFloat(form.coordenadaX),
-      coordenadaY: parseFloat(form.coordenadaY),
-      idUbicacion: parseInt(form.idUbicacion),
-      tipo_establecimiento: "defecto",
-      tipo_albergue: form.tipoAlbergue,
-      condicion_albergue: form.estado,
-      especificacion: form.especificacion,
-      detalle_condicion: form.detalle_condicion,
-      administrador: form.administrador,
-      telefono: form.telefono,
-      idCapacidad: parseInt(form.idCapacidad),
-      seccion: form.seccion,
-      requerimientos_tecnicos: form.requerimientos_tecnicos,
-      costo_requerimientos_tecnicos: parseFloat(form.costo_requerimientos_tecnicos),
-      idInfraestructura: parseInt(form.idInfraestructura),
-      idMunicipalidad: parseInt(form.idMunicipalidad),
-      color: "verde"
-    };
-
-    alberguesAPI.update(idAlbergue, payload)
-      .then(() => {
-        alert("Albergue actualizado correctamente");
-      })
-      .catch(err => {
-        console.error("Error al actualizar:", err);
-        alert("Error al actualizar albergue.");
-      });
-  };
-
-const handleDelete = () => {
-  if (window.confirm("¿Estás seguro de que deseas eliminar este albergue?")) {
-    alberguesAPI.remove(idAlbergue)
-      .then(() => {
-        alert("Albergue eliminado correctamente.");
-      })
-      .catch(err => {
-        console.error("Error al eliminar:", err);
-        alert("Error al eliminar albergue.");
-      });
-  }
-};
 
   return (
-    <div className="container main-content">
+    <div className="container mt-4">
       <h2>Actualizar Albergue</h2>
-      <form onSubmit={handleSubmit}>
+
+      <form>
         <details open>
-          <summary><strong>Información del Albergue</strong></summary>
+          <summary><strong>Seleccionar Albergue</strong></summary>
           <fieldset className="mt-2">
-            <label>ID:</label>
-            <input name="id" type="number" value={form.id || ''} onChange={handleChange} required />
-
-            <label>Especificación:</label>
-            <input name="especificacion" type="text" value={form.especificacion || ''} onChange={handleChange} required />
-
-            <label>Detalle de Condición:</label>
-            <input name="detalle_condicion" type="text" value={form.detalle_condicion || ''} onChange={handleChange} required />
-
-            <label>Sección:</label>
-            <input name="seccion" type="text" value={form.seccion || ''} onChange={handleChange} required />
-
-            <label>Requerimientos Técnicos:</label>
-            <textarea name="requerimientos_tecnicos" value={form.requerimientos_tecnicos || ''} onChange={handleChange} required />
-
-            <label>Coordenada X:</label>
-            <input name="coordenadaX" type="number" step="any" value={form.coordenadaX || ''} onChange={handleChange} required />
-
-            <label>Coordenada Y:</label>
-            <input name="coordenadaY" type="number" step="any" value={form.coordenadaY || ''} onChange={handleChange} required />
-
-            <label>Nombre del Albergue:</label>
-            <input name="nombreAlbergue" type="text" value={form.nombreAlbergue || ''} onChange={handleChange} required />
-
-            <label>Región CNE:</label>
-            <select name="regionCNE" value={form.regionCNE || ''} onChange={handleChange} required>
-              <option value="">Seleccione una región</option>
-              {["Región Central", "Región Chorotega", "Región Brunca", "Región Huetar Caribe", "Región Huetar Norte", "Región Pacífico Central"].map(r => (
-                <option key={r}>{r}</option>
-              ))}
-            </select>
-
-            <label>Provincia:</label>
-            <select name="provincia" value={form.provincia || ''} onChange={e => handleProvinciaChange(e.target.value)} required>
-              <option value="">Seleccione una provincia</option>
-              {Object.keys(cantonesPorProvincia).map(p => (
-                <option key={p}>{p}</option>
-              ))}
-            </select>
-
-            <label>Cantón:</label>
-            <select name="canton" value={form.canton || ''} onChange={handleChange} required>
-              <option value="">Seleccione un cantón</option>
-              {cantones.map(c => (
-                <option key={c}>{c}</option>
-              ))}
-            </select>
-
-            <label>Distrito:</label>
-            <input name="distrito" type="text" value={form.distrito || ''} onChange={handleChange} required />
-
-            <label>Dirección:</label>
-            <textarea name="direccion" value={form.direccion || ''} onChange={handleChange} required />
-
-            <label>Capacidad Total:</label>
-            <input name="capacidad" type="number" min="0" value={form.capacidad || ''} onChange={handleChange} required />
-
-            <label>Costo Requerimientos Técnicos:</label>
-            <input name="costo_requerimientos_tecnicos" type="number" step="any" value={form.costo_requerimientos_tecnicos || ''} onChange={handleChange} required />
-
-            <label>Estado del Albergue:</label>
-            <select name="estado" value={form.estado || ''} onChange={handleChange} required>
-              <option value="">Seleccione el estado</option>
-              <option>Abierto</option>
-              <option>Cerrado</option>
-            </select>
-
-            <label>Tipo de Albergue:</label>
-            <select name="tipoAlbergue" value={form.tipoAlbergue || ''} onChange={handleChange} required>
-              <option value="">Seleccione el tipo de albergue</option>
-              <option>Centro Educativo</option>
-              <option>Salón Comunal</option>
-              <option>Iglesia</option>
-              <option>Redondel</option>
-              <option>Gimnasio</option>
-              <option>Casa de Acogida</option>
-              <option>Zona de Refugio Temporal</option>
-            </select>
-
-            <label>Tipo de Establecimiento:</label>
-            <select name="tipoEstablecimiento" value={form.tipoEstablecimiento || ''} onChange={handleChange}>
-              <option value="">Seleccione el tipo de establecimiento</option>
-            </select>
-
-            <label>Ubicación:</label>
-            <select name="idUbicacion" value={form.idUbicacion || ''} onChange={handleChange} required>
-              <option value="">Seleccione una ubicación</option>
-              {ubicaciones.map(u => (
-                <option key={u.id} value={u.id}>
-                  {`${u.provincia} / ${u.canton} / ${u.distrito} / ${u.ubicacion}`}
+            <label>Albergue:</label>
+            <select
+              value={selectedId}
+              onChange={e => setSelectedId(e.target.value)}
+              className="form-control mb-3"
+            >
+              <option value="">Seleccione un albergue</option>
+              {albergues.map(a => (
+                <option key={a.id} value={a.id}>
+                  {`${a.idAlbergue} - ${a.nombre}`}
                 </option>
               ))}
             </select>
 
-            <label>Capacidad:</label>
-            <select name="idCapacidad" value={form.idCapacidad || ''} onChange={handleChange} required>
-              <option value="">Seleccione una capacidad</option>
-              {capacidades.map(c => (
-                <option key={c.id} value={c.id}>
-                  {`ID ${c.id} - Personas: ${c.capacidadPersonas}, Colectiva: ${c.capacidadColectiva}, Familias: ${c.cantidadFamilias}`}
-                </option>
-              ))}
-            </select>
+            {albergue && (
+              <fieldset>
+                {Object.entries(albergue).map(([key, value]) => (
+                  <div key={key}>
+                    <label htmlFor={key}>{key}:</label>
+                    <input
+                      type={typeof value === 'number' ? 'number' : 'text'}
+                      id={key}
+                      name={key}
+                      value={value || ''}
+                      onChange={handleChange}
+                      className="form-control mb-2"
+                      readOnly={key === 'id'}
+                    />
+                  </div>
+                ))}
 
-            <label>Infraestructura:</label>
-            <select name="idInfraestructura" value={form.idInfraestructura || ''} onChange={handleChange} required>
-              <option value="">Seleccione una infraestructura</option>
-              {infraestructuras.map(i => (
-                <option key={i.id} value={i.id}>
-                  {`ID ${i.id} - Cocina: ${i.cocina}, Ducha: ${i.duchas}, SS: ${i.serviciosSanitarios}, Área: ${i.areaTotalM2} m²`}
-                </option>
-              ))}
-            </select>
-
-            <label>Municipalidad:</label>
-            <select name="idMunicipalidad" value={form.idMunicipalidad || ''} onChange={handleChange} required>
-              <option value="">Seleccione una municipalidad</option>
-              {municipalidades.map(m => (
-                <option key={m.id} value={m.id}>
-                  {`ID ${m.id} - ${m.nombre}`}
-                </option>
-              ))}
-            </select>
-
-            <label>Administrador:</label>
-            <input name="administrador" type="text" value={form.administrador || ''} onChange={handleChange} required />
-
-            <label>Teléfono:</label>
-            <input name="telefono" type="tel" value={form.telefono || ''} onChange={handleChange} required pattern="[0-9]{4}-[0-9]{4}" />
-
-            <label>Cantidad de Familias:</label>
-            <input name="cantidadFamilias" type="number" min="0" value={form.cantidadFamilias || ''} onChange={handleChange} required />
-
-            <label>Área Total (m²):</label>
-            <input name="areaTotal" type="number" min="0" value={form.areaTotal || ''} onChange={handleChange} required />
+                <div className="mt-3">
+                  <button type="button" className="btn btn-success me-2" onClick={handleActualizar}>
+                    Actualizar
+                  </button>
+                  <button type="button" className="btn btn-danger" onClick={handleEliminar}>
+                    Eliminar
+                  </button>
+                </div>
+              </fieldset>
+            )}
           </fieldset>
         </details>
-        <button type="submit" className="btn btn-warning mt-3">Actualizar</button>
-        <button type="button" className="btn btn-danger mt-3 ms-2" onClick={handleDelete}>Eliminar</button>
       </form>
     </div>
   );
