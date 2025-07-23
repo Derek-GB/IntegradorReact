@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { consumiblesAPI } from "../helpers/api";
+import { consumiblesAPI } from "../helpers/api.js";
 import "../styles/ajusteInventario.css";
 import Alerta from "../components/Alerta.jsx";
 

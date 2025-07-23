@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { familiasAPI } from "../helpers/api";
-import Alerta from "./Alerta";
+import Alerta from "../components/Alerta";
 import "../styles/busquedaFamilia.css";
 
 const BusquedaFamilia = () => {

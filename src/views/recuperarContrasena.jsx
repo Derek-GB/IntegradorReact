@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { usuariosAPI } from '../helpers/api'; 
+import { usuariosAPI } from '../helpers/api.js'; 
 import axios from 'axios';
 
 import Alerta from '../components/Alerta.jsx';

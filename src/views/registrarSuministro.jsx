@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { productosAPI } from '../helpers/api';
+import { productosAPI } from '../helpers/api.js';
 import '../styles/registroUsuario.css'; 
 import Alerta from '../components/Alerta.jsx';
 

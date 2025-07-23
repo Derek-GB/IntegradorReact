@@ -1,5 +1,5 @@
 
-import FormularioEvento from "./FormularioEvento";
+import FormularioEvento from "../components/FormularioEvento";
 import "../styles/familia.css";
 
 

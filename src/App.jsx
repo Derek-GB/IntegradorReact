@@ -4,29 +4,29 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import Sidebar from './components/sidebar.jsx';
 import Login from './components/login.jsx';
 
-import Inicio from './components/inicio.jsx';
-import PreFormulario from './components/preFormulario.jsx';
-import RegistroSuministros from './components/registrarSuministro.jsx';
-import AsignacionRecursos from './components/AsignacionRecursos.jsx';
-import BusquedaAlbergue from './components/BusquedaAlbergue.jsx';
-import AyudaForm from './components/ayudaForm.jsx';
-import RegistrarConsumible from './components/registrarConsumibles.jsx';
-import RegistroAlbergue from './components/RegistroAlbergue.jsx';
-import RegistroUsuario from './components/registroUsuario.jsx';
-import ListaProducto from './components/ListaProducto.jsx';
-import ListaAlbergue from './components/ListaAlbergue.jsx';
-import MenuPrincipal from './components/menuPrincipal.jsx';
-import FormularioAbastecimiento from './components/formularioAbarrotes.jsx';
-import AjusteInventario from "./components/ajusteInventario.jsx";
-import RecuperarContrasena from './components/recuperarContrasena.jsx';
-import RegistroAmenazas from './components/registroAmenazas.jsx';
-import FamiliaFormulario from './components/familiaFormulario.jsx';
+import Inicio from './views/inicio.jsx';
+import PreFormulario from './views/preFormulario.jsx';
+import RegistroSuministros from './views/registrarSuministro.jsx';
+import AsignacionRecursos from './views/asignacionRecursos.jsx';
+import BusquedaAlbergue from './views/busquedaAlbergue.jsx';
+import AyudaForm from './views/ayudaForm.jsx';
+import RegistrarConsumible from './views/registrarConsumibles.jsx';
+import RegistroAlbergue from './views/registroAlbergue.jsx';
+import RegistroUsuario from './views/registroUsuario.jsx';
+import ListaProducto from './views/listaProducto.jsx';
+import ListaAlbergue from './views/listaAlbergue.jsx';
+import MenuPrincipal from './views/menuPrincipal.jsx';
+import FormularioAbastecimiento from './views/formularioAbarrotes.jsx';
+import AjusteInventario from "./views/ajusteInventario.jsx";
+import RecuperarContrasena from './views/recuperarContrasena.jsx';
+import RegistroAmenazas from './views/registroAmenazas.jsx';
+import FamiliaFormulario from './views/familiaFormulario.jsx';
 import FormularioIntegrantes from "./components/formularioIntegrantes.jsx";
-import RegistroMascotas from "./components/registroMascota.jsx";
-import BusquedaFamilia from './components/BusquedaFamilia.jsx';
+import RegistroMascotas from "./views/registroMascota.jsx";
+import BusquedaFamilia from './views/BusquedaFamilia.jsx';
 import ResumenFinal from './components/resumenFinal';
 
-import ActualizarAlbergue from './components/ActualizarAlbergue.jsx';
+import ActualizarAlbergue from './views/ActualizarAlbergue.jsx';
 
 
 // Importa el proveedor de contexto aquí

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { personasAPI, productosAPI, recursosAsignadosAPI } from '../helpers/api';
+import { personasAPI, productosAPI, recursosAsignadosAPI } from '../helpers/api.js';
 import '../styles/registroUsuario.css';
 import Alerta from '../components/Alerta.jsx';
 
