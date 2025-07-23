@@ -1,7 +1,6 @@
-// src/components/FormularioAbastecimiento.jsx
 import React, { useEffect, useState } from 'react';
 import "../styles/formularioFusionado.css";
-import "../styles/menuPrincipal.css"; // Asegúrate de que la ruta sea correcta
+import "../styles/menuPrincipal.css"; 
 import { useNavigate } from 'react-router-dom';
 
 function FormularioAbastecimiento() {
@@ -53,31 +52,20 @@ function FormularioAbastecimiento() {
       alert('Complete todos los campos');
       return;
     }
-
-    // Lógica de envío comentada
-    // Aquí iría tu axios.post()
-
     window.location.href = '/pages/grupo1/formAbasteci.html';
   };
 
   return (
     <div className="content-area">
-
-      {/* Aquí eliminé el import que estaba dentro del return, ya que no es válido */}
-      {/* Continuación del código que estaba dentro del return: */}
-
-      <div id="sidebar-container" dangerouslySetInnerHTML={{ __html: '' /* sidebarHTML no definido aquí */ }} />
-
+    <div id="sidebar-container" dangerouslySetInnerHTML={{ __html: '' /* sidebarHTML no definido aquí */ }} />
       <header className="top-header">
         <h1>Formulario de Abastecimiento</h1>
         <a href="#" className="back-button">
           <span className="material-icons">arrow_back</span>
         </a>
       </header>
-
       <main className="main-content">
         <div className="card">
-
           <form id="formularioAbastecimiento" onSubmit={e => e.preventDefault()}>
 
             <div className="form-group">
@@ -163,15 +151,10 @@ function FormularioAbastecimiento() {
               >
                 {guardado ? 'Guardado' : 'Guardar'}
               </button>
-
               <button
                 type="button"
                 className="btn-enviar"
-
                 onClick={() => navigate('/formularioAbarrotes.jsx')}
-
-             
-
               >
                 Enviar
               </button>
@@ -184,8 +167,6 @@ function FormularioAbastecimiento() {
     </div>
   );
 }
-
-
 export default FormularioAbastecimiento;
 
 
