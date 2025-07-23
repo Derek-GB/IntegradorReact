@@ -57,7 +57,7 @@ function FormularioAbastecimiento() {
 
   return (
     <div className="content-area">
-    <div id="sidebar-container" dangerouslySetInnerHTML={{ __html: '' /* sidebarHTML no definido aquí */ }} />
+    <div id="sidebar-container">
       <header className="top-header">
         <h1>Formulario de Abastecimiento</h1>
         <a href="#" className="back-button">
@@ -164,6 +164,7 @@ function FormularioAbastecimiento() {
 
         </div>
       </main>
+    </div>
     </div>
   );
 }
