@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { consumiblesAPI } from "../helpers/api";
-import "../styles/ajusteInventario.css";
-import Alerta from "../components/Alerta.jsx";
+import { consumiblesAPI } from "../../helpers/api.js";
+import "../../styles/ajusteInventario.css";
+import Alerta from "../../components/Alerta.jsx";
 
 const RegistroConsumibles = () => {
   const [form, setForm] = useState({

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useUbicaciones } from "../hooks/useUbicaciones";
-import { alberguesAPI } from "../helpers/api";
-import Alerta from "../components/Alerta";
-import "../styles/busquedaAlbergue.css";
+import { useUbicaciones } from "../../hooks/useUbicaciones";
+import { alberguesAPI } from "../../helpers/api";
+import Alerta from "../../components/Alerta";
+import "../../styles/busquedaAlbergue.css";
 
 const BusquedaAlbergue = () => {
   const { provincias, cantones, distritos, setProvinciaId, setCantonId } = useUbicaciones();

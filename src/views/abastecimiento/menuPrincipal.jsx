@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import "../styles/formularioFusionado.css";
-import "../styles/menuPrincipal.css"; 
+import "../../styles/formularioFusionado.css";
+import "../../styles/menuPrincipal.css";
 import { useNavigate } from 'react-router-dom';
 
 function FormularioAbastecimiento() {
