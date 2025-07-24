@@ -1,25 +1,43 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { contextoAbastecimiento } from '../context/contextoAbastecimiento';
 
-const gramosPorPersona = 120; // gramos por persona para todas las verduras
+const gramosPorPersona = 120;
 
 const Verduras = ({ abierto, alAbrir }) => {
   const [tipoVerdura, setTipoVerdura] = useState('');
-  const { agregarItem, eliminarItem, items, datosFormulario } = useContext(contextoAbastecimiento);
+  const { agregarItem, eliminarItem, limpiarItems, items, datosFormulario } = useContext(contextoAbastecimiento);
 
   const cantidadPersonas = parseInt(datosFormulario.cantidad) || 0;
+
+  useEffect(() => {
+    limpiarItems(); 
+  }, []);
 
   const handleAgregar = () => {
     if (!tipoVerdura) {
       alert("Seleccione una verdura");
       return;
     }
+
     if (cantidadPersonas <= 0) {
       alert("Debe definir la cantidad de personas en el menú principal.");
       return;
     }
 
-    // Calcular cantidad en kg: (gramosPorPersona * cantidadPersonas) / 1000
+    // Obtener verduras ya agregadas
+    const verdurasAgregadas = items.filter(i => i.seccion === 'Verduras');
+    const tiposUnicos = [...new Set(verdurasAgregadas.map(i => i.tipo))];
+
+    if (tiposUnicos.includes(tipoVerdura)) {
+      alert('Esta verdura ya fue agregada.');
+      return;
+    }
+
+    if (tiposUnicos.length >= 2) {
+      alert('Solo se pueden agregar hasta 2 tipos de verdura.');
+      return;
+    }
+
     const cantidadKg = ((gramosPorPersona * cantidadPersonas) / 1000).toFixed(2);
 
     agregarItem({
@@ -64,7 +82,12 @@ const Verduras = ({ abierto, alAbrir }) => {
                 <td>{item.tipo}</td>
                 <td>{item.unidad}</td>
                 <td>{item.cantidad}</td>
-            <td><button onClick={() => eliminarItem(index)}><i class="material-icons">delete</i></button></td>              </tr>
+                <td>
+                  <button onClick={() => eliminarItem(index)}>
+                    <i className="material-icons">delete</i>
+                  </button>
+                </td>
+              </tr>
             ))}
           </tbody>
         </table>

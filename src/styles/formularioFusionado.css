@@ -772,11 +772,11 @@ body {
   background-color: var(--color-fondo);
   font-family: var(--fuente-principal);
   overflow: hidden;
-  /* Evita el scroll horizontal */
+
 
 }
 
-/* registro de producto */
+
 
 .containerRegistroProducto {
   width: 100%;

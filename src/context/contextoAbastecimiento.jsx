@@ -17,6 +17,10 @@ export const AbastecimientoProvider = ({ children }) => {
     setItems(prev => prev.filter((_, i) => i !== index));
   };
 
+  const limpiarItems = () => {
+    setItems([]);
+  };
+
   const guardarDatosFormulario = (datos) => {
     setDatosFormulario(datos);
     localStorage.setItem('datosFormulario', JSON.stringify(datos));
@@ -27,7 +31,7 @@ export const AbastecimientoProvider = ({ children }) => {
       items,
       agregarItem,
       eliminarItem,
-      datosFormulario,
+      limpiarItems,        
       guardarDatosFormulario
     }}>
       {children}
