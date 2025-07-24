@@ -1,31 +1,51 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { contextoAbastecimiento } from '../context/contextoAbastecimiento';
 
 const Proteinas = ({ abierto, alAbrir }) => {
   const [tipoProteina, setTipoProteina] = useState('');
+  const [personas, setPersonas] = useState(0);
   const { agregarItem, eliminarItem, items } = useContext(contextoAbastecimiento);
 
+  useEffect(() => {
+    const datos = localStorage.getItem('datosFormulario');
+    if (datos) {
+      const datosParseados = JSON.parse(datos);
+      setPersonas(Number(datosParseados.cantidad) || 0);
+    }
+  }, []);
+
   const handleAgregar = () => {
-    if (!tipoProteina) return;
+    if (!tipoProteina || personas <= 0) {
+      alert('Seleccione proteína y asegúrese que hay cantidad de personas definida en el menú principal.');
+      return;
+    }
 
     let unidad = 'Unidad';
+    let cantidad = 1;
+
     switch (tipoProteina) {
       case 'Huevos':
-        unidad = 'Unidad';
+        unidad = 'Cartón (30 unidades)';
+        cantidad = Math.ceil(personas / 30);
         break;
       case 'Mortadela':
+        unidad = 'kg';
+        cantidad = ((personas * 25) / 1000).toFixed(2);
+        break;
       case 'Salchichón':
-        unidad = 'Paquete';
+        unidad = 'kg';
+        cantidad = ((personas * 125) / 1000).toFixed(2);
         break;
       default:
-        unidad = 'Unidad';
+        cantidad = 1;
+        break;
     }
 
     agregarItem({
       seccion: 'Proteínas',
       tipo: tipoProteina,
       unidad,
-      cantidad: 1
+      cantidad
     });
 
     setTipoProteina('');

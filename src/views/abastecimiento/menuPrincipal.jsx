@@ -1,25 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import "../../styles/formularioFusionado.css";
 import "../../styles/menuPrincipal.css";
 import { useNavigate } from 'react-router-dom';
+import { contextoAbastecimiento } from '../../context/contextoAbastecimiento'; 
 
 function FormularioAbastecimiento() {
   const navigate = useNavigate();
+  const { guardarDatosFormulario } = useContext(contextoAbastecimiento);
+
   const [formData, setFormData] = useState({
     fecha: '',
-    tipo: '',      // cambió de comida a tipo
-    cantidad: '',  // cambió de personas a cantidad
+    tipo: '',
+    cantidad: '',
     albergue: '',
   });
 
   const [guardado, setGuardado] = useState(false);
 
   useEffect(() => {
-    const datosGuardados = localStorage.getItem('datosFormulario');
-    if (datosGuardados) {
-      setFormData(JSON.parse(datosGuardados));
-      setGuardado(true);
-    }
+    setFormData({
+      fecha: '',
+      tipo: '',
+      cantidad: '',
+      albergue: '',
+    });
+    setGuardado(false);
   }, []);
 
   const handleChange = (e) => {
@@ -35,24 +40,17 @@ function FormularioAbastecimiento() {
       alert('Complete todos los campos');
       return;
     }
+    guardarDatosFormulario(formData);
 
-    // Guardar en localStorage con las claves correctas para ResumenFinal
-    localStorage.setItem('datosFormulario', JSON.stringify(formData));
     setGuardado(true);
   };
 
   const handleEnviar = () => {
-    const datosGuardados = localStorage.getItem('datosFormulario');
-    if (!datosGuardados) {
+    if (!guardado) {
       alert('Debe guardar el formulario antes de enviar.');
       return;
     }
 
-    const { fecha, tipo, cantidad, albergue } = formData;
-    if (!fecha || !tipo || !cantidad || !albergue) {
-      alert('Complete todos los campos');
-      return;
-    }
     navigate('/formularioAbarrotes.jsx');
   };
 
@@ -68,7 +66,6 @@ function FormularioAbastecimiento() {
         <main className="main-content">
           <div className="card">
             <form id="formularioAbastecimiento" onSubmit={e => e.preventDefault()}>
-
               <div className="form-group">
                 <label htmlFor="fecha">Fecha:</label>
                 <input
@@ -85,7 +82,7 @@ function FormularioAbastecimiento() {
                 <label htmlFor="tipo">Tipo de comida:</label>
                 <select
                   id="tipo"
-                  name="tipo"        // aquí cambió name a tipo
+                  name="tipo"
                   value={formData.tipo}
                   onChange={handleChange}
                   required
@@ -102,7 +99,7 @@ function FormularioAbastecimiento() {
                 <input
                   type="number"
                   id="cantidad"
-                  name="cantidad"    // aquí cambió name a cantidad
+                  name="cantidad"
                   min="1"
                   value={formData.cantidad}
                   onChange={handleChange}
@@ -160,7 +157,6 @@ function FormularioAbastecimiento() {
                   Enviar
                 </button>
               </div>
-
             </form>
           </div>
         </main>
