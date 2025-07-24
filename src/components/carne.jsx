@@ -21,7 +21,7 @@ const Carnes = ({ abierto, alAbrir }) => {
   return (
     <details open={abierto}>
       <summary onClick={alAbrir}><strong>Carnes</strong></summary>
-      <div>
+   
         <p>* Se calculan automáticamente 125 gramos por persona. *</p>
 
         <label className='labelAbarrote'>Tipo de carne:</label>
@@ -31,10 +31,7 @@ const Carnes = ({ abierto, alAbrir }) => {
           <option value="Cerdo">Cerdo</option>
           <option value="Res">Res</option>
         </select>
-
         <button type="button" onClick={handleAgregar}>Agregar</button>
-
-
 <div>
   <h4>Resumen Carnes</h4>
   <table>
@@ -56,5 +53,6 @@ const Carnes = ({ abierto, alAbrir }) => {
     </details>
   );
 };
+
 
 export default Carnes;

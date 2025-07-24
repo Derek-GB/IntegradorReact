@@ -127,7 +127,7 @@ body {
 
 .top-header {
     color: var(--color-texto);
-    padding: 40px 0;
+    padding: 50px 0;
     position: relative;
     display: flex;
     align-items: center;
@@ -144,20 +144,6 @@ body {
     color: #FAFAFA;
 }
 
-.back-button {
-    background-color: #fdd835;
-    color: black;
-    border-radius: 5px;
-    padding: 6px 8px;
-    text-decoration: none;
-    font-weight: bold;
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-}
 
 .back-button .material-icons {
     vertical-align: middle;

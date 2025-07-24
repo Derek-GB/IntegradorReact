@@ -59,9 +59,7 @@ function FormularioAbastecimiento() {
       <div id="sidebar-container">
         <header className="top-header">
           <h1>Formulario de Abastecimiento</h1>
-          <a href="#" className="back-button">
-            <span className="material-icons">arrow_back</span>
-          </a>
+        
         </header>
         <main className="main-content">
           <div className="card">

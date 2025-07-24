@@ -29,9 +29,7 @@ const ResumenParcial = () => {
  <div className="content-area">
  <header className="top-header">
  <h1>Formulario de Abastecimiento</h1>
- <button className="back-button" onClick={() => navigate('/formulario')}>
- <span className="material-icons">arrow_back</span>
- </button>
+
  </header>
 
  <main className="main-Content-abarrote">
