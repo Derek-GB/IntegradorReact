@@ -556,14 +556,14 @@ details > *:not(summary) {
   display: inline-block;
 }
 .cuadro-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 15px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  border: 2px solid #ccc;
-  max-width: 1000px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+    gap: 15px; 
+    padding: 20px; 
+    background-color: var(--color-gris-claro); 
+    border-radius: 8px; 
+    margin-top: 15px; 
+    border: none; 
 }
 
 .producto {
@@ -593,7 +593,6 @@ details > *:not(summary) {
 /* Estilos para la sección de Abarrotes (cuadritos más pequeños) */
 .cuadro-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
     gap: 15px;
     padding: 10px;
     background-color: var(--color-gris-claro);
@@ -614,6 +613,10 @@ details > *:not(summary) {
     transition: box-shadow 0.2s ease-in-out;
     position: relative;
     font-size: 0.9em;
+    word-wrap: break-word; 
+    overflow-wrap: break-word; 
+    white-space: normal; 
+
 }
 
 .cuadro-grid .producto:hover {
@@ -627,6 +630,8 @@ details > *:not(summary) {
     align-items: center;
     margin-bottom: 5px;
     line-height: 1.2;
+    align-items: flex-start; 
+    width: 100%; 
 }
 
 .cuadro-grid .producto input[type="checkbox"] {
