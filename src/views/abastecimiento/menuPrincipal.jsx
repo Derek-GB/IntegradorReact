@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import "../../styles/formularioFusionado.css";
 import "../../styles/menuPrincipal.css";
 import { useNavigate } from 'react-router-dom';
-import { contextoAbastecimiento } from '../../context/contextoAbastecimiento'; // ajusta ruta si hace falta
+import { contextoAbastecimiento } from '../../context/contextoAbastecimiento'; 
 
 function FormularioAbastecimiento() {
   const navigate = useNavigate();
@@ -18,7 +18,6 @@ function FormularioAbastecimiento() {
   const [guardado, setGuardado] = useState(false);
 
   useEffect(() => {
-    // No eliminamos localStorage acá porque usamos contexto para guardar datos globales
     setFormData({
       fecha: '',
       tipo: '',
@@ -41,8 +40,6 @@ function FormularioAbastecimiento() {
       alert('Complete todos los campos');
       return;
     }
-
-    // Guardar los datos en el contexto para que ResumenFinal.jsx pueda acceder
     guardarDatosFormulario(formData);
 
     setGuardado(true);
