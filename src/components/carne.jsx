@@ -2,15 +2,19 @@ import React, { useState, useContext } from 'react';
 import { contextoAbastecimiento } from '../context/contextoAbastecimiento';
 
 const Carnes = ({ abierto, alAbrir }) => {
-  const [personas, setPersonas] = useState('');
   const [tipoCarne, setTipoCarne] = useState('');
-  const { agregarItem, eliminarItem, items } = useContext(contextoAbastecimiento);
+  const { agregarItem, eliminarItem, items, datosFormulario } = useContext(contextoAbastecimiento);
 
   const handleAgregar = () => {
-    if (!personas || !tipoCarne) return;
-    const cantidadKg = ((parseInt(personas) * 120) / 1000).toFixed(2);
+    const cantidadPersonas = parseInt(datosFormulario.cantidad);
+
+    if (!tipoCarne || !cantidadPersonas || isNaN(cantidadPersonas)) {
+      alert('Seleccione tipo de carne y asegúrese que hay cantidad de personas definida en el menú principal.');
+      return;
+    }
+
+    const cantidadKg = ((cantidadPersonas * 125) / 1000).toFixed(2);
     agregarItem({ seccion: 'Carnes', tipo: tipoCarne, unidad: 'kg', cantidad: cantidadKg });
-    setPersonas('');
     setTipoCarne('');
   };
 
@@ -18,9 +22,7 @@ const Carnes = ({ abierto, alAbrir }) => {
     <details open={abierto}>
       <summary onClick={alAbrir}><strong>Carnes</strong></summary>
       <div>
-        <label className='labelAbarrote'>Cantidad de personas:</label>
-        <input className='inputAbarrote' type="number" value={personas} onChange={e => setPersonas(e.target.value)} />
-        <p>* Se calculan automáticamente 120 gramos por persona. *</p>
+        <p>* Se calculan automáticamente 125 gramos por persona. *</p>
 
         <label className='labelAbarrote'>Tipo de carne:</label>
         <select className='selectAbarrote' value={tipoCarne} onChange={e => setTipoCarne(e.target.value)}>
