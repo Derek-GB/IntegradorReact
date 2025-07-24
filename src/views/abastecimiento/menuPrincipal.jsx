@@ -7,19 +7,22 @@ function FormularioAbastecimiento() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fecha: '',
-    tipo: '',      // cambió de comida a tipo
-    cantidad: '',  // cambió de personas a cantidad
+    tipo: '',
+    cantidad: '',
     albergue: '',
   });
 
   const [guardado, setGuardado] = useState(false);
 
   useEffect(() => {
-    const datosGuardados = localStorage.getItem('datosFormulario');
-    if (datosGuardados) {
-      setFormData(JSON.parse(datosGuardados));
-      setGuardado(true);
-    }
+    localStorage.removeItem('datosFormulario');
+    setFormData({
+      fecha: '',
+      tipo: '',
+      cantidad: '',
+      albergue: '',
+    });
+    setGuardado(false);
   }, []);
 
   const handleChange = (e) => {
@@ -36,7 +39,6 @@ function FormularioAbastecimiento() {
       return;
     }
 
-    // Guardar en localStorage con las claves correctas para ResumenFinal
     localStorage.setItem('datosFormulario', JSON.stringify(formData));
     setGuardado(true);
   };
@@ -53,6 +55,7 @@ function FormularioAbastecimiento() {
       alert('Complete todos los campos');
       return;
     }
+
     navigate('/formularioAbarrotes.jsx');
   };
 
@@ -68,7 +71,6 @@ function FormularioAbastecimiento() {
         <main className="main-content">
           <div className="card">
             <form id="formularioAbastecimiento" onSubmit={e => e.preventDefault()}>
-
               <div className="form-group">
                 <label htmlFor="fecha">Fecha:</label>
                 <input
@@ -85,7 +87,7 @@ function FormularioAbastecimiento() {
                 <label htmlFor="tipo">Tipo de comida:</label>
                 <select
                   id="tipo"
-                  name="tipo"        // aquí cambió name a tipo
+                  name="tipo"
                   value={formData.tipo}
                   onChange={handleChange}
                   required
@@ -102,7 +104,7 @@ function FormularioAbastecimiento() {
                 <input
                   type="number"
                   id="cantidad"
-                  name="cantidad"    // aquí cambió name a cantidad
+                  name="cantidad"
                   min="1"
                   value={formData.cantidad}
                   onChange={handleChange}
@@ -160,7 +162,6 @@ function FormularioAbastecimiento() {
                   Enviar
                 </button>
               </div>
-
             </form>
           </div>
         </main>
