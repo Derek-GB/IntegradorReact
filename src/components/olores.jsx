@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { contextoAbastecimiento } from '../context/contextoAbastecimiento';
 
 const productosOlores = [
@@ -25,65 +25,59 @@ const productosOlores = [
 ];
 
 const Olores = ({ abierto, alAbrir }) => {
-  const { agregarItem, eliminarItem, items, datosFormulario } = useContext(contextoAbastecimiento);
-  const [selecciones, setSelecciones] = useState({});
+  const { agregarItem, eliminarItem, limpiarItems, items, datosFormulario } = useContext(contextoAbastecimiento);
 
   const cantidad = parseInt(datosFormulario?.cantidad) || 0;
 
-  const handleCheck = (nombre) => {
-    setSelecciones(prev => ({
-      ...prev,
-      [nombre]: {
-        ...prev[nombre],
-        checked: !prev[nombre]?.checked
-      }
-    }));
-  };
+  useEffect(() => {
+    limpiarItems(); 
+  }, []);
 
-  const agregarSeleccionados = () => {
+
+  const oloresAgregados = items
+    .filter(i => i.seccion === 'Olores')
+    .map(i => i.tipo);
+
+  
+  const handleCheck = (nombre) => {
     if (!cantidad || cantidad <= 0) {
       alert('Debe definir la cantidad de personas en el menú principal.');
       return;
     }
 
-    Object.entries(selecciones).forEach(([nombre, { checked }]) => {
-      if (checked) {
-        const producto = productosOlores.find(p => p.nombre === nombre);
-        if (producto) {
-          const cantidadCalculada = (cantidad * producto.factor).toFixed(2);
-          agregarItem({
-            seccion: 'Olores',
-            tipo: producto.nombre,
-            unidad: producto.unidad,
-            cantidad: cantidadCalculada
-          });
-        }
-      }
-    });
+    if (oloresAgregados.includes(nombre)) return; 
+    const producto = productosOlores.find(p => p.nombre === nombre);
+    if (!producto) return;
 
-    setSelecciones({});
+    const cantidadCalculada = (cantidad * producto.factor).toFixed(2);
+
+    agregarItem({
+      seccion: 'Olores',
+      tipo: producto.nombre,
+      unidad: producto.unidad,
+      cantidad: cantidadCalculada
+    });
   };
 
   return (
     <details open={abierto}>
       <summary onClick={alAbrir}><strong>Olores y otros</strong></summary>
+
       <div className="cuadro-grid">
         {productosOlores.map(({ nombre }) => (
-          <div key={nombre} className="producto">
-            <label className='labelAbarrote'>
-              <input
-                className='inputAbarrote'
-                type="checkbox"
-                checked={selecciones[nombre]?.checked || false}
-                onChange={() => handleCheck(nombre)}
-              />
-              {nombre}
-            </label>
-          </div>
+          !oloresAgregados.includes(nombre) && ( 
+            <div key={nombre} className="producto">
+              <label className='labelAbarrote'>
+                <input
+                  type="checkbox"
+                  onChange={() => handleCheck(nombre)}
+                />
+                {nombre}
+              </label>
+            </div>
+          )
         ))}
       </div>
-
-      <button type="button" onClick={agregarSeleccionados}>Agregar</button>
 
       <div className="card">
         <h4>Resumen Olores</h4>
@@ -97,7 +91,12 @@ const Olores = ({ abierto, alAbrir }) => {
                 <td>{item.tipo}</td>
                 <td>{item.unidad}</td>
                 <td>{item.cantidad}</td>
-            <td><button onClick={() => eliminarItem(index)}><i class="material-icons">delete</i></button></td>              </tr>
+                <td>
+                  <button onClick={() => eliminarItem(index)}>
+                    <i className="material-icons">delete</i>
+                  </button>
+                </td>
+              </tr>
             ))}
           </tbody>
         </table>

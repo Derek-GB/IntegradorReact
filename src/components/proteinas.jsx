@@ -4,9 +4,11 @@ import { contextoAbastecimiento } from '../context/contextoAbastecimiento';
 const Proteinas = ({ abierto, alAbrir }) => {
   const [tipoProteina, setTipoProteina] = useState('');
   const [personas, setPersonas] = useState(0);
-  const { agregarItem, eliminarItem, items } = useContext(contextoAbastecimiento);
+  const { agregarItem, eliminarItem, limpiarItems, items } = useContext(contextoAbastecimiento);
 
   useEffect(() => {
+    limpiarItems(); 
+
     const datos = localStorage.getItem('datosFormulario');
     if (datos) {
       const datosParseados = JSON.parse(datos);
@@ -20,13 +22,20 @@ const Proteinas = ({ abierto, alAbrir }) => {
       return;
     }
 
+    
+    const proteinasAgregadas = items.filter(i => i.seccion === 'Proteínas');
+    if (proteinasAgregadas.length >= 1) {
+      alert('Solo se puede agregar una proteína.');
+      return;
+    }
+
     let unidad = 'Unidad';
     let cantidad = 1;
 
     switch (tipoProteina) {
       case 'Huevos':
-        unidad = 'Unidad'; // huevos individuales
-        cantidad = personas; // 1 huevo por persona
+        unidad = 'Unidad';
+        cantidad = personas;
         break;
       case 'Mortadela':
         unidad = 'kg';
@@ -83,7 +92,12 @@ const Proteinas = ({ abierto, alAbrir }) => {
                 <td>{item.tipo}</td>
                 <td>{item.unidad}</td>
                 <td>{item.cantidad}</td>
-             <td><button onClick={() => eliminarItem(index)}><i class="material-icons">delete</i></button></td>              </tr>
+                <td>
+                  <button onClick={() => eliminarItem(index)}>
+                    <i className="material-icons">delete</i>
+                  </button>
+                </td>
+              </tr>
             ))}
           </tbody>
         </table>

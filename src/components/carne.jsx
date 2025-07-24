@@ -10,9 +10,11 @@ const carnesProductos = [
 const Carnes = ({ abierto, alAbrir }) => {
   const [tipoCarne, setTipoCarne] = useState('');
   const [personas, setPersonas] = useState(0);
-  const { agregarItem, eliminarItem, items } = useContext(contextoAbastecimiento);
+  const { agregarItem, eliminarItem, limpiarItems, items } = useContext(contextoAbastecimiento);
 
   useEffect(() => {
+    limpiarItems(); 
+
     const datos = localStorage.getItem('datosFormulario');
     if (datos) {
       const datosParseados = JSON.parse(datos);
@@ -23,6 +25,19 @@ const Carnes = ({ abierto, alAbrir }) => {
   const handleAgregar = () => {
     if (!tipoCarne || personas <= 0) {
       alert('Seleccione tipo de carne y asegúrese que la cantidad de personas está definida en el menú principal.');
+      return;
+    }
+
+    const carnesAgregadas = items.filter(i => i.seccion === 'Carnes');
+    const tiposUnicos = [...new Set(carnesAgregadas.map(i => i.tipo))];
+
+    if (tiposUnicos.includes(tipoCarne)) {
+      alert('Este tipo de carne ya fue agregado.');
+      return;
+    }
+
+    if (tiposUnicos.length >= 2) {
+      alert('Solo se pueden agregar hasta 2 tipos de carne.');
       return;
     }
 
@@ -60,30 +75,30 @@ const Carnes = ({ abierto, alAbrir }) => {
         </select>
 
         <button type="button" onClick={handleAgregar}>Agregar</button>
-</div>
+      </div>
 
-<div className="card">
-  <h4>Resumen Carnes</h4>
-  <table>
-    <thead>
-      <tr><th>Tipo</th><th>Unidad</th><th>Cantidad</th><th>Acción</th></tr>
-    </thead>
-    <tbody>
-      {items.filter(i => i.seccion === 'Carnes').map((item, idx) => (
-        <tr key={idx}>
-          <td>{item.tipo}</td>
-          <td>{item.unidad}</td>
-          <td>{item.cantidad}</td>
-          <td>
-            <button onClick={() => eliminarItem(idx)}>
-              Eliminar
-            </button>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
+      <div className="card">
+        <h4>Resumen Carnes</h4>
+        <table>
+          <thead>
+            <tr><th>Tipo</th><th>Unidad</th><th>Cantidad</th><th>Acción</th></tr>
+          </thead>
+          <tbody>
+            {items.filter(i => i.seccion === 'Carnes').map((item, idx) => (
+              <tr key={idx}>
+                <td>{item.tipo}</td>
+                <td>{item.unidad}</td>
+                <td>{item.cantidad}</td>
+                <td>
+                  <button onClick={() => eliminarItem(idx)}>
+                    <i className="material-icons">delete</i>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </details>
   );
 };

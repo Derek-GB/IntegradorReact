@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { contextoAbastecimiento } from '../context/contextoAbastecimiento';
 
 const productosAbarrotes = [
@@ -8,7 +8,7 @@ const productosAbarrotes = [
   { nombre: "Aceite de soya", unidad: "L", mililitrosPorPersona: 33 },
   { nombre: "Café", unidad: "kg", gramosPorPersona: 33.3 },
   { nombre: "Espagueti", unidad: "kg", gramosPorPersona: 33.3 },
-  { nombre: "Atún en trozos", unidad: "latas", gramosPorPersona: 21.3 }, // Esto es gramo pero unidad lata? ¿Asumimos gramos y luego pasamos a latas? Si no, dejar directo.
+  { nombre: "Atún en trozos", unidad: "latas", gramosPorPersona: 21.3 },
   { nombre: "Avena en polvo", unidad: "kg", gramosPorPersona: 26.6 },
   { nombre: "Refresco", unidad: "paquetes", paquetesPorPersona: 1 },
   { nombre: "Leche en polvo", unidad: "kg", gramosPorPersona: 52 },
@@ -20,76 +20,63 @@ const productosAbarrotes = [
 
 const Abarrotes = ({ abierto, alAbrir }) => {
   const { agregarItem, eliminarItem, items, datosFormulario } = useContext(contextoAbastecimiento);
-  const [selecciones, setSelecciones] = useState({});
 
-  // Para alternar selección
-  const handleCheck = (nombre) => {
-    setSelecciones(prev => ({
-      ...prev,
-      [nombre]: { checked: !prev[nombre]?.checked }
-    }));
-  };
+  const personas = parseInt(datosFormulario?.cantidad) || 0;
 
-  // Función para calcular la cantidad según reglas y cantidad personas
   const calcularCantidad = (producto) => {
-    const personas = parseInt(datosFormulario.cantidad);
     if (!personas || personas <= 0) return 0;
-
-    if (producto.gramosPorPersona) {
-      // gramos a kilogramos
-      return ((producto.gramosPorPersona * personas) / 1000).toFixed(2);
-    }
-    if (producto.mililitrosPorPersona) {
-      // mililitros a litros
-      return ((producto.mililitrosPorPersona * personas) / 1000).toFixed(2);
-    }
-    if (producto.paquetesPorPersona) {
-      return personas; // 1 paquete por persona
-    }
-    if (producto.rebanadasPorPersona) {
-      return personas * producto.rebanadasPorPersona;
-    }
-    if (producto.unidadesPorPersona) {
-      return personas * producto.unidadesPorPersona;
-    }
+    if (producto.gramosPorPersona) return ((producto.gramosPorPersona * personas) / 1000).toFixed(2);
+    if (producto.mililitrosPorPersona) return ((producto.mililitrosPorPersona * personas) / 1000).toFixed(2);
+    if (producto.paquetesPorPersona) return personas;
+    if (producto.rebanadasPorPersona) return personas * producto.rebanadasPorPersona;
+    if (producto.unidadesPorPersona) return personas * producto.unidadesPorPersona;
     return 0;
   };
 
-  const agregarSeleccionados = () => {
-    Object.entries(selecciones).forEach(([nombre, { checked }]) => {
-      if (checked) {
-        const producto = productosAbarrotes.find(p => p.nombre === nombre);
-        const cantidad = calcularCantidad(producto);
-        if (cantidad > 0) {
-          agregarItem({ seccion: 'Abarrotes', tipo: nombre, unidad: producto.unidad, cantidad });
-        } else {
-          alert("Debe definir la cantidad de personas en el menú principal.");
-        }
-      }
-    });
-    setSelecciones({});
+ 
+  const yaAgregado = (nombre) => {
+    return items.some(i => i.seccion === 'Abarrotes' && i.tipo === nombre);
+  };
+
+  const handleAgregar = (nombre) => {
+    if (yaAgregado(nombre)) return; 
+    const producto = productosAbarrotes.find(p => p.nombre === nombre);
+    const cantidad = calcularCantidad(producto);
+
+    if (cantidad > 0) {
+      agregarItem({
+        seccion: 'Abarrotes',
+        tipo: nombre,
+        unidad: producto.unidad,
+        cantidad
+      });
+    } else {
+      alert("Debe definir la cantidad de personas en el menú principal.");
+    }
   };
 
   return (
     <details open={abierto}>
       <summary onClick={alAbrir}><strong>Abarrotes</strong></summary>
-      <div className="cuadro-grid">
-        {productosAbarrotes.map(({ nombre }) => (
-          <div key={nombre} className="producto">
-            <label className='labelAbarrote'>
-              <input
-                className='inputAbarrote'
-                type="checkbox"
-                checked={selecciones[nombre]?.checked || false}
-                onChange={() => handleCheck(nombre)}
-              />
-              {nombre}
-            </label>
-          </div>
-        ))}
-      </div>
 
-      <button type="button" onClick={agregarSeleccionados}>Agregar</button>
+      <div className="cuadro-grid">
+        {productosAbarrotes.map(({ nombre }) => {
+          
+          if (yaAgregado(nombre)) return null;
+
+          return (
+            <div key={nombre} className="producto">
+              <label className="labelAbarrote" style={{ cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  onChange={() => handleAgregar(nombre)}
+                />
+                {nombre}
+              </label>
+            </div>
+          );
+        })}
+      </div>
 
       <div className="card">
         <h4>Resumen Abarrotes</h4>
@@ -103,7 +90,12 @@ const Abarrotes = ({ abierto, alAbrir }) => {
                 <td>{item.tipo}</td>
                 <td>{item.unidad}</td>
                 <td>{item.cantidad}</td>
-            <td><button onClick={() => eliminarItem(index)}><i class="material-icons">delete</i></button></td>              </tr>
+                <td>
+                  <button onClick={() => eliminarItem(index)}>
+                    <i className="material-icons">delete</i>
+                  </button>
+                </td>
+              </tr>
             ))}
           </tbody>
         </table>
