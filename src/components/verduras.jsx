@@ -43,8 +43,7 @@ const Verduras = () => {
                 <td>{item.tipo}</td>
                 <td>{item.unidad}</td>
                 <td>{item.cantidad}</td>
-                <td><button onClick={() => eliminarItem(index)}>Eliminar</button></td>
-              </tr>
+            <td><button onClick={() => eliminarItem(index)}><i class="material-icons">delete</i></button></td>              </tr>
             ))}
           </tbody>
         </table>

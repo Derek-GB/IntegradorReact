@@ -45,7 +45,7 @@ const Carnes = () => {
                 <td>{item.tipo}</td>
                 <td>{item.unidad}</td>
                 <td>{item.cantidad}</td>
-                <td><button onClick={() => eliminarItem(idx)}>Eliminar</button></td>
+               <td><button onClick={() => eliminarItem(idx)}><i class="material-icons">delete</i></button></td>
               </tr>
             ))}
           </tbody>
