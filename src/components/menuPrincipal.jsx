@@ -1,6 +1,6 @@
-// src/components/FormularioAbastecimiento.jsx
 import React, { useEffect, useState } from 'react';
 import "../styles/formularioFusionado.css";
+import "../styles/menuPrincipal.css"; 
 import { useNavigate } from 'react-router-dom';
 
 function FormularioAbastecimiento() {
@@ -52,7 +52,6 @@ function FormularioAbastecimiento() {
       alert('Complete todos los campos');
       return;
     }
-
     window.location.href = '/pages/grupo1/formAbasteci.html';
   };
 
