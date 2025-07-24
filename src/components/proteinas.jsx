@@ -25,8 +25,8 @@ const Proteinas = ({ abierto, alAbrir }) => {
 
     switch (tipoProteina) {
       case 'Huevos':
-        unidad = 'Cartón (30 unidades)';
-        cantidad = Math.ceil(personas / 30);
+        unidad = 'Unidad'; // huevos individuales
+        cantidad = personas; // 1 huevo por persona
         break;
       case 'Mortadela':
         unidad = 'kg';
