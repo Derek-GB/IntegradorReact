@@ -1,18 +1,34 @@
 import React, { useState, useContext } from 'react';
 import { contextoAbastecimiento } from '../context/contextoAbastecimiento';
 
+const gramosPorPersona = 120; // gramos por persona para todas las verduras
+
 const Verduras = ({ abierto, alAbrir }) => {
   const [tipoVerdura, setTipoVerdura] = useState('');
-  const { agregarItem, eliminarItem, items } = useContext(contextoAbastecimiento);
+  const { agregarItem, eliminarItem, items, datosFormulario } = useContext(contextoAbastecimiento);
+
+  const cantidadPersonas = parseInt(datosFormulario.cantidad) || 0;
 
   const handleAgregar = () => {
-    if (!tipoVerdura) return;
+    if (!tipoVerdura) {
+      alert("Seleccione una verdura");
+      return;
+    }
+    if (cantidadPersonas <= 0) {
+      alert("Debe definir la cantidad de personas en el menú principal.");
+      return;
+    }
+
+    // Calcular cantidad en kg: (gramosPorPersona * cantidadPersonas) / 1000
+    const cantidadKg = ((gramosPorPersona * cantidadPersonas) / 1000).toFixed(2);
+
     agregarItem({
       seccion: 'Verduras',
       tipo: tipoVerdura,
       unidad: 'kg',
-      cantidad: 1
+      cantidad: cantidadKg
     });
+
     setTipoVerdura('');
   };
 
