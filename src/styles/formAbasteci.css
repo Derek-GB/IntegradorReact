@@ -33,23 +33,23 @@ body {
 
 
 .form-title-header {
-    background-color: var(--color-verde-form); /* O puedes usar var(--color-verde-oscuro); si quieres el mismo color exacto del footer */
+    background-color: var(--color-verde-form); 
     color: var(--color-blanco);
     text-align: center;
-    padding: 20px 0; /* CAMBIO CLAVE: Padding horizontal a 0, si quieres que el color llegue a los bordes */
+    padding: 20px 0; 
     margin-top: 0;
-    margin-bottom: 25px; /* Puedes ajustar este margen inferior según el espacio que desees con el formulario */
+    margin-bottom: 25px; 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     letter-spacing: 0.05em;
-    border-radius: 0; /* CAMBIO CLAVE: Quita el redondeado de las esquinas */
-    box-shadow: none; /* CAMBIO CLAVE: Elimina la sombra para que se vea plano como el footer */
+    border-radius: 0; 
+    box-shadow: none; 
     font-weight: 700;
     font-size: 2.2em;
     box-sizing: border-box;
-    width: 100vw; /* CAMBIO CLAVE: Asegura que ocupe el 100% del ancho de la ventana */
-    max-width: 100vw; /* Asegura que no se limite */
-    margin-left: calc(50% - 50vw); /* CAMBIO CLAVE: Centra el elemento en el ancho de la ventana, eliminando el espacio del body */
-    margin-right: calc(50% - 50vw); /* Parte del centrado */
+    width: 100vw; 
+    max-width: 100vw; 
+    margin-left: calc(50% - 50vw); 
+    margin-right: calc(50% - 50vw); 
 }
 
 
@@ -307,7 +307,7 @@ h1 {
 
 /* Estilos del footer */
 .sidebar-copyright {
-  background-color: var(--color-verde-oscuro); /* Ya tiene el color correcto */
+  background-color: var(--color-verde-oscuro); 
   color: var(--color-blanco);
   padding: 1rem 1.5rem;
   text-align: center;
@@ -325,19 +325,18 @@ h1 {
 .encabezado-footer {
     background-color:#00796B; 
     color: var(--color-blanco);
-    text-align: center; /* Centrar el texto */
-    padding: 1rem 1.5rem; /* Usar el mismo padding que el footer */
-    font-size: 0.9em; /* Mismo tamaño de fuente que el footer */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Mismo tipo de fuente */
-    letter-spacing: 0.05em; /* Mismo espaciado de letras */
-    box-sizing: border-box; /* Para que el padding no incremente el ancho */
-    width: 400vw; /* Ocupa el 100% del ancho del viewport */
+    text-align: center; 
+    padding: 1rem 1.5rem; 
+    font-size: 0.9em; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    letter-spacing: 0.05em; 
+    box-sizing: border-box; 
+    width: 400vw; 
     max-width: 400vw;
-    margin-left: calc(50% - 50vw); /* Elimina el margen del body si lo hay y centra */
-    margin-right: calc(50% - 50vw); /* Parte del centrado */
-    margin-top: 0; /* Asegura que no haya margen superior */
-    margin-bottom: 20px; /* Puedes ajustar este margen para separar del contenido de abajo */
-    /* Si tienes bordes redondeados o sombras en tu header principal que no quieres aquí, asegúrate de quitarlos */
+    margin-left: calc(50% - 50vw); 
+    margin-right: calc(50% - 50vw); 
+    margin-top: 0; 
+    margin-bottom: 20px; 
     border-radius: 0;
     box-shadow: none;
 }
@@ -348,6 +347,9 @@ h1 {
   margin-bottom: 24px;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin: 700px;
+  width: 95%;
+  margin: auto;
  
 }
 
@@ -863,8 +865,7 @@ th, td {
     padding: 10px;
     text-align: center;
     font-size: 0.95em;
-    word-wrap: break-word; /* Permite que el texto largo se divida en múltiples líneas */
-    /* min-width: 50px; <-- Puedes añadir un min-width si las columnas se hacen muy estrechas */
+    word-wrap: break-word; 
 }
 
 
@@ -919,7 +920,7 @@ details > *:not(summary) label {
     background-color: var(--color-gris-claro);
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
-    box-sizing: border-box; /* Asegurado */
+    box-sizing: border-box; 
  
 }
 
