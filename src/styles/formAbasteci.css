@@ -301,6 +301,7 @@ h1 {
     font-weight: bold;
     user-select: none;
     transition: background-color 0.3s ease;
+    
 
 }
 
@@ -343,10 +344,11 @@ h1 {
 
 .card {
   background-color: var(--color-blanco);
-  padding: 10px;
+  padding: 10px 0;
   margin-bottom: 24px;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+ 
 }
 
 form {
@@ -393,9 +395,11 @@ button:hover {
 }
 
 table {
+  width: 100%;
   /* width: 900px; */
 
   margin-top: 12px;
+ 
 }
 
 th, td {
@@ -412,6 +416,7 @@ th {
 .card a {
   display: block;
   margin-bottom: 10px;
+ 
 }
 
 details > *:not(summary) {
@@ -849,6 +854,8 @@ table {
     border-radius: 8px;
     overflow: hidden; 
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+     padding: 0 10px; 
+      box-sizing: border-box;
 }
 
 th, td {
@@ -945,4 +952,19 @@ details > *:not(summary) select {
   padding: 8px 12px;
   margin-bottom: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h4 {
+    justify-content: center;
+    background-color: var(--color-verde-form);
+    color: var(--color-blanco);
+    text-align: center;
+    padding: 1rem;
+    margin-top: 0;
+    letter-spacing: 0.05em;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    font-weight: 700;
+    font-size: 1em;
+    box-sizing: border-box;
 }
