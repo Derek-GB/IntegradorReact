@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import "../../styles/formularioFusionado.css";
 import "../../styles/menuPrincipal.css";
 import { useNavigate } from 'react-router-dom';
+import { contextoAbastecimiento } from '../../context/contextoAbastecimiento'; // ajusta ruta si hace falta
 
 function FormularioAbastecimiento() {
   const navigate = useNavigate();
+  const { guardarDatosFormulario } = useContext(contextoAbastecimiento);
+
   const [formData, setFormData] = useState({
     fecha: '',
     tipo: '',
@@ -15,7 +18,7 @@ function FormularioAbastecimiento() {
   const [guardado, setGuardado] = useState(false);
 
   useEffect(() => {
-    localStorage.removeItem('datosFormulario');
+    // No eliminamos localStorage acá porque usamos contexto para guardar datos globales
     setFormData({
       fecha: '',
       tipo: '',
@@ -39,20 +42,15 @@ function FormularioAbastecimiento() {
       return;
     }
 
-    localStorage.setItem('datosFormulario', JSON.stringify(formData));
+    // Guardar los datos en el contexto para que ResumenFinal.jsx pueda acceder
+    guardarDatosFormulario(formData);
+
     setGuardado(true);
   };
 
   const handleEnviar = () => {
-    const datosGuardados = localStorage.getItem('datosFormulario');
-    if (!datosGuardados) {
+    if (!guardado) {
       alert('Debe guardar el formulario antes de enviar.');
-      return;
-    }
-
-    const { fecha, tipo, cantidad, albergue } = formData;
-    if (!fecha || !tipo || !cantidad || !albergue) {
-      alert('Complete todos los campos');
       return;
     }
 
