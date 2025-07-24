@@ -18,7 +18,7 @@ const productosLimpieza = [
   { nombre: "Toallas de papel", unidad: "rollo" }
 ];
 
-const Limpieza = () => {
+const Limpieza = ({ abierto, alAbrir }) => {
   const { agregarItem, eliminarItem, items } = useContext(contextoAbastecimiento);
   const [selecciones, setSelecciones] = useState({});
 
@@ -47,8 +47,8 @@ const Limpieza = () => {
   };
 
   return (
-    <details>
-      <summary><strong>Limpieza</strong></summary>
+    <details open={abierto}>
+      <summary onClick={alAbrir}><strong>Limpieza</strong></summary>
       <div className="cuadro-grid">
         {productosLimpieza.map(({ nombre, unidad }) => (
           <div key={nombre} className="producto">
@@ -60,17 +60,18 @@ const Limpieza = () => {
                 onChange={() => handleCheck(nombre)}
               />
               {nombre}
-  </label>
-  {/* <input
-    className='inputAbarrote'
-    type="number"
-    min="1"
-    value={selecciones[nombre]?.cantidad || ''}
-    onChange={e => handleCantidad(nombre, e.target.value)}
-    disabled={!selecciones[nombre]?.checked}
-    placeholder={unidad}
-  /> */}
-</div>
+            </label>
+            {/* Para habilitar la cantidad, descomenta este bloque y ajusta */}
+            {/* <input
+              className='inputAbarrote'
+              type="number"
+              min="1"
+              value={selecciones[nombre]?.cantidad || ''}
+              onChange={e => handleCantidad(nombre, e.target.value)}
+              disabled={!selecciones[nombre]?.checked}
+              placeholder={unidad}
+            /> */}
+          </div>
         ))}
       </div>
       <button type="button" onClick={agregarSeleccionados}>Agregar</button>

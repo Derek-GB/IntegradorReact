@@ -1,8 +1,7 @@
-// src/components/ResumenFinal.jsx
 import React, { useContext } from 'react';
 import { contextoAbastecimiento } from '../../context/contextoAbastecimiento';
 import { useNavigate } from 'react-router-dom';
-import '../../styles/resumenFinal.css'; // Asegúrate de tener o crear este archivo CSS
+import '../../styles/resumenFinal.css';
 
 const ResumenFinal = () => {
   const { items, datosFormulario } = useContext(contextoAbastecimiento);
