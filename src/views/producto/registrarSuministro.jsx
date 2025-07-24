@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { productosAPI } from '../helpers/api.js';
-import '../styles/registroUsuario.css'; 
-import Alerta from '../components/Alerta.jsx';
+import { productosAPI } from '../../helpers/api.js';
+import '../../styles/registroUsuario.css'; 
+import Alerta from '../../components/Alerta.jsx';
 
 const RegistrarSuministro = () => {
   const [form, setForm] = useState({

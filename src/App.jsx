@@ -2,31 +2,46 @@ import React from 'react';// asegúrate de que esta ruta sea correcta desde App.
 import './styles/formularioFusionado.css';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Sidebar from './components/sidebar.jsx';
-import Login from './components/login.jsx';
 
-import Inicio from './views/inicio.jsx';
-import PreFormulario from './views/preFormulario.jsx';
-import RegistroSuministros from './views/registrarSuministro.jsx';
-import AsignacionRecursos from './views/asignacionRecursos.jsx';
-import BusquedaAlbergue from './views/busquedaAlbergue.jsx';
-import AyudaForm from './views/ayudaForm.jsx';
-import RegistrarConsumible from './views/registrarConsumibles.jsx';
-import RegistroAlbergue from './views/registroAlbergue.jsx';
-import RegistroUsuario from './views/registroUsuario.jsx';
-import ListaProducto from './views/listaProducto.jsx';
-import ListaAlbergue from './views/listaAlbergue.jsx';
-import MenuPrincipal from './views/menuPrincipal.jsx';
-import FormularioAbastecimiento from './views/formularioAbarrotes.jsx';
+
+//Familia
+import PreFormulario from './views/familia/preFormulario.jsx';
+import FamiliaFormulario from './views/familia/familiaFormulario.jsx';
+import BusquedaFamilia from './views/familia/busquedaFamilia.jsx';
+
+//Producto
+import AsignacionRecursos from './views/producto/asignacionRecursos.jsx';
+import ListaProducto from './views/producto/listaProducto.jsx';
+import RegistrarConsumible from './views/producto/registrarConsumibles.jsx';
+import RegistroSuministros from './views/producto/registrarSuministro.jsx';
+
+//Usuario
+import Login from './views/usuario/login.jsx';
+import RecuperarContrasena from './views/usuario/recuperarContrasena.jsx';
+import RegistroUsuario from './views/usuario/registroUsuario.jsx';
+
+//Albergue
+
+import ActualizarAlbergue from './views/albergue/ActualizarAlbergue.jsx';
+import BusquedaAlbergue from './views/albergue/busquedaAlbergue.jsx';
+import ListaAlbergue from './views/albergue/listaAlbergue.jsx';
+import RegistroAlbergue from './views/albergue/registroAlbergue.jsx';
+
+//abastecimiento
+import MenuPrincipal from './views/abastecimiento/menuPrincipal.jsx';
+import ResumenFinal from './views/abastecimiento/resumenFinal.jsx';
+
+
+//Solos
 import AjusteInventario from "./views/ajusteInventario.jsx";
-import RecuperarContrasena from './views/recuperarContrasena.jsx';
+import AyudaForm from './views/ayudaForm.jsx';
+import FormularioAbastecimiento from './views/formularioAbarrotes.jsx';
+import Inicio from './views/inicio.jsx';
 import RegistroAmenazas from './views/registroAmenazas.jsx';
-import FamiliaFormulario from './views/familiaFormulario.jsx';
-import FormularioIntegrantes from "./components/formularioIntegrantes.jsx";
 import RegistroMascotas from "./views/registroMascota.jsx";
-import BusquedaFamilia from './views/BusquedaFamilia.jsx';
-import ResumenFinal from './components/resumenFinal';
 
-import ActualizarAlbergue from './views/ActualizarAlbergue.jsx';
+//No categorizado
+import FormularioIntegrantes from "./components/formularioIntegrantes.jsx";
 
 
 // Importa el proveedor de contexto aquí

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import {
   alberguesAPI,
   municipalidadAPI
-} from '../helpers/api';
-import '../styles/registroAlbergue.css';
+} from '../../helpers/api';
+import '../../styles/registroAlbergue.css';
 
 export default function RegistroAlbergue() {
   const idUsuario = localStorage.getItem("idUsuario");

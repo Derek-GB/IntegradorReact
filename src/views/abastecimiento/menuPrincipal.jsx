@@ -1,7 +1,7 @@
 // src/components/FormularioAbastecimiento.jsx
 import React, { useEffect, useState } from 'react';
-import "../styles/formularioFusionado.css";
-import "../styles/menuPrincipal.css"; // Asegúrate de que la ruta sea correcta
+import "../../styles/formularioFusionado.css";
+import "../../styles/menuPrincipal.css"; // Asegúrate de que la ruta sea correcta
 import { useNavigate } from 'react-router-dom';
 
 function FormularioAbastecimiento() {

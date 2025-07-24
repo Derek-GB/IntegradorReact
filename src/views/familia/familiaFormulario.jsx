@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import FamiliaDatosPersonales from "../components/familiaDatosPersonales.jsx";
-import FamiliaCondicionesEspeciales from "../components/FamiliaCondicionesEspeciales.jsx";
-import FamiliaCaracteristicasPoblacionales from "../components/FamiliaCaracteristicasPoblacionales.jsx";
-import FamiliaFirmaDigital from "../components/FamiliaFirmaDigital.jsx";
-import { personasAPI } from "../helpers/api.js";
-import "../styles/familiaFormulario.css";
-import "../styles/familiaFormulario.css";
+import FamiliaDatosPersonales from "../../components/familiaDatosPersonales.jsx";
+import FamiliaCondicionesEspeciales from "../../components/FamiliaCondicionesEspeciales.jsx";
+import FamiliaCaracteristicasPoblacionales from "../../components/FamiliaCaracteristicasPoblacionales.jsx";
+import FamiliaFirmaDigital from "../../components/FamiliaFirmaDigital.jsx";
+import { personasAPI } from "../../helpers/api.js";
+import "../../styles/familiaFormulario.css";
 
 const FamiliaFormulario = () => {
   const [datos, setDatos] = useState({
