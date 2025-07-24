@@ -6,7 +6,7 @@ import Olores from './olores';
 import Abarrotes from './abarrotes';
 import Limpieza from './limpieza';
 import ResumenParcial from './resumenParcial';
-import ResumenFinal from './resumenFinal'; // ⬅️ Asegúrate de tener este componente
+import ResumenFinal from './resumenFinal'; 
 import '../styles/formAbasteci.css';
 
 const FormularioAbastecimiento = () => {

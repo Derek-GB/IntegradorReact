@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { contextoAbastecimiento } from '../context/contextoAbastecimiento';
 
-const Proteinas = () => {
+const Proteinas = ({ abierto, alAbrir }) => {
   const [tipoProteina, setTipoProteina] = useState('');
   const { agregarItem, eliminarItem, items } = useContext(contextoAbastecimiento);
 
@@ -14,8 +14,6 @@ const Proteinas = () => {
         unidad = 'Unidad';
         break;
       case 'Mortadela':
-        unidad = 'Paquete';
-        break;
       case 'Salchichón':
         unidad = 'Paquete';
         break;
@@ -34,11 +32,16 @@ const Proteinas = () => {
   };
 
   return (
-    <details>
-      <summary><strong>Proteínas</strong></summary>
+    <details open={abierto}>
+      <summary onClick={alAbrir}><strong>Proteínas</strong></summary>
       <div>
-        <label className ='labelAbarrote' htmlFor="tipoProteina">Proteína:</label>
-        <select className='selectAbarrote' id="tipoProteina" value={tipoProteina} onChange={e => setTipoProteina(e.target.value)}>
+        <label className='labelAbarrote' htmlFor="tipoProteina">Proteína:</label>
+        <select
+          className='selectAbarrote'
+          id="tipoProteina"
+          value={tipoProteina}
+          onChange={e => setTipoProteina(e.target.value)}
+        >
           <option value="">Seleccione</option>
           <option value="Huevos">Huevos</option>
           <option value="Mortadela">Mortadela</option>

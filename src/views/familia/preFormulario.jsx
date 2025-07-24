@@ -1,6 +1,6 @@
 
-import FormularioEvento from "./FormularioEvento";
-import "../styles/familia.css";
+import FormularioEvento from "../../components/FormularioEvento";
+import "../../styles/familia.css";
 
 
 const preFormulario = () => {

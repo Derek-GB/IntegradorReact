@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import FamiliaDatosPersonales from "./familiaDatosPersonales.jsx";
-import FamiliaCondicionesEspeciales from "./FamiliaCondicionesEspeciales.jsx";
-import FamiliaCaracteristicasPoblacionales from "./FamiliaCaracteristicasPoblacionales.jsx";
-import FamiliaFirmaDigital from "./FamiliaFirmaDigital.jsx";
-import { personasAPI } from "../helpers/api";
-import "../styles/familiaFormulario.css";
-import "../styles/familiaFormulario.css";
+import FamiliaDatosPersonales from "../../components/familiaDatosPersonales.jsx";
+import FamiliaCondicionesEspeciales from "../../components/FamiliaCondicionesEspeciales.jsx";
+import FamiliaCaracteristicasPoblacionales from "../../components/FamiliaCaracteristicasPoblacionales.jsx";
+import FamiliaFirmaDigital from "../../components/FamiliaFirmaDigital.jsx";
+import { personasAPI } from "../../helpers/api.js";
+import "../../styles/familiaFormulario.css";
 
 const FamiliaFormulario = () => {
   const [datos, setDatos] = useState({
@@ -36,37 +35,45 @@ const FamiliaFormulario = () => {
     return null;
   };
 
-  const construirPersonaPayload = (dp, ce, cp, fd, codigoFamilia, idUsuarioCreacion) => ({
-    tieneCondicionSalud: ce.tieneCondicionSalud ?? true,
-    descripcionCondicionSalud: ce.descripcionCondicionSalud || ce.otrasCondiciones || "prueba",
-    discapacidad: ce.discapacidad ?? false,
-    tipoDiscapacidad: ce.tipoDiscapacidad || "",
-    subtipoDiscapacidad: ce.subtipoDiscapacidad || "",
-    paisOrigen: cp.paises || "",
-    autoidentificacionCultural: cp.autoidentificacionCultural || "prueba",
-    puebloIndigena: cp.grupoIndigena || "",
-    firma: fd.imagen || "",
-    idFamilia: codigoFamilia,
-    nombre: dp.nombre || "",
-    primerApellido: dp.primerApellido || "",
-    segundoApellido: dp.segundoApellido || "",
-    tipoIdentificacion: dp.tipoIdentificacion || "Cédula",
-    numeroIdentificacion: dp.numeroIdentificacion || "",
-    nacionalidad: dp.nacionalidad || "",
-    parentesco: dp.parentesco || "",
-    esJefeFamilia: dp.esJefeFamilia ?? false,
-    fechaNacimiento: dp.fechaNacimiento || "",
-    genero: dp.genero || "",
-    sexo: dp.sexo || "Otro",
-    telefono: dp.telefono || "",
-    contactoEmergencia: dp.contactoEmergencia || "",
-    observaciones: dp.observaciones || "",
-    estaACargoMenor: dp.estaACargoMenor ?? false,
-    idUsuarioCreacion,
-  });
+  const construirPersonaPayload = (
+  dp,
+  ce,
+  cp,
+  fd,
+  codigoFamilia,
+  idUsuarioCreacion
+) => ({
+  tieneCondicionSalud: ce.tieneCondicionSalud ?? true,
+  descripcionCondicionSalud: ce.descripcionCondicionSalud || ce.otrasCondiciones || "",
+  discapacidad: ce.discapacidad ?? false,
+  tipoDiscapacidad: ce.tipoDiscapacidad || "",
+  subtipoDiscapacidad: ce.subtipoDiscapacidad || "",
+  paisOrigen: cp.paises || "",
+  autoidentificacionCultural: cp.autoidentificacionCultural || "",
+  puebloIndigena: cp.grupoIndigena || "",
+  firma: fd.imagen || "",
+  idFamilia: codigoFamilia,
+  nombre: dp.nombre || "",
+  primerApellido: dp.primerApellido || "",
+  segundoApellido: dp.segundoApellido || "",
+  tipoIdentificacion: dp.tipoIdentificacion || "Cédula",
+  numeroIdentificacion: dp.numeroIdentificacion || "",
+  nacionalidad: dp.nacionalidad || "",
+  parentesco: dp.parentesco || "",
+  esJefeFamilia: dp.esJefeFamilia ?? false,
+  fechaNacimiento: dp.fechaNacimiento || "",
+  genero: dp.genero || "",
+  sexo: dp.sexo || "",
+  telefono: dp.telefono || "",
+  contactoEmergencia: dp.contactoEmergencia || "",
+  observaciones: dp.observaciones || "",
+  estaACargoMenor: dp.estaACargoMenor ?? false,
+  idUsuarioCreacion,
+});
+
 
   const crearPersonas = async (payloadArray) => {
-    console.log("Payload a enviar:", payloadArray);
+    console.log("Creando personas con payload:", payloadArray);
     const res = await personasAPI.create({personas: payloadArray});
     console.log("Respuesta API:", res);
 

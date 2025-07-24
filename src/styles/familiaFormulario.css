@@ -15,8 +15,8 @@
   padding: 2.5rem 2rem;
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-  min-width: 340px;
-  max-width: 400px;
+  min-width: 700px;
+  max-width: 900px;
   width: 100%;
   border: 1px solid var(--color-gris-borde);
   font-family: var(--fuente-principal);
@@ -71,6 +71,7 @@
   color: var(--color-texto);
   resize: vertical;
   box-shadow: none;
+
 }
 
 .familiaFormulario textarea:focus {
@@ -96,6 +97,12 @@
 .familiaFormulario button[type="button"]:hover {
   background: var(--color-amarillo-hover);
 }
+.familiaFormulario button[type="submit"],
+.familiaFormulario button[type="button"] {
+  padding: 10px ;
+  margin: 8px;
+  margin-right: 10px;
+}
 
 .familiaFormulario p {
   text-align: center;
@@ -120,8 +127,8 @@
   background-color: white;
   border: none;
   box-shadow: none;
-  padding: 1 px;
-  margin: -10px;
+  padding: 10px;
+  margin: 10px;
 }
 input[type="checkbox"] {
   width: 18px;
@@ -130,6 +137,26 @@ input[type="checkbox"] {
   border-radius: 4px;         /* Opcional para esquinas suavizadas */
 }
 .checkbox-group {
+    display: flex;
+    align-items: center;     /* Alinea verticalmente el checkbox y el texto */
+    gap: 0.7rem;             /* Espacio horizontal entre el checkbox y el label */
+    margin-bottom: 2rem;
+}
+
+
+
+input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #0d6efd;      /* Cambiá este color por uno institucional */
+  border-radius: 4px;   
+  display: flex;
+  align-items: center;     /* Alinea verticalmente el checkbox y el texto */
+  gap: 0.7rem;             /* Espacio horizontal entre el checkbox y el label */
+  margin-bottom: 2rem;      /* Opcional para esquinas suavizadas */
+}
+
+.radio-group {
   display: flex;
   align-items: center;     /* Alinea verticalmente el checkbox y el texto */
   gap: 0.7rem;             /* Espacio horizontal entre el checkbox y el label */
@@ -137,8 +164,39 @@ input[type="checkbox"] {
 }
 
 
-
-
 .ficha-persona legend {
   display: none;
 }
+.formulario-integrantes-container {
+  position: relative;
+  z-index: 5; /* más alto que el aside */
+  padding: 2rem;
+  background-color: var(--color-blanco);
+  border-radius: 12px;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.06);
+  max-width: 900px;
+  margin: 0 auto;
+}
+.btn-familia-paso {
+  background-color: var(--color-amarillo);
+  color: var(--color-texto);
+  border: 1px solid var(--color-gris-borde);
+  border-radius: 6px;
+  padding: 0.75rem 1.4rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  font-family: var(--fuente-principal);
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  margin-left: 580px;
+  
+  transition: background 0.3s ease;
+  cursor: pointer;
+  display: inline-block;
+  z-index: 2;
+}
+
+.btn-familia-paso:hover {
+  background-color: var(--color-amarillo-hover);
+}
+

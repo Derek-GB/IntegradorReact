@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import '../styles/login.css';
-import authHelper from '../helpers/sesion';
+import '../../styles/login.css';
+import authHelper from '../../helpers/sesion';
 
-import Alerta from '../components/Alerta'; // <-- Importa el componente alerta
+import Alerta from '../../components/Alerta'; // <-- Importa el componente alerta
 
 const Login = () => {
   const [usuario, setUsuario] = useState('');

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { municipalidadAPI, usuariosAPI } from '../helpers/api';
-import '../styles/registroUsuario.css';
-import Alerta from '../components/Alerta'; 
+import { municipalidadAPI, usuariosAPI } from '../../helpers/api';
+import '../../styles/registroUsuario.css';
+import Alerta from '../../components/Alerta'; 
 
 const RegistroUsuario = () => {
   const [municipalidades, setMunicipalidades] = useState([]);

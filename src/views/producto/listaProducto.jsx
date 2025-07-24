@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { productosAPI } from '../helpers/api';
-import Alerta from '../components/Alerta'; // Asegúrate de tener este import
-import '../styles/registroMascota.css'; // o el CSS general que uses
+import { productosAPI } from '../../helpers/api';
+import Alerta from '../../components/Alerta'; // Asegúrate de tener este import
+import '../../styles/registroMascota.css'; // o el CSS general que uses
 
 const ListaProducto = () => {
   const [productos, setProductos] = useState([]);
