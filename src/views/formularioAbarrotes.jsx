@@ -27,9 +27,8 @@ const FormularioAbastecimiento = () => {
     setMostrarResumenFinal(true);
   };
 
-  // Función para manejar clic en una sección con control completo
   const manejarAbrirSeccion = (nombreSeccion) => (event) => {
-    event.preventDefault(); // Evita comportamiento nativo <details>
+    event.preventDefault(); 
     setSeccionAbierta(prev => (prev === nombreSeccion ? '' : nombreSeccion));
   };
 

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { contextoAbastecimiento } from '../context/contextoAbastecimiento';
 
-const Verduras = () => {
+const Verduras = ({ abierto, alAbrir }) => {
   const [tipoVerdura, setTipoVerdura] = useState('');
   const { agregarItem, eliminarItem, items } = useContext(contextoAbastecimiento);
 
@@ -17,11 +17,16 @@ const Verduras = () => {
   };
 
   return (
-    <details>
-      <summary><strong>Verduras</strong></summary>
+    <details open={abierto}>
+      <summary onClick={alAbrir}><strong>Verduras</strong></summary>
       <div>
         <label className='labelAbarrote' htmlFor="tipoVerdura">Verdura:</label>
-        <select className='selectAbarrote' id="tipoVerdura" value={tipoVerdura} onChange={e => setTipoVerdura(e.target.value)}>
+        <select
+          className='selectAbarrote'
+          id="tipoVerdura"
+          value={tipoVerdura}
+          onChange={e => setTipoVerdura(e.target.value)}
+        >
           <option value="">Seleccione</option>
           <option value="Yuca">Yuca</option>
           <option value="Papa">Papa</option>
