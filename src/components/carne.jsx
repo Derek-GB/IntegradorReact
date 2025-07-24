@@ -32,27 +32,26 @@ const Carnes = ({ abierto, alAbrir }) => {
           <option value="Res">Res</option>
         </select>
 
-        <button type="button" onClick={handleAgregar}>Agregar</button>
+<button type="button" onClick={handleAgregar}>Agregar</button>
 
-        <div>
-          <h4>Resumen Carnes</h4>
-          <table>
-            <thead>
-              <tr><th>Tipo</th><th>Unidad</th><th>Cantidad</th><th>Acción</th></tr>
-            </thead>
-            <tbody>
-              {items.filter(i => i.seccion === 'Carnes').map((item, idx) => (
-                <tr key={idx}>
-                  <td>{item.tipo}</td>
-                  <td>{item.unidad}</td>
-                  <td>{item.cantidad}</td>
-                  <td><button onClick={() => eliminarItem(idx)}>Eliminar</button></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+<div>
+  <h4>Resumen Carnes</h4>
+  <table>
+    <thead>
+      <tr><th>Tipo</th><th>Unidad</th><th>Cantidad</th><th>Acción</th></tr>
+    </thead>
+    <tbody>
+      {items.filter(i => i.seccion === 'Carnes').map((item, idx) => (
+        <tr key={idx}>
+          <td>{item.tipo}</td>
+          <td>{item.unidad}</td>
+          <td>{item.cantidad}</td>
+          <td><button onClick={() => eliminarItem(idx)}>Eliminar</button></td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
     </details>
   );
 };
