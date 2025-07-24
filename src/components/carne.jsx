@@ -44,44 +44,45 @@ const Carnes = ({ abierto, alAbrir }) => {
 
   return (
     <details open={abierto}>
-      <summary onClick={alAbrir}><strong>Carnes</strong></summary>
-      <div>
-        <label className='labelAbarrote' htmlFor="tipoCarne">Tipo de carne:</label>
-        <select
-          className='selectAbarrote'
-          id="tipoCarne"
-          value={tipoCarne}
-          onChange={e => setTipoCarne(e.target.value)}
-        >
-          <option value="">Seleccione</option>
-          {carnesProductos.map(p => (
-            <option key={p.nombre} value={p.nombre}>{p.nombre}</option>
-          ))}
-        </select>
+<summary onClick={alAbrir}><strong>Carnes</strong></summary>
+<div>
+  <p>* Se calculan automáticamente 150 gramos por persona. *</p>
+  <label className='labelAbarrote' htmlFor="tipoCarne">Tipo de carne:</label>
+  <select
+    className='selectAbarrote'
+    id="tipoCarne"
+    value={tipoCarne}
+    onChange={e => setTipoCarne(e.target.value)}
+  >
+    <option value="">Seleccione</option>
+    {carnesProductos.map(p => (
+      <option key={p.nombre} value={p.nombre}>{p.nombre}</option>
+    ))}
+  </select>
+  <button type="button" onClick={handleAgregar}>Agregar</button>
+</div>
 
-        <button type="button" onClick={handleAgregar}>Agregar</button>
-      </div>
-
-      <div className="card">
-        <h4>Resumen Carnes</h4>
-        <table>
-          <thead>
-            <tr><th>Producto</th><th>Unidad</th><th>Cantidad</th><th>Acción</th></tr>
-          </thead>
-          <tbody>
-            {items.filter(i => i.seccion === 'Carnes').map((item, index) => (
-              <tr key={index}>
-                <td>{item.tipo}</td>
-                <td>{item.unidad}</td>
-                <td>{item.cantidad}</td>
-                <td><button onClick={() => eliminarItem(idx)}><i class="material-icons">delete</i></button></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+<div className="card">
+  <h4>Resumen Carnes</h4>
+  <table>
+    <thead>
+      <tr><th>Producto</th><th>Unidad</th><th>Cantidad</th><th>Acción</th></tr>
+    </thead>
+    <tbody>
+      {items.filter(i => i.seccion === 'Carnes').map((item, idx) => (
+        <tr key={idx}>
+          <td>{item.tipo}</td>
+          <td>{item.unidad}</td>
+          <td>{item.cantidad}</td>
+          <td><button onClick={() => eliminarItem(idx)}><i className="material-icons">delete</i></button></td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
     </details>
   );
 };
+
 
 export default Carnes;
