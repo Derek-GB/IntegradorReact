@@ -7,11 +7,7 @@ const Verduras = ({ abierto, alAbrir }) => {
   const [tipoVerdura, setTipoVerdura] = useState('');
   const { agregarItem, eliminarItem, limpiarItems, items, datosFormulario } = useContext(contextoAbastecimiento);
 
-  const cantidadPersonas = parseInt(datosFormulario.cantidad) || 0;
-
-  useEffect(() => {
-    limpiarItems(); 
-  }, []);
+  const cantidad = datosFormulario?.cantidad ?? 0;
 
   const handleAgregar = () => {
     if (!tipoVerdura) {
@@ -19,12 +15,11 @@ const Verduras = ({ abierto, alAbrir }) => {
       return;
     }
 
-    if (cantidadPersonas <= 0) {
+    if (cantidad <= 0) {
       alert("Debe definir la cantidad de personas en el menú principal.");
       return;
     }
 
-    // Obtener verduras ya agregadas
     const verdurasAgregadas = items.filter(i => i.seccion === 'Verduras');
     const tiposUnicos = [...new Set(verdurasAgregadas.map(i => i.tipo))];
 
@@ -38,7 +33,7 @@ const Verduras = ({ abierto, alAbrir }) => {
       return;
     }
 
-    const cantidadKg = ((gramosPorPersona * cantidadPersonas) / 1000).toFixed(2);
+    const cantidadKg = ((gramosPorPersona * cantidad) / 1000).toFixed(2);
 
     agregarItem({
       seccion: 'Verduras',

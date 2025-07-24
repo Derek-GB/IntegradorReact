@@ -31,8 +31,9 @@ export const AbastecimientoProvider = ({ children }) => {
       items,
       agregarItem,
       eliminarItem,
-      limpiarItems,        
-      guardarDatosFormulario
+      limpiarItems,
+      guardarDatosFormulario,
+      datosFormulario 
     }}>
       {children}
     </contextoAbastecimiento.Provider>
