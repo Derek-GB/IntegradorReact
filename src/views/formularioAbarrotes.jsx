@@ -36,7 +36,6 @@ const FormularioAbastecimiento = () => {
     setSeccionAbierta(prev => (prev === nombreSeccion ? '' : nombreSeccion));
   };
 
-  // Estilo para los modales
   const modalStyle = {
     position: 'absolute',
     top: '50%',
@@ -90,12 +89,8 @@ const FormularioAbastecimiento = () => {
         </button>
       </div>
 
-      {/* Modal para Resumen Parcial */}
       <Modal open={openResumenParcial} onClose={handleCloseResumenParcial}>
         <Box sx={modalStyle}>
-          <Typography variant="h6" component="h2" gutterBottom>
-            Resumen Parcial
-          </Typography>
           <ResumenParcial onVerResumenFinal={handleOpenResumenFinal} />
           <Button onClick={handleCloseResumenParcial} variant="contained" sx={{ mt: 2 }}>
             Cerrar
@@ -103,12 +98,8 @@ const FormularioAbastecimiento = () => {
         </Box>
       </Modal>
 
-      {/* Modal para Resumen Final */}
       <Modal open={openResumenFinal} onClose={handleCloseResumenFinal}>
         <Box sx={modalStyle}>
-          <Typography variant="h6" component="h2" gutterBottom>
-            Resumen Final
-          </Typography>
           <ResumenFinal />
           <Button onClick={handleCloseResumenFinal} variant="contained" sx={{ mt: 2 }}>
             Cerrar
