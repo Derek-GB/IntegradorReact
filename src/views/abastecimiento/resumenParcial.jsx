@@ -1,92 +1,89 @@
 import React, { useContext, useState } from 'react';
 import { contextoAbastecimiento } from '../../context/contextoAbastecimiento';
-import { useNavigate } from 'react-router-dom';
 import '../../styles/resumenParcial.css';
 
 const ResumenParcial = () => {
- const { items, eliminarItem } = useContext(contextoAbastecimiento);
- const navigate = useNavigate();
- const [modalIndex, setModalIndex] = useState(null);
- const [editCantidad, setEditCantidad] = useState('');
+  const { items, eliminarItem } = useContext(contextoAbastecimiento);
+  const [modalIndex, setModalIndex] = useState(null);
+  const [editCantidad, setEditCantidad] = useState('');
 
- const abrirModal = (index) => {
- setModalIndex(index);
- setEditCantidad(items[index].cantidad);
- };
+  const abrirModal = (index) => {
+    setModalIndex(index);
+    setEditCantidad(items[index].cantidad);
+  };
 
- const cerrarModal = () => {
- setModalIndex(null);
- setEditCantidad('');
- };
+  const cerrarModal = () => {
+    setModalIndex(null);
+    setEditCantidad('');
+  };
 
- const guardarEdicion = () => {
- if (editCantidad < 0) return;
- items[modalIndex].cantidad = editCantidad;
- cerrarModal();
- };
+  const guardarEdicion = () => {
+    if (editCantidad < 0) return;
+    items[modalIndex].cantidad = editCantidad;
+    cerrarModal();
+  };
 
- return (
- <div className="content-area">
- <header className="top-header">
- <h1>Formulario de Abastecimiento</h1>
+  return (
+    <div className="content-area">
+      <main className="main-Content-abarrote">
+        <div className="card">
+          <h2>Resumen Parcial de Productos</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Categoría</th>
+                <th>Producto</th>
+                <th>Unidad</th>
+                <th>Cantidad</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.seccion}</td>
+                  <td>{item.tipo}</td>
+                  <td>{item.unidad}</td>
+                  <td>{item.cantidad}</td>
+                  <td>
+                    <button onClick={() => abrirModal(index)}>
+                      <i className="material-icons">edit</i>
+                    </button>
+                    <button onClick={() => eliminarItem(index)}>
+                      <i className="material-icons">delete</i>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
- </header>
-
- <main className="main-Content-abarrote">
- <div className="card">
- <h2>Resumen Parcial de Productos</h2>
- <table>
- <thead>
- <tr>
- <th>Categoría</th>
- <th>Producto</th>
- <th>Unidad</th>
- <th>Cantidad</th>
- <th>Acciones</th>
- </tr>
- </thead>
- <tbody>
- {items.map((item, index) => (
- <tr key={index}>
- <td>{item.seccion}</td>
- <td>{item.tipo}</td>
- <td>{item.unidad}</td>
- <td>{item.cantidad}</td>
- <td>
- <button onClick={() => abrirModal(index)}><i class="material-icons">edit</i></button>
- <button onClick={() => eliminarItem(index)}><i class="material-icons">delete</i></button> {/* <-- ¡AQUÍ ESTÁ EL CAMBIO! Se eliminó el <td> extra. */}
- </td>
- </tr>
- ))}
- </tbody>
- </table>
- <div className="boton-resumen-final">
- <button onClick={() => navigate('/resumenFinal')}>Ver resumen final</button>
- </div>
- </div>
-
- {modalIndex !== null && (
- <div className="modal">
- <div className="modal-contenido">
- <h3>Editar producto</h3>
- <p><strong>{items[modalIndex].tipo}</strong></p>
- <p>Unidad: {items[modalIndex].unidad}</p>
-<input className='inputAbarrote'
- type="number"
- min="0"
- value={editCantidad}
- onChange={(e) => setEditCantidad(e.target.value)}
- />
- <div className="modal-botones">
- <button onClick={guardarEdicion}>Guardar cambios</button>
- <button onClick={cerrarModal}>Cancelar</button>
- </div>
- </div>
- </div>
- )}
- </main>
- </div>
-);
+        {modalIndex !== null && (
+          <div className="modal">
+            <div className="modal-contenido">
+              <h3>Editar producto</h3>
+              <p>
+                <strong>{items[modalIndex].tipo}</strong>
+              </p>
+              <p>Unidad: {items[modalIndex].unidad}</p>
+              <input
+                className="inputAbarrote"
+                type="number"
+                min="0"
+                value={editCantidad}
+                onChange={(e) => setEditCantidad(e.target.value)}
+              />
+              <div className="modal-botones">
+                <button onClick={guardarEdicion}>Guardar cambios</button>
+                <button onClick={cerrarModal}>Cancelar</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+    </div>
+  );
 };
 
 export default ResumenParcial;
