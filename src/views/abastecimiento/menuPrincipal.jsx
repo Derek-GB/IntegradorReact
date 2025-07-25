@@ -34,32 +34,26 @@ function FormularioAbastecimiento() {
     });
   };
 
-  const handleGuardar = () => {
+  const handleSiguiente = () => {
     const { fecha, tipo, cantidad, albergue } = formData;
     if (!fecha || !tipo || !cantidad || !albergue) {
       alert('Complete todos los campos');
       return;
     }
     guardarDatosFormulario(formData);
-
     setGuardado(true);
-  };
-
-  const handleEnviar = () => {
-    if (!guardado) {
-      alert('Debe guardar el formulario antes de enviar.');
-      return;
-    }
-
     navigate('/formularioAbarrotes.jsx');
   };
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); 
+  const minDate = today.toISOString().split('T')[0];
 
   return (
     <div className="content-area">
       <div id="sidebar-container">
         <header className="top-header">
           <h1>Formulario de Abastecimiento</h1>
-        
         </header>
         <main className="main-content">
           <div className="card">
@@ -72,6 +66,7 @@ function FormularioAbastecimiento() {
                   name="fecha"
                   value={formData.fecha}
                   onChange={handleChange}
+                  min={minDate}
                   required
                 />
               </div>
@@ -139,20 +134,10 @@ function FormularioAbastecimiento() {
               <div className="botones-accion">
                 <button
                   type="button"
-                  id="btnGuardar"
-                  onClick={handleGuardar}
-                  style={{
-                    backgroundColor: guardado ? '#059669' : undefined,
-                  }}
+                  id="btnSiguiente"
+                  onClick={handleSiguiente}
                 >
-                  {guardado ? 'Guardado' : 'Guardar'}
-                </button>
-                <button
-                  type="button"
-                  className="btn-enviar"
-                  onClick={handleEnviar}
-                >
-                  Enviar
+                  Siguiente
                 </button>
               </div>
             </form>
