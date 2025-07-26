@@ -6,11 +6,12 @@ const SubmitButton = ({
   width = "w-auto",
   className = "",
   loading = false,
+  color = "text-white",
   ...props
 }) => (
   <button
     type="submit"
-    className={`bg-[#F8B601] text-white font-bold py-3 px-10 rounded-xl transition ${width} ${className} hover:bg-[#d9a100] focus:outline-none focus:ring-2 focus:ring-[#F8B601]/50 duration-200`}
+    className={`bg-[#F8B601] ${color} font-bold py-3 px-10 rounded-xl transition ${width} ${className} hover:bg-[#d9a100] focus:outline-none focus:ring-2 focus:ring-[#F8B601]/50 duration-200`}
     disabled={loading || props.disabled}
     {...props}
   >

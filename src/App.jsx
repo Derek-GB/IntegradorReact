@@ -62,10 +62,9 @@ const App = () => {
         </Routes>
       ) : (
         <AbastecimientoProvider>
-
-          <div className="app-container">
+          <div className="app-container min-h-screen min-w-full flex flex-col md:flex-row bg-[#DEF7E9]">
             <Sidebar />
-            <div className="container main-content">
+            <div className="container main-content flex-1 w-full h-full p-4">
               <Routes>
                 <Route path="/inicio" element={<Inicio />} />
                 <Route path="/preFormulario.jsx" element={<PreFormulario />} />
@@ -94,11 +93,6 @@ const App = () => {
         </AbastecimientoProvider>
       )}
 
-      {!isLogin && (
-        <footer>
-          <p>© 2025 Integrador I - Todos los derechos reservados.</p>
-        </footer>
-      )}
     </>
   );
 };
