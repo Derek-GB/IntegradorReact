@@ -5,10 +5,7 @@ import SearchAutocompleteInput from "../components/FormComponents/SearchAutocomp
 import InputField from "../components/FormComponents/InputField";
 import SelectField from "../components/FormComponents/SelectField";
 import SubmitButton from "../components/FormComponents/SubmitButton";
-import Alerta from "../components/Alerta";
-import FullScreenSpinner from "../components/globalComponents/FullScreenSpinner";
-import { Modal } from "@mui/material";
-import GlobalModal from "../components/globalComponents/GlobalModal";
+
 import CustomToaster, { showCustomToast } from "../components/globalComponents/CustomToaster";
 
 export default function RegistroMascotas() {
@@ -99,9 +96,11 @@ export default function RegistroMascotas() {
   };
 
   return (
-    <div className="w-full mx-auto ">
 
-      <FormContainer title="Registro de Mascotas" size="xl" onSubmit={handleRegistro}>
+  
+    <div>
+    <CustomToaster/>
+      <FormContainer title="Registro de Mascotas" size="md" onSubmit={handleRegistro}>
         <div className="space-y-6">
           <div className="w-full">
             <SearchAutocompleteInput
@@ -153,13 +152,18 @@ export default function RegistroMascotas() {
           </div>
 
           <div className="flex justify-center pt-4">
-            <SubmitButton loading={loading}>Registrar Mascota</SubmitButton>
+            <SubmitButton
+            color="text-black"
+              
+             loading={loading}>
+              Registrar Mascota</SubmitButton>
           </div>
 
          
         </div>
       </FormContainer>
-      <CustomToaster/>
+      
     </div>
+  
   );
 }
