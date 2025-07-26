@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { familiasAPI } from "../../helpers/api";
 import Alerta from "../../components/Alerta";
-import "../../styles/busquedaFamilia.css";
+import FormContainer from "../../components/FormComponents/FormContainer.jsx";
+import InputField from "../../components/FormComponents/InputField.jsx";
+import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
+import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
 
 const BusquedaFamilia = () => {
   const [identificacion, setIdentificacion] = useState("");
   const [familia, setFamilia] = useState(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,6 +22,7 @@ const BusquedaFamilia = () => {
       return;
     }
 
+    setLoading(true);
     try {
       const id = identificacion.trim();
       const res = await familiasAPI.getById(id);
@@ -34,127 +39,139 @@ const BusquedaFamilia = () => {
       } else {
         setError(err.message || "Error al buscar la familia.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="busqueda-container">
-      <div className="header">
-        <h2 className="titulo">Buscar Familia</h2>
-      </div>
-
-      {/* Formulario de búsqueda */}
-      <form className="formulario-horizontal" onSubmit={handleSubmit} noValidate>
-        <div className="campo-horizontal">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Número de Identificación"
+    <FormContainer
+      title="Buscar Familia"
+      onSubmit={handleSubmit}
+      size={familia && familia.length > 0 ? "lg" : "md"}
+    >
+      <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex-1">
+          <InputField
+            label="Número de Identificación"
+            name="identificacion"
             value={identificacion}
             onChange={(e) => setIdentificacion(e.target.value)}
+            placeholder="Ingrese el número de identificación"
+            required
           />
+          <div className="mt-4">
+            <SubmitButton width="w-full" loading={loading}>
+              Buscar
+            </SubmitButton>
+          </div>
         </div>
+      </div>
 
-        <div className="campo-horizontal">
-          <button type="submit" className="btn-buscar">
-            Buscar
-          </button>
+      {error && (
+        <div className="mt-6">
+          <Alerta tipo="error" mensaje={error} />
         </div>
-      </form>
-
-      {error && <Alerta tipo="error" mensaje={error} />}
+      )}
 
       {familia && familia.length > 0 && (
         <>
-          <div className="detalles-generales" style={{ marginBottom: "20px" }}>
-            <h2>Detalles de la Familia</h2>
-            <div className="formulario-horizontal">
-              <div className="campo-horizontal">
-                <label>Código de Familia:</label>
-                <input value={familia[0].codigoFamilia || ""} disabled className="form-control" />
-              </div>
-
-              <div className="campo-horizontal">
-                <label>Nombre del Jefe de Familia:</label>
-                <input value={familia[0].nombreCompletoJefe || ""} disabled className="form-control" />
-              </div>
-
-              <div className="campo-horizontal">
-                <label>Ubicación:</label>
-                <input
-                  value={`${familia[0].provincia || ""}, ${familia[0].canton || ""}, ${familia[0].distrito || ""}`}
-                  disabled
-                  className="form-control"
+          <div className="mt-8 mb-4">
+            <h2 className="text-xl font-bold text-[#00897B] mb-4">Detalles de la Familia</h2>
+            <div className="flex flex-col md:grid md:grid-cols-3 gap-6">
+              <div>
+                <InputField
+                  label="Código de Familia"
+                  value={familia[0].codigoFamilia || ""}
+                  readOnly
                 />
               </div>
-
-              <div className="campo-horizontal">
-                <label>Dirección Exacta:</label>
-                <input value={familia[0].direccionExacta || ""} disabled className="form-control" />
+              <div>
+                <InputField
+                  label="Jefe de Familia"
+                  value={familia[0].nombreCompletoJefe || ""}
+                  readOnly
+                />
               </div>
-
-              <div className="campo-horizontal">
-                <label>Nombre del Albergue:</label>
-                <input value={familia[0].nombreAlbergue || ""} disabled className="form-control" />
+              <div>
+                <InputField
+                  label="Ubicación"
+                  value={`${familia[0].provincia || ""}, ${familia[0].canton || ""}, ${familia[0].distrito || ""}`}
+                  readOnly
+                />
               </div>
-
-              <div className="campo-horizontal">
-                <label>Cantidad de Personas:</label>
-                <input value={familia.length} disabled className="form-control" />
+              <div>
+                <InputField
+                  label="Dirección Exacta"
+                  value={familia[0].direccionExacta || ""}
+                  readOnly
+                />
+              </div>
+              <div>
+                <InputField
+                  label="Albergue"
+                  value={familia[0].nombreAlbergue || ""}
+                  readOnly
+                />
+              </div>
+              <div>
+                <InputField
+                  label="N° Personas"
+                  value={familia.length}
+                  readOnly
+                />
               </div>
             </div>
           </div>
 
-          {/* ✅ Contenedor visual + scroll interno */}
-          <div className="tabla-container">
-            <div className="tabla-scroll">
-              <table className="tabla-albergues">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Nombre Completo</th>
-                    <th>Tipo Identificación</th>
-                    <th>Número Identificación</th>
-                    <th>Fecha Nacimiento</th>
-                    <th>Nacionalidad</th>
-                    <th>Parentesco</th>
-                    <th>Sexo</th>
-                    <th>Género</th>
-                    <th>Condición de Salud</th>
-                    <th>Discapacidad</th>
-                    <th>Tipo Discapacidad</th>
-                    <th>Subtipo Discapacidad</th>
-                    <th>Tipo Condición Poblacional</th>
-                    <th>Contacto de Emergencia</th>
+          <div className="overflow-x-auto mt-4">
+            <table className="min-w-full border border-gray-200 rounded-lg">
+              <thead className="bg-[#00897B] text-white">
+                <tr>
+                  <th className="px-2 py-2">#</th>
+                  <th className="px-2 py-2">Nombre Completo</th>
+                  <th className="px-2 py-2">Tipo Identificación</th>
+                  <th className="px-2 py-2">Número Identificación</th>
+                  <th className="px-2 py-2">Fecha Nacimiento</th>
+                  <th className="px-2 py-2">Nacionalidad</th>
+                  <th className="px-2 py-2">Parentesco</th>
+                  <th className="px-2 py-2">Sexo</th>
+                  <th className="px-2 py-2">Género</th>
+                  <th className="px-2 py-2">Condición de Salud</th>
+                  <th className="px-2 py-2">Discapacidad</th>
+                  <th className="px-2 py-2">Tipo Discapacidad</th>
+                  <th className="px-2 py-2">Subtipo Discapacidad</th>
+                  <th className="px-2 py-2">Tipo Condición Poblacional</th>
+                  <th className="px-2 py-2">Contacto de Emergencia</th>
+                </tr>
+              </thead>
+              <tbody>
+                {familia.map((p, index) => (
+                  <tr key={index} className="bg-white border-b">
+                    <td className="px-2 py-2">{index + 1}</td>
+                    <td className="px-2 py-2">{p.nombreCompletoIntegrante || ""}</td>
+                    <td className="px-2 py-2">{p.tipoIdentificacion || ""}</td>
+                    <td className="px-2 py-2">{p.numeroIdentificacion || ""}</td>
+                    <td className="px-2 py-2">{p.fechaNacimiento ? p.fechaNacimiento.split("T")[0] : ""}</td>
+                    <td className="px-2 py-2">{p.nacionalidad || ""}</td>
+                    <td className="px-2 py-2">{p.parentesco || ""}</td>
+                    <td className="px-2 py-2">{p.sexo || ""}</td>
+                    <td className="px-2 py-2">{p.genero || ""}</td>
+                    <td className="px-2 py-2">{p.tieneCondicionSalud === 1 ? "Sí" : "No"}</td>
+                    <td className="px-2 py-2">{p.discapacidad === 1 ? "Sí" : "No"}</td>
+                    <td className="px-2 py-2">{p.discapacidad === 1 ? p.tipoDiscapacidad || "" : "-"}</td>
+                    <td className="px-2 py-2">{p.discapacidad === 1 ? p.subtipoDiscapacidad || "" : "-"}</td>
+                    <td className="px-2 py-2">{p.tipoCondicionPoblacional || ""}</td>
+                    <td className="px-2 py-2">{p.contactoEmergencia || ""}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {familia.map((p, index) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>{p.nombreCompletoIntegrante || ""}</td>
-                      <td>{p.tipoIdentificacion || ""}</td>
-                      <td>{p.numeroIdentificacion || ""}</td>
-                      <td>{p.fechaNacimiento ? p.fechaNacimiento.split("T")[0] : ""}</td>
-                      <td>{p.nacionalidad || ""}</td>
-                      <td>{p.parentesco || ""}</td>
-                      <td>{p.sexo || ""}</td>
-                      <td>{p.genero || ""}</td>
-                      <td>{p.tieneCondicionSalud === 1 ? "Sí" : "No"}</td>
-                      <td>{p.discapacidad === 1 ? "Sí" : "No"}</td>
-                      <td>{p.discapacidad === 1 ? p.tipoDiscapacidad || "" : "-"}</td>
-                      <td>{p.discapacidad === 1 ? p.subtipoDiscapacidad || "" : "-"}</td>
-                      <td>{p.tipoCondicionPoblacional || ""}</td>
-                      <td>{p.contactoEmergencia || ""}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
         </>
       )}
-    </div>
+      <CustomToaster />
+    </FormContainer>
   );
 };
 

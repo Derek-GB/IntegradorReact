@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from "react";
-import "../styles/ajusteInventario.css";
 import { familiasAPI, referenciasAPI } from "../helpers/api";
-import Alerta from "../components/Alerta";
+import FormContainer from "../components/FormComponents/FormContainer";
+import InputField from "../components/FormComponents/InputField";
+import SelectField from "../components/FormComponents/SelectField";
+import SubmitButton from "../components/FormComponents/SubmitButton";
+import SearchAutocompleteInput from "../components/FormComponents/SearchAutocompleteInput";
+import CustomToaster, { showCustomToast } from "../components/globalComponents/CustomToaster";
+
+const tiposAyuda = [
+  { id: "imas", nombre: "IMAS" },
+  { id: "cruzroja", nombre: "Cruz Roja" },
+  { id: "cne", nombre: "CNE" },
+  { id: "refugio", nombre: "Refugio" },
+  { id: "otros", nombre: "Otros" },
+];
 
 const AyudaForm = () => {
   const idUsuario = localStorage.getItem("idUsuario");
@@ -14,9 +26,11 @@ const AyudaForm = () => {
     responsable: "",
   });
 
+  // Autocomplete states
+  const [busquedaFamilia, setBusquedaFamilia] = useState("");
+  const [showSugerenciasFamilia, setShowSugerenciasFamilia] = useState(false);
+
   const [loading, setLoading] = useState(false);
-  const [mensaje, setMensaje] = useState(null); // Para usar con <Alerta />
-  const [tipoMensaje, setTipoMensaje] = useState("exito"); // 'exito' o 'error'
 
   useEffect(() => {
     const fetchFamilias = async () => {
@@ -24,8 +38,7 @@ const AyudaForm = () => {
         const res = await familiasAPI.getAll();
         setFamilias(Array.isArray(res) ? res : res.data ?? []);
       } catch {
-        setMensaje("Error al cargar familias");
-        setTipoMensaje("error");
+        showCustomToast("Error", "Error al cargar familias", "error");
       }
     };
     fetchFamilias();
@@ -43,17 +56,14 @@ const AyudaForm = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
-    setMensaje(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMensaje(null);
 
     const validacion = validarFormulario();
     if (validacion) {
-      setMensaje(validacion);
-      setTipoMensaje("error");
+      showCustomToast("Error", validacion, "error");
       return;
     }
 
@@ -70,8 +80,7 @@ const AyudaForm = () => {
 
       await referenciasAPI.create(payload);
 
-      setMensaje("Ayuda registrada correctamente");
-      setTipoMensaje("exito");
+      showCustomToast("Éxito", "Ayuda registrada correctamente", "success");
       setForm({
         idFamilia: "",
         tipoAyuda: "",
@@ -79,81 +88,96 @@ const AyudaForm = () => {
         fechaEntrega: "",
         responsable: "",
       });
-    } catch{
-      setMensaje("No se pudo registrar la ayuda. Inténtelo de nuevo.");
-      setTipoMensaje("error");
+      setBusquedaFamilia("");
+    } catch {
+      showCustomToast("Error", "No se pudo registrar la ayuda. Inténtelo de nuevo.", "error");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="ajuste-inventario-fullscreen">
-      <form className="ajuste-inventario-form" onSubmit={handleSubmit}>
-        <h2>Registro de Ayuda Entregada</h2>
-
-        <label>
-          Código de Familia:
-          <select name="idFamilia" value={form.idFamilia} onChange={handleChange}>
-            <option value="">Seleccione familia</option>
-            {familias.map((f) => (
-              <option key={f.id || f.ID} value={f.id || f.ID}>
-                {f.codigoFamilia || f.codigo}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label>
-          Tipo de Ayuda:
-          <select name="tipoAyuda" value={form.tipoAyuda} onChange={handleChange}>
-            <option value="">Seleccione tipo de ayuda</option>
-            <option value="imas">IMAS</option>
-            <option value="cruzroja">Cruz Roja</option>
-            <option value="cne">CNE</option>
-            <option value="refugio">Refugio</option>
-            <option value="otros">Otros</option>
-          </select>
-        </label>
-
-        <label>
-          Descripción:
-          <input
-            type="text"
-            name="descripcion"
-            value={form.descripcion}
-            onChange={handleChange}
-            placeholder="Descripción de la ayuda"
-          />
-        </label>
-
-        <label>
-          Fecha de Entrega:
-          <input
-            type="date"
-            name="fechaEntrega"
-            value={form.fechaEntrega}
-            onChange={handleChange}
-          />
-        </label>
-
-        <label>
-          Responsable:
-          <input
-            type="text"
-            name="responsable"
-            value={form.responsable}
-            onChange={handleChange}
-            placeholder="Nombre del responsable"
-          />
-        </label>
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Registrando..." : "Registrar"}
-        </button>
-
-        {mensaje && <Alerta tipo={tipoMensaje} mensaje={mensaje} />}
-      </form>
+    <div>
+    <FormContainer
+      title="Registro de Ayuda Entregada"
+      onSubmit={handleSubmit}
+      size="md"
+    >
+      <fieldset className="w-full">
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-1">
+            <SearchAutocompleteInput
+              label="Código de Familia"
+              busqueda={busquedaFamilia}
+              setBusqueda={setBusquedaFamilia}
+              showSugerencias={showSugerenciasFamilia}
+              setShowSugerencias={setShowSugerenciasFamilia}
+              resultados={familias}
+              onSelect={(familia) => {
+                setForm((prev) => ({
+                  ...prev,
+                  idFamilia: familia.id || familia.ID,
+                }));
+                setBusquedaFamilia(familia.codigoFamilia || familia.codigo);
+              }}
+              optionLabelKeys={["codigoFamilia", "codigo"]}
+              placeholder="Buscar familia..."
+            />
+          </div>
+          <div className="flex-1">
+            <SelectField
+              label="Tipo de Ayuda"
+              name="tipoAyuda"
+              value={form.tipoAyuda}
+              onChange={handleChange}
+              options={tiposAyuda}
+              optionLabel="nombre"
+              optionValue="id"
+              required
+            />
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row gap-6 mt-4">
+          <div className="flex-1">
+            <InputField
+              label="Descripción"
+              name="descripcion"
+              value={form.descripcion}
+              onChange={handleChange}
+              placeholder="Descripción de la ayuda"
+              required
+            />
+          </div>
+          <div className="flex-1">
+          <InputField
+              label="Responsable"
+              name="responsable"
+              value={form.responsable}
+              onChange={handleChange}
+              placeholder="Nombre del responsable"
+              required
+            />
+          
+          </div>
+          <div className="flex-1">
+          <InputField
+              label="Fecha de Entrega"
+              name="fechaEntrega"
+              type="date"
+              value={form.fechaEntrega}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        </div>
+      </fieldset>
+      <div className="flex justify-center mt-8">
+        <SubmitButton width="w-full" loading={loading}>
+          Registrar
+        </SubmitButton>
+      </div>
+    </FormContainer>
+    <CustomToaster />
     </div>
   );
 };

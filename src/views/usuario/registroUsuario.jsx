@@ -1,7 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { municipalidadAPI, usuariosAPI } from '../../helpers/api';
-import '../../styles/registroUsuario.css';
-import Alerta from '../../components/Alerta'; 
+import FormContainer from '../../components/FormComponents/FormContainer.jsx';
+import InputField from '../../components/FormComponents/InputField.jsx';
+import SelectField from '../../components/FormComponents/SelectField.jsx';
+import SubmitButton from '../../components/FormComponents/SubmitButton.jsx';
+import CustomToaster, { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
+
+const roles = [
+  { nombre: "Administrador", value: "admin" },
+  { nombre: "Editor", value: "editor" },
+  { nombre: "Visualizador", value: "viewer" },
+];
+
+const estados = [
+  { nombre: "Activo", value: "activo" },
+  { nombre: "Inactivo", value: "inactivo" },
+];
 
 const RegistroUsuario = () => {
   const [municipalidades, setMunicipalidades] = useState([]);
@@ -15,8 +29,6 @@ const RegistroUsuario = () => {
     identificacion: ''
   });
 
-  const [alerta, setAlerta] = useState(null); // { mensaje: '', tipo: 'success' | 'error' | 'info' }
-
   useEffect(() => {
     const fetchMunicipalidades = async () => {
       try {
@@ -24,9 +36,8 @@ const RegistroUsuario = () => {
         const lista = Array.isArray(data) ? data : data.data ?? [];
         setMunicipalidades(lista || []);
       } catch (error) {
-        console.error('Error al cargar municipalidades:', error);
+        showCustomToast('Error', 'Error al cargar municipalidades.', 'error');
         setMunicipalidades([]);
-        setAlerta({ mensaje: 'Error al cargar municipalidades.', tipo: 'error' });
       }
     };
     fetchMunicipalidades();
@@ -42,7 +53,7 @@ const RegistroUsuario = () => {
     const { nombre, correo, contrasena, rol, activo, municipalidad, identificacion } = form;
 
     if (!nombre || !correo || !contrasena || !rol || !activo || !municipalidad || !identificacion) {
-      setAlerta({ mensaje: 'Por favor complete todos los campos.', tipo: 'error' });
+      showCustomToast('Error', 'Por favor complete todos los campos.', 'error');
       return;
     }
 
@@ -58,75 +69,124 @@ const RegistroUsuario = () => {
 
     try {
       await usuariosAPI.create(payload);
-      setAlerta({ mensaje: 'Usuario registrado correctamente.', tipo: 'exito' });
+      showCustomToast('Éxito', 'Usuario registrado correctamente.', 'success');
       setForm({
         nombre: '', correo: '', contrasena: '',
         rol: '', activo: '', municipalidad: '', identificacion: ''
       });
     } catch (error) {
-      console.error("Error al registrar usuario:", error);
       if (error.response) {
-        setAlerta({ mensaje: 'Error del servidor: ' + JSON.stringify(error.response.data), tipo: 'error' });
+        showCustomToast('Error', 'Error del servidor: ' + JSON.stringify(error.response.data), 'error');
       } else {
-        setAlerta({ mensaje: 'Error al conectar con el servidor.', tipo: 'error' });
+        showCustomToast('Error', 'Error al conectar con el servidor.', 'error');
       }
     }
   };
 
   return (
-    <div className="ajuste-inventario-fullscreen sin-flecha-back">
-      {alerta && (
-        <Alerta
-          mensaje={alerta.mensaje}
-          tipo={alerta.tipo}
-          duracion={4000}
-          onClose={() => setAlerta(null)}
-        />
-      )}
-
-      <form className="ajuste-inventario-form" onSubmit={handleSubmit}>
-        <h2>Registro de Usuario</h2>
-
-        <label>Nombre Completo:</label>
-        <input name="nombre" value={form.nombre} onChange={handleChange} required />
-
-        <label>Correo Electrónico:</label>
-        <input name="correo" type="email" value={form.correo} onChange={handleChange} required />
-
-        <label>Contraseña:</label>
-        <input name="contrasena" type="password" value={form.contrasena} onChange={handleChange} required />
-
-        <label>Rol:</label>
-        <select name="rol" value={form.rol} onChange={handleChange} required>
-          <option value="">Seleccione un rol</option>
-          <option value="admin">Administrador</option>
-          <option value="editor">Editor</option>
-          <option value="viewer">Visualizador</option>
-        </select>
-
-        <label>Estado:</label>
-        <select name="activo" value={form.activo} onChange={handleChange} required>
-          <option value="">Seleccione un estado</option>
-          <option value="activo">Activo</option>
-          <option value="inactivo">Inactivo</option>
-        </select>
-
-        <label>Municipalidad:</label>
-        <select name="municipalidad" value={form.municipalidad} onChange={handleChange} required>
-          <option value="">Seleccione municipalidad</option>
-          {municipalidades.map((m) => (
-            <option key={m.id || m.ID} value={m.id || m.ID}>
-              {m.nombre || m.Nombre || 'Sin nombre'}
-            </option>
-          ))}
-        </select>
-
-        <label>Identificación:</label>
-        <input name="identificacion" value={form.identificacion} onChange={handleChange} required />
-
-        <button type="submit">Registrar</button>
-      </form>
-    </div>
+    <>
+      <FormContainer
+        title="Registro de Usuario"
+        onSubmit={handleSubmit}
+        size="md"
+      >
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-1">
+            <InputField
+              label="Nombre Completo"
+              name="nombre"
+              value={form.nombre}
+              onChange={handleChange}
+              required
+            />
+          </div>
+         
+          <div className="flex-1">
+            <InputField
+              label="Identificación"
+              name="identificacion"
+              value={form.identificacion}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row gap-6 mt-4">
+        <div className="flex-1">
+            <InputField
+              label="Correo Electrónico"
+              name="correo"
+              type="email"
+              value={form.correo}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="flex-1">
+            <InputField
+              label="Contraseña"
+              name="contrasena"
+              type="password"
+              value={form.contrasena}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          
+         
+         </div>
+        <div className="flex flex-col md:flex-row gap-6  mt-4 ">
+      
+          <div className="flex-1">
+            <SelectField
+              label="Municipalidad"
+              name="municipalidad"
+              value={form.municipalidad}
+              onChange={handleChange}
+              options={municipalidades.map(m => ({
+                nombre: m.nombre || m.Nombre || 'Sin nombre',
+                value: m.id || m.ID
+              }))}
+              optionLabel="nombre"
+              optionValue="value"
+              required
+            />
+            
+          </div>
+          <div className="flex-1">
+          <SelectField
+              label="Rol"
+              name="rol"
+              value={form.rol}
+              onChange={handleChange}
+              options={roles}
+              optionLabel="nombre"
+              optionValue="value"
+              required
+            />
+            </div>
+            <div className="flex-1">
+            <SelectField
+              label="Estado"
+              name="activo"
+              value={form.activo}
+              onChange={handleChange}
+              options={estados}
+              optionLabel="nombre"
+              optionValue="value"
+              required
+            />
+          </div>
+        </div>
+      
+        <div className="flex justify-center mt-8">
+          <SubmitButton width="w-full">
+            Registrar
+          </SubmitButton>
+        </div>
+      </FormContainer>
+      <CustomToaster />
+    </>
   );
 };
 
