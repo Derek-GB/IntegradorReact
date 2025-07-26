@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { familiasAPI, mascotasAPI } from "../helpers/api";
-import "../styles/registroMascota.css";
+import FormContainer from "../components/FormComponents/FormContainer";
+import SearchAutocompleteInput from "../components/FormComponents/SearchAutocompleteInput";
+import InputField from "../components/FormComponents/InputField";
+import SelectField from "../components/FormComponents/SelectField";
+import SubmitButton from "../components/FormComponents/SubmitButton";
 import Alerta from "../components/Alerta";
+import FullScreenSpinner from "../components/globalComponents/FullScreenSpinner";
+import { Modal } from "@mui/material";
+import GlobalModal from "../components/globalComponents/GlobalModal";
+import CustomToaster, { showCustomToast } from "../components/globalComponents/CustomToaster";
 
 export default function RegistroMascotas() {
   const [familias, setFamilias] = useState([]);
-  const [selectedFamilia, setSelectedFamilia] = useState("");
+  const [busquedaFamilia, setBusquedaFamilia] = useState("");
+  const [showSugerencias, setShowSugerencias] = useState(false);
+  const [selectedFamilia, setSelectedFamilia] = useState(null);
   const [tipo, setTipo] = useState("");
   const [tamano, setTamano] = useState("");
   const [nombreMascota, setNombreMascota] = useState("");
@@ -13,6 +23,7 @@ export default function RegistroMascotas() {
   const [alerta, setAlerta] = useState({ mensaje: "", tipo: "" });
 
   const tiposMascota = ["Perro", "Gato", "Ave", "Roedor"];
+  const tamanosMascota = ["Pequeño", "Mediano", "Grande"];
 
   const fetchFamilias = async () => {
     try {
@@ -36,6 +47,11 @@ export default function RegistroMascotas() {
     fetchFamilias();
   }, []);
 
+  const handleFamiliaSelect = (familia) => {
+    setSelectedFamilia(familia);
+    setBusquedaFamilia(familia.codigoFamilia);
+  };
+
   const handleRegistro = async (e) => {
     e.preventDefault();
 
@@ -47,14 +63,8 @@ export default function RegistroMascotas() {
     try {
       setLoading(true);
 
-      const familiaSeleccionada = familias.find(fam => fam.codigoFamilia === selectedFamilia);
-
-      if (!familiaSeleccionada) {
-        throw new Error("Familia seleccionada no válida");
-      }
-
       const mascotaData = {
-        idFamilia: familiaSeleccionada.id || familiaSeleccionada._id,
+        idFamilia: selectedFamilia.id || selectedFamilia._id,
         tipo: tipo,
         tamaño: tamano,
         nombreMascota: nombreMascota
@@ -62,10 +72,15 @@ export default function RegistroMascotas() {
 
       await mascotasAPI.create(mascotaData);
 
-      setAlerta({ mensaje: "Mascota registrada correctamente.", tipo: "exito" });
-
+      
+      showCustomToast(
+        "Registro exitoso",
+        "La mascota ha sido registrada correctamente.",
+        "success"
+      );
       // Limpiar campos
-      setSelectedFamilia("");
+      setSelectedFamilia(null);
+      setBusquedaFamilia("");
       setTipo("");
       setTamano("");
       setNombreMascota("");
@@ -84,89 +99,67 @@ export default function RegistroMascotas() {
   };
 
   return (
-    <div className="registro-mascotas-fullscreen">
-      <form className="registro-mascotas-form" onSubmit={handleRegistro}>
-        <h2>Registro de Mascotas</h2>
+    <div className="w-full mx-auto ">
 
-        <label>
-          Familia:
-          <select
-            value={selectedFamilia}
-            onChange={(e) => setSelectedFamilia(e.target.value)}
-            disabled={loading || familias.length === 0}
-            required
-          >
-            <option value="">Seleccione una familia</option>
-            {familias.map((fam) => (
-              <option key={fam._id || fam.id} value={fam.codigoFamilia}>
-                {fam.codigoFamilia}
-              </option>
-            ))}
-          </select>
-          {loading && familias.length === 0 && (
-            <p>Cargando familias...</p>
-          )}
-          {!loading && familias.length === 0 && (
-            <p>No hay familias disponibles</p>
-          )}
-        </label>
+      <FormContainer title="Registro de Mascotas" size="xl" onSubmit={handleRegistro}>
+        <div className="space-y-6">
+          <div className="w-full">
+            <SearchAutocompleteInput
+              label="Familia"
+              busqueda={busquedaFamilia}
+              setBusqueda={setBusquedaFamilia}
+              showSugerencias={showSugerencias}
+              setShowSugerencias={setShowSugerencias}
+              resultados={familias}
+              onSelect={handleFamiliaSelect}
+              optionLabelKeys={["codigoFamilia"]}
+              placeholder="Seleccione una familia"
+              disabled={loading || familias.length === 0}
+            />
+          </div>
 
-        <label>
-          Tipo:
-          <select
-            value={tipo}
-            onChange={(e) => setTipo(e.target.value)}
-            disabled={loading}
-            required
-          >
-            <option value="">Seleccione un tipo</option>
-            {tiposMascota.map((tipo) => (
-              <option key={tipo} value={tipo}>
-                {tipo}
-              </option>
-            ))}
-          </select>
-        </label>
+          <div className="w-full">
+            <InputField
+              label="Nombre de la Mascota"
+              name="nombreMascota"
+              value={nombreMascota}
+              onChange={(e) => setNombreMascota(e.target.value)}
+              placeholder="Ingrese el nombre de la mascota"
+              disabled={loading}
+              required
+            />
+          </div>
 
-        <label>
-          Tamaño:
-          <select
-            value={tamano}
-            onChange={(e) => setTamano(e.target.value)}
-            disabled={loading}
-            required
-          >
-            <option value="">Seleccione un tamaño</option>
-            <option value="Pequeño">Pequeño</option>
-            <option value="Mediano">Mediano</option>
-            <option value="Grande">Grande</option>
-          </select>
-        </label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <SelectField
+              label="Tipo"
+              name="tipo"
+              value={tipo}
+              onChange={(e) => setTipo(e.target.value)}
+              options={tiposMascota}
+              disabled={loading}
+              required
+            />
 
-        <label>
-          Nombre:
-          <input
-            type="text"
-            value={nombreMascota}
-            onChange={(e) => setNombreMascota(e.target.value)}
-            placeholder="Nombre de la mascota"
-            disabled={loading}
-            required
-          />
-        </label>
+            <SelectField
+              label="Tamaño"
+              name="tamano"
+              value={tamano}
+              onChange={(e) => setTamano(e.target.value)}
+              options={tamanosMascota}
+              disabled={loading}
+              required
+            />
+          </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Registrando..." : "Registrar Mascota"}
-        </button>
+          <div className="flex justify-center pt-4">
+            <SubmitButton loading={loading}>Registrar Mascota</SubmitButton>
+          </div>
 
-        {alerta.mensaje && (
-          <Alerta
-            mensaje={alerta.mensaje}
-            tipo={alerta.tipo}
-            onClose={() => setAlerta({ mensaje: "", tipo: "" })}
-          />
-        )}
-      </form>
+         
+        </div>
+      </FormContainer>
+      <CustomToaster/>
     </div>
   );
 }
