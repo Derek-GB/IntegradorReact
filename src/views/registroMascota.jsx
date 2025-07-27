@@ -1,105 +1,35 @@
-import React, { useState, useEffect } from "react";
-import { familiasAPI, mascotasAPI } from "../helpers/api";
+import React from "react";
+import useRegistroMascotas from "../hooks/useRegistroMascotas";
 import FormContainer from "../components/FormComponents/FormContainer";
 import SearchAutocompleteInput from "../components/FormComponents/SearchAutocompleteInput";
 import InputField from "../components/FormComponents/InputField";
 import SelectField from "../components/FormComponents/SelectField";
 import SubmitButton from "../components/FormComponents/SubmitButton";
-
-import CustomToaster, { showCustomToast } from "../components/globalComponents/CustomToaster";
+import CustomToaster from "../components/globalComponents/CustomToaster";
 
 export default function RegistroMascotas() {
-  const [familias, setFamilias] = useState([]);
-  const [busquedaFamilia, setBusquedaFamilia] = useState("");
-  const [showSugerencias, setShowSugerencias] = useState(false);
-  const [selectedFamilia, setSelectedFamilia] = useState(null);
-  const [tipo, setTipo] = useState("");
-  const [tamano, setTamano] = useState("");
-  const [nombreMascota, setNombreMascota] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [alerta, setAlerta] = useState({ mensaje: "", tipo: "" });
-
-  const tiposMascota = ["Perro", "Gato", "Ave", "Roedor"];
-  const tamanosMascota = ["Pequeño", "Mediano", "Grande"];
-
-  const fetchFamilias = async () => {
-    try {
-      setLoading(true);
-      const data = await familiasAPI.getAll();
-      const lista = Array.isArray(data) ? data : data.data ?? [];
-      setFamilias(lista || []);
-    } catch (error) {
-      console.error('Error al cargar familias:', error);
-      setFamilias([]);
-      setAlerta({
-        mensaje: "Error al cargar las familias disponibles",
-        tipo: "error"
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchFamilias();
-  }, []);
-
-  const handleFamiliaSelect = (familia) => {
-    setSelectedFamilia(familia);
-    setBusquedaFamilia(familia.codigoFamilia);
-  };
-
-  const handleRegistro = async (e) => {
-    e.preventDefault();
-
-    if (!selectedFamilia || !tipo || !tamano || !nombreMascota) {
-      setAlerta({ mensaje: "Completa todos los campos.", tipo: "error" });
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      const mascotaData = {
-        idFamilia: selectedFamilia.id || selectedFamilia._id,
-        tipo: tipo,
-        tamaño: tamano,
-        nombreMascota: nombreMascota
-      };
-
-      await mascotasAPI.create(mascotaData);
-
-      
-      showCustomToast(
-        "Registro exitoso",
-        "La mascota ha sido registrada correctamente.",
-        "success"
-      );
-      // Limpiar campos
-      setSelectedFamilia(null);
-      setBusquedaFamilia("");
-      setTipo("");
-      setTamano("");
-      setNombreMascota("");
-
-      fetchFamilias();
-
-    } catch (error) {
-      console.error('Error al registrar mascota:', error);
-      setAlerta({
-        mensaje: error.response?.data?.message || error.message || "Error al registrar la mascota",
-        tipo: "error"
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    familias,
+    busquedaFamilia,
+    setBusquedaFamilia,
+    showSugerencias,
+    setShowSugerencias,
+    handleFamiliaSelect,
+    tipo,
+    setTipo,
+    tamano,
+    setTamano,
+    nombreMascota,
+    setNombreMascota,
+    loading,
+    handleRegistro,
+    tiposMascota,
+    tamanosMascota,
+  } = useRegistroMascotas();
 
   return (
-
-  
     <div>
-    <CustomToaster/>
+      <CustomToaster />
       <FormContainer title="Registro de Mascotas" size="md" onSubmit={handleRegistro}>
         <div className="space-y-6">
           <div className="w-full">
@@ -152,18 +82,12 @@ export default function RegistroMascotas() {
           </div>
 
           <div className="flex justify-center pt-4">
-            <SubmitButton
-            color="text-black"
-              
-             loading={loading}>
-              Registrar Mascota</SubmitButton>
+            <SubmitButton color="text-black" loading={loading}>
+              Registrar Mascota
+            </SubmitButton>
           </div>
-
-         
         </div>
       </FormContainer>
-      
     </div>
-  
   );
 }

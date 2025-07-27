@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useUbicaciones } from "../../hooks/useUbicaciones";
-import { alberguesAPI } from "../../helpers/api";
+import { useBusquedaAlbergue } from "../../hooks/useBusquedaAlbergue";
 import FormContainer from "../../components/FormComponents/FormContainer.jsx";
 import InputField from "../../components/FormComponents/InputField.jsx";
 import SelectField from "../../components/FormComponents/SelectField.jsx";
@@ -10,81 +10,32 @@ import CustomToaster, { showCustomToast } from "../../components/globalComponent
 const BusquedaAlbergue = () => {
   const { provincias, cantones, distritos, setProvinciaId, setCantonId } = useUbicaciones();
 
-  const [idAlbergue, setIdAlbergue] = useState("");
-  const [nombre, setNombre] = useState("");
-  const [resultados, setResultados] = useState([]);
-  const [error, setError] = useState("");
-  const [provinciaSeleccionada, setProvinciaSeleccionada] = useState("");
-  const [cantonSeleccionado, setCantonSeleccionado] = useState("");
-  const [distritoSeleccionado, setDistritoSeleccionado] = useState("");
-  const [loading, setLoading] = useState(false);
+  const {
+    idAlbergue,
+    setIdAlbergue,
+    nombre,
+    setNombre,
+    resultados,
+    error,
+    provinciaSeleccionada,
+    cantonSeleccionado,
+    distritoSeleccionado,
+    loading,
+    handleSubmit,
+    handleProvinciaChange,
+    handleCantonChange,
+    handleDistritoChange,
+  } = useBusquedaAlbergue({ provincias, cantones, distritos, setProvinciaId, setCantonId });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setResultados([]);
-    
-    setLoading(true);
-
-    try {
-      if (idAlbergue.trim() !== "") {
-        const res = await alberguesAPI.getById(idAlbergue.trim());
-        if (res?.data?.length > 0) {
-          setResultados(res.data);
-        } else {
-          setError("No se encontró albergue con ese ID.");
-        }
-      } else if (nombre.trim() !== "") {
-        const res = await alberguesAPI.getByNombre(nombre.trim());
-        if (res?.data?.length > 0) {
-          setResultados(res.data);
-        } else {
-          setError("No se encontró albergue con ese nombre.");
-        }
-      } else if (distritoSeleccionado) {
-        const res = await alberguesAPI.getByDistrito(distritoSeleccionado);
-        if (res?.data?.length > 0) {
-          setResultados(res.data);
-        } else {
-          setError("No se encontró albergue en ese distrito.");
-        }
-      } else if (cantonSeleccionado) {
-        const res = await alberguesAPI.getByCanton(cantonSeleccionado);
-        if (res?.data?.length > 0) {
-          setResultados(res.data);
-        } else {
-          setError("No se encontró albergue en ese cantón.");
-        }
-      } else if (provinciaSeleccionada) {
-        const res = await alberguesAPI.getByProvincia(provinciaSeleccionada);
-        if (res?.data?.length > 0) {
-          setResultados(res.data);
-        } else {
-          setError("No se encontró albergue en esa provincia.");
-        }
-      } else {
-        setError("Por favor ingrese ID, Nombre o seleccione una ubicación.");
-      }
-    } catch (err) {
-      if (err.response && err.response.status === 404) {
-        setError("No se encontró un albergue con esos datos.");
-      } else if (err.message && err.message.includes("Albergue no encontrado")) {
-        setError("No se encontró un albergue con esos datos.");
-      } else {
-        setError(String(err) || "Error al buscar albergue.");
-      }
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (error) {
+      showCustomToast(error, null, "error"); 
     }
-  };
+  }, [error]);
 
   return (
     <>
-      <FormContainer
-        title="Búsqueda de Albergue"
-        onSubmit={handleSubmit}
-        size="md"
-      >
+      <FormContainer title="Búsqueda de Albergue" onSubmit={handleSubmit} size="md">
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1">
             <InputField
@@ -100,16 +51,8 @@ const BusquedaAlbergue = () => {
               label="Provincia"
               name="provincia"
               value={provincias.find(p => p.descripcion === provinciaSeleccionada)?.idProvincia || ""}
-              onChange={(e) => {
-                const idSeleccionado = parseInt(e.target.value, 10);
-                setProvinciaId(idSeleccionado);
-                const provincia = provincias.find((p) => p.idProvincia === idSeleccionado);
-                setProvinciaSeleccionada(provincia?.descripcion || "");
-              }}
-              options={provincias.map(p => ({
-                nombre: p.descripcion,
-                value: p.idProvincia
-              }))}
+              onChange={handleProvinciaChange}
+              options={provincias.map(p => ({ nombre: p.descripcion, value: p.idProvincia }))}
               optionLabel="nombre"
               optionValue="value"
             />
@@ -119,16 +62,8 @@ const BusquedaAlbergue = () => {
               label="Cantón"
               name="canton"
               value={cantones.find(c => c.descripcion === cantonSeleccionado)?.idCanton || ""}
-              onChange={(e) => {
-                const idSeleccionado = parseInt(e.target.value, 10);
-                setCantonId(idSeleccionado);
-                const canton = cantones.find((c) => c.idCanton === idSeleccionado);
-                setCantonSeleccionado(canton?.descripcion || "");
-              }}
-              options={cantones.map(c => ({
-                nombre: c.descripcion,
-                value: c.idCanton
-              }))}
+              onChange={handleCantonChange}
+              options={cantones.map(c => ({ nombre: c.descripcion, value: c.idCanton }))}
               optionLabel="nombre"
               optionValue="value"
             />
@@ -138,20 +73,14 @@ const BusquedaAlbergue = () => {
               label="Distrito"
               name="distrito"
               value={distritos.find(d => d.descripcion === distritoSeleccionado)?.idDistrito || ""}
-              onChange={(e) => {
-                const idSeleccionado = parseInt(e.target.value, 10);
-                const distrito = distritos.find((d) => d.idDistrito === idSeleccionado);
-                setDistritoSeleccionado(distrito?.descripcion || "");
-              }}
-              options={distritos.map(d => ({
-                nombre: d.descripcion,
-                value: d.idDistrito
-              }))}
+              onChange={handleDistritoChange}
+              options={distritos.map(d => ({ nombre: d.descripcion, value: d.idDistrito }))}
               optionLabel="nombre"
               optionValue="value"
             />
           </div>
         </div>
+
         <div className="flex flex-col md:flex-row gap-6 mt-4">
           <div className="flex-1">
             <InputField
@@ -168,16 +97,13 @@ const BusquedaAlbergue = () => {
             </SubmitButton>
           </div>
         </div>
-        {error && (
-          <div className="mt-6">
-            <span className="block text-red-600 text-center font-semibold">{error}</span>
-          </div>
-        )}
+
         {!error && resultados.length === 0 && (
           <p className="mt-6 text-center text-gray-500">
             Ingrese un criterio y presione Buscar para ver resultados.
           </p>
         )}
+
         {resultados.length > 0 && (
           <div className="overflow-x-auto mt-8">
             <table className="min-w-full border border-gray-200 rounded-lg">
@@ -242,6 +168,12 @@ const BusquedaAlbergue = () => {
                 ))}
               </tbody>
             </table>
+          </div>
+        )}
+
+        {error && (
+          <div className="mt-6">
+            <span className="block text-red-600 text-center font-semibold">{error}</span>
           </div>
         )}
       </FormContainer>
