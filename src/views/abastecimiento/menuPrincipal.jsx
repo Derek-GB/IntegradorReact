@@ -35,14 +35,6 @@ const opcionesAlbergue = [
 
 function FormularioAbastecimiento() {
   const navigate = useNavigate();
-  const { guardarDatosFormulario } = useContext(contextoAbastecimiento);
-
-  const [formData, setFormData] = useState({
-    fecha: '',
-    tipo: '',
-    cantidad: '',
-function FormularioAbastecimiento() {
-  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     fecha: '',
