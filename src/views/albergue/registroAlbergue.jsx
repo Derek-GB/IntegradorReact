@@ -3,14 +3,18 @@ import {
   alberguesAPI,
   municipalidadAPI
 } from '../../helpers/api';
-import '../../styles/registroAlbergue.css';
+import FormContainer from '../../components/FormComponents/FormContainer.jsx';
+import InputField from '../../components/FormComponents/InputField.jsx';
+import SelectField from '../../components/FormComponents/SelectField.jsx';
+import SubmitButton from '../../components/FormComponents/SubmitButton.jsx';
+import CustomToaster, { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
 
 export default function RegistroAlbergue() {
   const idUsuario = localStorage.getItem("idUsuario");
   const [form, setForm] = useState({});
   const [cantones, setCantones] = useState([]);
   const [municipalidades, setMunicipalidades] = useState([]);
-  const [mensaje, setMensaje] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const cantonesPorProvincia = {
     "San José": ["San José", "Escazú", "Desamparados", "Puriscal", "Tarrazú", "Aserrí", "Mora", "Goicoechea", "Santa Ana", "Alajuelita", "Vázquez de Coronado", "Acosta", "Tibás", "Moravia", "Montes de Oca", "Turrubares", "Dota", "Curridabat", "Pérez Zeledón", "León Cortés Castro"],
@@ -26,90 +30,43 @@ export default function RegistroAlbergue() {
     const cargarDatos = async () => {
       try {
         const muniRes = await municipalidadAPI.getAll();
-        console.log('Respuesta de municipalidadAPI.getAll():', muniRes);
-        // Manejo robusto de la respuesta
         const lista = Array.isArray(muniRes) ? muniRes : muniRes.data ?? [];
-        console.log('Lista de municipalidades después de procesamiento:', lista);
         setMunicipalidades(lista);
       } catch (error) {
-        console.error('Error al cargar datos:', error.message);
         setMunicipalidades([]);
       }
     };
-
     cargarDatos();
   }, []);
 
   const handleProvinciaChange = (provincia) => {
-    console.log('Provincia seleccionada:', provincia);
     setForm(prev => ({ ...prev, provincia, canton: '', distrito: '' }));
-    const nuevosCantones = cantonesPorProvincia[provincia] || [];
-    console.log('Cantones cargados para provincia:', nuevosCantones);
-    setCantones(nuevosCantones);
+    setCantones(cantonesPorProvincia[provincia] || []);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(`Campo cambiado: ${name} = ${value}`);
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
+    // Validación básica
     const camposRequeridos = [
-      'idAlbergue',                       // para idAlbergue (aunque es un poco inconsistente que el payload sea idAlbergue y aquí id)
-      'nombreAlbergue',
-      'especificacion',
-      'tipoAlbergue',
-      'tipoEstablecimiento',
-      'estado',                   // para condicionAlbergue
-      'regionCNE',                // region
-      'provincia',
-      'canton',
-      'distrito',
-      'direccion',
-      'coordenadaX',
-      'coordenadaY',
-      'idMunicipalidad',
-      'capacidad',
-      'capacidadColectiva',
-      'ocupacion',
-      'egresos',
-      'sospechososSanos',
-      'cantidadFamilias',
-      'areaTotal',
-      'detalle_condicion',
-      'seccion',
-      'requerimientos_tecnicos',
-      'costo_requerimientos_tecnicos',
-      'cocina',
-      'duchas',
-      'serviciosSanitarios',
-      'bodega',
-      'menaje_mobiliario',
-      'tanque_agua',
-      'administrador',
-      'telefono',
-      'color',
-      'otros',
-      'idPedidoAbarrote',
-      'idUsuarioCreacion'
+      'idAlbergue', 'nombreAlbergue', 'especificacion', 'tipoAlbergue', 'tipoEstablecimiento', 'estado',
+      'regionCNE', 'provincia', 'canton', 'distrito', 'direccion', 'coordenadaX', 'coordenadaY',
+      'idMunicipalidad', 'capacidad', 'capacidadColectiva', 'ocupacion', 'egresos', 'sospechososSanos',
+      'cantidadFamilias', 'areaTotal', 'detalle_condicion', 'seccion', 'requerimientos_tecnicos',
+      'costo_requerimientos_tecnicos', 'cocina', 'duchas', 'serviciosSanitarios', 'bodega',
+      'menaje_mobiliario', 'tanque_agua', 'administrador', 'telefono', 'color'
     ];
 
-    // Asegúrate que idPedidoAbarrote e idUsuarioCreacion tengan valor en form o validalos aparte
-    // Por ejemplo, si idPedidoAbarrote es null y permites eso, quítalo de los requeridos
-
-    const faltantes = camposRequeridos.filter(campo => {
-      // Permitamos que idPedidoAbarrote sea null o undefined si es válido
-      if (campo === 'idPedidoAbarrote') return false;
-      if (campo === 'idUsuarioCreacion') return !idUsuario; // Si no hay idUsuario definido, marca como faltante
-      return form[campo] === undefined || form[campo] === '';
-    });
-
+    const faltantes = camposRequeridos.filter(campo => form[campo] === undefined || form[campo] === '');
     if (faltantes.length > 0) {
-      setMensaje("Completa todos los campos.");
-      console.log('Campos faltantes:', faltantes);
+      showCustomToast("Error", "Completa todos los campos.", "error");
+      setLoading(false);
       return;
     }
 
@@ -120,7 +77,6 @@ export default function RegistroAlbergue() {
       bodega: form.bodega === "true" || form.bodega === true,
       menajeMobiliario: form.menaje_mobiliario === "true" || form.menaje_mobiliario === true,
       tanqueAgua: form.tanque_agua === "true" || form.tanque_agua === true,
-
       areaTotalM2: parseFloat(form.areaTotal) || 0,
       capacidadPersonas: parseInt(form.capacidad, 10) || 0,
       capacidadColectiva: parseInt(form.capacidadColectiva, 10) || 0,
@@ -129,12 +85,10 @@ export default function RegistroAlbergue() {
       egresos: parseInt(form.egresos, 10) || 0,
       sospechososSanos: parseInt(form.sospechososSanos, 10) || 0,
       otros: form.otros || "",
-
       provincia: form.provincia || "",
       canton: form.canton || "",
       distrito: form.distrito || "",
       direccion: form.direccion || "",
-
       idAlbergue: parseInt(form.idAlbergue) || 0,
       nombre: form.nombreAlbergue || "",
       region: form.regionCNE || "",
@@ -150,234 +104,485 @@ export default function RegistroAlbergue() {
       seccion: form.seccion || "",
       requerimientosTecnicos: form.requerimientos_tecnicos || "",
       costoRequerimientosTecnicos: parseFloat(form.costo_requerimientos_tecnicos) || 0,
-
       idMunicipalidad: parseInt(form.idMunicipalidad, 10) || 0,
       color: form.color || "",
       idPedidoAbarrote: null,
       idUsuarioCreacion: parseInt(idUsuario, 10) || 0
     };
 
-
-    console.log('Payload para envío:', payload);
-
     try {
       await alberguesAPI.create(payload);
-      setMensaje("Albergue registrado correctamente");
+      showCustomToast("Éxito", "Albergue registrado correctamente.", "success");
       setForm({});
       setCantones([]);
     } catch (error) {
-      console.error("Error al registrar:", error.message);
-      if (error.response) {
-        console.error("Respuesta del servidor:", error.response.data);
-        setMensaje("Error del servidor: " + JSON.stringify(error.response.data));
-      } else {
-        setMensaje("Error al registrar albergue.");
-      }
+      showCustomToast("Error", "Error al registrar albergue.", "error");
+    } finally {
+      setLoading(false);
     }
-
   };
 
+  // Opciones para selects
+  const tipoAlbergueOpts = [
+    "Centro Educativo", "Salón Comunal", "Iglesia", "Redondel", "Gimnasio", "Casa de Acogida", "Zona de Refugio Temporal"
+  ].map(nombre => ({ nombre }));
+
+  const tipoEstablecimientoOpts = [
+    "Albergue temporal o de emergencia"
+  ].map(nombre => ({ nombre }));
+
+  const estadoOpts = [
+    "Abierto", "Cerrado"
+  ].map(nombre => ({ nombre }));
+
+  const regionCNEOpts = [
+    "Región Central", "Región Chorotega", "Región Brunca", "Región Huetar Caribe", "Región Huetar Norte", "Región Pacífico Central"
+  ].map(nombre => ({ nombre }));
+
+  const provinciaOpts = Object.keys(cantonesPorProvincia).map(nombre => ({ nombre }));
+
+  const cocinaOpts = [
+    { nombre: "Sí", value: "true" },
+    { nombre: "No", value: "false" }
+  ];
 
   return (
-    <div className="registro-albergue-fullscreen">
-      <form className="registro-albergue-form" onSubmit={handleSubmit}>
-        <legend><strong>Registro de Albergue</strong></legend>
-        <legend><strong>Identificación del Albergue</strong></legend>
-        <label>ID:
-          <input name="idAlbergue" type="text" className="form-control mb-2" placeholder="ID numérico" value={form.idAlbergue || ''} onChange={handleChange} required />
-        </label>
-        <label>Nombre del Albergue:
-          <input name="nombreAlbergue" type="text" className="form-control mb-2" placeholder="Nombre del albergue" value={form.nombreAlbergue || ''} onChange={handleChange} required />
-        </label>
-        <label>Especificación:
-          <input name="especificacion" type="text" className="form-control mb-2" placeholder="Especificación" value={form.especificacion || ''} onChange={handleChange} required />
-        </label>
-        <label>Tipo de Albergue:
-          <select name="tipoAlbergue" className="form-control mb-2" value={form.tipoAlbergue || ''} onChange={handleChange} required>
-            <option value="">Seleccione el tipo de albergue</option>
-            <option>Centro Educativo</option>
-            <option>Salón Comunal</option>
-            <option>Iglesia</option>
-            <option>Redondel</option>
-            <option>Gimnasio</option>
-            <option>Casa de Acogida</option>
-            <option>Zona de Refugio Temporal</option>
-          </select>
-        </label>
-        <label>Tipo de Establecimiento:
-          <select name="tipoEstablecimiento" className="form-control mb-2" value={form.tipoEstablecimiento || ''} onChange={handleChange} required>
-            <option value="">Seleccione el tipo de establecimiento</option>
-            <option>Albergue temporal o de emergencia</option>
-          </select>
-        </label>
-        <label>Estado del Albergue:
-          <select name="estado" className="form-control mb-2" value={form.estado || ''} onChange={handleChange} required>
-            <option value="">Seleccione el estado</option>
-            <option>Abierto</option>
-            <option>Cerrado</option>
-          </select>
-        </label>
-        <hr />
+    <>
+      <FormContainer
+        title="Registro de Albergue"
+        onSubmit={handleSubmit}
+        size="lg"
+      >
+        {/* Identificación */}
+        <fieldset>
+          <legend className="font-bold text-lg mb-4 text-[#00897B]">Identificación del Albergue</legend>
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1">
+              <InputField
+                label="ID"
+                name="idAlbergue"
+                value={form.idAlbergue || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <InputField
+                label="Nombre del Albergue"
+                name="nombreAlbergue"
+                value={form.nombreAlbergue || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <InputField
+                label="Especificación"
+                name="especificacion"
+                value={form.especificacion || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row gap-6 mt-4">
+            <div className="flex-1">
+              <SelectField
+                label="Tipo de Albergue"
+                name="tipoAlbergue"
+                value={form.tipoAlbergue || ''}
+                onChange={handleChange}
+                options={tipoAlbergueOpts}
+                optionLabel="nombre"
+                optionValue="nombre"
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <SelectField
+                label="Tipo de Establecimiento"
+                name="tipoEstablecimiento"
+                value={form.tipoEstablecimiento || ''}
+                onChange={handleChange}
+                options={tipoEstablecimientoOpts}
+                optionLabel="nombre"
+                optionValue="nombre"
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <SelectField
+                label="Estado del Albergue"
+                name="estado"
+                value={form.estado || ''}
+                onChange={handleChange}
+                options={estadoOpts}
+                optionLabel="nombre"
+                optionValue="nombre"
+                required
+              />
+            </div>
+          </div>
+        </fieldset>
 
-        <legend><strong>Ubicación Geográfica</strong></legend>
-        <label>Región CNE:
-          <select name="regionCNE" className="form-control mb-2" value={form.regionCNE || ''} onChange={handleChange} required>
-            <option value="">Seleccione una región</option>
-            <option>Región Central</option>
-            <option>Región Chorotega</option>
-            <option>Región Brunca</option>
-            <option>Región Huetar Caribe</option>
-            <option>Región Huetar Norte</option>
-            <option>Región Pacífico Central</option>
-          </select>
-        </label>
-        <label>Provincia:
-          <select id="provincia" name="provincia" className="form-control mb-2" value={form.provincia || ''} onChange={e => handleProvinciaChange(e.target.value)} required>
-            <option value="">Seleccione una provincia</option>
-            <option value="San José">San José</option>
-            <option value="Alajuela">Alajuela</option>
-            <option value="Cartago">Cartago</option>
-            <option value="Heredia">Heredia</option>
-            <option value="Guanacaste">Guanacaste</option>
-            <option value="Puntarenas">Puntarenas</option>
-            <option value="Limón">Limón</option>
-          </select>
-        </label>
-        <label>Cantón:
-          <select id="canton" name="canton" className="form-control mb-2" value={form.canton || ''} onChange={handleChange} required>
-            <option value="">Seleccione un cantón</option>
-            {cantones.map(c => (
-              <option key={c} value={c}>{c}</option>
-            ))}
-          </select>
-        </label>
-        <label>Distrito:
-          <input name="distrito" type="text" className="form-control mb-2" placeholder="Distrito" value={form.distrito || ''} onChange={handleChange} required />
-        </label>
-        <label>Dirección:
-          <textarea name="direccion" className="form-control mb-2" rows="3" placeholder="Dirección exacta" value={form.direccion || ''} onChange={handleChange} required />
-        </label>
-        <label>Coordenada X:
-          <input name="coordenadaX" type="number" step="any" className="form-control mb-2" value={form.coordenadaX || ''} onChange={handleChange} required />
-        </label>
-        <label>Coordenada Y:
-          <input name="coordenadaY" type="number" step="any" className="form-control mb-2" value={form.coordenadaY || ''} onChange={handleChange} required />
-        </label>
-        <label>Municipalidad:
-          <select id="selectMunicipalidad" name="idMunicipalidad" className="form-control mb-2" value={form.idMunicipalidad || ''} onChange={handleChange} required>
-            <option value="">Seleccione municipalidad</option>
-            {municipalidades.map((m) => (
-              <option key={m.id || m.ID} value={m.id || m.ID}>
-                {m.nombre || m.Nombre || 'Sin nombre'}
-              </option>
-            ))}
-          </select>
-        </label>
-        <hr />
+        {/* Ubicación */}
+        <fieldset className="mt-8">
+          <legend className="font-bold text-lg mb-4 text-[#00897B]">Ubicación Geográfica</legend>
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1">
+              <SelectField
+                label="Región CNE"
+                name="regionCNE"
+                value={form.regionCNE || ''}
+                onChange={handleChange}
+                options={regionCNEOpts}
+                optionLabel="nombre"
+                optionValue="nombre"
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <SelectField
+                label="Provincia"
+                name="provincia"
+                value={form.provincia || ''}
+                onChange={e => handleProvinciaChange(e.target.value)}
+                options={provinciaOpts}
+                optionLabel="nombre"
+                optionValue="nombre"
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <SelectField
+                label="Cantón"
+                name="canton"
+                value={form.canton || ''}
+                onChange={handleChange}
+                options={cantones.map(c => ({ nombre: c }))}
+                optionLabel="nombre"
+                optionValue="nombre"
+                required
+                disabled={!cantones.length}
+              />
+            </div>
+            <div className="flex-1">
+              <InputField
+                label="Distrito"
+                name="distrito"
+                value={form.distrito || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row gap-6 mt-4">
+            <div className="flex-1">
+              <InputField
+                label="Dirección"
+                name="direccion"
+                value={form.direccion || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <InputField
+                label="Coordenada X"
+                name="coordenadaX"
+                type="number"
+                value={form.coordenadaX || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <InputField
+                label="Coordenada Y"
+                name="coordenadaY"
+                type="number"
+                value={form.coordenadaY || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <SelectField
+                label="Municipalidad"
+                name="idMunicipalidad"
+                value={form.idMunicipalidad || ''}
+                onChange={handleChange}
+                options={municipalidades.map(m => ({
+                  nombre: m.nombre || m.Nombre || 'Sin nombre',
+                  id: m.id || m.ID
+                }))}
+                optionLabel="nombre"
+                optionValue="id"
+                required
+              />
+            </div>
+          </div>
+        </fieldset>
 
-        <legend><strong>Capacidad y Ocupación</strong></legend>
-        <label>Capacidad Total de Personas:
-          <input name="capacidad" type="number" className="form-control mb-2" min="0" value={form.capacidad || ''} onChange={handleChange} required />
-        </label>
-        <label>Capacidad Colectiva:
-          <input name="capacidadColectiva" type="number" className="form-control mb-2" min="0" value={form.capacidadColectiva || ''} onChange={handleChange} required />
-        </label>
-        <label>Ocupación:
-          <input name="ocupacion" type="number" className="form-control mb-2" min="0" value={form.ocupacion || ''} onChange={handleChange} required />
-        </label>
-        <label>Egresos:
-          <input name="egresos" type="number" className="form-control mb-2" min="0" value={form.egresos || ''} onChange={handleChange} required />
-        </label>
-        <label>Sospechosos Sanos:
-          <input name="sospechososSanos" type="number" className="form-control mb-2" min="0" value={form.sospechososSanos || ''} onChange={handleChange} required />
-        </label>
-        <label>Otros (observaciones):
-          <input name="otros" type="text" className="form-control mb-2" value={form.otros || ''} onChange={handleChange} />
-        </label>
-        <label>Familias:
-          <input name="cantidadFamilias" type="number" className="form-control mb-2" min="0" value={form.cantidadFamilias || ''} onChange={handleChange} required />
-        </label>
-        <label>Área Total (m²):
-          <input name="areaTotal" type="number" className="form-control mb-2" min="0" value={form.areaTotal || ''} onChange={handleChange} required />
-        </label>
-        <hr />
+        {/* Capacidad y Ocupación */}
+        <fieldset className="mt-8">
+          <legend className="font-bold text-lg mb-4 text-[#00897B]">Capacidad y Ocupación</legend>
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1">
+              <InputField
+                label="Capacidad Total de Personas"
+                name="capacidad"
+                type="number"
+                min="0"
+                value={form.capacidad || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <InputField
+                label="Capacidad Colectiva"
+                name="capacidadColectiva"
+                type="number"
+                min="0"
+                value={form.capacidadColectiva || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <InputField
+                label="Ocupación"
+                name="ocupacion"
+                type="number"
+                min="0"
+                value={form.ocupacion || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <InputField
+                label="Egresos"
+                name="egresos"
+                type="number"
+                min="0"
+                value={form.egresos || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row gap-6 mt-4">
+            <div className="flex-1">
+              <InputField
+                label="Sospechosos Sanos"
+                name="sospechososSanos"
+                type="number"
+                min="0"
+                value={form.sospechososSanos || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <InputField
+                label="Otros (observaciones)"
+                name="otros"
+                value={form.otros || ''}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="flex-1">
+              <InputField
+                label="Familias"
+                name="cantidadFamilias"
+                type="number"
+                min="0"
+                value={form.cantidadFamilias || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <InputField
+                label="Área Total (m²)"
+                name="areaTotal"
+                type="number"
+                min="0"
+                value={form.areaTotal || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+        </fieldset>
 
-        <legend><strong>Condición y Requerimientos Técnicos</strong></legend>
-        <label>Detalle de Condición:
-          <input name="detalle_condicion" type="text" className="form-control mb-2" value={form.detalle_condicion || ''} onChange={handleChange} required />
-        </label>
-        <label>Sección:
-          <input name="seccion" type="text" className="form-control mb-2" value={form.seccion || ''} onChange={handleChange} required />
-        </label>
-        <label>Requerimientos Técnicos:
-          <textarea name="requerimientos_tecnicos" className="form-control mb-2" rows="2" value={form.requerimientos_tecnicos || ''} onChange={handleChange} required />
-        </label>
-        <label>Costo Requerimientos Técnicos:
-          <input name="costo_requerimientos_tecnicos" type="number" step="any" className="form-control mb-2" value={form.costo_requerimientos_tecnicos || ''} onChange={handleChange} required />
-        </label>
-        <hr />
+        {/* Condición y Requerimientos Técnicos */}
+        <fieldset className="mt-8">
+          <legend className="font-bold text-lg mb-4 text-[#00897B]">Condición y Requerimientos Técnicos</legend>
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1">
+              <InputField
+                label="Detalle de Condición"
+                name="detalle_condicion"
+                value={form.detalle_condicion || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <InputField
+                label="Sección"
+                name="seccion"
+                value={form.seccion || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <InputField
+                label="Requerimientos Técnicos"
+                name="requerimientos_tecnicos"
+                value={form.requerimientos_tecnicos || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <InputField
+                label="Costo Requerimientos Técnicos"
+                name="costo_requerimientos_tecnicos"
+                type="number"
+                value={form.costo_requerimientos_tecnicos || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+        </fieldset>
 
-        <legend><strong>Infraestructura</strong></legend>
-        <label>Cocina:
-          <select name="cocina" className="form-control mb-2" value={form.cocina || ''} onChange={handleChange} required>
-            <option value="">¿Tiene cocina?</option>
-            <option value="true">Sí</option>
-            <option value="false">No</option>
-          </select>
-        </label>
-        <label>Duchas:
-          <select name="duchas" className="form-control mb-2" value={form.duchas || ''} onChange={handleChange} required>
-            <option value="">¿Tiene ducha?</option>
-            <option value="true">Sí</option>
-            <option value="false">No</option>
-          </select>
-        </label>
-        <label>Servicios Sanitarios:
-          <select name="serviciosSanitarios" className="form-control mb-2" value={form.serviciosSanitarios || ''} onChange={handleChange} required>
-            <option value="">Tiene servicios sanitarios?</option>
-            <option value="true">Sí</option>
-            <option value="false">No</option>
-          </select>
-        </label>
-        <label>Bodega:
-          <select name="bodega" className="form-control mb-2" value={form.bodega || ''} onChange={handleChange} required>
-            <option value="">Seleccione</option>
-            <option value="true">Sí</option>
-            <option value="false">No</option>
-          </select>
-        </label>
-        <label>Menaje Mobiliario:
-          <select name="menaje_mobiliario" className="form-control mb-2" value={form.menaje_mobiliario || ''} onChange={handleChange} required>
-            <option value="">¿Tiene menaje?</option>
-            <option value="true">Sí</option>
-            <option value="false">No</option>
-          </select>
-        </label>
-        <label>Tanque de Agua:
-          <select name="tanque_agua" className="form-control mb-2" value={form.tanque_agua || ''} onChange={handleChange} required>
-            <option value="">¿Tiene tanque de agua?</option>
-            <option value="true">Sí</option>
-            <option value="false">No</option>
-          </select>
-        </label>
-        <hr />
+        {/* Infraestructura */}
+        <fieldset className="mt-8">
+          <legend className="font-bold text-lg mb-4 text-[#00897B]">Infraestructura</legend>
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1">
+              <SelectField
+                label="Cocina"
+                name="cocina"
+                value={form.cocina || ''}
+                onChange={handleChange}
+                options={cocinaOpts}
+                optionLabel="nombre"
+                optionValue="value"
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <SelectField
+                label="Duchas"
+                name="duchas"
+                value={form.duchas || ''}
+                onChange={handleChange}
+                options={cocinaOpts}
+                optionLabel="nombre"
+                optionValue="value"
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <SelectField
+                label="Servicios Sanitarios"
+                name="serviciosSanitarios"
+                value={form.serviciosSanitarios || ''}
+                onChange={handleChange}
+                options={cocinaOpts}
+                optionLabel="nombre"
+                optionValue="value"
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <SelectField
+                label="Bodega"
+                name="bodega"
+                value={form.bodega || ''}
+                onChange={handleChange}
+                options={cocinaOpts}
+                optionLabel="nombre"
+                optionValue="value"
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <SelectField
+                label="Menaje Mobiliario"
+                name="menaje_mobiliario"
+                value={form.menaje_mobiliario || ''}
+                onChange={handleChange}
+                options={cocinaOpts}
+                optionLabel="nombre"
+                optionValue="value"
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <SelectField
+                label="Tanque de Agua"
+                name="tanque_agua"
+                value={form.tanque_agua || ''}
+                onChange={handleChange}
+                options={cocinaOpts}
+                optionLabel="nombre"
+                optionValue="value"
+                required
+              />
+            </div>
+          </div>
+        </fieldset>
 
-        <legend><strong>Administrador y Contacto</strong></legend>
-        <label>Administrador:
-          <input name="administrador" type="text" className="form-control mb-2" value={form.administrador || ''} onChange={handleChange} required />
-        </label>
-        <label>Teléfono:
-          <input name="telefono" type="tel" className="form-control mb-2" value={form.telefono || ''} onChange={handleChange} required />
-        </label>
-        <label>Color:
-          <input name="color" type="text" className="form-control mb-2" value={form.color} onChange={handleChange} required />
-        </label>
-        <hr />
+        {/* Administrador y Contacto */}
+        <fieldset className="mt-8">
+          <legend className="font-bold text-lg mb-4 text-[#00897B]">Administrador y Contacto</legend>
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1">
+              <InputField
+                label="Administrador"
+                name="administrador"
+                value={form.administrador || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <InputField
+                label="Teléfono"
+                name="telefono"
+                type="tel"
+                value={form.telefono || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <InputField
+                label="Color"
+                name="color"
+                value={form.color || ''}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+        </fieldset>
 
-        <button type="submit" className="btn btn-primary">Registrar Albergue</button>
-
-        {mensaje && <p className="mensaje">{mensaje}</p>}
-      </form>
-    </div>
+        <div className="flex justify-center mt-8">
+          <SubmitButton width="w-full" loading={loading}>
+            Registrar Albergue
+          </SubmitButton>
+        </div>
+      </FormContainer>
+      <CustomToaster />
+    </>
   );
 }

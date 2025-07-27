@@ -1,8 +1,37 @@
-import React, { useEffect, useState, useContext } from 'react';
-import "../../styles/formularioFusionado.css";
-import "../../styles/menuPrincipal.css";
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { contextoAbastecimiento } from '../../context/contextoAbastecimiento'; 
+import FormContainer from '../../components/FormComponents/FormContainer.jsx';
+import InputField from '../../components/FormComponents/InputField.jsx';
+import SelectField from '../../components/FormComponents/SelectField.jsx';
+import SubmitButton from '../../components/FormComponents/SubmitButton.jsx';
+import CustomToaster, { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
+
+const opcionesComida = [
+  { nombre: "Desayuno", value: "desayuno" },
+  { nombre: "Almuerzo", value: "almuerzo" },
+  { nombre: "Cena", value: "cena" },
+];
+
+const opcionesAlbergue = [
+  { nombre: "Liceo de Bebedero" },
+  { nombre: "Escuela de Bebedero" },
+  { nombre: "Gimnasio Municipal - Manuel Melico Corella" },
+  { nombre: "Universidad Invenio" },
+  { nombre: "Salón Comunal de Javilla" },
+  { nombre: "Salón Comunal de Paso Lajas" },
+  { nombre: "Salón de Eventos de eventos Municipal" },
+  { nombre: "Escuela San Cristobal" },
+  { nombre: "Colegio Técnico Profesional de Cañas" },
+  { nombre: "Salón comunal de Barrio Las Palmas" },
+  { nombre: "Escuela Monseñor Luis Leipold" },
+  { nombre: "Escuela Antonio Obando Espinoza" },
+  { nombre: "Salón Comunal de Porozal" },
+  { nombre: "Escuela San Miguel" },
+  { nombre: "Escuela Barrio Hotel de Cañas" },
+  { nombre: "Escuela Corobicí" },
+  { nombre: "Gimnasio Antonio Obando Espinoza" },
+  { nombre: "Salón Comunal Hotel" },
+];
 
 function FormularioAbastecimiento() {
   const navigate = useNavigate();
@@ -12,16 +41,24 @@ function FormularioAbastecimiento() {
     fecha: '',
     tipo: '',
     cantidad: '',
+function FormularioAbastecimiento() {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    fecha: '',
+    comida: '',
+    personas: '',
     albergue: '',
   });
 
   const [guardado, setGuardado] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setFormData({
       fecha: '',
-      tipo: '',
-      cantidad: '',
+      comida: '',
+      personas: '',
       albergue: '',
     });
     setGuardado(false);
@@ -34,117 +71,117 @@ function FormularioAbastecimiento() {
     });
   };
 
-  const handleSiguiente = () => {
-    const { fecha, tipo, cantidad, albergue } = formData;
-    if (!fecha || !tipo || !cantidad || !albergue) {
-      alert('Complete todos los campos');
+  const handleGuardar = () => {
+    const { fecha, comida, personas, albergue } = formData;
+    if (!fecha || !comida || !personas || !albergue) {
+      showCustomToast('Error', 'Complete todos los campos', 'error');
       return;
     }
-    guardarDatosFormulario(formData);
+    localStorage.setItem('datosFormulario', JSON.stringify(formData));
     setGuardado(true);
+    showCustomToast('Éxito', 'Formulario guardado correctamente', 'success');
+  };
+
+  const handleEnviar = () => {
+    const datosGuardados = localStorage.getItem('datosFormulario');
+    if (!datosGuardados) {
+      showCustomToast('Error', 'Debe guardar el formulario antes de enviar.', 'error');
+      return;
+    }
+    const { fecha, comida, personas, albergue } = formData;
+    if (!fecha || !comida || !personas || !albergue) {
+      showCustomToast('Error', 'Complete todos los campos', 'error');
+      return;
+    }
+    // Aquí iría tu lógica de envío (axios.post, etc)
     navigate('/formularioAbarrotes.jsx');
   };
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); 
-  const minDate = today.toISOString().split('T')[0];
-
   return (
-    <div className="content-area">
-      <div id="sidebar-container">
-        <header className="top-header">
-          <h1>Formulario de Abastecimiento</h1>
-        </header>
-        <main className="main-content">
-          <div className="card">
-            <form id="formularioAbastecimiento" onSubmit={e => e.preventDefault()}>
-              <div className="form-group">
-                <label htmlFor="fecha">Fecha:</label>
-                <input
-                  type="date"
-                  id="fecha"
-                  name="fecha"
-                  value={formData.fecha}
-                  onChange={handleChange}
-                  min={minDate}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="tipo">Tipo de comida:</label>
-                <select
-                  id="tipo"
-                  name="tipo"
-                  value={formData.tipo}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Seleccione</option>
-                  <option value="desayuno">Desayuno</option>
-                  <option value="almuerzo">Almuerzo</option>
-                  <option value="cena">Cena</option>
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="cantidad">Cantidad de personas:</label>
-                <input
-                  type="number"
-                  id="cantidad"
-                  name="cantidad"
-                  min="1"
-                  value={formData.cantidad}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="albergue">Nombre del albergue:</label>
-                <select
-                  id="albergue"
-                  name="albergue"
-                  value={formData.albergue}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Seleccione un albergue</option>
-                  <option value="Liceo de Bebedero">Liceo de Bebedero</option>
-                  <option value="Escuela de Bebedero">Escuela de Bebedero</option>
-                  <option value="Gimnasio Municipal - Manuel Melico Corella">Gimnasio Municipal - Manuel Melico Corella</option>
-                  <option value="Universidad Invenio">Universidad Invenio</option>
-                  <option value="Salón Comunal de Javilla">Salón Comunal de Javilla</option>
-                  <option value="Salón Comunal de Paso Lajas">Salón Comunal de Paso Lajas</option>
-                  <option value="Salón de Eventos de eventos Municipal">Salón de Eventos de eventos Municipal</option>
-                  <option value="Escuela San Cristobal">Escuela San Cristobal</option>
-                  <option value="Colegio Técnico Profesional de Cañas">Colegio Técnico Profesional de Cañas</option>
-                  <option value="Salón comunal de Barrio Las Palmas">Salón comunal de Barrio Las Palmas</option>
-                  <option value="Escuela Monseñor Luis Leipold">Escuela Monseñor Luis Leipold</option>
-                  <option value="Escuela Antonio Obando Espinoza">Escuela Antonio Obando Espinoza</option>
-                  <option value="Salón Comunal de Porozal">Salón Comunal de Porozal</option>
-                  <option value="Escuela San Miguel">Escuela San Miguel</option>
-                  <option value="Escuela Barrio Hotel de Cañas">Escuela Barrio Hotel de Cañas</option>
-                  <option value="Escuela Corobicí">Escuela Corobicí</option>
-                  <option value="Gimnasio Antonio Obando Espinoza">Gimnasio Antonio Obando Espinoza</option>
-                  <option value="Salón Comunal Hotel">Salón Comunal Hotel</option>
-                </select>
-              </div>
-
-              <div className="botones-accion">
-                <button
-                  type="button"
-                  id="btnSiguiente"
-                  onClick={handleSiguiente}
-                >
-                  Siguiente
-                </button>
-              </div>
-            </form>
+    <>
+      <FormContainer
+        title="Formulario de Abastecimiento"
+        size="md"
+        onSubmit={e => e.preventDefault()}
+      >
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-1">
+            <InputField
+              label="Fecha"
+              name="fecha"
+              type="date"
+              value={formData.fecha}
+              onChange={handleChange}
+              required
+            />
           </div>
-        </main>
-      </div>
-    </div>
+          <div className="flex-1">
+            <InputField
+              label="Cantidad de personas"
+              name="personas"
+              type="number"
+              min="1"
+              value={formData.personas}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        
+        </div>
+        <div className="flex flex-col md:flex-row gap-6 mt-4">
+        <div className="flex-1">
+            <SelectField
+              label="Nombre del albergue"
+              name="albergue"
+              value={formData.albergue}
+              onChange={handleChange}
+              options={opcionesAlbergue}
+              optionLabel="nombre"
+              optionValue="nombre"
+              required
+            />
+          </div>
+        <div className="flex-1">
+            <SelectField
+              label="Tipo de comida"
+              name="comida"
+              value={formData.comida}
+              onChange={handleChange}
+              options={opcionesComida}
+              optionLabel="nombre"
+              optionValue="value"
+              required
+            />
+          </div>
+          
+        </div>
+        <div className="flex flex-col md:flex-row gap-6 mt-8">
+          <div className="flex-1 flex gap-4">
+            <SubmitButton
+              type="button"
+              width="w-full"
+              color="text-white"
+              onClick={handleGuardar}
+              loading={loading}
+              style={{
+                backgroundColor: guardado ? '#059669' : undefined,
+              }}
+            >
+              {guardado ? 'Guardado' : 'Guardar'}
+            </SubmitButton>
+            <SubmitButton
+              type="button"
+              width="w-full"
+              color="text-white"
+              onClick={handleEnviar}
+            >
+              Enviar
+            </SubmitButton>
+          </div>
+        </div>
+      </FormContainer>
+      <CustomToaster />
+    </>
   );
 }
 

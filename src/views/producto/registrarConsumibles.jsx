@@ -1,7 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { consumiblesAPI } from "../../helpers/api.js";
-import "../../styles/ajusteInventario.css";
-import Alerta from "../../components/Alerta.jsx";
+import FormContainer from "../../components/FormComponents/FormContainer.jsx";
+import InputField from "../../components/FormComponents/InputField.jsx";
+import SelectField from "../../components/FormComponents/SelectField.jsx";
+import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
+import CustomToaster, { showCustomToast } from "../../components/globalComponents/CustomToaster.jsx";
+
+const categorias = [
+  { nombre: "Alimentos" },
+  { nombre: "Higiene" },
+  { nombre: "Ropa" },
+  { nombre: "Medicamentos" },
+  { nombre: "Otros" },
+];
+
+const unidades = [
+  { nombre: "Gramos" },
+  { nombre: "Mililitros" },
+  { nombre: "Unidades" },
+];
 
 const RegistroConsumibles = () => {
   const [form, setForm] = useState({
@@ -11,18 +28,7 @@ const RegistroConsumibles = () => {
     cantidad: "",
   });
 
-  const [mensaje, setMensaje] = useState("");
-  const [error, setError] = useState("");
-  const [mostrarAlertaMensaje, setMostrarAlertaMensaje] = useState(false);
-  const [mostrarAlertaError, setMostrarAlertaError] = useState(false);
-
-  useEffect(() => {
-    if (mensaje) setMostrarAlertaMensaje(true);
-  }, [mensaje]);
-
-  useEffect(() => {
-    if (error) setMostrarAlertaError(true);
-  }, [error]);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -33,11 +39,11 @@ const RegistroConsumibles = () => {
 
     const camposIncompletos = Object.values(form).some((val) => val === "");
     if (camposIncompletos) {
-      setError("Por favor complete todos los campos.");
-      setMensaje("");
+      showCustomToast("Error", "Por favor complete todos los campos.", "error");
       return;
     }
 
+    setLoading(true);
     try {
       const payload = {
         nombre: form.nombre,
@@ -47,8 +53,7 @@ const RegistroConsumibles = () => {
       };
 
       await consumiblesAPI.create(payload);
-      setMensaje("Consumible registrado correctamente.");
-      setError("");
+      showCustomToast("Éxito", "Consumible registrado correctamente.", "success");
       setForm({
         nombre: "",
         categoriaProducto: "",
@@ -56,89 +61,80 @@ const RegistroConsumibles = () => {
         cantidad: "",
       });
     } catch (err) {
-      console.error("Error al registrar consumible:", err);
-      setError("Error al registrar consumible.");
-      setMensaje("");
+      showCustomToast("Error", "Error al registrar consumible.", "error");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="ajuste-inventario-fullscreen">
-      <form className="ajuste-inventario-form" onSubmit={handleSubmit}>
-        <h2>Registro de Consumibles</h2>
-
-        {mostrarAlertaMensaje && (
-          <Alerta
-            mensaje={mensaje}
-            tipo="exito"
-            duracion={4000}
-            onClose={() => setMostrarAlertaMensaje(false)}
-          />
-        )}
-        {mostrarAlertaError && (
-          <Alerta
-            mensaje={error}
-            tipo="error"
-            duracion={4000}
-            onClose={() => setMostrarAlertaError(false)}
-          />
-        )}
-
-        <label>
-          Nombre del Producto:
-          <input
-            type="text"
-            name="nombre"
-            value={form.nombre}
-            onChange={handleChange}
-            placeholder="Ingrese el nombre"
-          />
-        </label>
-
-        <label>
-          Categoría del Producto:
-          <select
-            name="categoriaProducto"
-            value={form.categoriaProducto}
-            onChange={handleChange}
-          >
-            <option value="">Seleccione una categoría</option>
-            <option value="Alimentos">Alimentos</option>
-            <option value="Higiene">Higiene</option>
-            <option value="Ropa">Ropa</option>
-            <option value="Medicamentos">Medicamentos</option>
-            <option value="Otros">Otros</option>
-          </select>
-        </label>
-
-        <label>
-          Unidad de Medida:
-          <select
-            name="unidadMedida"
-            value={form.unidadMedida}
-            onChange={handleChange}
-          >
-            <option value="">Seleccione una unidad</option>
-            <option value="Gramos">Gramos</option>
-            <option value="Mililitros">Mililitros</option>
-            <option value="Unidades">Unidades</option>
-          </select>
-        </label>
-
-        <label>
-          Cantidad:
-          <input
-            type="number"
-            name="cantidad"
-            value={form.cantidad}
-            onChange={handleChange}
-            placeholder="Ingrese la cantidad"
-          />
-        </label>
-
-        <button type="submit">Registrar</button>
-      </form>
-    </div>
+    <>
+      <FormContainer
+        title="Registro de Consumibles"
+        onSubmit={handleSubmit}
+        size="md"
+      >
+        <fieldset className="w-full">
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1">
+              <InputField
+                label="Nombre del Producto"
+                name="nombre"
+                value={form.nombre}
+                onChange={handleChange}
+                placeholder="Ingrese el nombre"
+                required
+              />
+            </div>
+            <div className="flex-1">
+          
+              <InputField
+                label="Cantidad"
+                name="cantidad"
+                type="number"
+                min="0"
+                value={form.cantidad}
+                onChange={handleChange}
+                placeholder="Ingrese la cantidad"
+                required
+              />
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row gap-6 mt-4">
+            <div className="flex-1">
+              <SelectField
+                label="Unidad de Medida"
+                name="unidadMedida"
+                value={form.unidadMedida}
+                onChange={handleChange}
+                options={unidades}
+                optionLabel="nombre"
+                optionValue="nombre"
+                required
+              />
+            </div>
+            <div className="flex-1">
+            <SelectField
+                label="Categoría del Producto"
+                name="categoriaProducto"
+                value={form.categoriaProducto}
+                onChange={handleChange}
+                options={categorias}
+                optionLabel="nombre"
+                optionValue="nombre"
+                required
+              />
+            </div>
+          </div>
+        </fieldset>
+        <div className="flex justify-center mt-8">
+          <SubmitButton width="w-full" loading={loading}>
+            Registrar
+          </SubmitButton>
+        </div>
+      </FormContainer>
+      <CustomToaster />
+    </>
   );
 };
 

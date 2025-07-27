@@ -1,21 +1,23 @@
 import React, { useState } from "react";
-import "../styles/registroAmenazas.css";
+import FormContainer from "../components/FormComponents/FormContainer.jsx";
+import InputField from "../components/FormComponents/InputField.jsx";
+import SubmitButton from "../components/FormComponents/SubmitButton.jsx";
+import CustomToaster, { showCustomToast } from "../components/globalComponents/CustomToaster.jsx";
 
-export default function RegistroAmenazas() {  // <-- MAYÚSCULA aquí
+export default function RegistroAmenazas() {
   const [familia, setFamilia] = useState("");
   const [evento, setEvento] = useState("");
   const [peligro, setPeligro] = useState("");
   const [eventoEspecifico, setEventoEspecifico] = useState("");
-  const [mensaje, setMensaje] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleRegistro = (e) => {
     e.preventDefault();
     if (!familia || !evento || !peligro || !eventoEspecifico) {
-      setMensaje("Por favor completa todos los campos.");
+      showCustomToast("Error", "Por favor completa todos los campos.", "error");
       return;
     }
-
-    setMensaje("Amenaza registrada correctamente.");
+    showCustomToast("Éxito", "Amenaza registrada correctamente.", "success");
     setFamilia("");
     setEvento("");
     setPeligro("");
@@ -23,53 +25,63 @@ export default function RegistroAmenazas() {  // <-- MAYÚSCULA aquí
   };
 
   return (
-    <div className="registro-amenazas-fullscreen">
-      <form className="registro-amenazas-form" onSubmit={handleRegistro}>
-        <h2>Registro de Amenazas</h2>
-
-        <label>
-          Familia del Evento:
-          <input
-            type="text"
-            value={familia}
-            onChange={(e) => setFamilia(e.target.value)}
-            placeholder="Ej: Hidrológico"
-          />
-        </label>
-
-        <label>
-          Evento:
-          <input
-            type="text"
-            value={evento}
-            onChange={(e) => setEvento(e.target.value)}
-            placeholder="Ej: Inundación"
-          />
-        </label>
-
-        <label>
-          Peligro:
-          <input
-            type="text"
-            value={peligro}
-            onChange={(e) => setPeligro(e.target.value)}
-            placeholder="Ej: Inundación"
-          />
-        </label>
-
-        <label>
-          Evento Específico:
-          <input
-            type="text"
-            value={eventoEspecifico}
-            onChange={(e) => setEventoEspecifico(e.target.value)}
-            placeholder="Ej: Huracán Lesly"
-          />
-        </label>
-
-        <button type="submit">Registrar</button>
-        {mensaje && <p>{mensaje}</p>}
-      </form>
-    </div>
+    <>
+      <FormContainer
+        title="Registro de Amenazas"
+        onSubmit={handleRegistro}
+        size="md"
+      >
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-1">
+            <InputField
+              label="Familia del Evento"
+              name="familia"
+              value={familia}
+              onChange={(e) => setFamilia(e.target.value)}
+              placeholder="Ej: Hidrológico"
+              required
+            />
+          </div>
+          <div className="flex-1">
+            <InputField
+              label="Evento"
+              name="evento"
+              value={evento}
+              onChange={(e) => setEvento(e.target.value)}
+              placeholder="Ej: Inundación"
+              required
+            />
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row gap-6 mt-4">
+          <div className="flex-1">
+            <InputField
+              label="Peligro"
+              name="peligro"
+              value={peligro}
+              onChange={(e) => setPeligro(e.target.value)}
+              placeholder="Ej: Inundación"
+              required
+            />
+          </div>
+          <div className="flex-1">
+            <InputField
+              label="Evento Específico"
+              name="eventoEspecifico"
+              value={eventoEspecifico}
+              onChange={(e) => setEventoEspecifico(e.target.value)}
+              placeholder="Ej: Huracán Lesly"
+              required
+            />
+          </div>
+        </div>
+        <div className="flex justify-center mt-8">
+          <SubmitButton width="w-full" loading={loading}>
+            Registrar
+          </SubmitButton>
+        </div>
+      </FormContainer>
+      <CustomToaster />
+    </>
   );
 }

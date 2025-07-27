@@ -1,242 +1,184 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useUbicaciones } from "../../hooks/useUbicaciones";
-import { alberguesAPI } from "../../helpers/api";
-import Alerta from "../../components/Alerta";
-import "../../styles/busquedaAlbergue.css";
+import { useBusquedaAlbergue } from "../../hooks/useBusquedaAlbergue";
+import FormContainer from "../../components/FormComponents/FormContainer.jsx";
+import InputField from "../../components/FormComponents/InputField.jsx";
+import SelectField from "../../components/FormComponents/SelectField.jsx";
+import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
+import CustomToaster, { showCustomToast } from "../../components/globalComponents/CustomToaster.jsx";
 
 const BusquedaAlbergue = () => {
   const { provincias, cantones, distritos, setProvinciaId, setCantonId } = useUbicaciones();
 
-  const [idAlbergue, setIdAlbergue] = useState("");
-  const [nombre, setNombre] = useState("");
-  const [resultados, setResultados] = useState([]);
-  const [error, setError] = useState("");
-  const [provinciaSeleccionada, setProvinciaSeleccionada] = useState("");
-  const [cantonSeleccionado, setCantonSeleccionado] = useState("");
-  const [distritoSeleccionado, setDistritoSeleccionado] = useState("");
+  const {
+    idAlbergue,
+    setIdAlbergue,
+    nombre,
+    setNombre,
+    resultados,
+    error,
+    provinciaSeleccionada,
+    cantonSeleccionado,
+    distritoSeleccionado,
+    loading,
+    handleSubmit,
+    handleProvinciaChange,
+    handleCantonChange,
+    handleDistritoChange,
+  } = useBusquedaAlbergue({ provincias, cantones, distritos, setProvinciaId, setCantonId });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setResultados([]);
-
-    try {
-      if (idAlbergue.trim() !== "") {
-        const res = await alberguesAPI.getById(idAlbergue.trim());
-        if (res?.data?.length > 0) {
-          setResultados(res.data);
-        } else {
-          setError("No se encontró albergue con ese ID.");
-        }
-      } else if (nombre.trim() !== "") {
-        const res = await alberguesAPI.getByNombre(nombre.trim());
-        if (res?.data?.length > 0) {
-          setResultados(res.data);
-        } else {
-          setError("No se encontró albergue con ese nombre.");
-        }
-      } else if (distritoSeleccionado) {
-        const res = await alberguesAPI.getByDistrito(distritoSeleccionado);
-        if (res?.data?.length > 0) {
-          setResultados(res.data);
-        } else {
-          setError("No se encontró albergue en ese distrito.");
-        }
-      } else if (cantonSeleccionado) {
-        const res = await alberguesAPI.getByCanton(cantonSeleccionado);
-        if (res?.data?.length > 0) {
-          setResultados(res.data);
-        } else {
-          setError("No se encontró albergue en ese cantón.");
-        }
-      } else if (provinciaSeleccionada) {
-        const res = await alberguesAPI.getByProvincia(provinciaSeleccionada);
-        if (res?.data?.length > 0) {
-          setResultados(res.data);
-        } else {
-          setError("No se encontró albergue en esa provincia.");
-        }
-      } else {
-        setError("Por favor ingrese ID, Nombre o seleccione una ubicación.");
-      }
-    } catch (err) {
-      if (err.response && err.response.status === 404) {
-        setError("No se encontró un albergue con esos datos.");
-      } else if (err.message && err.message.includes("Albergue no encontrado")) {
-        setError("No se encontró un albergue con esos datos.");
-      } else {
-        setError(String(err) || "Error al buscar albergue.");
-      }
+  useEffect(() => {
+    if (error) {
+      showCustomToast(error, null, "error"); 
     }
-  };
+  }, [error]);
 
   return (
-    <div className="busqueda-container">
-      <div className="header">
-        <h2 className="titulo">Búsqueda de Albergue</h2>
-      </div>
-
-      <form className="formulario-horizontal" onSubmit={handleSubmit} noValidate>
-        <div className="fila-formulario">
-          <div className="campo-horizontal campo-pequeno">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="ID Albergue"
+    <>
+      <FormContainer title="Búsqueda de Albergue" onSubmit={handleSubmit} size="md">
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-1">
+            <InputField
+              label="ID Albergue"
+              name="idAlbergue"
               value={idAlbergue}
               onChange={(e) => setIdAlbergue(e.target.value)}
+              placeholder="ID Albergue"
             />
           </div>
-          <div className="campo-horizontal campo-pequeno">
-            <select
-              className="form-select"
-              onChange={(e) => {
-                const idSeleccionado = parseInt(e.target.value, 10);
-                setProvinciaId(idSeleccionado);
-                const provincia = provincias.find((p) => p.idProvincia === idSeleccionado);
-                setProvinciaSeleccionada(provincia?.descripcion || "");
-              }}
+          <div className="flex-1">
+            <SelectField
+              label="Provincia"
+              name="provincia"
               value={provincias.find(p => p.descripcion === provinciaSeleccionada)?.idProvincia || ""}
-            >
-              <option value="">Provincia</option>
-              {provincias.map((p) => (
-                <option key={p.idProvincia} value={p.idProvincia}>
-                  {p.descripcion}
-                </option>
-              ))}
-            </select>
+              onChange={handleProvinciaChange}
+              options={provincias.map(p => ({ nombre: p.descripcion, value: p.idProvincia }))}
+              optionLabel="nombre"
+              optionValue="value"
+            />
           </div>
-          <div className="campo-horizontal campo-pequeno">
-            <select
-              className="form-select"
-              onChange={(e) => {
-                const idSeleccionado = parseInt(e.target.value, 10);
-                setCantonId(idSeleccionado);
-                const canton = cantones.find((c) => c.idCanton === idSeleccionado);
-                setCantonSeleccionado(canton?.descripcion || "");
-              }}
+          <div className="flex-1">
+            <SelectField
+              label="Cantón"
+              name="canton"
               value={cantones.find(c => c.descripcion === cantonSeleccionado)?.idCanton || ""}
-            >
-              <option value="">Cantón</option>
-              {cantones.map((c) => (
-                <option key={c.idCanton} value={c.idCanton}>
-                  {c.descripcion}
-                </option>
-              ))}
-            </select>
+              onChange={handleCantonChange}
+              options={cantones.map(c => ({ nombre: c.descripcion, value: c.idCanton }))}
+              optionLabel="nombre"
+              optionValue="value"
+            />
           </div>
-          <div className="campo-horizontal campo-pequeno">
-            <select
-              className="form-select"
-              onChange={(e) => {
-                const idSeleccionado = parseInt(e.target.value, 10);
-                const distrito = distritos.find((d) => d.idDistrito === idSeleccionado);
-                setDistritoSeleccionado(distrito?.descripcion || "");
-              }}
+          <div className="flex-1">
+            <SelectField
+              label="Distrito"
+              name="distrito"
               value={distritos.find(d => d.descripcion === distritoSeleccionado)?.idDistrito || ""}
-            >
-              <option value="">Distrito</option>
-              {distritos.map((d) => (
-                <option key={d.idDistrito} value={d.idDistrito}>
-                  {d.descripcion}
-                </option>
-              ))}
-            </select>
+              onChange={handleDistritoChange}
+              options={distritos.map(d => ({ nombre: d.descripcion, value: d.idDistrito }))}
+              optionLabel="nombre"
+              optionValue="value"
+            />
           </div>
         </div>
-        <div className="fila-formulario fila-formulario-centro">
-          <div className="campo-horizontal">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Nombre"
+
+        <div className="flex flex-col md:flex-row gap-6 mt-4">
+          <div className="flex-1">
+            <InputField
+              label="Nombre"
+              name="nombre"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
+              placeholder="Nombre del albergue"
             />
           </div>
-          <div className="campo-horizontal">
-            <button type="submit" className="btn-buscar">
+          <div className="flex-1 flex items-end">
+            <SubmitButton width="w-full" loading={loading}>
               Buscar
-            </button>
+            </SubmitButton>
           </div>
         </div>
-      </form>
 
-      {error && <Alerta tipo="error" mensaje={error} />}
+        {!error && resultados.length === 0 && (
+          <p className="mt-6 text-center text-gray-500">
+            Ingrese un criterio y presione Buscar para ver resultados.
+          </p>
+        )}
 
-      {!error && resultados.length === 0 && (
-        <p style={{ marginTop: "1rem", textAlign: "center", color: "#666" }}>
-          Ingrese un criterio y presione Buscar para ver resultados.
-        </p>
-      )}
-
-      {resultados.length > 0 && (
-        <div className="tabla-container">
-          <table className="tabla-albergues">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Región</th>
-                <th>Provincia</th>
-                <th>Cantón</th>
-                <th>Distrito</th>
-                <th>Dirección</th>
-                <th>Tipo Establecimiento</th>
-                <th>Tipo Albergue</th>
-                <th>Condición</th>
-                <th>Administrador</th>
-                <th>Teléfono</th>
-                <th>Capacidad Personas</th>
-                <th>Capacidad Colectiva</th>
-                <th>Cantidad Familias</th>
-                <th>Ocupación</th>
-                <th>Cocina</th>
-                <th>Duchas</th>
-                <th>Servicios Sanitarios</th>
-                <th>Bodega</th>
-                <th>Menaje Mobiliario</th>
-                <th>Tanque Agua</th>
-                <th>Área Total (m²)</th>
-                <th>Municipalidad</th>
-                <th>Color</th>
-              </tr>
-            </thead>
-            <tbody>
-              {resultados.map((a) => (
-                <tr key={a.IdAlbergue || a.id}>
-                  <td>{a.IdAlbergue || a.id}</td>
-                  <td>{a.Nombre}</td>
-                  <td>{a.Region}</td>
-                  <td>{a.provincia}</td>
-                  <td>{a.canton}</td>
-                  <td>{a.distrito}</td>
-                  <td>{a.direccion}</td>
-                  <td>{a.tipoEstablecimiento}</td>
-                  <td>{a.tipoAlbergue}</td>
-                  <td>{a.condicionAlbergue}</td>
-                  <td>{a.administrador}</td>
-                  <td>{a.telefono}</td>
-                  <td>{a.capacidadPersonas}</td>
-                  <td>{a.capacidadColectiva}</td>
-                  <td>{a.cantidadFamilias}</td>
-                  <td>{a.ocupacion}</td>
-                  <td>{a.cocina ? "Sí" : "No"}</td>
-                  <td>{a.duchas ? "Sí" : "No"}</td>
-                  <td>{a.serviciosSanitarios ? "Sí" : "No"}</td>
-                  <td>{a.bodega ? "Sí" : "No"}</td>
-                  <td>{a.menajeMobiliario ? "Sí" : "No"}</td>
-                  <td>{a.tanqueAgua ? "Sí" : "No"}</td>
-                  <td>{a.areaTotalM2}</td>
-                  <td>{a.municipalidad}</td>
-                  <td style={{ backgroundColor: a.color }}>{a.color}</td>
+        {resultados.length > 0 && (
+          <div className="overflow-x-auto mt-8">
+            <table className="min-w-full border border-gray-200 rounded-lg">
+              <thead className="bg-[#00897B] text-white">
+                <tr>
+                  <th className="px-2 py-2">ID</th>
+                  <th className="px-2 py-2">Nombre</th>
+                  <th className="px-2 py-2">Región</th>
+                  <th className="px-2 py-2">Provincia</th>
+                  <th className="px-2 py-2">Cantón</th>
+                  <th className="px-2 py-2">Distrito</th>
+                  <th className="px-2 py-2">Dirección</th>
+                  <th className="px-2 py-2">Tipo Establecimiento</th>
+                  <th className="px-2 py-2">Tipo Albergue</th>
+                  <th className="px-2 py-2">Condición</th>
+                  <th className="px-2 py-2">Administrador</th>
+                  <th className="px-2 py-2">Teléfono</th>
+                  <th className="px-2 py-2">Capacidad Personas</th>
+                  <th className="px-2 py-2">Capacidad Colectiva</th>
+                  <th className="px-2 py-2">Cantidad Familias</th>
+                  <th className="px-2 py-2">Ocupación</th>
+                  <th className="px-2 py-2">Cocina</th>
+                  <th className="px-2 py-2">Duchas</th>
+                  <th className="px-2 py-2">Servicios Sanitarios</th>
+                  <th className="px-2 py-2">Bodega</th>
+                  <th className="px-2 py-2">Menaje Mobiliario</th>
+                  <th className="px-2 py-2">Tanque Agua</th>
+                  <th className="px-2 py-2">Área Total (m²)</th>
+                  <th className="px-2 py-2">Municipalidad</th>
+                  <th className="px-2 py-2">Color</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
+              </thead>
+              <tbody>
+                {resultados.map((a) => (
+                  <tr key={a.IdAlbergue || a.id} className="bg-white border-b">
+                    <td className="px-2 py-2">{a.IdAlbergue || a.id}</td>
+                    <td className="px-2 py-2">{a.Nombre}</td>
+                    <td className="px-2 py-2">{a.Region}</td>
+                    <td className="px-2 py-2">{a.provincia}</td>
+                    <td className="px-2 py-2">{a.canton}</td>
+                    <td className="px-2 py-2">{a.distrito}</td>
+                    <td className="px-2 py-2">{a.direccion}</td>
+                    <td className="px-2 py-2">{a.tipoEstablecimiento}</td>
+                    <td className="px-2 py-2">{a.tipoAlbergue}</td>
+                    <td className="px-2 py-2">{a.condicionAlbergue}</td>
+                    <td className="px-2 py-2">{a.administrador}</td>
+                    <td className="px-2 py-2">{a.telefono}</td>
+                    <td className="px-2 py-2">{a.capacidadPersonas}</td>
+                    <td className="px-2 py-2">{a.capacidadColectiva}</td>
+                    <td className="px-2 py-2">{a.cantidadFamilias}</td>
+                    <td className="px-2 py-2">{a.ocupacion}</td>
+                    <td className="px-2 py-2">{a.cocina ? "Sí" : "No"}</td>
+                    <td className="px-2 py-2">{a.duchas ? "Sí" : "No"}</td>
+                    <td className="px-2 py-2">{a.serviciosSanitarios ? "Sí" : "No"}</td>
+                    <td className="px-2 py-2">{a.bodega ? "Sí" : "No"}</td>
+                    <td className="px-2 py-2">{a.menajeMobiliario ? "Sí" : "No"}</td>
+                    <td className="px-2 py-2">{a.tanqueAgua ? "Sí" : "No"}</td>
+                    <td className="px-2 py-2">{a.areaTotalM2}</td>
+                    <td className="px-2 py-2">{a.municipalidad}</td>
+                    <td className="px-2 py-2" style={{ backgroundColor: a.color }}>{a.color}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {error && (
+          <div className="mt-6">
+            <span className="block text-red-600 text-center font-semibold">{error}</span>
+          </div>
+        )}
+      </FormContainer>
+      <CustomToaster />
+    </>
   );
 };
 
