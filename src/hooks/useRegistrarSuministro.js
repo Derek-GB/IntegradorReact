@@ -56,7 +56,7 @@ const useRegistrarSuministro = () => {
         unidad: '',
         cantidad: ''
       });
-    } catch (err) {
+    } catch{
       showCustomToast("Error", "Hubo un error al registrar el producto. Intente de nuevo.", "error");
       setMensaje('');
     } finally {
