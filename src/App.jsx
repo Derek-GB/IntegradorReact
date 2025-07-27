@@ -1,32 +1,47 @@
-import React from 'react';
+import React from 'react';// asegúrate de que esta ruta sea correcta desde App.jsx
 import './styles/formularioFusionado.css';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Sidebar from './components/sidebar.jsx';
-import Login from './components/login.jsx';
 
-import Inicio from './components/inicio.jsx';
-import PreFormulario from './components/preFormulario.jsx';
-import RegistroSuministros from './components/registrarSuministro.jsx';
-import AsignacionRecursos from './components/AsignacionRecursos.jsx';
-import BusquedaAlbergue from './components/BusquedaAlbergue.jsx';
-import AyudaForm from './components/ayudaForm.jsx';
-import RegistrarConsumible from './components/registrarConsumibles.jsx';
-import RegistroAlbergue from './components/RegistroAlbergue.jsx';
-import RegistroUsuario from './components/registroUsuario.jsx';
-import ListaProducto from './components/ListaProducto.jsx';
-import ListaAlbergue from './components/ListaAlbergue.jsx';
-import MenuPrincipal from './components/menuPrincipal.jsx';
-import FormularioAbastecimiento from './components/formularioAbarrotes.jsx';
-import AjusteInventario from "./components/ajusteInventario.jsx";
-import RecuperarContrasena from './components/recuperarContrasena.jsx';
-import RegistroAmenazas from './components/registroAmenazas.jsx';
-import FamiliaFormulario from './components/familiaFormulario.jsx';
+
+//Familia
+import PreFormulario from './views/familia/preFormulario.jsx';
+import FamiliaFormulario from './views/familia/familiaFormulario.jsx';
+import BusquedaFamilia from './views/familia/busquedaFamilia.jsx';
+
+//Producto
+import AsignacionRecursos from './views/producto/asignacionRecursos.jsx';
+import ListaProducto from './views/producto/listaProducto.jsx';
+import RegistrarConsumible from './views/producto/registrarConsumibles.jsx';
+import RegistroSuministros from './views/producto/registrarSuministro.jsx';
+
+//Usuario
+import Login from './views/usuario/login.jsx';
+import RecuperarContrasena from './views/usuario/recuperarContrasena.jsx';
+import RegistroUsuario from './views/usuario/registroUsuario.jsx';
+
+//Albergue
+
+import ActualizarAlbergue from './views/albergue/ActualizarAlbergue.jsx';
+import BusquedaAlbergue from './views/albergue/busquedaAlbergue.jsx';
+import ListaAlbergue from './views/albergue/listaAlbergue.jsx';
+import RegistroAlbergue from './views/albergue/registroAlbergue.jsx';
+
+//abastecimiento
+import MenuPrincipal from './views/abastecimiento/menuPrincipal.jsx';
+import ResumenFinal from './views/abastecimiento/resumenFinal.jsx';
+
+
+//Solos
+import AjusteInventario from "./views/ajusteInventario.jsx";
+import AyudaForm from './views/ayudaForm.jsx';
+import FormularioAbastecimiento from './views/formularioAbarrotes.jsx';
+import Inicio from './views/inicio.jsx';
+import RegistroAmenazas from './views/registroAmenazas.jsx';
+import RegistroMascotas from "./views/registroMascota.jsx";
+
+//No categorizado
 import FormularioIntegrantes from "./components/formularioIntegrantes.jsx";
-import RegistroMascotas from "./components/registroMascota.jsx";
-import BusquedaFamilia from './components/BusquedaFamilia.jsx';
-import ResumenFinal from './components/resumenFinal';
-
-import ActualizarAlbergue from './components/ActualizarAlbergue.jsx';
 
 
 // Importa el proveedor de contexto aquí
@@ -47,10 +62,9 @@ const App = () => {
         </Routes>
       ) : (
         <AbastecimientoProvider>
-
-          <div className="app-container">
+          <div className="app-container min-h-screen min-w-full flex flex-col md:flex-row bg-[#DEF7E9]">
             <Sidebar />
-            <div className="container main-content">
+            <div className="container main-content flex-1 w-full h-full p-4">
               <Routes>
                 <Route path="/inicio" element={<Inicio />} />
                 <Route path="/preFormulario.jsx" element={<PreFormulario />} />
@@ -79,11 +93,6 @@ const App = () => {
         </AbastecimientoProvider>
       )}
 
-      {!isLogin && (
-        <footer>
-          <p>© 2025 Integrador I - Todos los derechos reservados.</p>
-        </footer>
-      )}
     </>
   );
 };

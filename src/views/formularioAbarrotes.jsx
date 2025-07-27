@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import Carnes from './carne';
-import Proteinas from './Proteinas';
-import Verduras from './Verduras';
-import Olores from './olores';
-import Abarrotes from './abarrotes';
-import Limpieza from './limpieza';
-import ResumenParcial from './resumenParcial';
-import ResumenFinal from './resumenFinal'; // ⬅️ Asegúrate de tener este componente
+import Carnes from '../components/carne';
+import Proteinas from '../components/Proteinas';
+import Verduras from '../components/Verduras';
+import Olores from '../components/olores';
+import Abarrotes from '../components/abarrotes';
+import Limpieza from '../components/limpieza';
+import ResumenParcial from './abastecimiento/resumenParcial';
+import ResumenFinal from './abastecimiento/resumenFinal'; // ⬅️ Asegúrate de tener este componente
 import '../styles/formAbasteci.css';
 
 const FormularioAbastecimiento = () => {

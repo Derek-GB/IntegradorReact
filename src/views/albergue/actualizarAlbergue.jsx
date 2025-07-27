@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { alberguesAPI } from '../helpers/api';
+import { alberguesAPI } from '../../helpers/api';
 
 const ActualizarAlbergue = () => {
   const [albergues, setAlbergues] = useState([]);

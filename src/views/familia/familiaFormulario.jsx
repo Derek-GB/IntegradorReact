@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import FamiliaDatosPersonales from "./familiaDatosPersonales.jsx";
-import FamiliaCondicionesEspeciales from "./FamiliaCondicionesEspeciales.jsx";
-import FamiliaCaracteristicasPoblacionales from "./FamiliaCaracteristicasPoblacionales.jsx";
-import FamiliaFirmaDigital from "./FamiliaFirmaDigital.jsx";
-import { personasAPI } from "../helpers/api";
-import "../styles/familiaFormulario.css";
-import "../styles/familiaFormulario.css";
+import FormContainer from "../../components/FormComponents/FormContainer.jsx";
+import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
+import FoldDownComponent from "../../components/otros/FoldDownComponent.jsx";
+import FamiliaDatosPersonales from "../../components/familiaDatosPersonales.jsx";
+import FamiliaCondicionesEspeciales from "../../components/FamiliaCondicionesEspeciales.jsx";
+import FamiliaCaracteristicasPoblacionales from "../../components/FamiliaCaracteristicasPoblacionales.jsx";
+import FamiliaFirmaDigital from "../../components/FamiliaFirmaDigital.jsx";
+import { personasAPI } from "../../helpers/api.js";
+import "../../styles/familiaFormulario.css";
 
 const FamiliaFormulario = () => {
   const [datos, setDatos] = useState({
@@ -36,14 +38,21 @@ const FamiliaFormulario = () => {
     return null;
   };
 
-  const construirPersonaPayload = (dp, ce, cp, fd, codigoFamilia, idUsuarioCreacion) => ({
+  const construirPersonaPayload = (
+    dp,
+    ce,
+    cp,
+    fd,
+    codigoFamilia,
+    idUsuarioCreacion
+  ) => ({
     tieneCondicionSalud: ce.tieneCondicionSalud ?? true,
-    descripcionCondicionSalud: ce.descripcionCondicionSalud || ce.otrasCondiciones || "prueba",
+    descripcionCondicionSalud: ce.descripcionCondicionSalud || ce.otrasCondiciones || "",
     discapacidad: ce.discapacidad ?? false,
     tipoDiscapacidad: ce.tipoDiscapacidad || "",
     subtipoDiscapacidad: ce.subtipoDiscapacidad || "",
     paisOrigen: cp.paises || "",
-    autoidentificacionCultural: cp.autoidentificacionCultural || "prueba",
+    autoidentificacionCultural: cp.autoidentificacionCultural || "",
     puebloIndigena: cp.grupoIndigena || "",
     firma: fd.imagen || "",
     idFamilia: codigoFamilia,
@@ -57,7 +66,7 @@ const FamiliaFormulario = () => {
     esJefeFamilia: dp.esJefeFamilia ?? false,
     fechaNacimiento: dp.fechaNacimiento || "",
     genero: dp.genero || "",
-    sexo: dp.sexo || "Otro",
+    sexo: dp.sexo || "",
     telefono: dp.telefono || "",
     contactoEmergencia: dp.contactoEmergencia || "",
     observaciones: dp.observaciones || "",
@@ -66,10 +75,7 @@ const FamiliaFormulario = () => {
   });
 
   const crearPersonas = async (payloadArray) => {
-    console.log("Payload a enviar:", payloadArray);
-    const res = await personasAPI.create({personas: payloadArray});
-    console.log("Respuesta API:", res);
-
+    const res = await personasAPI.create({ personas: payloadArray });
     const resultados = res?.resultados || [];
     const ids = resultados.map(r => r.id);
 
@@ -134,65 +140,71 @@ const FamiliaFormulario = () => {
   };
 
   return (
-    <div className="familia-formulario-fullscreen">
-      <form onSubmit={handleSubmit} className="familiaFormulario">
-        <div className="ficha-persona">
-          <FamiliaDatosPersonales
-            datos={datos.FamiliaDatosPersonales}
+    <FormContainer
+      title="Formulario de Registro Familiar"
+      onSubmit={handleSubmit}
+      size="lg"
+    >
+      <FoldDownComponent title="Información Personal" open>
+        <FamiliaDatosPersonales
+          datos={datos.FamiliaDatosPersonales}
+          setDatos={(nuevosDatos) =>
+            setDatos((prev) => ({
+              ...prev,
+              FamiliaDatosPersonales: nuevosDatos,
+            }))
+          }
+        />
+      </FoldDownComponent>
+
+      <FoldDownComponent title="Condiciones Especiales" open>
+        <FamiliaCondicionesEspeciales
+          datos={datos.FamiliaCondicionesEspeciales}
+          setDatos={(nuevosDatos) =>
+            setDatos((prev) => ({
+              ...prev,
+              FamiliaCondicionesEspeciales: nuevosDatos,
+            }))
+          }
+        />
+      </FoldDownComponent>
+
+      <FoldDownComponent title="Características Poblacionales" open>
+        <FamiliaCaracteristicasPoblacionales
+          datos={datos.FamiliaCaracteristicasPoblacionales}
+          setDatos={(nuevosDatos) =>
+            setDatos((prev) => ({
+              ...prev,
+              FamiliaCaracteristicasPoblacionales: nuevosDatos,
+            }))
+          }
+        />
+      </FoldDownComponent>
+
+      {datos.FamiliaDatosPersonales.esJefeFamilia && (
+        <FoldDownComponent title="Firma Digital" open>
+          <FamiliaFirmaDigital
+            datos={datos.FamiliaFirmaDigital}
             setDatos={(nuevosDatos) =>
               setDatos((prev) => ({
                 ...prev,
-                FamiliaDatosPersonales: nuevosDatos,
+                FamiliaFirmaDigital: nuevosDatos,
               }))
             }
           />
-        </div>
+        </FoldDownComponent>
+      )}
 
-        <div className="ficha-persona">
-          <FamiliaCondicionesEspeciales
-            datos={datos.FamiliaCondicionesEspeciales}
-            setDatos={(nuevosDatos) =>
-              setDatos((prev) => ({
-                ...prev,
-                FamiliaCondicionesEspeciales: nuevosDatos,
-              }))
-            }
-          />
-        </div>
+      {loading && <p className="mensaje-cargando">Guardando datos...</p>}
+      {error && <p className="error">{error}</p>}
+      {success && <p className="success">{success}</p>}
 
-        <div className="ficha-persona">
-          <FamiliaCaracteristicasPoblacionales
-            datos={datos.FamiliaCaracteristicasPoblacionales}
-            setDatos={(nuevosDatos) =>
-              setDatos((prev) => ({
-                ...prev,
-                FamiliaCaracteristicasPoblacionales: nuevosDatos,
-              }))
-            }
-          />
-        </div>
-
-        {datos.FamiliaDatosPersonales.esJefeFamilia && (
-          <div className="ficha-persona">
-            <FamiliaFirmaDigital
-              datos={datos.FamiliaFirmaDigital}
-              setDatos={(nuevosDatos) =>
-                setDatos((prev) => ({
-                  ...prev,
-                  FamiliaFirmaDigital: nuevosDatos,
-                }))
-              }
-            />
-          </div>
-        )}
-
-        {loading && <p className="mensaje-cargando">Guardando datos...</p>}
-        {error && <p className="error">{error}</p>}
-        {success && <p className="success">{success}</p>}
-
-        <button type="submit" disabled={loading}>Guardar Datos</button>
-      </form>
-    </div>
+      <div className="flex justify-center mt-8">
+        <SubmitButton width="w-full" loading={loading}>
+          Guardar Datos
+        </SubmitButton>
+      </div>
+    </FormContainer>
   );
 };
 

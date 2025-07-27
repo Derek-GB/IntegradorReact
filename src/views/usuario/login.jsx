@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import '../styles/login.css';
-import authHelper from '../helpers/sesion';
-
-import Alerta from '../components/Alerta'; // <-- Importa el componente alerta
+import authHelper from '../../helpers/sesion';
+import Alerta from '../../components/Alerta';
 
 const Login = () => {
   const [usuario, setUsuario] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [error, setError] = useState('');
-  const [mostrarAlerta, setMostrarAlerta] = useState(false); // nuevo estado para mostrar alerta
+  const [mostrarAlerta, setMostrarAlerta] = useState(false);
 
   const navigate = useNavigate();
 
@@ -49,15 +47,14 @@ const Login = () => {
   };
 
   return (
-    <>
-      <div className="containerLogin">
-        <div className="login-wrapper">
-          <h2>Iniciar Sesión</h2>
-
-          <form onSubmit={handleSubmit}>
-            {/* Eliminamos el div con clase error */}
-            
-            <label htmlFor="usuario">Usuario</label>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="w-full max-w-sm bg-white rounded-xl shadow-lg p-8">
+        <h2 className="text-2xl font-bold text-center mb-6 text-[#00897B]">Iniciar Sesión</h2>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label htmlFor="usuario" className="block text-sm font-medium text-gray-700 mb-1">
+              Usuario
+            </label>
             <input
               type="text"
               id="usuario"
@@ -66,9 +63,13 @@ const Login = () => {
               value={usuario}
               onChange={(e) => setUsuario(e.target.value)}
               required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00897B] transition"
             />
-
-            <label htmlFor="contrasena">Contraseña</label>
+          </div>
+          <div>
+            <label htmlFor="contrasena" className="block text-sm font-medium text-gray-700 mb-1">
+              Contraseña
+            </label>
             <input
               type="password"
               id="contrasena"
@@ -77,30 +78,33 @@ const Login = () => {
               value={contrasena}
               onChange={(e) => setContrasena(e.target.value)}
               required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00897B] transition"
             />
-            <br />
-            <div className="btn-group">
-              <button type="submit" className="btn btn-primary">Ingresar</button>
-            </div>
-            <br />
-
-            <div>
-              <Link to="/recuperarContrasena.jsx">¿Olvidaste tu contraseña?</Link>
-            </div>
-          </form>
-
-          {/* Mostrar alerta si hay error y mostrarAlerta=true */}
-          {mostrarAlerta && error && (
+          </div>
+          <button
+            type="submit"
+            className="w-full py-2 rounded-lg bg-[#00897B] text-white font-semibold hover:bg-[#00796B] transition"
+          >
+            Ingresar
+          </button>
+          <div className="text-center mt-2">
+            <Link to="/recuperarContrasena.jsx" className="text-[#00897B] hover:underline text-sm">
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </div>
+        </form>
+        {mostrarAlerta && error && (
+          <div className="mt-4">
             <Alerta
               mensaje={error}
               tipo="error"
               duracion={4000}
               onClose={() => setMostrarAlerta(false)}
             />
-          )}
-        </div>
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 
