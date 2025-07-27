@@ -5,7 +5,6 @@ import InputField from '../../components/FormComponents/InputField.jsx';
 import SelectField from '../../components/FormComponents/SelectField.jsx';
 import SubmitButton from '../../components/FormComponents/SubmitButton.jsx';
 import CustomToast from '../../components/globalComponents/CustomToaster.jsx';
-import Alerta from '../../components/globalComponents/Alerta.jsx'; // Asegúrate que exista
 
 const categorias = [
   { id: 1, nombre: "Carne" },
