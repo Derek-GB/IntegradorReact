@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FormContainer from '../../components/FormComponents/FormContainer.jsx';
 import InputField from '../../components/FormComponents/InputField.jsx';
 import SelectField from '../../components/FormComponents/SelectField.jsx';
 import SubmitButton from '../../components/FormComponents/SubmitButton.jsx';
 import CustomToaster, { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
+import { contextoAbastecimiento } from '../../context/contextoAbastecimiento.jsx'; // 👈 IMPORTANTE
 
 const opcionesComida = [
   { nombre: "Desayuno", value: "desayuno" },
@@ -35,11 +36,12 @@ const opcionesAlbergue = [
 
 function FormularioAbastecimiento() {
   const navigate = useNavigate();
+  const { guardarDatosFormulario } = useContext(contextoAbastecimiento); // 👈 USA EL CONTEXTO
 
   const [formData, setFormData] = useState({
     fecha: '',
-    comida: '',
-    personas: '',
+    tipo: '',
+    cantidad: '',
     albergue: '',
   });
 
@@ -49,8 +51,8 @@ function FormularioAbastecimiento() {
   useEffect(() => {
     setFormData({
       fecha: '',
-      comida: '',
-      personas: '',
+      tipo: '',
+      cantidad: '',
       albergue: '',
     });
     setGuardado(false);
@@ -64,38 +66,29 @@ function FormularioAbastecimiento() {
   };
 
   const handleGuardar = () => {
-    const { fecha, comida, personas, albergue } = formData;
-    if (!fecha || !comida || !personas || !albergue) {
+    const { fecha, tipo, cantidad, albergue } = formData;
+    if (!fecha || !tipo || !cantidad || !albergue) {
       showCustomToast('Error', 'Complete todos los campos', 'error');
       return;
     }
-    localStorage.setItem('datosFormulario', JSON.stringify(formData));
+
+    guardarDatosFormulario(formData);
     setGuardado(true);
     showCustomToast('Éxito', 'Formulario guardado correctamente', 'success');
   };
 
   const handleEnviar = () => {
-    const datosGuardados = localStorage.getItem('datosFormulario');
-    if (!datosGuardados) {
-      showCustomToast('Error', 'Debe guardar el formulario antes de enviar.', 'error');
-      return;
-    }
-    const { fecha, comida, personas, albergue } = formData;
-    if (!fecha || !comida || !personas || !albergue) {
+    const { fecha, tipo, cantidad, albergue } = formData;
+    if (!fecha || !tipo || !cantidad || !albergue) {
       showCustomToast('Error', 'Complete todos los campos', 'error');
       return;
     }
-    // Aquí iría tu lógica de envío (axios.post, etc)
     navigate('/formularioAbarrotes.jsx');
   };
 
   return (
     <>
-      <FormContainer
-        title="Formulario de Abastecimiento"
-        size="md"
-        onSubmit={e => e.preventDefault()}
-      >
+      <FormContainer title="Formulario de Abastecimiento" size="md" onSubmit={e => e.preventDefault()}>
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1">
             <InputField
@@ -110,18 +103,18 @@ function FormularioAbastecimiento() {
           <div className="flex-1">
             <InputField
               label="Cantidad de personas"
-              name="personas"
+              name="cantidad"
               type="number"
               min="1"
-              value={formData.personas}
+              value={formData.cantidad}
               onChange={handleChange}
               required
             />
           </div>
-        
         </div>
+
         <div className="flex flex-col md:flex-row gap-6 mt-4">
-        <div className="flex-1">
+          <div className="flex-1">
             <SelectField
               label="Nombre del albergue"
               name="albergue"
@@ -133,11 +126,11 @@ function FormularioAbastecimiento() {
               required
             />
           </div>
-        <div className="flex-1">
+          <div className="flex-1">
             <SelectField
               label="Tipo de comida"
-              name="comida"
-              value={formData.comida}
+              name="tipo"
+              value={formData.tipo}
               onChange={handleChange}
               options={opcionesComida}
               optionLabel="nombre"
@@ -145,8 +138,8 @@ function FormularioAbastecimiento() {
               required
             />
           </div>
-          
         </div>
+
         <div className="flex flex-col md:flex-row gap-6 mt-8">
           <div className="flex-1 flex gap-4">
             <SubmitButton
