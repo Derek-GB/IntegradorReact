@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import FamiliaFormulario from "./familiaFormulario";
+import FamiliaFormulario from "../views/familia/familiaFormulario.jsx";
 
 const FormularioIntegrantes = () => {
   const cantidad = parseInt(localStorage.getItem("cantidadIntegrantes")) || 0;
