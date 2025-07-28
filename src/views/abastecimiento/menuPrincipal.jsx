@@ -5,7 +5,7 @@ import InputField from '../../components/FormComponents/InputField.jsx';
 import SelectField from '../../components/FormComponents/SelectField.jsx';
 import SubmitButton from '../../components/FormComponents/SubmitButton.jsx';
 import CustomToaster, { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
-import { contextoAbastecimiento } from '../../context/contextoAbastecimiento.jsx'; // 👈 IMPORTANTE
+import { contextoAbastecimiento } from '../../context/contextoAbastecimiento.jsx'; 
 
 const opcionesComida = [
   { nombre: "Desayuno", value: "desayuno" },
@@ -47,7 +47,6 @@ function FormularioAbastecimiento() {
 
   const [loading, setLoading] = useState(false);
 
-  // Get today's date in YYYY-MM-DD format
   const today = new Date().toISOString().split('T')[0];
 
   useEffect(() => {
