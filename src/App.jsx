@@ -35,7 +35,7 @@ import ResumenFinal from './views/abastecimiento/resumenFinal.jsx';
 //Solos
 import AjusteInventario from "./views/ajusteInventario.jsx";
 import AyudaForm from './views/ayudaForm.jsx';
-import FormularioAbastecimiento from './views/formularioAbarrotes.jsx';
+import FormularioAbastecimiento from './components/formularioAbarrotes.jsx';
 import Inicio from './views/inicio.jsx';
 import RegistroAmenazas from './views/registroAmenazas.jsx';
 import RegistroMascotas from "./views/registroMascota.jsx";
