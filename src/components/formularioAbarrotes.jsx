@@ -1,5 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { contextoAbastecimiento } from '../context/contextoAbastecimiento';
+import { Modal, Box, Button } from '@mui/material';
+import ResumenParcial from '../views/abastecimiento/resumenParcial';
+import ResumenFinal from '../views/abastecimiento/resumenFinal';
 
 // Productos por categoría
 const carnesProductos = [
@@ -109,12 +112,35 @@ const categorias = {
 const FormularioAbastecimiento = () => {
   const { agregarItem, eliminarItem, items, datosFormulario } = useContext(contextoAbastecimiento);
 
+// MODALES
+  const [openResumenParcial, setOpenResumenParcial] = useState(false);
+  const [openResumenFinal, setOpenResumenFinal] = useState(false);
+  const handleOpenResumenParcial = () => setOpenResumenParcial(true);
+  const handleCloseResumenParcial = () => setOpenResumenParcial(false);
+  const handleOpenResumenFinal = () => setOpenResumenFinal(true);
+  const handleCloseResumenFinal = () => setOpenResumenFinal(false);
+
+  const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '80%',
+    maxWidth: 800,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: 2,
+    maxHeight: '80vh',
+    overflowY: 'auto',
+  };
+
   const [tipoCarne, setTipoCarne] = useState('');
   const [tipoProteina, setTipoProteina] = useState('');
   const [tipoVerdura, setTipoVerdura] = useState('');
 
-  // Control para abrir una sola sección a la vez
-  const [seccionAbierta, setSeccionAbierta] = useState('Carnes');
+  // ABRIR UNA SECCION A LA VEZ
+  const [seccionAbierta, setSeccionAbierta] = useState('carnes');
 
   const personas = parseInt(datosFormulario?.cantidad) || 0;
 
@@ -128,26 +154,21 @@ const FormularioAbastecimiento = () => {
       alert('Seleccione tipo de carne y asegúrese que la cantidad de personas está definida en el menú principal.');
       return;
     }
-
     const carnesAgregadas = items.filter(i => i.seccion === 'Carnes');
     if (carnesAgregadas.length >= 1) {
       alert('Solo se puede agregar un tipo de carne.');
       return;
     }
-
     const producto = carnesProductos.find(p => p.nombre === tipoCarne);
     if (!producto) return;
-
     const gramosTotales = producto.gramosPorPersona * personas;
     const cantidadKg = (gramosTotales / 1000).toFixed(2);
-
     agregarItem({
       seccion: 'Carnes',
       tipo: tipoCarne,
       unidad: 'kg',
       cantidad: cantidadKg,
     });
-
     setTipoCarne('');
   };
 
@@ -162,10 +183,8 @@ const FormularioAbastecimiento = () => {
       alert('Solo se puede agregar una proteína.');
       return;
     }
-
     let unidad = 'Unidad';
     let cantidad = 1;
-
     switch (tipoProteina) {
       case 'Huevos':
         unidad = 'Unidad';
@@ -183,14 +202,12 @@ const FormularioAbastecimiento = () => {
         cantidad = 1;
         break;
     }
-
     agregarItem({
       seccion: 'Proteínas',
       tipo: tipoProteina,
       unidad,
       cantidad
     });
-
     setTipoProteina('');
   };
 
@@ -228,7 +245,6 @@ const FormularioAbastecimiento = () => {
   //CHECKBOXES
   const calcularCantidad = (producto) => {
     if (!personas || personas <= 0) return 0;
-
     if (producto.factor) return (producto.factor * personas).toFixed(2);
     if (producto.gramosPorPersona) return ((producto.gramosPorPersona * personas) / 1000).toFixed(2);
     if (producto.mililitrosPorPersona) return ((producto.mililitrosPorPersona * personas) / 1000).toFixed(2);
@@ -242,14 +258,11 @@ const FormularioAbastecimiento = () => {
 
   const handleAgregarProducto = (categoria, producto) => {
     if (items.some(i => i.seccion === categoria && i.tipo === producto.nombre)) return;
-
     const cantidad = calcularCantidad(producto);
-
     if (!cantidad || cantidad <= 0) {
       alert("Debe definir la cantidad de personas en el menú principal.");
       return;
     }
-
     agregarItem({
       seccion: categoria,
       tipo: producto.nombre,
@@ -284,7 +297,6 @@ const FormularioAbastecimiento = () => {
               ))}
             </select>
             <button type="button" onClick={handleAgregarCarne}>Agregar</button>
-
             <div className="card" style={{marginTop: '10px'}}>
               <h4>Resumen Carnes</h4>
               <table>
@@ -334,7 +346,6 @@ const FormularioAbastecimiento = () => {
               <option value="Salchichón">Salchichón</option>
             </select>
             <button type="button" onClick={handleAgregarProteina}>Agregar</button>
-
             <div className="card" style={{marginTop: '10px'}}>
               <h4>Resumen Proteínas</h4>
               <table>
@@ -384,7 +395,6 @@ const FormularioAbastecimiento = () => {
               ))}
             </select>
             <button type="button" onClick={handleAgregarVerdura}>Agregar</button>
-
             <div className="card" style={{marginTop: '10px'}}>
               <h4>Resumen Verduras</h4>
               <table>
@@ -414,7 +424,6 @@ const FormularioAbastecimiento = () => {
       {/* Otras Categorías con checkboxes */}
       {Object.entries(categorias).map(([categoria, productos]) => {
         if (['Carnes', 'Proteínas', 'Verduras'].includes(categoria)) return null;
-
         return (
           <div key={categoria} style={{border: '1px solid #ccc', marginBottom: '10px'}}>
             <div
@@ -429,7 +438,6 @@ const FormularioAbastecimiento = () => {
                   {productos.map((producto) => {
                     const yaAgregado = items.some(i => i.seccion === categoria && i.tipo === producto.nombre);
                     if (yaAgregado) return null;
-
                     return (
                       <div key={producto.nombre} className="producto">
                         <label className="labelAbarrote">
@@ -465,13 +473,45 @@ const FormularioAbastecimiento = () => {
                     </tbody>
                   </table>
                 </div>
+                 <div>
+                </div>
               </div>
             )}
           </div>
-        )
+        );
       })}
+    {/* Botones para abrir modales resumen, por ejemplo al inicio o al final del formulario */}
+    <div style={{ margin: '20px 0', display: 'flex', gap: '10px' }}>
+      <button className="btn-resumen" onClick={handleOpenResumenParcial}>
+        Ver Resumen Parcial
+      </button>
+      <button className="btn-resumen-final" onClick={handleOpenResumenFinal}>
+        Ver Resumen Final
+      </button>
     </div>
+    {/* Modal Resumen Parcial */}
+    <Modal open={openResumenParcial} onClose={handleCloseResumenParcial}>
+      <Box sx={modalStyle}>
+        {/* Pasamos función para abrir resumen final desde resumen parcial, si quieres */}
+        <ResumenParcial onVerResumenFinal={() => {
+          setOpenResumenParcial(false);
+          setOpenResumenFinal(true);
+        }} />
+        <Button onClick={handleCloseResumenParcial} variant="contained" sx={{ mt: 2 }}>
+          Cerrar
+        </Button>
+      </Box>
+    </Modal>
+    {/* Modal Resumen Final */}
+    <Modal open={openResumenFinal} onClose={handleCloseResumenFinal}>
+      <Box sx={modalStyle}>
+        <ResumenFinal />
+        <Button onClick={handleCloseResumenFinal} variant="contained" sx={{ mt: 2 }}>
+          Cerrar
+        </Button>
+      </Box>
+    </Modal>
+  </div>
   );
 };
-
 export default FormularioAbastecimiento;
