@@ -38,7 +38,7 @@ const RegistrarSuministro = () => {
   } = useRegistrarSuministro();
 
   return (
-    <div>
+    <>
       <FormContainer
         title="Registrar Suministros"
         onSubmit={handleSubmit}
@@ -138,7 +138,7 @@ const RegistrarSuministro = () => {
         </div>
       </FormContainer>
       <CustomToast />
-    </div>
+    </>
   );
 };
 

@@ -7,7 +7,6 @@ import Abarrotes from '../components/abarrotes';
 import Limpieza from '../components/limpieza';
 import ResumenParcial from './abastecimiento/resumenParcial';
 import ResumenFinal from './abastecimiento/resumenFinal'; // ⬅️ Asegúrate de tener este componente
-import '../styles/formAbasteci.css';
 
 const FormularioAbastecimiento = () => {
   const [mostrarResumenParcial, setMostrarResumenParcial] = useState(false);

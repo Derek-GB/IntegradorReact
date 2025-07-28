@@ -30,11 +30,10 @@ const AyudaForm = () => {
   } = useAyudaForm();
 
   return (
-    <div>
+    <>
       <FormContainer
         title="Registro de Ayuda Entregada"
         onSubmit={handleSubmit}
-        size="md"
       >
         <fieldset className="w-full">
           <div className="flex flex-col md:flex-row gap-6">
@@ -104,7 +103,7 @@ const AyudaForm = () => {
         </div>
       </FormContainer>
       <CustomToaster />
-    </div>
+    </>
   );
 };
 
