@@ -1,7 +1,7 @@
 // src/hooks/useRegistrarSuministro.js
 import { useState, useEffect } from 'react';
-import { productosAPI } from '../helpers/api';
-import { showCustomToast } from '../components/globalComponents/CustomToaster';
+import { productosAPI } from '../../helpers/api';
+import { showCustomToast } from '../../components/globalComponents/CustomToaster';
 
 const useRegistrarSuministro = () => {
   const [form, setForm] = useState({

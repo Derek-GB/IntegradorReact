@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRegistroUsuario } from '../../hooks/useRegistroUsuario.js';
+import { useRegistroUsuario } from '../../hooks/Usuario/useRegistroUsuario.js';
 import FormContainer from '../../components/FormComponents/FormContainer.jsx';
 import InputField from '../../components/FormComponents/InputField.jsx';
 import SelectField from '../../components/FormComponents/SelectField.jsx';

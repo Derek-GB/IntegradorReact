@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { alberguesAPI } from "../helpers/api.js";
+import { alberguesAPI } from "../../helpers/api.js";
 
 export function useBusquedaAlbergue({ provincias, cantones, distritos, setProvinciaId, setCantonId }) {
   const [idAlbergue, setIdAlbergue] = useState("");

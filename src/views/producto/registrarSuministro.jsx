@@ -1,5 +1,5 @@
 import React from 'react';
-import useRegistrarSuministro from '../../hooks/useRegistrarSuministro';
+import useRegistrarSuministro from '../../hooks/Producto/useRegistrarSuministro.js';
 import FormContainer from '../../components/FormComponents/FormContainer.jsx';
 import InputField from '../../components/FormComponents/InputField.jsx';
 import SelectField from '../../components/FormComponents/SelectField.jsx';
