@@ -48,7 +48,7 @@ const App = () => {
   const location = useLocation();
   const isLogin = 
     location.pathname === '/' || 
-    location.pathname === '/recuperarContrasena.jsx';
+    location.pathname === '/recuperarContrasena';
 
   // Simple función de logout (puedes mejorarla)
   const handleLogout = () => {
@@ -64,7 +64,7 @@ const App = () => {
       {isLogin ? (
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/recuperarContrasena.jsx" element={<RecuperarContrasena />} />
+          <Route path="/recuperarContrasena" element={<RecuperarContrasena />} />
         </Routes>
       ) : (
           <div className="">
