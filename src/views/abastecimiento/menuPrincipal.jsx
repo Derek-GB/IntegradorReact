@@ -36,7 +36,7 @@ const opcionesAlbergue = [
 
 function FormularioAbastecimiento() {
   const navigate = useNavigate();
-  const { guardarDatosFormulario } = useContext(contextoAbastecimiento); // 👈 USA EL CONTEXTO
+  const { guardarDatosFormulario } = useContext(contextoAbastecimiento);
 
   const [formData, setFormData] = useState({
     fecha: '',
@@ -45,8 +45,10 @@ function FormularioAbastecimiento() {
     albergue: '',
   });
 
-  const [guardado, setGuardado] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split('T')[0];
 
   useEffect(() => {
     setFormData({
@@ -55,7 +57,6 @@ function FormularioAbastecimiento() {
       cantidad: '',
       albergue: '',
     });
-    setGuardado(false);
   }, []);
 
   const handleChange = (e) => {
@@ -65,25 +66,18 @@ function FormularioAbastecimiento() {
     });
   };
 
-  const handleGuardar = () => {
+  const handleSiguiente = () => {
     const { fecha, tipo, cantidad, albergue } = formData;
     if (!fecha || !tipo || !cantidad || !albergue) {
       showCustomToast('Error', 'Complete todos los campos', 'error');
       return;
     }
 
+    setLoading(true);
     guardarDatosFormulario(formData);
-    setGuardado(true);
     showCustomToast('Éxito', 'Formulario guardado correctamente', 'success');
-  };
-
-  const handleEnviar = () => {
-    const { fecha, tipo, cantidad, albergue } = formData;
-    if (!fecha || !tipo || !cantidad || !albergue) {
-      showCustomToast('Error', 'Complete todos los campos', 'error');
-      return;
-    }
     navigate('/formularioAbarrotes.jsx');
+    setLoading(false);
   };
 
   return (
@@ -98,6 +92,7 @@ function FormularioAbastecimiento() {
               value={formData.fecha}
               onChange={handleChange}
               required
+              min={today}
             />
           </div>
           <div className="flex-1">
@@ -141,26 +136,15 @@ function FormularioAbastecimiento() {
         </div>
 
         <div className="flex flex-col md:flex-row gap-6 mt-8">
-          <div className="flex-1 flex gap-4">
+          <div className="flex-1">
             <SubmitButton
               type="button"
               width="w-full"
               color="text-white"
-              onClick={handleGuardar}
+              onClick={handleSiguiente}
               loading={loading}
-              style={{
-                backgroundColor: guardado ? '#059669' : undefined,
-              }}
             >
-              {guardado ? 'Guardado' : 'Guardar'}
-            </SubmitButton>
-            <SubmitButton
-              type="button"
-              width="w-full"
-              color="text-white"
-              onClick={handleEnviar}
-            >
-              Enviar
+              Siguiente
             </SubmitButton>
           </div>
         </div>
