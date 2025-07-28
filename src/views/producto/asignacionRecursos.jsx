@@ -147,7 +147,6 @@ const AsignarRecurso = () => {
                 onChange={handleChange}
                 options={productos.map(p => ({
                   nombre: p.nombre || `Producto ${p.id}`,
-                  nombre: p.id || p.ID
                 }))}
                 optionLabel="nombre"
                 optionValue="nombre"
@@ -180,6 +179,7 @@ const AsignarRecurso = () => {
             <SubmitButton
               loading={loading}
               className="px-8 py-3"
+              color='text-black'
             >
               {loading ? 'Asignando...' : 'Asignar Recurso'}
             </SubmitButton>

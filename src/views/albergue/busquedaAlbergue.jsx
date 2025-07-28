@@ -6,6 +6,7 @@ import InputField from "../../components/FormComponents/InputField.jsx";
 import SelectField from "../../components/FormComponents/SelectField.jsx";
 import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
 import CustomToaster, { showCustomToast } from "../../components/globalComponents/CustomToaster.jsx";
+import GlobalDataTable from "../../components/globalComponents/GlobalDataTable.jsx";
 
 const BusquedaAlbergue = () => {
   const { provincias, cantones, distritos, setProvinciaId, setCantonId } = useUbicaciones();
@@ -32,6 +33,47 @@ const BusquedaAlbergue = () => {
       showCustomToast(error, null, "error"); 
     }
   }, [error]);
+
+  // Define columnas para la tabla
+  const columns = [
+    { name: "ID", selector: row => row.IdAlbergue || row.id, sortable: true },
+    { name: "Nombre", selector: row => row.Nombre },
+    { name: "Región", selector: row => row.Region },
+    { name: "Provincia", selector: row => row.provincia },
+    { name: "Cantón", selector: row => row.canton },
+    { name: "Distrito", selector: row => row.distrito },
+    { name: "Dirección", selector: row => row.direccion },
+    { name: "Tipo Establecimiento", selector: row => row.tipoEstablecimiento },
+    { name: "Tipo Albergue", selector: row => row.tipoAlbergue },
+    { name: "Condición", selector: row => row.condicionAlbergue },
+    { name: "Administrador", selector: row => row.administrador },
+    { name: "Teléfono", selector: row => row.telefono },
+    { name: "Capacidad Personas", selector: row => row.capacidadPersonas },
+    { name: "Capacidad Colectiva", selector: row => row.capacidadColectiva },
+    { name: "Cantidad Familias", selector: row => row.cantidadFamilias },
+    { name: "Ocupación", selector: row => row.ocupacion },
+    { name: "Cocina", selector: row => (row.cocina ? "Sí" : "No") },
+    { name: "Duchas", selector: row => (row.duchas ? "Sí" : "No") },
+    { name: "Servicios Sanitarios", selector: row => (row.serviciosSanitarios ? "Sí" : "No") },
+    { name: "Bodega", selector: row => (row.bodega ? "Sí" : "No") },
+    { name: "Menaje Mobiliario", selector: row => (row.menajeMobiliario ? "Sí" : "No") },
+    { name: "Tanque Agua", selector: row => (row.tanqueAgua ? "Sí" : "No") },
+    { name: "Área Total (m²)", selector: row => row.areaTotalM2 },
+    { name: "Municipalidad", selector: row => row.municipalidad },
+    {
+      name: "Color",
+      selector: row => row.color,
+      cell: row => (
+        <div className="flex items-center gap-2">
+          <div
+            className="w-4 h-4 rounded-full border"
+            style={{ backgroundColor: row.color }}
+          ></div>
+          <span>{row.color}</span>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <>
@@ -92,7 +134,7 @@ const BusquedaAlbergue = () => {
             />
           </div>
           <div className="flex-1 flex items-end">
-            <SubmitButton width="w-full" loading={loading}>
+            <SubmitButton width="w-full" loading={loading} color="text-black">
               Buscar
             </SubmitButton>
           </div>
@@ -105,69 +147,13 @@ const BusquedaAlbergue = () => {
         )}
 
         {resultados.length > 0 && (
-          <div className="overflow-x-auto mt-8">
-            <table className="min-w-full border border-gray-200 rounded-lg">
-              <thead className="bg-[#00897B] text-white">
-                <tr>
-                  <th className="px-2 py-2">ID</th>
-                  <th className="px-2 py-2">Nombre</th>
-                  <th className="px-2 py-2">Región</th>
-                  <th className="px-2 py-2">Provincia</th>
-                  <th className="px-2 py-2">Cantón</th>
-                  <th className="px-2 py-2">Distrito</th>
-                  <th className="px-2 py-2">Dirección</th>
-                  <th className="px-2 py-2">Tipo Establecimiento</th>
-                  <th className="px-2 py-2">Tipo Albergue</th>
-                  <th className="px-2 py-2">Condición</th>
-                  <th className="px-2 py-2">Administrador</th>
-                  <th className="px-2 py-2">Teléfono</th>
-                  <th className="px-2 py-2">Capacidad Personas</th>
-                  <th className="px-2 py-2">Capacidad Colectiva</th>
-                  <th className="px-2 py-2">Cantidad Familias</th>
-                  <th className="px-2 py-2">Ocupación</th>
-                  <th className="px-2 py-2">Cocina</th>
-                  <th className="px-2 py-2">Duchas</th>
-                  <th className="px-2 py-2">Servicios Sanitarios</th>
-                  <th className="px-2 py-2">Bodega</th>
-                  <th className="px-2 py-2">Menaje Mobiliario</th>
-                  <th className="px-2 py-2">Tanque Agua</th>
-                  <th className="px-2 py-2">Área Total (m²)</th>
-                  <th className="px-2 py-2">Municipalidad</th>
-                  <th className="px-2 py-2">Color</th>
-                </tr>
-              </thead>
-              <tbody>
-                {resultados.map((a) => (
-                  <tr key={a.IdAlbergue || a.id} className="bg-white border-b">
-                    <td className="px-2 py-2">{a.IdAlbergue || a.id}</td>
-                    <td className="px-2 py-2">{a.Nombre}</td>
-                    <td className="px-2 py-2">{a.Region}</td>
-                    <td className="px-2 py-2">{a.provincia}</td>
-                    <td className="px-2 py-2">{a.canton}</td>
-                    <td className="px-2 py-2">{a.distrito}</td>
-                    <td className="px-2 py-2">{a.direccion}</td>
-                    <td className="px-2 py-2">{a.tipoEstablecimiento}</td>
-                    <td className="px-2 py-2">{a.tipoAlbergue}</td>
-                    <td className="px-2 py-2">{a.condicionAlbergue}</td>
-                    <td className="px-2 py-2">{a.administrador}</td>
-                    <td className="px-2 py-2">{a.telefono}</td>
-                    <td className="px-2 py-2">{a.capacidadPersonas}</td>
-                    <td className="px-2 py-2">{a.capacidadColectiva}</td>
-                    <td className="px-2 py-2">{a.cantidadFamilias}</td>
-                    <td className="px-2 py-2">{a.ocupacion}</td>
-                    <td className="px-2 py-2">{a.cocina ? "Sí" : "No"}</td>
-                    <td className="px-2 py-2">{a.duchas ? "Sí" : "No"}</td>
-                    <td className="px-2 py-2">{a.serviciosSanitarios ? "Sí" : "No"}</td>
-                    <td className="px-2 py-2">{a.bodega ? "Sí" : "No"}</td>
-                    <td className="px-2 py-2">{a.menajeMobiliario ? "Sí" : "No"}</td>
-                    <td className="px-2 py-2">{a.tanqueAgua ? "Sí" : "No"}</td>
-                    <td className="px-2 py-2">{a.areaTotalM2}</td>
-                    <td className="px-2 py-2">{a.municipalidad}</td>
-                    <td className="px-2 py-2" style={{ backgroundColor: a.color }}>{a.color}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="mt-8">
+            <GlobalDataTable
+              columns={columns}
+              data={resultados}
+              loading={loading}
+              rowsPerPage={3}
+            />
           </div>
         )}
 
@@ -177,6 +163,7 @@ const BusquedaAlbergue = () => {
           </div>
         )}
       </FormContainer>
+
       <CustomToaster />
     </>
   );
