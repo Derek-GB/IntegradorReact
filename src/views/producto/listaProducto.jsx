@@ -37,7 +37,7 @@ const ListaProducto = () => {
         const data = await productosAPI.getAll();
         const lista = Array.isArray(data) ? data : data.data || [];
         setProductos(lista);
-      } catch (err) {
+      } catch {
         showCustomToast('Error', 'Error al cargar productos. Verifica si tu sesión expiró.', 'error');
       }
     };
@@ -76,7 +76,7 @@ const ListaProducto = () => {
           p.id === form.id ? { ...p, descripcion: payload.descripcion, cantidad: payload.cantidad } : p
         )
       );
-    } catch (error) {
+    } catch {
       showCustomToast("Error", "Error al actualizar el producto.", "error");
     } finally {
       setLoading(false);
@@ -198,13 +198,14 @@ const ListaProducto = () => {
                 type="submit"
                 width="w-full"
                 loading={loading}
+                color='text-black'
               >
                 Actualizar
               </SubmitButton>
               <SubmitButton
                 type="button"
                 width="w-full"
-                color="text-white bg-red-600 hover:bg-red-700"
+                color="text-black bg-red-600 hover:bg-red-700"
                 onClick={eliminarProducto}
                 disabled={loading}
               >

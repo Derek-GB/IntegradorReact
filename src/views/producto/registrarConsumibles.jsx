@@ -79,7 +79,7 @@ const RegistroConsumibles = () => {
           </div>
         </fieldset>
         <div className="flex justify-center mt-8">
-          <SubmitButton width="w-full" loading={loading}>
+          <SubmitButton width="w-full" loading={loading} color="text-black">
             Registrar
           </SubmitButton>
         </div>
