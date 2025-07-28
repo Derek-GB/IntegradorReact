@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { municipalidadAPI, usuariosAPI } from '../helpers/api.js';
-import { showCustomToast } from '../components/globalComponents/CustomToaster.jsx';
+import { municipalidadAPI, usuariosAPI } from '../../helpers/api.js';
+import { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
 
 const roles = [
   { nombre: "Administrador", value: "admin" },

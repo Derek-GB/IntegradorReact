@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useUbicaciones } from "../../hooks/useUbicaciones";
-import { useBusquedaAlbergue } from "../../hooks/useBusquedaAlbergue";
+import { useBusquedaAlbergue } from "../../hooks/Albergue/useBusquedaAlbergue.js";
 import FormContainer from "../../components/FormComponents/FormContainer.jsx";
 import InputField from "../../components/FormComponents/InputField.jsx";
 import SelectField from "../../components/FormComponents/SelectField.jsx";
