@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { consumiblesAPI } from "../helpers/api.js";
-import { showCustomToast } from "../components/globalComponents/CustomToaster.jsx";
+import { consumiblesAPI } from "../../helpers/api.js";
+import { showCustomToast } from "../../components/globalComponents/CustomToaster.jsx";
 
 export const useRegistroConsumibles = () => {
   const [form, setForm] = useState({

@@ -1,5 +1,5 @@
 import React from "react";
-import { useRegistroConsumibles } from "../../hooks/useRegistroConsumibles.js";
+import { useRegistroConsumibles } from "../../hooks/Producto/useRegistroConsumibles.js";
 import FormContainer from "../../components/FormComponents/FormContainer.jsx";
 import InputField from "../../components/FormComponents/InputField.jsx";
 import SelectField from "../../components/FormComponents/SelectField.jsx";
