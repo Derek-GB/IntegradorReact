@@ -84,7 +84,6 @@ const App = () => {
               >
                 <div
                   style={{
-                    minHeight: "100vh",
                     maxWidth: "1200px",
                     width: "100%",
                     background: "#fff",
