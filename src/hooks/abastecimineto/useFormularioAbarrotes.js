@@ -150,12 +150,12 @@ export const useFormularioAbarrotes = () => {
   // CARNES
   const handleAgregarCarne = () => {
     if (!tipoCarne || personas <= 0) {
-      alert('Seleccione tipo de carne y asegúrese que la cantidad de personas está definida en el menú principal.');
+      alert('Seleccione 2 tipo de carne y asegúrese que la cantidad de personas está definida en el menú principal.');
       return;
     }
     const carnesAgregadas = items.filter(i => i.seccion === 'Carnes');
-    if (carnesAgregadas.length >= 1) {
-      alert('Solo se puede agregar un tipo de carne.');
+    if (carnesAgregadas.length >= 2) {
+      alert('Solo se pueden agregar 2 tipos de carne.');
       return;
     }
     const producto = carnesProductos.find(p => p.nombre === tipoCarne);
@@ -214,7 +214,7 @@ export const useFormularioAbarrotes = () => {
   const gramosPorPersonaVerdura = 120;
   const handleAgregarVerdura = () => {
     if (!tipoVerdura) {
-      alert("Seleccione una verdura");
+      alert("Seleccione dos verduras");
       return;
     }
     if (personas <= 0) {

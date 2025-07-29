@@ -55,7 +55,9 @@ const FormularioAbastecimiento = () => {
       cell: (row) => <span className="text-gray-600">{row.unidad}</span>,
     },
     {
-      name: "Cantidad",
+      name: (
+        <span style={{ minWidth: 90, display: 'inline-block' }}>Cantidad</span>
+      ),
       selector: (row) => row.cantidad,
       sortable: true,
       cell: (row) => (
@@ -138,22 +140,24 @@ const FormularioAbastecimiento = () => {
                   </div>
 
                   {items.filter((i) => i.seccion === "Carnes").length > 0 && (
-                    <div className="mt-6">
-                      <div className="mb-4">
-                        <h4 className="text-lg font-semibold text-gray-800">
+                    <div className="mt-6 flex justify-center">
+                      <div className="mb-4 w-full" style={{ minWidth: '700px', maxWidth: '900px' }}>
+                        <h4 className="text-lg font-semibold text-gray-800 text-center">
                           Resumen Carnes
                         </h4>
+                        <div className="rounded-lg bg-white shadow p-2" style={{ minWidth: '700px', maxWidth: '900px', overflowX: 'auto' }}>
+                          <GlobalDataTable
+                            columns={createColumns("carnes")}
+                            data={items.filter((i) => i.seccion === "Carnes")}
+                            pagination={false}
+                            noDataComponent={
+                              <div className="px-6 py-4 text-center text-sm text-gray-500">
+                                No hay carnes seleccionadas
+                              </div>
+                            }
+                          />
+                        </div>
                       </div>
-                      <GlobalDataTable
-                        columns={createColumns("carnes")}
-                        data={items.filter((i) => i.seccion === "Carnes")}
-                        pagination={false}
-                        noDataComponent={
-                          <div className="px-6 py-4 text-center text-sm text-gray-500">
-                            No hay carnes seleccionadas
-                          </div>
-                        }
-                      />
                     </div>
                   )}
                 </div>
@@ -199,24 +203,25 @@ const FormularioAbastecimiento = () => {
                     </SubmitButton>
                   </div>
 
-                  {items.filter((i) => i.seccion === "Proteínas").length >
-                    0 && (
-                    <div className="mt-6">
-                      <div className="mb-4">
-                        <h4 className="text-lg font-semibold text-gray-800">
+                  {items.filter((i) => i.seccion === "Proteínas").length > 0 && (
+                    <div className="mt-6 flex justify-center">
+                      <div className="mb-4 w-full" style={{ minWidth: '700px', maxWidth: '900px' }}>
+                        <h4 className="text-lg font-semibold text-gray-800 text-center">
                           Resumen Proteínas
                         </h4>
+                        <div className="rounded-lg bg-white shadow p-2" style={{ minWidth: '700px', maxWidth: '900px', overflowX: 'auto' }}>
+                          <GlobalDataTable
+                            columns={createColumns("proteinas")}
+                            data={items.filter((i) => i.seccion === "Proteínas")}
+                            pagination={false}
+                            noDataComponent={
+                              <div className="px-6 py-4 text-center text-sm border bg-yellow-400">
+                                No hay proteínas seleccionadas
+                              </div>
+                            }
+                          />
+                        </div>
                       </div>
-                      <GlobalDataTable
-                        columns={createColumns("proteinas")}
-                        data={items.filter((i) => i.seccion === "Proteínas")}
-                        pagination={false}
-                        noDataComponent={
-                          <div className="px-6 py-4 text-center text-sm border bg-yellow-400">
-                            No hay proteínas seleccionadas
-                          </div>
-                        }
-                      />
                     </div>
                   )}
                 </div>
@@ -264,22 +269,24 @@ const FormularioAbastecimiento = () => {
                   </div>
 
                   {items.filter((i) => i.seccion === "Verduras").length > 0 && (
-                    <div className="mt-6">
-                      <div className="mb-4">
-                        <h4 className="text-lg font-semibold text-gray-800">
+                    <div className="mt-6 flex justify-center">
+                      <div className="mb-4 w-full" style={{ minWidth: '700px', maxWidth: '900px' }}>
+                        <h4 className="text-lg font-semibold text-gray-800 text-center">
                           Resumen Verduras
                         </h4>
+                        <div className="rounded-lg bg-white shadow p-2" style={{ minWidth: '700px', maxWidth: '900px', overflowX: 'auto' }}>
+                          <GlobalDataTable
+                            columns={createColumns("verduras")}
+                            data={items.filter((i) => i.seccion === "Verduras")}
+                            pagination={false}
+                            noDataComponent={
+                              <div className="px-6 py-4 text-center text-sm text-gray-500">
+                                No hay verduras seleccionadas
+                              </div>
+                            }
+                          />
+                        </div>
                       </div>
-                      <GlobalDataTable
-                        columns={createColumns("verduras")}
-                        data={items.filter((i) => i.seccion === "Verduras")}
-                        pagination={false}
-                        noDataComponent={
-                          <div className="px-6 py-4 text-center text-sm text-gray-500">
-                            No hay verduras seleccionadas
-                          </div>
-                        }
-                      />
                     </div>
                   )}
                 </div>
@@ -346,25 +353,25 @@ const FormularioAbastecimiento = () => {
                         })}
                       </div>
 
-                      {items.filter((i) => i.seccion === categoria).length >
-                        0 && (
-                        <div className="mt-6">
-                          <div className="mb-4">
-                            <h4 className="text-lg font-semibold text-gray-800">
+                      {items.filter((i) => i.seccion === categoria).length > 0 && (
+                        <div className="mt-6 flex justify-center">
+                          <div className="mb-4 w-full" style={{ minWidth: '700px', maxWidth: '900px' }}>
+                            <h4 className="text-lg font-semibold text-gray-800 text-center">
                               Resumen {categoria}
                             </h4>
+                            <div className="rounded-lg bg-white shadow p-2" style={{ minWidth: '700px', maxWidth: '900px', overflowX: 'auto' }}>
+                              <GlobalDataTable
+                                columns={createColumns("otros")}
+                                data={items.filter((i) => i.seccion === categoria)}
+                                pagination={false}
+                                noDataComponent={
+                                  <div className="px-6 py-4 text-center text-sm text-gray-500">
+                                    No hay productos de {categoria.toLowerCase()} seleccionados
+                                  </div>
+                                }
+                              />
+                            </div>
                           </div>
-                          <GlobalDataTable
-                            columns={createColumns("otros")}
-                            data={items.filter((i) => i.seccion === categoria)}
-                            pagination={false}
-                            noDataComponent={
-                              <div className="px-6 py-4 text-center text-sm text-gray-500">
-                                No hay productos de {categoria.toLowerCase()}{" "}
-                                seleccionados
-                              </div>
-                            }
-                          />
                         </div>
                       )}
                     </div>
@@ -407,7 +414,7 @@ const FormularioAbastecimiento = () => {
           open={openResumenParcial}
           onClose={handleCloseResumenParcial}
           title="Resumen Parcial del Pedido"
-          maxWidth="md"
+          maxWidth="xl"
         >
           <ResumenParcial
             onVerResumenFinal={() => {
@@ -422,7 +429,7 @@ const FormularioAbastecimiento = () => {
           open={openResumenFinal}
           onClose={handleCloseResumenFinal}
           title="Resumen Final del Pedido"
-          maxWidth="md"
+          maxWidth="xl"
         >
           <ResumenFinal />
         </GlobalModal>
