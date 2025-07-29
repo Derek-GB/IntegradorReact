@@ -10,10 +10,75 @@ const ResumenFinal = () => {
     items,
     guardarDatos,
     descargarResumen,
-    datosFormularioColumns,
-    productosColumns,
-    datosFormularioData,
+    datosFormulario,
   } = useResumenFinal();
+
+  // Configuración de columnas para datos del formulario
+  const datosFormularioColumns = [
+    {
+      name: "Fecha",
+      selector: (row) => row.fecha,
+      sortable: true,
+      cell: (row) => <span className="font-medium">{row.fecha || "-"}</span>,
+    },
+    {
+      name: "Tipo de Comida",
+      selector: (row) => row.tipo,
+      sortable: true,
+      cell: (row) => <span className="font-medium">{row.tipo || "-"}</span>,
+    },
+    {
+      name: "Cantidad de Personas",
+      selector: (row) => row.cantidad,
+      sortable: true,
+      cell: (row) => <span className="font-medium">{row.cantidad || "-"}</span>,
+    },
+    {
+      name: "Nombre del Albergue",
+      selector: (row) => row.albergue,
+      sortable: true,
+      cell: (row) => <span className="font-medium">{row.albergue || "-"}</span>,
+    },
+  ];
+
+  // Configuración de columnas para productos
+  const productosColumns = [
+    {
+      name: "Categoría",
+      selector: (row) => row.seccion,
+      sortable: true,
+      cell: (row) => (
+        <span className="font-medium text-teal-700 bg-teal-50 px-2 py-1 rounded-full text-sm">
+          {row.seccion}
+        </span>
+      ),
+    },
+    {
+      name: "Producto",
+      selector: (row) => row.tipo,
+      sortable: true,
+      cell: (row) => (
+        <span className="font-medium text-gray-900">{row.tipo}</span>
+      ),
+    },
+    {
+      name: "Unidad",
+      selector: (row) => row.unidad,
+      sortable: true,
+      cell: (row) => <span className="text-gray-600">{row.unidad}</span>,
+    },
+    {
+      name: "Cantidad",
+      selector: (row) => row.cantidad,
+      sortable: true,
+      cell: (row) => (
+        <span className="font-semibold text-gray-900">{row.cantidad}</span>
+      ),
+    },
+  ];
+
+  // Datos del formulario para la tabla
+  const datosFormularioData = [datosFormulario || {}];
 
   return (
     <div className="space-y-6">
