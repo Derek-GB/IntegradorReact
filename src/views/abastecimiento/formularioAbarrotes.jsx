@@ -384,7 +384,7 @@ const FormularioAbastecimiento = () => {
                   type="button"
                   onClick={handleOpenResumenParcial}
                   width="flex-1"
-                  color="text-black"
+                  color="text-white"
                   className="bg-yellow-500 "
                 >
                   Ver Resumen Parcial
@@ -393,7 +393,7 @@ const FormularioAbastecimiento = () => {
                   type="button"
                   onClick={handleOpenResumenFinal}
                   width="flex-1"
-                  color="text-black"
+                  color="text-white"
                   className="bg-yellow-500"
                 >
                   Ver Resumen Final
