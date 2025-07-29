@@ -15,7 +15,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
-import InventoryIcon from "@mui/icons-material/Inventory";
+import Inventory from "@mui/icons-material/Inventory2";
 import LocalDiningIcon from "@mui/icons-material/LocalDining";
 import HotelIcon from "@mui/icons-material/Hotel";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -28,6 +28,13 @@ import SearchIcon from "@mui/icons-material/Search";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
+import LocalShipping from "@mui/icons-material/localShipping";
+import AssignmentReturned from "@mui/icons-material/assignmentreturned";
+import Shelves from "@mui/icons-material/shelves";
+
+
+
+
 import { Link, useLocation } from "react-router-dom";
 
 const drawerWidth = 270;
@@ -127,14 +134,14 @@ const routeGroups = [
   },
   {
     label: "Suministros",
-    icon: <InventoryIcon />,
+    icon: <Inventory />,
     routes: [
-      { to: "/registroSuministros.jsx", label: "Registrar Suministros", icon: <InventoryIcon /> },
+      { to: "/registroSuministros.jsx", label: "Registrar Suministros", icon: <Shelves /> },
       { to: "/registrarConsumibles.jsx", label: "Consumibles", icon: <LocalDiningIcon /> },
       { to: "/listaProducto.jsx", label: "Lista Producto", icon: <ListIcon /> },
-      { to: "/ajusteInventario.jsx", label: "Ajuste Inventario", icon: <WarehouseIcon /> },
-      { to: "/asignacionRecursos.jsx", label: "Asignación Recursos", icon: <InventoryIcon /> },
-      { to: "/menuPrincipal", label: "Abastecimiento", icon: <InventoryIcon /> },
+      { to: "/ajusteInventario.jsx", label: "Ajuste Inventario", icon: <Inventory /> },
+      { to: "/asignacionRecursos.jsx", label: "Asignación Recursos", icon: <AssignmentReturned  /> },
+      { to: "/menuPrincipal", label: "Abastecimiento", icon: <LocalShipping /> },
       
     ],
   },
