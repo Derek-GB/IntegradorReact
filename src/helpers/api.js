@@ -7,17 +7,9 @@ const handleError = (error) => {
     error.message ||                  // Mensaje genérico de Axios
     "Error desconocido";
 
-  // Opcional: muestra toda la respuesta del backend en consola
   console.error("Detalles del error:", error.response?.data);
 
   throw new Error("Error al conectar con la API: " + apiMessage);
-};
-
-const createApiMethods = (endpoint, extraMethods = {}) => {
-  return {
-    ...defaultMethods(endpoint),
-    ...extraMethods
-  };
 };
 
 const defaultMethods = (endpoint) => ({
@@ -67,7 +59,14 @@ const defaultMethods = (endpoint) => ({
   },
 });
 
-// Aquí modificamos SOLO productosAPI para corregir update
+const createApiMethods = (endpoint, extraMethods = {}) => {
+  return {
+    ...defaultMethods(endpoint),
+    ...extraMethods,
+  };
+};
+
+// Productos API con update personalizado (sin id en URL)
 export const productosAPI = createApiMethods("productos", {
   update: async (data) => {
     try {
@@ -76,14 +75,28 @@ export const productosAPI = createApiMethods("productos", {
     } catch (error) {
       handleError(error);
     }
-  }
+  },
 });
 
-export const familiasAPI = createApiMethods("familias");
+// Familias API con consulta por identificación
+export const familiasAPI = createApiMethods("familias", {
+  getById: async (identificacion) => {
+    try {
+      const res = await customAxios.get(
+        `/familias/consulta/familiaConJefe/${encodeURIComponent(identificacion)}`
+      );
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+});
+
+// Albergues API con consultas específicas
 export const alberguesAPI = createApiMethods("albergues", {
   getById: async (id) => {
     try {
-      const res = await customAxios.get(`/albergues/consulta/id/${id}`);
+      const res = await customAxios.get(`/albergues/consulta/id/${encodeURIComponent(id)}`);
       return res.data;
     } catch (error) {
       handleError(error);
@@ -91,22 +104,47 @@ export const alberguesAPI = createApiMethods("albergues", {
   },
   getByNombre: async (nombre) => {
     try {
-      const res = await customAxios.get(`/albergues/consulta/nombre/${nombre}`);
+      const res = await customAxios.get(
+        `/albergues/consulta/nombre/${encodeURIComponent(nombre)}`
+      );
       return res.data;
     } catch (error) {
       handleError(error);
     }
   },
-  getByUbicacion: async (ubicacion) => {
-  try {
-    const res = await customAxios.get(`/albergues/consulta/ubicacion/${ubicacion}`);
-    return res.data;
-  } catch (error) {
-    handleError(error);
-  }
-},
-
+  getByDistrito: async (distrito) => {
+    try {
+      const res = await customAxios.get(
+        `/albergues/consulta/distrito/${encodeURIComponent(distrito)}`
+      );
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+  getByCanton: async (canton) => {
+    try {
+      const res = await customAxios.get(
+        `/albergues/consulta/canton/${encodeURIComponent(canton)}`
+      );
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+  getByProvincia: async (provincia) => {
+    try {
+      const res = await customAxios.get(
+        `/albergues/consulta/provincia/${encodeURIComponent(provincia)}`
+      );
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
 });
+
+// Otros APIs estándar sin modificaciones
 export const municipalidadAPI = createApiMethods("municipalidad");
 export const capacidadAlberguesAPI = createApiMethods("capacidadAlbergues");
 export const ubicacionesAPI = createApiMethods("ubicaciones");
@@ -121,15 +159,17 @@ export const infraestructuraAlberguesAPI = createApiMethods("infraestructuraAlbe
 export const amenazasAPI = createApiMethods("amenazas");
 export const mascotasAPI = createApiMethods("mascotas");
 export const categoriaConsumiblesAPI = createApiMethods("categoriaConsumibles");
+
+// Usuarios API con validación especial
 export const usuariosAPI = createApiMethods("usuarios", {
   validarCorreo: async (correo) => {
     try {
-      const res = await customAxios.post(`/usuarios/validar/correo`, { correo });
+      await customAxios.post(`public/usuarios/validar/correo`, { correo });
       return { existe: false };
     } catch (error) {
-      if (error.response && error.response.status === 400) {
+      if (error.response?.status === 400) {
         return { existe: true };
-      } else if (error.response && error.response.status === 500) {
+      } else if (error.response?.status === 500) {
         throw new Error("Error del servidor. Contacta al soporte.");
       } else {
         console.error("Error desconocido:", error);
@@ -139,13 +179,15 @@ export const usuariosAPI = createApiMethods("usuarios", {
   },
   updateContrasena: async (correo, nuevaContrasena) => {
     try {
-      const res = await customAxios.put(`/usuarios/contrasena`, { correo, nuevaContrasena });
+      const res = await customAxios.put(`public/usuarios/contrasena`, { correo, nuevaContrasena });
       return res.data;
     } catch (error) {
       handleError(error);
     }
   },
 });
+
+// APIs estándar restantes
 export const consumiblesAPI = createApiMethods("consumibles");
 export const detallePedidoConsumiblesAPI = createApiMethods("detallePedidoConsumibles");
 export const pedidoConsumiblesAPI = createApiMethods("pedidoConsumibles");

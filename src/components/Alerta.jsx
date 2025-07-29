@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/alerta.css'; // Asegúrate de crear este archivo
 
 const Alerta = ({ mensaje, tipo = 'info', duracion = 3000, onClose }) => {
   const [visible, setVisible] = useState(true);

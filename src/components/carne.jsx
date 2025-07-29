@@ -34,7 +34,7 @@ const Carnes = () => {
       </div>
 
       <div>
-        <h4>Resumen</h4>
+        <h4>Resumen Carnes</h4>
         <table>
           <thead>
             <tr><th>Tipo</th><th>Unidad</th><th>Cantidad</th><th>Acción</th></tr>

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const login = async (correo, contrasena) => {
   try {
-    const res = await axios.post("https://apiintegrador-production-8ef8.up.railway.app/api/auth/login", {
+    const res = await axios.post("https://apiintegrador-production-8ad3.up.railway.app/api/auth/login", {
       correo,
       contrasena,
     });
