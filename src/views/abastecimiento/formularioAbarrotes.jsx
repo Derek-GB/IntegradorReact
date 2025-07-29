@@ -112,8 +112,8 @@ const FormularioAbastecimiento = () => {
               </div>
               {seccionAbierta === "Carnes" && (
                 <div className="p-6 bg-gray-50">
-                  <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-4">
-                    <p className="text-blue-700 text-sm font-medium">
+                   <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                        <p className="text-yellow-700 text-sm font-medium">
                       Se calculan automáticamente 120 gramos por persona
                     </p>
                   </div>
@@ -212,7 +212,7 @@ const FormularioAbastecimiento = () => {
                         data={items.filter((i) => i.seccion === "Proteínas")}
                         pagination={false}
                         noDataComponent={
-                          <div className="px-6 py-4 text-center text-sm text-gray-500">
+                          <div className="px-6 py-4 text-center text-sm border bg-yellow-400">
                             No hay proteínas seleccionadas
                           </div>
                         }
@@ -238,8 +238,8 @@ const FormularioAbastecimiento = () => {
               </div>
               {seccionAbierta === "Verduras" && (
                 <div className="p-6 bg-gray-50">
-                  <div className="bg-green-50 border-l-4 border-green-400 p-4 mb-4">
-                    <p className="text-green-700 text-sm font-medium">
+                  <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                        <p className="text-yellow-700 text-sm font-medium">
                       Máximo 2 tipos de verdura - 120g por persona cada una
                     </p>
                   </div>
