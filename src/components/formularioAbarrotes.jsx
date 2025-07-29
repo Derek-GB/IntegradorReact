@@ -4,6 +4,7 @@ import { Modal, Box, Button } from '@mui/material';
 import ResumenParcial from '../views/abastecimiento/resumenParcial';
 import ResumenFinal from '../views/abastecimiento/resumenFinal';
 
+
 // Productos por categoría
 const carnesProductos = [
   { nombre: "Pollo", gramosPorPersona: 120 },
@@ -221,7 +222,7 @@ const FormularioAbastecimiento = () => {
     if (personas <= 0) {
       alert("Debe definir la cantidad de personas en el menú principal.");
       return;
-    }
+      }
     const verdurasAgregadas = items.filter(i => i.seccion === 'Verduras');
     const tiposUnicos = [...new Set(verdurasAgregadas.map(i => i.tipo))];
     if (tiposUnicos.includes(tipoVerdura)) {
@@ -277,7 +278,7 @@ const FormularioAbastecimiento = () => {
       <div style={{border: '1px solid #ccc', marginBottom: '10px'}}>
         <div
           onClick={() => toggleSeccion('Carnes')}
-          style={{cursor: 'pointer', fontWeight: 'bold', padding: '10px', userSelect: 'none', backgroundColor: '#eee'}}
+          className="cursor-pointer font-bold py-2 px-4 select-none bg-teal-700 text-white border-b-2 border-teal-800"
         >
           Carnes {seccionAbierta === 'Carnes' ? '▲' : '▼'}
         </div>
@@ -296,7 +297,13 @@ const FormularioAbastecimiento = () => {
                 <option key={p.nombre} value={p.nombre}>{p.nombre}</option>
               ))}
             </select>
-            <button type="button" onClick={handleAgregarCarne}>Agregar</button>
+            <button
+              type="button"
+              onClick={handleAgregarCarne}
+              className="mt-4 w-full bg-yellow-500 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-75"
+            >
+              Agregar
+            </button>
             <div className="card" style={{marginTop: '10px'}}>
               <h4>Resumen Carnes</h4>
               <table>
@@ -310,7 +317,7 @@ const FormularioAbastecimiento = () => {
                       <td>{item.unidad}</td>
                       <td>{item.cantidad}</td>
                       <td>
-                        <button onClick={() => eliminarItem(idx)}>
+                        <button onClick={() => eliminarItem(idx)} className="bg-yellow-500 p-2">
                           <i className="material-icons">delete</i>
                         </button>
                       </td>
@@ -327,7 +334,7 @@ const FormularioAbastecimiento = () => {
       <div style={{border: '1px solid #ccc', marginBottom: '10px'}}>
         <div
           onClick={() => toggleSeccion('Proteínas')}
-          style={{cursor: 'pointer', fontWeight: 'bold', padding: '10px', userSelect: 'none', backgroundColor: '#eee'}}
+          className="cursor-pointer font-bold py-2 px-4 select-none bg-teal-700 text-white border-b-2 border-teal-800"
         >
           Proteínas {seccionAbierta === 'Proteínas' ? '▲' : '▼'}
         </div>
@@ -345,7 +352,13 @@ const FormularioAbastecimiento = () => {
               <option value="Mortadela">Mortadela</option>
               <option value="Salchichón">Salchichón</option>
             </select>
-            <button type="button" onClick={handleAgregarProteina}>Agregar</button>
+            <button
+              type="button"
+              onClick={handleAgregarProteina}
+              className="mt-4 w-full bg-yellow-500 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-75"
+            >
+              Agregar
+            </button>
             <div className="card" style={{marginTop: '10px'}}>
               <h4>Resumen Proteínas</h4>
               <table>
@@ -359,7 +372,7 @@ const FormularioAbastecimiento = () => {
                       <td>{item.unidad}</td>
                       <td>{item.cantidad}</td>
                       <td>
-                        <button onClick={() => eliminarItem(idx)}>
+                        <button onClick={() => eliminarItem(idx)} className="bg-yellow-500 p-2">
                           <i className="material-icons">delete</i>
                         </button>
                       </td>
@@ -376,7 +389,7 @@ const FormularioAbastecimiento = () => {
       <div style={{border: '1px solid #ccc', marginBottom: '10px'}}>
         <div
           onClick={() => toggleSeccion('Verduras')}
-          style={{cursor: 'pointer', fontWeight: 'bold', padding: '10px', userSelect: 'none', backgroundColor: '#eee'}}
+          className="cursor-pointer font-bold py-2 px-4 select-none bg-teal-700 text-white border-b-2 border-teal-800"
         >
           Verduras {seccionAbierta === 'Verduras' ? '▲' : '▼'}
         </div>
@@ -394,7 +407,13 @@ const FormularioAbastecimiento = () => {
                 <option key={p.nombre} value={p.nombre}>{p.nombre}</option>
               ))}
             </select>
-            <button type="button" onClick={handleAgregarVerdura}>Agregar</button>
+            <button
+              type="button"
+              onClick={handleAgregarVerdura}
+              className="mt-4 w-full bg-yellow-500 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-75"
+            >
+              Agregar
+            </button>
             <div className="card" style={{marginTop: '10px'}}>
               <h4>Resumen Verduras</h4>
               <table>
@@ -408,7 +427,7 @@ const FormularioAbastecimiento = () => {
                       <td>{item.unidad}</td>
                       <td>{item.cantidad}</td>
                       <td>
-                        <button onClick={() => eliminarItem(idx)}>
+                        <button onClick={() => eliminarItem(idx)} className="bg-yellow-500 p-2">
                           <i className="material-icons">delete</i>
                         </button>
                       </td>
@@ -428,7 +447,7 @@ const FormularioAbastecimiento = () => {
           <div key={categoria} style={{border: '1px solid #ccc', marginBottom: '10px'}}>
             <div
               onClick={() => toggleSeccion(categoria)}
-              style={{cursor: 'pointer', fontWeight: 'bold', padding: '10px', userSelect: 'none', backgroundColor: '#eee'}}
+              className="cursor-pointer font-bold py-2 px-4 select-none bg-teal-700 text-white border-b-2 border-teal-800"
             >
               {categoria} {seccionAbierta === categoria ? '▲' : '▼'}
             </div>
@@ -451,6 +470,7 @@ const FormularioAbastecimiento = () => {
                     );
                   })}
                 </div>
+              
                 <div className="card" style={{marginTop: '10px'}}>
                   <h4>Resumen {categoria}</h4>
                   <table>
@@ -464,7 +484,7 @@ const FormularioAbastecimiento = () => {
                           <td>{item.unidad}</td>
                           <td>{item.cantidad}</td>
                           <td>
-                            <button onClick={() => eliminarItem(index)}>
+                            <button onClick={() => eliminarItem(index)} className="bg-yellow-500 p-2">
                               <i className="material-icons">delete</i>
                             </button>
                           </td>
@@ -473,19 +493,19 @@ const FormularioAbastecimiento = () => {
                     </tbody>
                   </table>
                 </div>
-                 <div>
+                  <div>
                 </div>
               </div>
             )}
           </div>
         );
       })}
-    {/* Botones para abrir modales resumen, por ejemplo al inicio o al final del formulario */}
+    {/* Botones para abrir modales resumen - SIN CAMBIOS SOLICITADOS */}
     <div style={{ margin: '20px 0', display: 'flex', gap: '10px' }}>
-      <button className="btn-resumen" onClick={handleOpenResumenParcial}>
+      <button className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded" onClick={handleOpenResumenParcial}>
         Ver Resumen Parcial
       </button>
-      <button className="btn-resumen-final" onClick={handleOpenResumenFinal}>
+      <button className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded" onClick={handleOpenResumenFinal}>
         Ver Resumen Final
       </button>
     </div>
