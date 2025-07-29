@@ -1,36 +1,17 @@
-import React, { useContext } from 'react';
-import { contextoAbastecimiento } from '../../context/contextoAbastecimiento';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import useResumenFinal from '../../hooks/abastecimineto/useResumenFinal';
 import '../../styles/resumenFinal.css';
 
 const ResumenFinal = () => {
- const { items, datosFormulario } = useContext(contextoAbastecimiento);
- const navigate = useNavigate();
+  const {
+    items,
+    datosFormulario,
+    agrupados,
+    guardarDatos,
+    descargarResumen
+  } = useResumenFinal();
 
- const agrupados = items.reduce((acc, item) => {
- if (!acc[item.seccion]) acc[item.seccion] = [];
- acc[item.seccion].push(item);
- return acc;
- }, {});
-
- const guardarDatos = () => {
- alert('Datos guardados exitosamente.');
- };
-
- const descargarResumen = () => {
- const texto = items.map(i =>
- `${i.seccion},${i.tipo},${i.unidad},${i.cantidad}`
- ).join('\n');
- const blob = new Blob([texto], { type: 'text/csv' });
- const url = URL.createObjectURL(blob);
- const a = document.createElement('a');
- a.href = url;
- a.download = 'resumen_abastecimiento.csv';
- a.click();
- URL.revokeObjectURL(url);
- };
-
- return (
+  return (
  <div className="resumen-container">
  <section className="seccion">
  <h2>Datos del Formulario</h2>

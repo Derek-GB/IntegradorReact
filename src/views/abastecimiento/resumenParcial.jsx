@@ -1,27 +1,19 @@
-import React, { useContext, useState } from 'react';
-import { contextoAbastecimiento } from '../../context/contextoAbastecimiento';
+import React from 'react';
+import useResumenParcial from '../../hooks/abastecimineto/useResumenParcial';
 import '../../styles/resumenParcial.css';
 
+
 const ResumenParcial = () => {
-  const { items, eliminarItem } = useContext(contextoAbastecimiento);
-  const [modalIndex, setModalIndex] = useState(null);
-  const [editCantidad, setEditCantidad] = useState('');
-
-  const abrirModal = (index) => {
-    setModalIndex(index);
-    setEditCantidad(items[index].cantidad);
-  };
-
-  const cerrarModal = () => {
-    setModalIndex(null);
-    setEditCantidad('');
-  };
-
-  const guardarEdicion = () => {
-    if (editCantidad < 0) return;
-    items[modalIndex].cantidad = editCantidad;
-    cerrarModal();
-  };
+  const {
+    items,
+    eliminarItem,
+    modalIndex,
+    editCantidad,
+    abrirModal,
+    cerrarModal,
+    guardarEdicion,
+    setEditCantidad
+  } = useResumenParcial();
 
   return (
     <div className="content-area">
