@@ -80,19 +80,19 @@ const ResumenFinal = () => {
  </table>
  </section>
 
- {/* Modificaciones aquí para los botones */}
- <div className="botones mt-4 flex justify-center gap-4"> {/* Añadimos 'flex justify-center gap-4' */}
- {/* Botón "Guardar datos" */}
+ {}
+ <div className="botones mt-4 flex justify-center gap-4"> {}
+ {}
  <button
  onClick={guardarDatos}
- className="bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg shadow-md flex-1" // Cambiamos 'w-full mb-2' por 'flex-1'
+ className="bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg shadow-md flex-1"
  >
  Guardar datos
  </button>
- {/* Botón "Descargar Formulario" */}
+ {}
  <button
  onClick={descargarResumen}
- className="bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg shadow-md flex-1" // Cambiamos 'w-full' por 'flex-1'
+ className="bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg shadow-md flex-1" 
  >
  Descargar Formulario
  </button>

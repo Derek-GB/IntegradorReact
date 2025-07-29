@@ -46,25 +46,25 @@ const ResumenParcial = () => {
                   <td>{item.unidad}</td>
                   <td>{item.cantidad}</td>
                   <td>
-                    {/* Botón de editar cuadrado */}
+                    {}
                     <button 
                       onClick={() => abrirModal(index)} 
                       style={{ 
-                        backgroundColor: '#FACC15', // Color amarillo de Tailwind bg-yellow-500
-                        padding: '8px', // Ajusta el padding para que sea cuadrado
+                        backgroundColor: '#FACC15', 
+                        padding: '8px', 
                         border: 'none',
                         cursor: 'pointer',
-                        marginRight: '5px' // Pequeño margen entre botones
+                        marginRight: '5px' 
                       }}
                     >
                       <i className="material-icons">edit</i>
                     </button>
-                    {/* Botón de eliminar cuadrado */}
+                    {}
                     <button 
                       onClick={() => eliminarItem(index)} 
                       style={{ 
-                        backgroundColor: '#FACC15', // Color amarillo de Tailwind bg-yellow-500
-                        padding: '8px', // Ajusta el padding para que sea cuadrado
+                        backgroundColor: '#FACC15', 
+                        padding: '8px', 
                         border: 'none',
                         cursor: 'pointer'
                       }}
