@@ -17,6 +17,10 @@ export const AbastecimientoProvider = ({ children }) => {
     setItems(prev => prev.filter((_, i) => i !== index));
   };
 
+  const editarItem = (index, nuevoItem) => {
+    setItems(prev => prev.map((item, i) => i === index ? nuevoItem : item));
+  };
+
   const limpiarItems = () => {
     setItems([]);
   };
@@ -31,6 +35,7 @@ export const AbastecimientoProvider = ({ children }) => {
       items,
       agregarItem,
       eliminarItem,
+      editarItem, 
       limpiarItems,
       guardarDatosFormulario,
       datosFormulario 

@@ -1,6 +1,5 @@
 import { Modal, Box, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ResumenParcial from "./resumenParcial.jsx";
 import ResumenFinal from "./resumenFinal.jsx";
 import GlobalDataTable from "../../components/globalComponents/GlobalDataTable.jsx";
 import GlobalModal from "../../components/globalComponents/GlobalModal.jsx";
@@ -382,15 +381,6 @@ const FormularioAbastecimiento = () => {
               <div className="flex flex-col sm:flex-row gap-4">
                 <SubmitButton
                   type="button"
-                  onClick={handleOpenResumenParcial}
-                  width="flex-1"
-                  color="text-black"
-                  className="bg-yellow-500 "
-                >
-                  Ver Resumen Parcial
-                </SubmitButton>
-                <SubmitButton
-                  type="button"
                   onClick={handleOpenResumenFinal}
                   width="flex-1"
                   color="text-black"
@@ -401,22 +391,6 @@ const FormularioAbastecimiento = () => {
               </div>
             </div>
         </FormContainer>
-
-        {/* Modal Resumen Parcial */}
-        <GlobalModal
-          open={openResumenParcial}
-          onClose={handleCloseResumenParcial}
-          title="Resumen Parcial del Pedido"
-          maxWidth="md"
-        >
-          <ResumenParcial
-            onVerResumenFinal={() => {
-              handleCloseResumenParcial();
-              handleOpenResumenFinal();
-            }}
-          />
-        </GlobalModal>
-
         {/* Modal Resumen Final */}
         <GlobalModal
           open={openResumenFinal}
