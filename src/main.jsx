@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App.jsx';
 import './index.css'; // Asegúrate de tener tus estilos globales aquí
-import './styles/formularioFusionado.css'; // Asegúrate de tener este archivo con
 import { AbastecimientoProvider } from './context/contextoAbastecimiento.jsx'; // <-- importa tu provider
 
 ReactDOM.createRoot(document.getElementById('root')).render(

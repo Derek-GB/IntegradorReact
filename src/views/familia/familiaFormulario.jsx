@@ -7,7 +7,6 @@ import FamiliaCondicionesEspeciales from "../../components/FamiliaCondicionesEsp
 import FamiliaCaracteristicasPoblacionales from "../../components/FamiliaCaracteristicasPoblacionales.jsx";
 import FamiliaFirmaDigital from "../../components/FamiliaFirmaDigital.jsx";
 import { personasAPI } from "../../helpers/api.js";
-import "../../styles/familiaFormulario.css";
 
 const FamiliaFormulario = () => {
   const [datos, setDatos] = useState({

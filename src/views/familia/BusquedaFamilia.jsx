@@ -48,7 +48,7 @@ const BusquedaFamilia = () => {
     <FormContainer
       title="Buscar Familia"
       onSubmit={handleSubmit}
-      size={familia && familia.length > 0 ? "lg" : "md"}
+      size={familia && familia.length > 0 ? "md" : "xs"}
     >
       <div className="flex flex-col md:flex-row gap-6">
         <div className="flex-1">

@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react';
 import { contextoAbastecimiento } from '../../context/contextoAbastecimiento';
-import '../../styles/resumenParcial.css';
 
 const ResumenParcial = () => {
   const { items, eliminarItem } = useContext(contextoAbastecimiento);

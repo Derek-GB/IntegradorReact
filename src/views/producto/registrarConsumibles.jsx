@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { consumiblesAPI } from "../../helpers/api.js";
+import React from "react";
+import { useRegistroConsumibles } from "../../hooks/Producto/useRegistroConsumibles.js";
 import FormContainer from "../../components/FormComponents/FormContainer.jsx";
 import InputField from "../../components/FormComponents/InputField.jsx";
 import SelectField from "../../components/FormComponents/SelectField.jsx";
 import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
-import CustomToaster, { showCustomToast } from "../../components/globalComponents/CustomToaster.jsx";
+import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
 
 const categorias = [
   { nombre: "Alimentos" },
@@ -21,59 +21,11 @@ const unidades = [
 ];
 
 const RegistroConsumibles = () => {
-  const [form, setForm] = useState({
-    nombre: "",
-    categoriaProducto: "",
-    unidadMedida: "",
-    cantidad: "",
-  });
-
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const camposIncompletos = Object.values(form).some((val) => val === "");
-    if (camposIncompletos) {
-      showCustomToast("Error", "Por favor complete todos los campos.", "error");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const payload = {
-        nombre: form.nombre,
-        unidadMedidaNombre: form.unidadMedida,
-        categoriaNombre: form.categoriaProducto,
-        cantidad: parseInt(form.cantidad),
-      };
-
-      await consumiblesAPI.create(payload);
-      showCustomToast("Éxito", "Consumible registrado correctamente.", "success");
-      setForm({
-        nombre: "",
-        categoriaProducto: "",
-        unidadMedida: "",
-        cantidad: "",
-      });
-    } catch (err) {
-      showCustomToast("Error", "Error al registrar consumible.", "error");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { form, loading, handleChange, handleSubmit } = useRegistroConsumibles();
 
   return (
     <>
-      <FormContainer
-        title="Registro de Consumibles"
-        onSubmit={handleSubmit}
-        size="md"
-      >
+      <FormContainer title="Registro de Consumibles" onSubmit={handleSubmit} size="md">
         <fieldset className="w-full">
           <div className="flex flex-col md:flex-row gap-6">
             <div className="flex-1">
@@ -87,7 +39,6 @@ const RegistroConsumibles = () => {
               />
             </div>
             <div className="flex-1">
-          
               <InputField
                 label="Cantidad"
                 name="cantidad"
@@ -114,7 +65,7 @@ const RegistroConsumibles = () => {
               />
             </div>
             <div className="flex-1">
-            <SelectField
+              <SelectField
                 label="Categoría del Producto"
                 name="categoriaProducto"
                 value={form.categoriaProducto}
@@ -128,7 +79,7 @@ const RegistroConsumibles = () => {
           </div>
         </fieldset>
         <div className="flex justify-center mt-8">
-          <SubmitButton width="w-full" loading={loading}>
+          <SubmitButton width="w-full" loading={loading} color="text-black">
             Registrar
           </SubmitButton>
         </div>
