@@ -1,85 +1,91 @@
-import React from 'react';
-import useResumenFinal from '../../hooks/abastecimineto/useResumenFinal';
-import '../../styles/resumenFinal.css';
+import React from "react";
+import SaveIcon from "@mui/icons-material/Save";
+import DownloadIcon from "@mui/icons-material/Download";
+import GlobalDataTable from "../../components/globalComponents/GlobalDataTable.jsx";
+import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
+import useResumenFinal from "../../hooks/abastecimineto/useResumenFinal.js";
 
 const ResumenFinal = () => {
   const {
     items,
-    datosFormulario,
-    agrupados,
     guardarDatos,
-    descargarResumen
+    descargarResumen,
+    datosFormularioColumns,
+    productosColumns,
+    datosFormularioData,
   } = useResumenFinal();
 
   return (
- <div className="resumen-container">
- <section className="seccion">
- <h2>Datos del Formulario</h2>
- <table className="tabla">
- <thead>
- <tr>
- <th>Fecha</th>
- <th>Tipo de Comida</th>
- <th>Cantidad de Personas</th>
- <th>Nombre del Albergue</th>
- </tr>
- </thead>
- <tbody>
- <tr>
- <td>{datosFormulario?.fecha || '-'}</td>
- <td>{datosFormulario?.tipo || '-'}</td>
- <td>{datosFormulario?.cantidad || '-'}</td>
- <td>{datosFormulario?.albergue || '-'}</td>
- </tr>
- </tbody>
- </table>
- </section>
+    <div className="space-y-6">
+      {/* Sección Datos del Formulario */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+          <h2 className="text-xl font-semibold text-gray-800">
+            Datos del Formulario
+          </h2>
+        </div>
+        <div className="p-4">
+          <GlobalDataTable
+            columns={datosFormularioColumns}
+            data={datosFormularioData}
+            pagination={false}
+            noDataComponent={
+              <div className="px-6 py-4 text-center text-sm text-gray-500">
+                No hay datos del formulario disponibles
+              </div>
+            }
+          />
+        </div>
+      </div>
 
- <section className="seccion">
- <h2>Productos Registrados</h2>
- <table className="tabla">
- <thead>
- <tr>
- <th>Categoría</th>
- <th>Producto</th>
- <th>Unidad</th>
- <th>Cantidad</th>
- </tr>
- </thead>
- <tbody>
- {Object.entries(agrupados).map(([categoria, productos]) =>
- productos.map((item, index) => (
- <tr key={`${categoria}-${index}`}>
- <td>{categoria}</td>
- <td>{item.tipo}</td>
- <td>{item.unidad}</td>
- <td>{item.cantidad}</td>
- </tr>
- ))
- )}
- </tbody>
- </table>
- </section>
+      {/* Sección Productos Registrados */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+          <h2 className="text-xl font-semibold text-gray-800">
+            Productos Registrados
+          </h2>
+        </div>
+        <div className="p-4">
+          <GlobalDataTable
+            columns={productosColumns}
+            data={items}
+            pagination={true}
+            paginationPerPage={10}
+            noDataComponent={
+              <div className="px-6 py-4 text-center text-sm text-gray-500">
+                No hay productos registrados
+              </div>
+            }
+          />
+        </div>
+      </div>
 
- {}
- <div className="botones mt-4 flex justify-center gap-4"> {}
- {}
- <button
- onClick={guardarDatos}
- className="bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg shadow-md flex-1"
- >
- Guardar datos
- </button>
- {}
- <button
- onClick={descargarResumen}
- className="bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg shadow-md flex-1" 
- >
- Descargar Formulario
- </button>
- </div>
- </div>
- );
+      {/* Botones de acción */}
+      <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+        <SubmitButton
+          type="button"
+          onClick={guardarDatos}
+          width="flex-1 sm:max-w-xs"
+          className="bg-yellow-500"
+        >
+          <div className="flex items-center justify-center gap-2">
+            <SaveIcon sx={{ fontSize: 20 }} />
+          </div>
+        </SubmitButton>
+
+        <SubmitButton
+          type="button"
+          onClick={descargarResumen}
+          width="flex-1 sm:max-w-xs"
+          className="bg-yellow-500"
+        >
+          <div className="flex items-center justify-center gap-2">
+            <DownloadIcon sx={{ fontSize: 20 }} />
+          </div>
+        </SubmitButton>
+      </div>
+    </div>
+  );
 };
 
 export default ResumenFinal;

@@ -6,9 +6,9 @@ import CloseIcon from '@mui/icons-material/Close';
 
 const toastStyles = {
   success: {
-    border: '#13bd62',
-    borderTw: 'border-[#13bd62]',
-    icon: <CheckCircleIcon style={{ color: '#13bd62', fontSize: 24, marginRight: 10 }} />,
+    border: '#00897B',
+    borderTw: 'border-[#00897B]',
+    icon: <CheckCircleIcon style={{ color: '#00897B', fontSize: 24, marginRight: 10 }} />,
   },
   error: {
     border: '#e53935',
@@ -33,7 +33,7 @@ export function showCustomToast(
       <div
         className={`
           min-w-[220px] max-w-[320px] bg-white text-[#304328] rounded-xl shadow-lg
-          px-4 py-3 pr-2 font-sans flex flex-row items-center gap-2.5 relative
+          px-5 py-4 pr-3 font-sans flex flex-row items-center gap-2.5 relative
           border ${borderTw} border-l-4
           transition-all duration-300
           ${t.visible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-3'}
@@ -126,9 +126,9 @@ export default function CustomToaster() {
       gutter={10}
       toastOptions={{
         style: {
-          background: 'transparent',
-          boxShadow: 'none',
-          padding: 0,
+          background: '#fff',
+          boxShadow: '0 4px 14px rgba(0,0,0,0.1)',
+          padding: '8px 12px',
         },
       }}
     >

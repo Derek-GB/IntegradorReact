@@ -1,19 +1,28 @@
-import React from 'react';
-import useResumenParcial from '../../hooks/abastecimineto/useResumenParcial';
-import '../../styles/resumenParcial.css';
-
+import { useContext, useState } from 'react';
+import SaveIcon from '@mui/icons-material/Save';
+import CloseIcon from '@mui/icons-material/Close';
+import { contextoAbastecimiento } from '../../context/contextoAbastecimiento';
 
 const ResumenParcial = () => {
-  const {
-    items,
-    eliminarItem,
-    modalIndex,
-    editCantidad,
-    abrirModal,
-    cerrarModal,
-    guardarEdicion,
-    setEditCantidad
-  } = useResumenParcial();
+  const { items, eliminarItem } = useContext(contextoAbastecimiento);
+  const [modalIndex, setModalIndex] = useState(null);
+  const [editCantidad, setEditCantidad] = useState('');
+
+  const abrirModal = (index) => {
+    setModalIndex(index);
+    setEditCantidad(items[index].cantidad);
+  };
+
+  const cerrarModal = () => {
+    setModalIndex(null);
+    setEditCantidad('');
+  };
+
+  const guardarEdicion = () => {
+    if (editCantidad < 0) return;
+    items[modalIndex].cantidad = editCantidad;
+    cerrarModal();
+  };
 
   return (
     <div className="content-area">
@@ -38,25 +47,25 @@ const ResumenParcial = () => {
                   <td>{item.unidad}</td>
                   <td>{item.cantidad}</td>
                   <td>
-                    {}
+                    {/* Botón de editar cuadrado */}
                     <button 
                       onClick={() => abrirModal(index)} 
                       style={{ 
-                        backgroundColor: '#FACC15', 
-                        padding: '8px', 
+                        backgroundColor: '#FACC15', // Color amarillo de Tailwind bg-yellow-500
+                        padding: '8px', // Ajusta el padding para que sea cuadrado
                         border: 'none',
                         cursor: 'pointer',
-                        marginRight: '5px' 
+                        marginRight: '5px' // Pequeño margen entre botones
                       }}
                     >
                       <i className="material-icons">edit</i>
                     </button>
-                    {}
+                    {/* Botón de eliminar cuadrado */}
                     <button 
                       onClick={() => eliminarItem(index)} 
                       style={{ 
-                        backgroundColor: '#FACC15', 
-                        padding: '8px', 
+                        backgroundColor: '#FACC15', // Color amarillo de Tailwind bg-yellow-500
+                        padding: '8px', // Ajusta el padding para que sea cuadrado
                         border: 'none',
                         cursor: 'pointer'
                       }}
@@ -86,8 +95,20 @@ const ResumenParcial = () => {
                 onChange={(e) => setEditCantidad(e.target.value)}
               />
               <div className="modal-botones">
-                <button onClick={guardarEdicion}>Guardar cambios</button>
-                <button onClick={cerrarModal}>Cancelar</button>
+                <button 
+                  onClick={guardarEdicion}
+                  className="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white p-2 rounded-lg mr-2"
+                  title="Guardar cambios"
+                >
+                  <SaveIcon sx={{ fontSize: 20 }} />
+                </button>
+                <button 
+                  onClick={cerrarModal}
+                  className="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg"
+                  title="Cancelar"
+                >
+                  <CloseIcon sx={{ fontSize: 20 }} />
+                </button>
               </div>
             </div>
           </div>

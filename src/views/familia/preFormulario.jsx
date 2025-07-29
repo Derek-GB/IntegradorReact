@@ -140,7 +140,7 @@ const FormularioRegistro = () => {
   };
 
   return (
-    <FormContainer title="Registro de Familia en Albergue" onSubmit={crearFamilia} size="lg">
+    <FormContainer title="Registro de Familia en Albergue" onSubmit={crearFamilia} size="xl">
       <div className="space-y-8">
         {/* Familia */}
         <div className="flex flex-col gap-6">
