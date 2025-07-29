@@ -28,14 +28,14 @@ import ListaAlbergue from './views/albergue/listaAlbergue.jsx';
 import RegistroAlbergue from './views/albergue/registroAlbergue.jsx';
 
 //abastecimiento
-import MenuPrincipal from './views/abastecimiento/abarrotesMenuPrincipal.jsx';
-import ResumenFinal from './views/abastecimiento/resumenFinal.jsx';
-
+import MenuPrincipal from './views/abastecimiento/abarrotesMenuPrincipal';
+import ResumenFinal from './views/abastecimiento/resumenFinal';
+import FormularioAbastecimiento from './views/abastecimiento/formularioAbarrotes';
 
 //Solos
 import AjusteInventario from "./views/ajusteInventario.jsx";
 import AyudaForm from './views/ayudaForm.jsx';
-import FormularioAbastecimiento from './components/formularioAbarrotes.jsx';
+
 import Inicio from './views/inicio.jsx';
 import RegistroAmenazas from './views/registroAmenazas.jsx';
 import RegistroMascotas from "./views/registroMascota.jsx";

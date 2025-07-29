@@ -1,8 +1,7 @@
-import React from 'react';
 import { Modal, Box, Button } from '@mui/material';
-import ResumenParcial from '../views/abastecimiento/resumenParcial';
-import ResumenFinal from '../views/abastecimiento/resumenFinal';
-import { useFormularioAbarrotes } from '../hooks/abastecimineto/useFormularioAbarrotes.js';
+import ResumenParcial from './resumenParcial.jsx';
+import ResumenFinal from './resumenFinal.jsx';
+import { useFormularioAbarrotes } from '../../hooks/abastecimineto/useFormularioAbarrotes.js';
 
 const FormularioAbastecimiento = () => {
   const {
