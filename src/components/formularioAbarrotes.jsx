@@ -500,7 +500,7 @@ const FormularioAbastecimiento = () => {
           </div>
         );
       })}
-    {/* Botones para abrir modales resumen - SIN CAMBIOS SOLICITADOS */}
+    {/* Botones para abrir modales resumen*/}
     <div style={{ margin: '20px 0', display: 'flex', gap: '10px' }}>
       <button className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded" onClick={handleOpenResumenParcial}>
         Ver Resumen Parcial
