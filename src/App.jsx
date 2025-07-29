@@ -28,7 +28,7 @@ import ListaAlbergue from './views/albergue/listaAlbergue.jsx';
 import RegistroAlbergue from './views/albergue/registroAlbergue.jsx';
 
 //abastecimiento
-import MenuPrincipal from './views/abastecimiento/menuPrincipal.jsx';
+import MenuPrincipal from './views/abastecimiento/abarrotesMenuPrincipal.jsx';
 import ResumenFinal from './views/abastecimiento/resumenFinal.jsx';
 
 
@@ -77,7 +77,7 @@ const App = () => {
                 <Route path="/registroUsuario.jsx" element={<RegistroUsuario />} />
                 <Route path="/listaProducto.jsx" element={<ListaProducto />} />
                 <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
-                <Route path="/menuPrincipal" element={<MenuPrincipal />} />
+                <Route path="/abarrotesMenuPrincipal" element={<MenuPrincipal />} />
                 <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
                 <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
                 <Route path="/familiaFormulario.jsx" element={<FamiliaFormulario />} />
