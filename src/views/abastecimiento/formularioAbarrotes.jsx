@@ -1,11 +1,16 @@
-import { Modal, Box, Button } from '@mui/material';
-import ResumenParcial from './resumenParcial.jsx';
-import ResumenFinal from './resumenFinal.jsx';
-import { useFormularioAbarrotes } from '../../hooks/abastecimineto/useFormularioAbarrotes.js';
+import { Modal, Box, Button } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ResumenParcial from "./resumenParcial.jsx";
+import ResumenFinal from "./resumenFinal.jsx";
+import GlobalDataTable from "../../components/globalComponents/GlobalDataTable.jsx";
+import GlobalModal from "../../components/globalComponents/GlobalModal.jsx";
+import FormContainer from "../../components/FormComponents/FormContainer.jsx";
+import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
+import SelectField from "../../components/FormComponents/SelectField.jsx";
+import { useFormularioAbarrotes } from "../../hooks/abastecimineto/useFormularioAbarrotes.js";
 
 const FormularioAbastecimiento = () => {
   const {
-    // Estados
     openResumenParcial,
     openResumenFinal,
     tipoCarne,
@@ -14,26 +19,18 @@ const FormularioAbastecimiento = () => {
     seccionAbierta,
     personas,
     modalStyle,
-    
-    // Datos
     carnesProductos,
     proteinasProductos,
     verdurasProductos,
     categorias,
     items,
-    
-    // Manejadores de estado
     setTipoCarne,
     setTipoProteina,
     setTipoVerdura,
-    
-    // Manejadores de modales
     handleOpenResumenParcial,
     handleCloseResumenParcial,
     handleOpenResumenFinal,
     handleCloseResumenFinal,
-    
-    // Manejadores de funcionalidad
     toggleSeccion,
     handleAgregarCarne,
     handleAgregarProteina,
@@ -42,266 +39,393 @@ const FormularioAbastecimiento = () => {
     eliminarItem,
   } = useFormularioAbarrotes();
 
-  return (
-    <div>
-      {/* Sección Carnes */}
-      <div style={{border: '1px solid #ccc', marginBottom: '10px'}}>
-        <div
-          onClick={() => toggleSeccion('Carnes')}
-          className="cursor-pointer font-bold py-2 px-4 select-none bg-teal-700 text-white border-b-2 border-teal-800"
-        >
-          Carnes {seccionAbierta === 'Carnes' ? '▲' : '▼'}
-        </div>
-        {seccionAbierta === 'Carnes' && (
-          <div style={{padding: '10px'}}>
-            <p>* Se calculan automáticamente 120 gramos por persona. *</p>
-            <label className='labelAbarrote' htmlFor="tipoCarne">Tipo de carne:</label>
-            <select
-              className='selectAbarrote'
-              id="tipoCarne"
-              value={tipoCarne}
-              onChange={e => setTipoCarne(e.target.value)}
-            >
-              <option value="">Seleccione</option>
-              {carnesProductos.map(p => (
-                <option key={p.nombre} value={p.nombre}>{p.nombre}</option>
-              ))}
-            </select>
-            <button
-              type="button"
-              onClick={handleAgregarCarne}
-              className="mt-4 w-full bg-yellow-500 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-75"
-            >
-              Agregar
-            </button>
-            <div className="card" style={{marginTop: '10px'}}>
-              <h4>Resumen Carnes</h4>
-              <table>
-                <thead>
-                  <tr><th>Tipo</th><th>Unidad</th><th>Cantidad</th><th>Acción</th></tr>
-                </thead>
-                <tbody>
-                  {items.filter(i => i.seccion === 'Carnes').map((item, idx) => (
-                    <tr key={idx}>
-                      <td>{item.tipo}</td>
-                      <td>{item.unidad}</td>
-                      <td>{item.cantidad}</td>
-                      <td>
-                        <button onClick={() => eliminarItem(idx)} className="bg-yellow-500 p-2">
-                          <i className="material-icons">delete</i>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Sección Proteínas */}
-      <div style={{border: '1px solid #ccc', marginBottom: '10px'}}>
-        <div
-          onClick={() => toggleSeccion('Proteínas')}
-          className="cursor-pointer font-bold py-2 px-4 select-none bg-teal-700 text-white border-b-2 border-teal-800"
-        >
-          Proteínas {seccionAbierta === 'Proteínas' ? '▲' : '▼'}
-        </div>
-        {seccionAbierta === 'Proteínas' && (
-          <div style={{padding: '10px'}}>
-            <label className='labelAbarrote' htmlFor="tipoProteina">Proteína:</label>
-            <select
-              className='selectAbarrote'
-              id="tipoProteina"
-              value={tipoProteina}
-              onChange={e => setTipoProteina(e.target.value)}
-            >
-              <option value="">Seleccione</option>
-              <option value="Huevos">Huevos</option>
-              <option value="Mortadela">Mortadela</option>
-              <option value="Salchichón">Salchichón</option>
-            </select>
-            <button
-              type="button"
-              onClick={handleAgregarProteina}
-              className="mt-4 w-full bg-yellow-500 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-75"
-            >
-              Agregar
-            </button>
-            <div className="card" style={{marginTop: '10px'}}>
-              <h4>Resumen Proteínas</h4>
-              <table>
-                <thead>
-                  <tr><th>Producto</th><th>Unidad</th><th>Cantidad</th><th>Acción</th></tr>
-                </thead>
-                <tbody>
-                  {items.filter(i => i.seccion === 'Proteínas').map((item, idx) => (
-                    <tr key={idx}>
-                      <td>{item.tipo}</td>
-                      <td>{item.unidad}</td>
-                      <td>{item.cantidad}</td>
-                      <td>
-                        <button onClick={() => eliminarItem(idx)} className="bg-yellow-500 p-2">
-                          <i className="material-icons">delete</i>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Sección Verduras */}
-      <div style={{border: '1px solid #ccc', marginBottom: '10px'}}>
-        <div
-          onClick={() => toggleSeccion('Verduras')}
-          className="cursor-pointer font-bold py-2 px-4 select-none bg-teal-700 text-white border-b-2 border-teal-800"
-        >
-          Verduras {seccionAbierta === 'Verduras' ? '▲' : '▼'}
-        </div>
-        {seccionAbierta === 'Verduras' && (
-          <div style={{padding: '10px'}}>
-            <label className='labelAbarrote' htmlFor="tipoVerdura">Verdura:</label>
-            <select
-              className='selectAbarrote'
-              id="tipoVerdura"
-              value={tipoVerdura}
-              onChange={e => setTipoVerdura(e.target.value)}
-            >
-              <option value="">Seleccione</option>
-              {verdurasProductos.map(p => (
-                <option key={p.nombre} value={p.nombre}>{p.nombre}</option>
-              ))}
-            </select>
-            <button
-              type="button"
-              onClick={handleAgregarVerdura}
-              className="mt-4 w-full bg-yellow-500 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-opacity-75"
-            >
-              Agregar
-            </button>
-            <div className="card" style={{marginTop: '10px'}}>
-              <h4>Resumen Verduras</h4>
-              <table>
-                <thead>
-                  <tr><th>Producto</th><th>Unidad</th><th>Cantidad</th><th>Acción</th></tr>
-                </thead>
-                <tbody>
-                  {items.filter(i => i.seccion === 'Verduras').map((item, idx) => (
-                    <tr key={idx}>
-                      <td>{item.tipo}</td>
-                      <td>{item.unidad}</td>
-                      <td>{item.cantidad}</td>
-                      <td>
-                        <button onClick={() => eliminarItem(idx)} className="bg-yellow-500 p-2">
-                          <i className="material-icons">delete</i>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Otras Categorías con checkboxes */}
-      {Object.entries(categorias).map(([categoria, productos]) => {
-        if (['Carnes', 'Proteínas', 'Verduras'].includes(categoria)) return null;
+  const createColumns = (tipoColumna = "default") => [
+    {
+      name: tipoColumna === "carnes" ? "Tipo" : "Producto",
+      selector: (row) => row.tipo,
+      sortable: true,
+      cell: (row) => (
+        <span className="font-medium text-gray-900">{row.tipo}</span>
+      ),
+    },
+    {
+      name: "Unidad",
+      selector: (row) => row.unidad,
+      sortable: true,
+      cell: (row) => <span className="text-gray-600">{row.unidad}</span>,
+    },
+    {
+      name: "Cantidad",
+      selector: (row) => row.cantidad,
+      sortable: true,
+      cell: (row) => (
+        <span className="font-semibold text-gray-900">{row.cantidad}</span>
+      ),
+    },
+    {
+      name: "Acción",
+      cell: (row) => {
+        const realIndex = items.findIndex(
+          (item) =>
+            item.tipo === row.tipo &&
+            item.unidad === row.unidad &&
+            item.cantidad === row.cantidad
+        );
         return (
-          <div key={categoria} style={{border: '1px solid #ccc', marginBottom: '10px'}}>
-            <div
-              onClick={() => toggleSeccion(categoria)}
-              className="cursor-pointer font-bold py-2 px-4 select-none bg-teal-700 text-white border-b-2 border-teal-800"
-            >
-              {categoria} {seccionAbierta === categoria ? '▲' : '▼'}
-            </div>
-            {seccionAbierta === categoria && (
-              <div style={{padding: '10px'}}>
-                <div className="cuadro-grid">
-                  {productos.map((producto) => {
-                    const yaAgregado = items.some(i => i.seccion === categoria && i.tipo === producto.nombre);
-                    if (yaAgregado) return null;
-                    return (
-                      <div key={producto.nombre} className="producto">
-                        <label className="labelAbarrote">
-                          <input
-                            type="checkbox"
-                            onChange={() => handleAgregarProducto(categoria, producto)}
-                          />
-                          {producto.nombre}
-                        </label>
-                      </div>
-                    );
-                  })}
-                </div>
-              
-                <div className="card" style={{marginTop: '10px'}}>
-                  <h4>Resumen {categoria}</h4>
-                  <table>
-                    <thead>
-                      <tr><th>Producto</th><th>Unidad</th><th>Cantidad</th><th>Acción</th></tr>
-                    </thead>
-                    <tbody>
-                      {items.filter(i => i.seccion === categoria).map((item, index) => (
-                        <tr key={`${item.tipo}-${index}`}>
-                          <td>{item.tipo}</td>
-                          <td>{item.unidad}</td>
-                          <td>{item.cantidad}</td>
-                          <td>
-                            <button onClick={() => eliminarItem(index)} className="bg-yellow-500 p-2">
-                              <i className="material-icons">delete</i>
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                  <div>
+          <button
+            onClick={() => eliminarItem(realIndex)}
+            className="text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 p-2 rounded-full transition-colors duration-200 flex items-center justify-center"
+            title="Eliminar item"
+          >
+            <DeleteIcon sx={{ fontSize: 18, color: "#dc2626" }} />
+          </button>
+        );
+      },
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    },
+  ];
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="max-w-4xl mx-auto">
+        <FormContainer 
+          title="Formulario de Abastecimiento" 
+          onSubmit={(e) => e.preventDefault()}
+        >
+          <p className="text-gray-600 mb-6 text-center">
+            Seleccione los productos necesarios para {personas} personas
+          </p>
+            {/* Sección Carnes */}
+            <div className="bg-white rounded-lg shadow-md mb-4 overflow-hidden">
+              <div
+                onClick={() => toggleSeccion("Carnes")}
+                className="cursor-pointer font-bold py-3 px-6 select-none bg-teal-700 text-white hover:bg-teal-800 transition-colors duration-200"
+              >
+                <div className="flex justify-between items-center">
+                  <span>Carnes</span>
+                  <span className="text-xl">
+                    {seccionAbierta === "Carnes" ? "▲" : "▼"}
+                  </span>
                 </div>
               </div>
-            )}
-          </div>
-        );
-      })}
-    {/* Botones para abrir modales resumen*/}
-    <div style={{ margin: '20px 0', display: 'flex', gap: '10px' }}>
-      <button className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded" onClick={handleOpenResumenParcial}>
-        Ver Resumen Parcial
-      </button>
-      <button className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded" onClick={handleOpenResumenFinal}>
-        Ver Resumen Final
-      </button>
+              {seccionAbierta === "Carnes" && (
+                <div className="p-6 bg-gray-50">
+                  <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-4">
+                    <p className="text-blue-700 text-sm font-medium">
+                      Se calculan automáticamente 120 gramos por persona
+                    </p>
+                  </div>
+                  <div className="space-y-4">
+                    <SelectField
+                      label="Tipo de carne"
+                      name="tipoCarne"
+                      value={tipoCarne}
+                      onChange={(e) => setTipoCarne(e.target.value)}
+                      options={carnesProductos}
+                      optionLabel="nombre"
+                      optionValue="nombre"
+                    />
+                    <SubmitButton
+                      type="button"
+                      onClick={handleAgregarCarne}
+                      width="w-full"
+                      className="bg-yellow-500 "
+                    >
+                      Agregar Carne
+                    </SubmitButton>
+                  </div>
+
+                  {items.filter((i) => i.seccion === "Carnes").length > 0 && (
+                    <div className="mt-6">
+                      <div className="mb-4">
+                        <h4 className="text-lg font-semibold text-gray-800">
+                          Resumen Carnes
+                        </h4>
+                      </div>
+                      <GlobalDataTable
+                        columns={createColumns("carnes")}
+                        data={items.filter((i) => i.seccion === "Carnes")}
+                        pagination={false}
+                        noDataComponent={
+                          <div className="px-6 py-4 text-center text-sm text-gray-500">
+                            No hay carnes seleccionadas
+                          </div>
+                        }
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Sección Proteínas */}
+            <div className="bg-white rounded-lg shadow-md mb-4 overflow-hidden">
+              <div
+                onClick={() => toggleSeccion("Proteínas")}
+                className="cursor-pointer font-bold py-3 px-6 select-none bg-teal-700 text-white hover:bg-teal-800 transition-colors duration-200"
+              >
+                <div className="flex justify-between items-center">
+                  <span>Proteínas</span>
+                  <span className="text-xl">
+                    {seccionAbierta === "Proteínas" ? "▲" : "▼"}
+                  </span>
+                </div>
+              </div>
+              {seccionAbierta === "Proteínas" && (
+                <div className="p-6 bg-gray-50">
+                  <div className="space-y-4">
+                    <SelectField
+                      label="Seleccione una proteína"
+                      name="tipoProteina"
+                      value={tipoProteina}
+                      onChange={(e) => setTipoProteina(e.target.value)}
+                      options={[
+                        { nombre: "Huevos" },
+                        { nombre: "Mortadela" },
+                        { nombre: "Salchichón" },
+                      ]}
+                      optionLabel="nombre"
+                      optionValue="nombre"
+                    />
+                    <SubmitButton
+                      type="button"
+                      onClick={handleAgregarProteina}
+                      width="w-full"
+                      className="bg-yellow-500 "
+                    >
+                      Agregar Proteína
+                    </SubmitButton>
+                  </div>
+
+                  {items.filter((i) => i.seccion === "Proteínas").length >
+                    0 && (
+                    <div className="mt-6">
+                      <div className="mb-4">
+                        <h4 className="text-lg font-semibold text-gray-800">
+                          Resumen Proteínas
+                        </h4>
+                      </div>
+                      <GlobalDataTable
+                        columns={createColumns("proteinas")}
+                        data={items.filter((i) => i.seccion === "Proteínas")}
+                        pagination={false}
+                        noDataComponent={
+                          <div className="px-6 py-4 text-center text-sm text-gray-500">
+                            No hay proteínas seleccionadas
+                          </div>
+                        }
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Sección Verduras */}
+            <div className="bg-white rounded-lg shadow-md mb-4 overflow-hidden">
+              <div
+                onClick={() => toggleSeccion("Verduras")}
+                className="cursor-pointer font-bold py-3 px-6 select-none bg-teal-700 text-white hover:bg-teal-800 transition-colors duration-200"
+              >
+                <div className="flex justify-between items-center">
+                  <span>Verduras</span>
+                  <span className="text-xl">
+                    {seccionAbierta === "Verduras" ? "▲" : "▼"}
+                  </span>
+                </div>
+              </div>
+              {seccionAbierta === "Verduras" && (
+                <div className="p-6 bg-gray-50">
+                  <div className="bg-green-50 border-l-4 border-green-400 p-4 mb-4">
+                    <p className="text-green-700 text-sm font-medium">
+                      Máximo 2 tipos de verdura - 120g por persona cada una
+                    </p>
+                  </div>
+                  <div className="space-y-4">
+                    <SelectField
+                      label="Seleccione una verdura"
+                      name="tipoVerdura"
+                      value={tipoVerdura}
+                      onChange={(e) => setTipoVerdura(e.target.value)}
+                      options={verdurasProductos}
+                      optionLabel="nombre"
+                      optionValue="nombre"
+                    />
+                    <SubmitButton
+                      type="button"
+                      onClick={handleAgregarVerdura}
+                      width="w-full"
+                      className="bg-yellow-500 "
+                    >
+                      Agregar Verdura
+                    </SubmitButton>
+                  </div>
+
+                  {items.filter((i) => i.seccion === "Verduras").length > 0 && (
+                    <div className="mt-6">
+                      <div className="mb-4">
+                        <h4 className="text-lg font-semibold text-gray-800">
+                          Resumen Verduras
+                        </h4>
+                      </div>
+                      <GlobalDataTable
+                        columns={createColumns("verduras")}
+                        data={items.filter((i) => i.seccion === "Verduras")}
+                        pagination={false}
+                        noDataComponent={
+                          <div className="px-6 py-4 text-center text-sm text-gray-500">
+                            No hay verduras seleccionadas
+                          </div>
+                        }
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Otras Categorías con checkboxes */}
+            {Object.entries(categorias).map(([categoria, productos]) => {
+              if (["Carnes", "Proteínas", "Verduras"].includes(categoria))
+                return null;
+
+              return (
+                <div
+                  key={categoria}
+                  className="bg-white rounded-lg shadow-md mb-4 overflow-hidden"
+                >
+                  <div
+                    onClick={() => toggleSeccion(categoria)}
+                    className="cursor-pointer font-bold py-3 px-6 select-none bg-teal-700 text-white hover:bg-teal-800 transition-colors duration-200"
+                  >
+                    <div className="flex justify-between items-center">
+                      <span>{categoria}</span>
+                      <span className="text-xl">
+                        {seccionAbierta === categoria ? "▲" : "▼"}
+                      </span>
+                    </div>
+                  </div>
+                  {seccionAbierta === categoria && (
+                    <div className="p-6 bg-gray-50">
+                      <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                        <p className="text-yellow-700 text-sm font-medium">
+                          Seleccione los productos necesarios marcando las
+                          casillas
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+                        {productos.map((producto) => {
+                          const yaAgregado = items.some(
+                            (i) =>
+                              i.seccion === categoria &&
+                              i.tipo === producto.nombre
+                          );
+                          if (yaAgregado) return null;
+                          return (
+                            <div
+                              key={producto.nombre}
+                              className="bg-white border border-gray-200 rounded-lg p-3 hover:border-teal-300 hover:shadow-sm transition-all duration-200"
+                            >
+                              <label className="flex items-center space-x-3 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  onChange={() =>
+                                    handleAgregarProducto(categoria, producto)
+                                  }
+                                  className="w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 rounded focus:ring-teal-500 focus:ring-2"
+                                />
+                                <span className="text-sm font-medium text-gray-700 select-none">
+                                  {producto.nombre}
+                                </span>
+                              </label>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {items.filter((i) => i.seccion === categoria).length >
+                        0 && (
+                        <div className="mt-6">
+                          <div className="mb-4">
+                            <h4 className="text-lg font-semibold text-gray-800">
+                              Resumen {categoria}
+                            </h4>
+                          </div>
+                          <GlobalDataTable
+                            columns={createColumns("otros")}
+                            data={items.filter((i) => i.seccion === categoria)}
+                            pagination={false}
+                            noDataComponent={
+                              <div className="px-6 py-4 text-center text-sm text-gray-500">
+                                No hay productos de {categoria.toLowerCase()}{" "}
+                                seleccionados
+                              </div>
+                            }
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+            {/* Botones para abrir modales resumen*/}
+            <div className="bg-white rounded-lg shadow-md p-6 mt-6">
+              <div className="border-b border-gray-200 pb-4 mb-6">
+                <h3 className="text-lg font-semibold text-gray-800">
+                  Resúmenes del Pedido
+                </h3>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <SubmitButton
+                  type="button"
+                  onClick={handleOpenResumenParcial}
+                  width="flex-1"
+                  className="bg-yellow-500 "
+                >
+                  Ver Resumen Parcial
+                </SubmitButton>
+                <SubmitButton
+                  type="button"
+                  onClick={handleOpenResumenFinal}
+                  width="flex-1"
+                  className="bg-yellow-500"
+                >
+                  Ver Resumen Final
+                </SubmitButton>
+              </div>
+            </div>
+        </FormContainer>
+
+        {/* Modal Resumen Parcial */}
+        <GlobalModal
+          open={openResumenParcial}
+          onClose={handleCloseResumenParcial}
+          title="Resumen Parcial del Pedido"
+          maxWidth="md"
+        >
+          <ResumenParcial
+            onVerResumenFinal={() => {
+              handleCloseResumenParcial();
+              handleOpenResumenFinal();
+            }}
+          />
+        </GlobalModal>
+
+        {/* Modal Resumen Final */}
+        <GlobalModal
+          open={openResumenFinal}
+          onClose={handleCloseResumenFinal}
+          title="Resumen Final del Pedido"
+          maxWidth="md"
+        >
+          <ResumenFinal />
+        </GlobalModal>
+      </div>
     </div>
-    {/* Modal Resumen Parcial */}
-    <Modal open={openResumenParcial} onClose={handleCloseResumenParcial}>
-      <Box sx={modalStyle}>
-        {/* Pasamos función para abrir resumen final desde resumen parcial, si quieres */}
-        <ResumenParcial onVerResumenFinal={() => {
-          handleCloseResumenParcial();
-          handleOpenResumenFinal();
-        }} />
-        <Button onClick={handleCloseResumenParcial} variant="contained" sx={{ mt: 2 }}>
-          Cerrar
-        </Button>
-      </Box>
-    </Modal>
-    {/* Modal Resumen Final */}
-    <Modal open={openResumenFinal} onClose={handleCloseResumenFinal}>
-      <Box sx={modalStyle}>
-        <ResumenFinal />
-        <Button onClick={handleCloseResumenFinal} variant="contained" sx={{ mt: 2 }}>
-          Cerrar
-        </Button>
-      </Box>
-    </Modal>
-  </div>
   );
 };
 export default FormularioAbastecimiento;

@@ -1,4 +1,6 @@
 import { useContext, useState } from 'react';
+import SaveIcon from '@mui/icons-material/Save';
+import CloseIcon from '@mui/icons-material/Close';
 import { contextoAbastecimiento } from '../../context/contextoAbastecimiento';
 
 const ResumenParcial = () => {
@@ -93,8 +95,20 @@ const ResumenParcial = () => {
                 onChange={(e) => setEditCantidad(e.target.value)}
               />
               <div className="modal-botones">
-                <button onClick={guardarEdicion}>Guardar cambios</button>
-                <button onClick={cerrarModal}>Cancelar</button>
+                <button 
+                  onClick={guardarEdicion}
+                  className="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white p-2 rounded-lg mr-2"
+                  title="Guardar cambios"
+                >
+                  <SaveIcon sx={{ fontSize: 20 }} />
+                </button>
+                <button 
+                  onClick={cerrarModal}
+                  className="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg"
+                  title="Cancelar"
+                >
+                  <CloseIcon sx={{ fontSize: 20 }} />
+                </button>
               </div>
             </div>
           </div>
