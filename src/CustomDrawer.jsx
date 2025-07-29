@@ -123,7 +123,6 @@ const routeGroups = [
       { to: "/preFormulario.jsx", label: "Familia", icon: <GroupIcon /> },
       { to: "/familiaFormulario.jsx", label: "Integrante", icon: <GroupIcon /> },
       { to: "/BusquedaFamilia.jsx", label: "Buscar Familia", icon: <SearchIcon /> },
-      { to: "/formularioIntegrantes.jsx", label: "Formulario Integrantes", icon: <GroupIcon /> },
     ],
   },
   {
@@ -134,10 +133,9 @@ const routeGroups = [
       { to: "/registrarConsumibles.jsx", label: "Consumibles", icon: <LocalDiningIcon /> },
       { to: "/listaProducto.jsx", label: "Lista Producto", icon: <ListIcon /> },
       { to: "/ajusteInventario.jsx", label: "Ajuste Inventario", icon: <WarehouseIcon /> },
-      { to: "/formularioAbarrotes.jsx", label: "Formulario Abastecimiento", icon: <InventoryIcon /> },
       { to: "/asignacionRecursos.jsx", label: "Asignación Recursos", icon: <InventoryIcon /> },
       { to: "/menuPrincipal", label: "Abastecimiento", icon: <InventoryIcon /> },
-      { to: "/resumenFinal", label: "Resumen Final", icon: <ListIcon /> },
+      
     ],
   },
   {
@@ -145,9 +143,9 @@ const routeGroups = [
     icon: <HotelIcon />,
     routes: [
       { to: "/registroAlbergue.jsx", label: "Registrar Albergue", icon: <HotelIcon /> },
-      { to: "/listaAlbergue.jsx", label: "Lista Albergue", icon: <ListIcon /> },
+
       { to: "/busquedaAlbergue.jsx", label: "Buscar Albergue", icon: <SearchIcon /> },
-      { to: "/ActualizarAlbergue.jsx", label: "Actualizar Albergue", icon: <BusinessIcon /> },
+      { to: "/ActualizarAlbergue.jsx", label: "Lista Albergue", icon: <BusinessIcon /> },
     ],
   },
   {
