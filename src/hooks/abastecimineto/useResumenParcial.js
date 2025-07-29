@@ -1,36 +1,51 @@
 
-import { useState, useContext } from 'react';
+import { useContext, useState } from 'react';
 import { contextoAbastecimiento } from '../../context/contextoAbastecimiento';
 
-export default function useResumenParcial() {
+const useResumenParcial = () => {
   const { items, eliminarItem } = useContext(contextoAbastecimiento);
-  const [modalIndex, setModalIndex] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(null);
   const [editCantidad, setEditCantidad] = useState('');
 
   const abrirModal = (index) => {
-    setModalIndex(index);
+    setSelectedIndex(index);
     setEditCantidad(items[index].cantidad);
+    setIsModalOpen(true);
   };
 
   const cerrarModal = () => {
-    setModalIndex(null);
+    setIsModalOpen(false);
+    setSelectedIndex(null);
     setEditCantidad('');
   };
 
   const guardarEdicion = () => {
-    if (editCantidad < 0) return;
-    items[modalIndex].cantidad = editCantidad;
+    if (editCantidad < 0 || selectedIndex === null) return;
+    
+    // Modificación directa del item
+    items[selectedIndex].cantidad = editCantidad;
+    
     cerrarModal();
   };
 
+  const handleEliminar = (index) => {
+    eliminarItem(index);
+  };
+
+  const selectedProduct = selectedIndex !== null ? items[selectedIndex] : null;
+
   return {
     items,
-    eliminarItem,
-    modalIndex,
+    isModalOpen,
+    selectedProduct,
     editCantidad,
+    setEditCantidad,
     abrirModal,
     cerrarModal,
     guardarEdicion,
-    setEditCantidad
+    handleEliminar,
   };
-}
+};
+
+export default useResumenParcial;
