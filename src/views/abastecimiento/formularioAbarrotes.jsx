@@ -388,15 +388,6 @@ const FormularioAbastecimiento = () => {
               <div className="flex flex-col sm:flex-row gap-4">
 <SubmitButton
   type="button"
-  onClick={handleOpenResumenParcial}
-  width="flex-1"
-  color="text-white"
-  className="bg-yellow-500 "
->
-  Ver Resumen Parcial
-</SubmitButton>
-<SubmitButton
-  type="button"
   onClick={handleOpenResumenFinal}
   width="flex-1"
   color="text-white"
