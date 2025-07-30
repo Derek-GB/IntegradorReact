@@ -13,19 +13,6 @@ const useResumenFinal = () => {
     return acc;
   }, {});
 
-  const guardarDatos = () => {
-    if (!datosFormulario.nombreAlbergue || !datosFormulario.tipoComida || !datosFormulario.cantidadPersonas || !datosFormulario.fecha) {
-      showCustomToast('Faltan datos. Por favor complete todos los campos.', 'error');
-      return;
-    }
-
-    if (items.length === 0) {
-      showCustomToast("Agregar un producto para guardar.", 'error');
-      return;
-    }
-    showCustomToast("Datos guardados exitosamente.", 'success');
-  };
-
   const descargarResumen = () => {
     if (items.length === 0) {
       showCustomToast("No hay datos para descargar.", 'error');
@@ -45,13 +32,14 @@ const useResumenFinal = () => {
     a.download = "resumen_abastecimiento.csv";
     a.click();
     URL.revokeObjectURL(url);
+
+    showCustomToast("Descarga completada.", 'success');
   };
 
   return {
     items,
     datosFormulario,
     agrupados,
-    guardarDatos,
     descargarResumen,
     eliminarItem,
     editarItem,

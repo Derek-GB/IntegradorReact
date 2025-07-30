@@ -156,19 +156,8 @@ const ResumenFinal = () => {
         </div>
       </div>
 
-      {/* Botones */}
+      {/* Boton */}
       <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-        <SubmitButton
-          type="button"
-          onClick={guardarDatos}
-          width="flex-1 sm:max-w-xs"
-          className="bg-yellow-500"
-        >
-          <div className="flex items-center justify-center gap-2">
-            <SaveIcon sx={{ fontSize: 20, color: "black" }} />
-          </div>
-        </SubmitButton>
-
         <SubmitButton
           type="button"
           onClick={descargarResumen}
