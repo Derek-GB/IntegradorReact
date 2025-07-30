@@ -123,7 +123,7 @@ export default function AjusteInventario() {
           </div>
         </div>
         <div className="flex justify-center mt-8">
-          <SubmitButton width="w-full" loading={loading}>
+          <SubmitButton color="text-black" width="w-full" loading={loading}>
             Registrar Ajuste
           </SubmitButton>
         </div>

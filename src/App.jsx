@@ -4,7 +4,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import CustomDrawer from './CustomDrawer.jsx';
 
 //Familia
-import PreFormulario from './views/familia/preFormulario.jsx';
+import FormularioRegistro from './views/familia/formularioRegistro.jsx';
 import FamiliaFormulario from './views/familia/familiaFormulario.jsx';
 import BusquedaFamilia from './views/familia/busquedaFamilia.jsx';
 
@@ -99,7 +99,7 @@ const App = () => {
                 >
                   <Routes>
                     <Route path="/inicio" element={<Inicio />} />
-                    <Route path="/preFormulario.jsx" element={<PreFormulario />} />
+                    <Route path="/preFormulario.jsx" element={<FormularioRegistro />} />
                     <Route path="/registroSuministros.jsx" element={<RegistroSuministros />} />
                     <Route path="/asignacionRecursos.jsx" element={<AsignacionRecursos />} />
                     <Route path="/busquedaAlbergue.jsx" element={<BusquedaAlbergue />} />
