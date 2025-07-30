@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
 import { contextoAbastecimiento } from '../../context/contextoAbastecimiento';
+import { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
 
 // Productos por categoría
 const carnesProductos = [
@@ -149,37 +150,44 @@ export const useFormularioAbarrotes = () => {
 
   // CARNES
   const handleAgregarCarne = () => {
-    if (!tipoCarne || personas <= 0) {
-      alert('Seleccione 2 tipo de carne y asegúrese que la cantidad de personas está definida en el menú principal.');
-      return;
-    }
-    const carnesAgregadas = items.filter(i => i.seccion === 'Carnes');
-    if (carnesAgregadas.length >= 2) {
-      alert('Solo se pueden agregar 2 tipos de carne.');
-      return;
-    }
-    const producto = carnesProductos.find(p => p.nombre === tipoCarne);
-    if (!producto) return;
-    const gramosTotales = producto.gramosPorPersona * personas;
-    const cantidadKg = (gramosTotales / 1000).toFixed(2);
-    agregarItem({
-      seccion: 'Carnes',
-      tipo: tipoCarne,
-      unidad: 'kg',
-      cantidad: cantidadKg,
-    });
-    setTipoCarne('');
-  };
+  if (!tipoCarne || personas <= 0) {
+    showCustomToast('Seleccione 2 tipos de carne y asegúrese que la cantidad de personas está definida en el menú principal.', 'warning');
+    return;
+  }
+  const carnesAgregadas = items.filter(i => i.seccion === 'Carnes');
+  const yaExiste = carnesAgregadas.some(i => i.tipo === tipoCarne);
+  if (yaExiste) {
+    showCustomToast('Esta ya fue agregada.', 'error');
+    return;
+  }
+  if (carnesAgregadas.length >= 2) {
+    showCustomToast('Solo 2 tipos de carne.', 'warning');
+    return;
+  }
+  const producto = carnesProductos.find(p => p.nombre === tipoCarne);
+  if (!producto) return;
+  const gramosTotales = producto.gramosPorPersona * personas;
+  const cantidadKg = (gramosTotales / 1000).toFixed(2);
+
+  agregarItem({
+    seccion: 'Carnes',
+    tipo: tipoCarne,
+    unidad: 'kg',
+    cantidad: cantidadKg,
+  });
+
+  setTipoCarne('');
+};
 
   // PROTEINAS
   const handleAgregarProteina = () => {
     if (!tipoProteina || personas <= 0) {
-      alert('Seleccione proteína y asegúrese que hay cantidad de personas definida en el menú principal.');
+      showCustomToast('Seleccione proteína y asegúrese que hay cantidad de personas definida en el menú principal.', 'error');
       return;
     }
     const proteinasAgregadas = items.filter(i => i.seccion === 'Proteínas');
     if (proteinasAgregadas.length >= 1) {
-      alert('Solo se puede agregar una proteína.');
+      showCustomToast('Solo una proteína.', 'error');
       return;
     }
     let unidad = 'Unidad';
@@ -214,21 +222,21 @@ export const useFormularioAbarrotes = () => {
   const gramosPorPersonaVerdura = 120;
   const handleAgregarVerdura = () => {
     if (!tipoVerdura) {
-      alert("Seleccione dos verduras");
+      showCustomToast("Seleccione dos verduras", 'error');
       return;
     }
     if (personas <= 0) {
-      alert("Debe definir la cantidad de personas en el menú principal.");
+      showCustomToast("Debe definir la cantidad de personas en el menú principal.", 'error');
       return;
     }
     const verdurasAgregadas = items.filter(i => i.seccion === 'Verduras');
     const tiposUnicos = [...new Set(verdurasAgregadas.map(i => i.tipo))];
     if (tiposUnicos.includes(tipoVerdura)) {
-      alert('Esta verdura ya fue agregada.');
+      showCustomToast('Verdura ya agregada.', 'error');
       return;
     }
     if (tiposUnicos.length >= 2) {
-      alert('Solo se pueden agregar hasta 2 tipos de verdura.');
+      showCustomToast('Solo 2 tipos de verdura.', 'error');
       return;
     }
     const cantidadKg = ((gramosPorPersonaVerdura * personas) / 1000).toFixed(2);
@@ -259,7 +267,7 @@ export const useFormularioAbarrotes = () => {
     if (items.some(i => i.seccion === categoria && i.tipo === producto.nombre)) return;
     const cantidad = calcularCantidad(producto);
     if (!cantidad || cantidad <= 0) {
-      alert("Debe definir la cantidad de personas en el menú principal.");
+       showCustomToast("Debe definir la cantidad de personas en el menú principal.", 'error');
       return;
     }
     agregarItem({

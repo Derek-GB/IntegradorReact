@@ -7,6 +7,8 @@ import FormContainer from "../../components/FormComponents/FormContainer.jsx";
 import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
 import SelectField from "../../components/FormComponents/SelectField.jsx";
 import { useFormularioAbarrotes } from "../../hooks/abastecimineto/useFormularioAbarrotes.js";
+import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
+
 
 const FormularioAbastecimiento = () => {
   const {
@@ -162,6 +164,7 @@ const FormularioAbastecimiento = () => {
             </div>
           )}
         </div>
+          <CustomToaster />
 
         {/* Sección Proteínas */}
         <div className="bg-white rounded-lg shadow-md mb-4 overflow-hidden">
@@ -226,6 +229,7 @@ const FormularioAbastecimiento = () => {
             </div>
           )}
         </div>
+        <CustomToaster />
 
         {/* Sección Verduras */}
         <div className="bg-white rounded-lg shadow-md mb-4 overflow-hidden">
@@ -291,6 +295,7 @@ const FormularioAbastecimiento = () => {
             </div>
           )}
         </div>
+        <CustomToaster />
 
         {/* Otras Categorías con checkboxes */}
         {Object.entries(categorias).map(([categoria, productos]) => {
@@ -377,6 +382,8 @@ const FormularioAbastecimiento = () => {
             </div>
           );
         })}
+        <CustomToaster />
+        
         {/* Botones para abrir modales resumen*/}
         <div className="bg-white rounded-lg shadow-md p-6 mt-6">
           <div className="border-b border-gray-200 pb-4 mb-6">
@@ -389,7 +396,7 @@ const FormularioAbastecimiento = () => {
               type="button"
               onClick={handleOpenResumenFinal}
               width="flex-1"
-              color="text-white"
+              color="text-black"
               className="bg-yellow-500"
             >
               Ver Resumen Final

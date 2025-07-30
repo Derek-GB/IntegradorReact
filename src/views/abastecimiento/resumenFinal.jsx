@@ -100,10 +100,10 @@ const ResumenFinal = () => {
       name: "Acciones",
       cell: (row, index) => (
         <div className="flex gap-2">
-          <button onClick={() => handleOpenModal(index)} className="text-blue-600 hover:text-blue-800" title="Editar">
+          <button onClick={() => handleOpenModal(index)} className="text-black hover:text-yellow-600" title="Editar">
             <EditIcon fontSize="small" />
           </button>
-          <button onClick={() => eliminarItem(index)} className="text-red-600 hover:text-red-800" title="Eliminar">
+          <button onClick={() => eliminarItem(index)} className="text-black hover:text-red-600" title="Eliminar">
             <DeleteIcon fontSize="small" />
           </button>
         </div>
@@ -163,7 +163,7 @@ const ResumenFinal = () => {
           className="bg-yellow-500"
         >
           <div className="flex items-center justify-center gap-2">
-            <SaveIcon sx={{ fontSize: 20 }} />
+            <SaveIcon sx={{ fontSize: 20, color: "black" }} />
           </div>
         </SubmitButton>
 
@@ -174,7 +174,7 @@ const ResumenFinal = () => {
           className="bg-yellow-500"
         >
           <div className="flex items-center justify-center gap-2">
-            <DownloadIcon sx={{ fontSize: 20 }} />
+            <DownloadIcon sx={{ fontSize: 20, color: "black"  }} />
           </div>
         </SubmitButton>
       </div>
