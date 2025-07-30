@@ -134,7 +134,7 @@ const FormularioAbastecimiento = () => {
                   type="button"
                   onClick={handleAgregarCarne}
                   width="w-full"
-                  className="bg-yellow-500 "
+                  className="text-black"
                 >
                   Agregar Carne
                 </SubmitButton>
