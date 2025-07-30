@@ -3,116 +3,192 @@ import { alberguesAPI } from "../../helpers/api";
 import FormContainer from "../../components/FormComponents/FormContainer.jsx";
 import InputField from "../../components/FormComponents/InputField.jsx";
 import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
+import SearchAutocompleteInput from "../../components/FormComponents/SearchAutocompleteInput.jsx";
 import CustomToaster, { showCustomToast } from "../../components/globalComponents/CustomToaster.jsx";
 
+const camposFormulario = [
+  "nombre", "region", "provincia", "canton", "distrito", "direccion",
+  "tipoEstablecimiento", "tipoAlbergue", "condicionAlbergue",
+  "administrador", "telefono", "capacidadPersonas", "capacidadColectiva",
+  "cantidadFamilias", "ocupacion", "cocina", "duchas", "serviciosSanitarios",
+  "bodega", "menajeMobiliario", "tanqueAgua", "areaTotalM2", "municipalidad", "color"
+];
+
+const formatearLabel = (texto) =>
+  texto.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase());
+
 const ActualizarAlbergue = () => {
-  const [idAlbergue, setIdAlbergue] = useState("");
-  const [albergue, setAlbergue] = useState(null);
+  const [albergues, setAlbergues] = useState([]);
+  const [busquedaAlbergue, setBusquedaAlbergue] = useState("");
+  const [showSugerencias, setShowSugerencias] = useState(false);
+  const [form, setForm] = useState({});
   const [loading, setLoading] = useState(false);
 
-  // Buscar albergue por ID
-  const fetchAlbergue = async () => {
-    if (!idAlbergue.trim()) {
-      showCustomToast("Ingrese un ID de albergue", null, "error");
+  // Carga todos los albergues al inicio para la búsqueda
+  useEffect(() => {
+    const fetchAlbergues = async () => {
+      try {
+        const data = await alberguesAPI.getAll();
+        const lista = Array.isArray(data) ? data : data.data || [];
+        setAlbergues(lista);
+      } catch  {
+        showCustomToast(
+          "Error",
+          "Error al cargar albergues. Verifica si tu sesión expiró.",
+          "error"
+        );
+      }
+    };
+    fetchAlbergues();
+  }, []);
+
+  // Cuando seleccionas un albergue, cargas sus datos en el formulario
+  const handleSelectAlbergue = (albergue) => {
+    if (!albergue) {
+      setForm({});
+      setBusquedaAlbergue("");
       return;
     }
+    // Construir objeto con todos los campos (por si faltan)
+    const datosCompletos = { idAlbergue: albergue.idAlbergue || "" };
+    camposFormulario.forEach((campo) => {
+      datosCompletos[campo] = albergue[campo] ?? "";
+    });
+    setForm(datosCompletos);
+    setBusquedaAlbergue(
+      `ID: ${datosCompletos.idAlbergue} - ${datosCompletos.nombre}`
+    );
+  };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleActualizar = async (e) => {
+    e.preventDefault();
+    if (!form.idAlbergue) {
+      showCustomToast(
+        "Error",
+        "Seleccione un albergue antes de actualizar",
+        "error"
+      );
+      return;
+    }
     try {
       setLoading(true);
-      const res = await alberguesAPI.getById(idAlbergue);
-      const data = Array.isArray(res.data) ? res.data[0] : res.data;
-
-      if (!data) {
-        showCustomToast("Albergue no encontrado", null, "error");
-        setAlbergue(null);
-      } else {
-        setAlbergue(data);
-      }
+      await alberguesAPI.update(form.idAlbergue, form);
+      showCustomToast("Éxito", "Albergue actualizado correctamente", "success");
     } catch (error) {
-      showCustomToast("Error al obtener el albergue", null, "error");
+      showCustomToast("Error", "No se pudo actualizar el albergue", "error");
       console.error(error);
-      setAlbergue(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleActualizar = async () => {
-    try {
-      await alberguesAPI.update(albergue.id, albergue);
-      showCustomToast("Albergue actualizado correctamente", null, "success");
-    } catch (error) {
-      showCustomToast("No se pudo actualizar el albergue", null, "error");
-      console.error(error);
-    }
-  };
-
   const handleEliminar = async () => {
+    if (!form.idAlbergue) {
+      showCustomToast("Error", "No hay albergue para eliminar", "error");
+      return;
+    }
     if (!window.confirm("¿Está seguro de eliminar este albergue?")) return;
     try {
-      await alberguesAPI.remove(albergue.id);
-      showCustomToast("Albergue eliminado", null, "success");
-      setAlbergue(null);
-      setIdAlbergue("");
+      setLoading(true);
+      await alberguesAPI.remove(form.idAlbergue);
+      showCustomToast("Éxito", "Albergue eliminado", "success");
+      setForm({});
+      setBusquedaAlbergue("");
     } catch (error) {
-      showCustomToast("Error al eliminar el albergue", null, "error");
+      showCustomToast("Error", "Error al eliminar el albergue", "error");
       console.error(error);
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setAlbergue((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
-    <>
-      <FormContainer title="Actualizar Albergue" onSubmit={(e) => { e.preventDefault(); fetchAlbergue(); }}>
-        <div className="flex flex-col md:flex-row gap-6">
-          <div className="flex-1">
-            <InputField
-              label="ID del Albergue"
-              name="idAlbergue"
-              value={idAlbergue}
-              onChange={(e) => setIdAlbergue(e.target.value)}
-              placeholder="Ingrese ID"
-            />
-          </div>
-          <div className="flex-1 flex items-end">
-            <SubmitButton width="w-full" loading={loading}>
-              Cargar Datos
-            </SubmitButton>
-          </div>
+    <FormContainer title="Actualizar Albergue" size="md" onSubmit={handleActualizar}>
+      <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex-1">
+          <SearchAutocompleteInput
+            label="Buscar Albergue"
+            busqueda={busquedaAlbergue}
+            setBusqueda={setBusquedaAlbergue}
+            showSugerencias={showSugerencias}
+            setShowSugerencias={setShowSugerencias}
+            resultados={albergues}
+            onSelect={handleSelectAlbergue}
+            optionLabelKeys={["idAlbergue", "nombre"]}
+            placeholder="ID o nombre del albergue..."
+          />
         </div>
 
-        {albergue && (
-          <div className="mt-8 space-y-4">
-            {Object.entries(albergue).map(([key, value]) => (
+        {form.idAlbergue && (
+          <>
+            <div className="flex-1">
               <InputField
-                key={key}
-                label={key}
-                name={key}
-                value={value || ""}
-                onChange={handleChange}
-                readOnly={key === "id"}
-                type={typeof value === "number" ? "number" : "text"}
+                label="ID Albergue"
+                name="idAlbergue"
+                value={form.idAlbergue}
+                readOnly
               />
-            ))}
+            </div>
+            <div className="flex-1">
+              <InputField
+                label="Nombre"
+                name="nombre"
+                value={form.nombre || ""}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </>
+        )}
+      </div>
 
-            <div className="flex gap-4 pt-4">
-              <SubmitButton color="text-white bg-green-600 hover:bg-green-700" onClick={handleActualizar}>
+      {form.idAlbergue && (
+        <>
+          <div className="flex flex-col md:flex-row gap-6 mt-4">
+            {camposFormulario
+              .filter((campo) => campo !== "nombre") // Ya mostramos nombre arriba
+              .map((campo) => (
+                <div className="flex-1" key={campo}>
+                  <InputField
+                    label={formatearLabel(campo)}
+                    name={campo}
+                    value={form[campo] || ""}
+                    onChange={handleChange}
+                    type={typeof form[campo] === "number" ? "number" : "text"}
+                  />
+                </div>
+              ))}
+          </div>
+          <div className="flex flex-col md:flex-row gap-6 mt-8">
+            <div className="flex-1 flex gap-4">
+              <SubmitButton
+                type="submit"
+                width="w-full"
+                loading={loading}
+                color="text-black"
+              >
                 Actualizar
               </SubmitButton>
-              <SubmitButton color="text-white bg-red-600 hover:bg-red-700" onClick={handleEliminar}>
+              <SubmitButton
+                type="button"
+                width="w-full"
+                color="text-black bg-red-600 hover:bg-red-700"
+                onClick={handleEliminar}
+                disabled={loading}
+              >
                 Eliminar
               </SubmitButton>
             </div>
           </div>
-        )}
-      </FormContainer>
-
+        </>
+      )}
       <CustomToaster />
-    </>
+    </FormContainer>
   );
 };
 
