@@ -149,21 +149,20 @@ const ActualizarAlbergue = () => {
 
       {form.idAlbergue && (
         <>
-          <div className="flex flex-col md:flex-row gap-6 mt-4">
-            {camposFormulario
-              .filter((campo) => campo !== "nombre") // Ya mostramos nombre arriba
-              .map((campo) => (
-                <div className="flex-1" key={campo}>
-                  <InputField
-                    label={formatearLabel(campo)}
-                    name={campo}
-                    value={form[campo] || ""}
-                    onChange={handleChange}
-                    type={typeof form[campo] === "number" ? "number" : "text"}
-                  />
-                </div>
-              ))}
-          </div>
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+  {camposFormulario
+    .filter((campo) => campo !== "nombre")
+    .map((campo) => (
+      <InputField
+        key={campo}
+        label={formatearLabel(campo)}
+        name={campo}
+        value={form[campo] || ""}
+        onChange={handleChange}
+        type={typeof form[campo] === "number" ? "number" : "text"}
+      />
+    ))}
+</div>
           <div className="flex flex-col md:flex-row gap-6 mt-8">
             <div className="flex-1 flex gap-4">
               <SubmitButton
@@ -177,7 +176,7 @@ const ActualizarAlbergue = () => {
               <SubmitButton
                 type="button"
                 width="w-full"
-                color="text-black bg-red-600 hover:bg-red-700"
+                color="text-black hover:bg-red-700"
                 onClick={handleEliminar}
                 disabled={loading}
               >
