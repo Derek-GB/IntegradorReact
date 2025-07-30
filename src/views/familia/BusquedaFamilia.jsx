@@ -5,6 +5,7 @@ import FormContainer from "../../components/FormComponents/FormContainer.jsx";
 import InputField from "../../components/FormComponents/InputField.jsx";
 import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
 import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
+import GlobalDataTable from "../../components/globalComponents/GlobalDataTable.jsx";
 
 const BusquedaFamilia = () => {
   const [identificacion, setIdentificacion] = useState("");
@@ -124,49 +125,31 @@ const BusquedaFamilia = () => {
             </div>
           </div>
 
-          <div className="overflow-x-auto mt-4">
-            <table className="min-w-full border border-gray-200 rounded-lg">
-              <thead className="bg-[#00897B] text-white">
-                <tr>
-                  <th className="px-2 py-2">#</th>
-                  <th className="px-2 py-2">Nombre Completo</th>
-                  <th className="px-2 py-2">Tipo Identificación</th>
-                  <th className="px-2 py-2">Número Identificación</th>
-                  <th className="px-2 py-2">Fecha Nacimiento</th>
-                  <th className="px-2 py-2">Nacionalidad</th>
-                  <th className="px-2 py-2">Parentesco</th>
-                  <th className="px-2 py-2">Sexo</th>
-                  <th className="px-2 py-2">Género</th>
-                  <th className="px-2 py-2">Condición de Salud</th>
-                  <th className="px-2 py-2">Discapacidad</th>
-                  <th className="px-2 py-2">Tipo Discapacidad</th>
-                  <th className="px-2 py-2">Subtipo Discapacidad</th>
-                  <th className="px-2 py-2">Tipo Condición Poblacional</th>
-                  <th className="px-2 py-2">Contacto de Emergencia</th>
-                </tr>
-              </thead>
-              <tbody>
-                {familia.map((p, index) => (
-                  <tr key={index} className="bg-white border-b">
-                    <td className="px-2 py-2">{index + 1}</td>
-                    <td className="px-2 py-2">{p.nombreCompletoIntegrante || ""}</td>
-                    <td className="px-2 py-2">{p.tipoIdentificacion || ""}</td>
-                    <td className="px-2 py-2">{p.numeroIdentificacion || ""}</td>
-                    <td className="px-2 py-2">{p.fechaNacimiento ? p.fechaNacimiento.split("T")[0] : ""}</td>
-                    <td className="px-2 py-2">{p.nacionalidad || ""}</td>
-                    <td className="px-2 py-2">{p.parentesco || ""}</td>
-                    <td className="px-2 py-2">{p.sexo || ""}</td>
-                    <td className="px-2 py-2">{p.genero || ""}</td>
-                    <td className="px-2 py-2">{p.tieneCondicionSalud === 1 ? "Sí" : "No"}</td>
-                    <td className="px-2 py-2">{p.discapacidad === 1 ? "Sí" : "No"}</td>
-                    <td className="px-2 py-2">{p.discapacidad === 1 ? p.tipoDiscapacidad || "" : "-"}</td>
-                    <td className="px-2 py-2">{p.discapacidad === 1 ? p.subtipoDiscapacidad || "" : "-"}</td>
-                    <td className="px-2 py-2">{p.tipoCondicionPoblacional || ""}</td>
-                    <td className="px-2 py-2">{p.contactoEmergencia || ""}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="mt-4">
+            <GlobalDataTable
+              columns={[
+                { name: "#", selector: (row, i) => i + 1, width: "60px", sortable: false },
+                { name: "Nombre Completo", selector: row => row.nombreCompletoIntegrante || "", sortable: true },
+                { name: "Tipo Identificación", selector: row => row.tipoIdentificacion || "", sortable: true },
+                { name: "Número Identificación", selector: row => row.numeroIdentificacion || "", sortable: true },
+                { name: "Fecha Nacimiento", selector: row => row.fechaNacimiento ? row.fechaNacimiento.split("T")[0] : "", sortable: true },
+                { name: "Nacionalidad", selector: row => row.nacionalidad || "", sortable: true },
+                { name: "Parentesco", selector: row => row.parentesco || "", sortable: true },
+                { name: "Sexo", selector: row => row.sexo || "", sortable: true },
+                { name: "Género", selector: row => row.genero || "", sortable: true },
+                { name: "Condición de Salud", selector: row => row.tieneCondicionSalud === 1 ? "Sí" : "No", sortable: true },
+                { name: "Discapacidad", selector: row => row.discapacidad === 1 ? "Sí" : "No", sortable: true },
+                { name: "Tipo Discapacidad", selector: row => row.discapacidad === 1 ? row.tipoDiscapacidad || "" : "-", sortable: true },
+                { name: "Subtipo Discapacidad", selector: row => row.discapacidad === 1 ? row.subtipoDiscapacidad || "" : "-", sortable: true },
+                { name: "Tipo Condición Poblacional", selector: row => row.tipoCondicionPoblacional || "", sortable: true },
+                { name: "Contacto de Emergencia", selector: row => row.contactoEmergencia || "", sortable: true },
+              ]}
+              data={familia}
+              pagination
+              rowsPerPage={10}
+              highlightOnHover
+              dense
+            />
           </div>
         </>
       )}
