@@ -1,110 +1,118 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { alberguesAPI } from '../../helpers/api';
+import React, { useEffect, useState } from "react";
+import { alberguesAPI } from "../../helpers/api";
+import FormContainer from "../../components/FormComponents/FormContainer.jsx";
+import InputField from "../../components/FormComponents/InputField.jsx";
+import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
+import CustomToaster, { showCustomToast } from "../../components/globalComponents/CustomToaster.jsx";
 
 const ActualizarAlbergue = () => {
-  const [albergues, setAlbergues] = useState([]);
-  const [selectedId, setSelectedId] = useState('');
+  const [idAlbergue, setIdAlbergue] = useState("");
   const [albergue, setAlbergue] = useState(null);
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchAlbergues = async () => {
-      try {
-        const data = await alberguesAPI.getAll();
-        setAlbergues(data.data || []);
-      } catch (err) {
-        console.error('Error cargando albergues:', err);
+  // Buscar albergue por ID
+  const fetchAlbergue = async () => {
+    if (!idAlbergue.trim()) {
+      showCustomToast("Ingrese un ID de albergue", null, "error");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const res = await alberguesAPI.getById(idAlbergue);
+      const data = Array.isArray(res.data) ? res.data[0] : res.data;
+
+      if (!data) {
+        showCustomToast("Albergue no encontrado", null, "error");
+        setAlbergue(null);
+      } else {
+        setAlbergue(data);
       }
-    };
-    fetchAlbergues();
-  }, []);
-
-  useEffect(() => {
-    const selected = albergues.find(a => a.id === parseInt(selectedId));
-    setAlbergue(selected || null);
-  }, [selectedId, albergues]);
+    } catch (error) {
+      showCustomToast("Error al obtener el albergue", null, "error");
+      console.error(error);
+      setAlbergue(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleActualizar = async () => {
     try {
       await alberguesAPI.update(albergue.id, albergue);
-      alert('Albergue actualizado correctamente.');
+      showCustomToast("Albergue actualizado correctamente", null, "success");
     } catch (error) {
-      console.error('Error al actualizar:', error);
-      alert('No se pudo actualizar el albergue.');
+      showCustomToast("No se pudo actualizar el albergue", null, "error");
+      console.error(error);
     }
   };
 
   const handleEliminar = async () => {
-    if (!window.confirm('¿Estás seguro de eliminar este albergue?')) return;
+    if (!window.confirm("¿Está seguro de eliminar este albergue?")) return;
     try {
       await alberguesAPI.remove(albergue.id);
-      alert('Albergue eliminado correctamente.');
-      window.location.reload(); // Recarga la lista
+      showCustomToast("Albergue eliminado", null, "success");
+      setAlbergue(null);
+      setIdAlbergue("");
     } catch (error) {
-      console.error('Error al eliminar:', error);
-      alert('No se pudo eliminar el albergue.');
+      showCustomToast("Error al eliminar el albergue", null, "error");
+      console.error(error);
     }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setAlbergue(prev => ({ ...prev, [name]: value }));
+    setAlbergue((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
-    <div className="container mt-4">
-      <h2>Actualizar Albergue</h2>
+    <>
+      <FormContainer title="Actualizar Albergue" onSubmit={(e) => { e.preventDefault(); fetchAlbergue(); }}>
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-1">
+            <InputField
+              label="ID del Albergue"
+              name="idAlbergue"
+              value={idAlbergue}
+              onChange={(e) => setIdAlbergue(e.target.value)}
+              placeholder="Ingrese ID"
+            />
+          </div>
+          <div className="flex-1 flex items-end">
+            <SubmitButton width="w-full" loading={loading}>
+              Cargar Datos
+            </SubmitButton>
+          </div>
+        </div>
 
-      <form>
-        <details open>
-          <summary><strong>Seleccionar Albergue</strong></summary>
-          <fieldset className="mt-2">
-            <label>Albergue:</label>
-            <select
-              value={selectedId}
-              onChange={e => setSelectedId(e.target.value)}
-              className="form-control mb-3"
-            >
-              <option value="">Seleccione un albergue</option>
-              {albergues.map(a => (
-                <option key={a.id} value={a.id}>
-                  {`${a.idAlbergue} - ${a.nombre}`}
-                </option>
-              ))}
-            </select>
+        {albergue && (
+          <div className="mt-8 space-y-4">
+            {Object.entries(albergue).map(([key, value]) => (
+              <InputField
+                key={key}
+                label={key}
+                name={key}
+                value={value || ""}
+                onChange={handleChange}
+                readOnly={key === "id"}
+                type={typeof value === "number" ? "number" : "text"}
+              />
+            ))}
 
-            {albergue && (
-              <fieldset>
-                {Object.entries(albergue).map(([key, value]) => (
-                  <div key={key}>
-                    <label htmlFor={key}>{key}:</label>
-                    <input
-                      type={typeof value === 'number' ? 'number' : 'text'}
-                      id={key}
-                      name={key}
-                      value={value || ''}
-                      onChange={handleChange}
-                      className="form-control mb-2"
-                      readOnly={key === 'id'}
-                    />
-                  </div>
-                ))}
+            <div className="flex gap-4 pt-4">
+              <SubmitButton color="text-white bg-green-600 hover:bg-green-700" onClick={handleActualizar}>
+                Actualizar
+              </SubmitButton>
+              <SubmitButton color="text-white bg-red-600 hover:bg-red-700" onClick={handleEliminar}>
+                Eliminar
+              </SubmitButton>
+            </div>
+          </div>
+        )}
+      </FormContainer>
 
-                <div className="mt-3">
-                  <button type="button" className="btn btn-success me-2" onClick={handleActualizar}>
-                    Actualizar
-                  </button>
-                  <button type="button" className="btn btn-danger" onClick={handleEliminar}>
-                    Eliminar
-                  </button>
-                </div>
-              </fieldset>
-            )}
-          </fieldset>
-        </details>
-      </form>
-    </div>
+      <CustomToaster />
+    </>
   );
 };
 
