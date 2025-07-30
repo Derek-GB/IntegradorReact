@@ -203,7 +203,7 @@ const ResumenFinal = () => {
       type="number"
       fullWidth
       autoFocus
-      InputLabelProps={{ style: { whiteSpace: 'nowrap' } }} // evita corte del label
+      InputLabelProps={{ style: { whiteSpace: 'nowrap' } }} 
       inputProps={{ min: 0, step: "any" }}
       sx={{ fontSize: '1.2rem', mb: 2 }}
     />

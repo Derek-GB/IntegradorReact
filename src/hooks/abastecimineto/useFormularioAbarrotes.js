@@ -65,24 +65,24 @@ const productosAbarrotes = [
 const productosLimpieza = [
   { nombre: "Bolsas para basura Grande", unidad: "paquete", gramosPorPersona: null, conversion: 10 },
   { nombre: "Bolsas para basura medianas", unidad: "paquete", gramosPorPersona: null, conversion: 10 },
-  { nombre: "Papel Higiénico", unidad: "rollo", gramosPorPersona: 1 },
+  { nombre: "Papel Higiénico", unidad: "rollo", gramosPorPersona: null, conversion: 1 },
   { nombre: "Pasta dental", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Jabón en polvo", unidad: "kg", gramosPorPersona: 0.01 },
-  { nombre: "Cloro", unidad: "litro", gramosPorPersona: 0.02 },
+  { nombre: "Jabón en polvo", unidad: "kg", gramosPorPersona: null,conversion: 0.01 },
+  { nombre: "Cloro", unidad: "litro", gramosPorPersona: null, conversion: 0.02 },
   { nombre: "Jabón de baño", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
   { nombre: "Guantes de Cocina (Hule)", unidad: "par", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Jabón lavamanos", unidad: "litro", gramosPorPersona: 0.01 },
+  { nombre: "Jabón lavamanos", unidad: "litro", gramosPorPersona:  null, conversion:0.01 },
   { nombre: "Jabón Lavaplatos Caja", unidad: "caja", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Desinfectante", unidad: "litro", gramosPorPersona: 0.02 },
+  { nombre: "Desinfectante", unidad: "litro", gramosPorPersona: null, conversion: 0.02 },
   { nombre: "Esponja lava platos", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
   { nombre: "Fosforos", unidad: "caja", gramosPorPersona: null, conversion: 1 },
   { nombre: "Desodorante unisex", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Champú", unidad: "litro", gramosPorPersona: 0.01 },
+  { nombre: "Champú", unidad: "litro", gramosPorPersona:  null, conversion:0.01 },
   { nombre: "Escoba", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
   { nombre: "Trapeador piso", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
   { nombre: "Limpiones", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
   { nombre: "Trapos o mechas", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Toallas de papel", unidad: "rollo", gramosPorPersona: 1 },
+  { nombre: "Toallas de papel", unidad: "rollo", gramosPorPersona: null, conversion: 1 },
   { nombre: "Bomba desatorar servicios", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
   { nombre: "Toalla sanitaria", unidad: "paquete", gramosPorPersona: null, conversion: 10 },
   { nombre: "Pañales niño M unidades", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
@@ -151,17 +151,17 @@ export const useFormularioAbarrotes = () => {
   // CARNES
   const handleAgregarCarne = () => {
   if (!tipoCarne || personas <= 0) {
-    showCustomToast('Seleccione 2 tipos de carne y asegúrese que la cantidad de personas está definida en el menú principal.', 'warning');
+    showCustomToast('Warning','Seleccione 2 tipos de carne y asegúrese que la cantidad de personas está definida en el menú principal.');
     return;
   }
   const carnesAgregadas = items.filter(i => i.seccion === 'Carnes');
   const yaExiste = carnesAgregadas.some(i => i.tipo === tipoCarne);
   if (yaExiste) {
-    showCustomToast('Esta ya fue agregada.', 'error');
+    showCustomToast( 'Warning','Esta ya fue agregada.');
     return;
   }
   if (carnesAgregadas.length >= 2) {
-    showCustomToast('Solo 2 tipos de carne.', 'warning');
+    showCustomToast('Warning','Solo 2 tipos de carne.');
     return;
   }
   const producto = carnesProductos.find(p => p.nombre === tipoCarne);
@@ -182,12 +182,12 @@ export const useFormularioAbarrotes = () => {
   // PROTEINAS
   const handleAgregarProteina = () => {
     if (!tipoProteina || personas <= 0) {
-      showCustomToast('Seleccione proteína y asegúrese que hay cantidad de personas definida en el menú principal.', 'error');
+      showCustomToast('Warning','Seleccione proteína y asegúrese que hay cantidad de personas definida en el menú principal.');
       return;
     }
     const proteinasAgregadas = items.filter(i => i.seccion === 'Proteínas');
     if (proteinasAgregadas.length >= 1) {
-      showCustomToast('Solo una proteína.', 'error');
+      showCustomToast('Warning','Solo una proteína.');
       return;
     }
     let unidad = 'Unidad';
@@ -222,21 +222,21 @@ export const useFormularioAbarrotes = () => {
   const gramosPorPersonaVerdura = 120;
   const handleAgregarVerdura = () => {
     if (!tipoVerdura) {
-      showCustomToast("Seleccione dos verduras", 'error');
+      showCustomToast('Warning', "Seleccione dos verduras");
       return;
     }
     if (personas <= 0) {
-      showCustomToast("Debe definir la cantidad de personas en el menú principal.", 'error');
+      showCustomToast('Warning', "Debe definir la cantidad de personas en el menú principal.");
       return;
     }
     const verdurasAgregadas = items.filter(i => i.seccion === 'Verduras');
     const tiposUnicos = [...new Set(verdurasAgregadas.map(i => i.tipo))];
     if (tiposUnicos.includes(tipoVerdura)) {
-      showCustomToast('Verdura ya agregada.', 'error');
+      showCustomToast('Warning', 'Verdura ya agregada.');
       return;
     }
     if (tiposUnicos.length >= 2) {
-      showCustomToast('Solo 2 tipos de verdura.', 'error');
+      showCustomToast('Warning', 'Solo 2 tipos de verdura.');
       return;
     }
     const cantidadKg = ((gramosPorPersonaVerdura * personas) / 1000).toFixed(2);
@@ -267,7 +267,7 @@ export const useFormularioAbarrotes = () => {
     if (items.some(i => i.seccion === categoria && i.tipo === producto.nombre)) return;
     const cantidad = calcularCantidad(producto);
     if (!cantidad || cantidad <= 0) {
-       showCustomToast("Debe definir la cantidad de personas en el menú principal.", 'error');
+       showCustomToast('Error', "Debe definir la cantidad de personas en el menú principal.");
       return;
     }
     agregarItem({
