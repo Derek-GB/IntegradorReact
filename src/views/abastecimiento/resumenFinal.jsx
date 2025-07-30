@@ -100,10 +100,10 @@ const ResumenFinal = () => {
       name: "Acciones",
       cell: (row, index) => (
         <div className="flex gap-2">
-          <button onClick={() => handleOpenModal(index)} className="text-blue-600 hover:text-blue-800" title="Editar">
+          <button onClick={() => handleOpenModal(index)} className="bg-yellow-500  hover:bg-yellow-600 " title="Editar">
             <EditIcon fontSize="small" />
           </button>
-          <button onClick={() => eliminarItem(index)} className="text-red-600 hover:text-red-800" title="Eliminar">
+          <button onClick={() => eliminarItem(index)} className="bg-yellow-500 hover:text-red-800" title="Eliminar">
             <DeleteIcon fontSize="small" />
           </button>
         </div>
