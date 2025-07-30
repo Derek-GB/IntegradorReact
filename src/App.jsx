@@ -27,13 +27,14 @@ import ListaAlbergue from './views/albergue/listaAlbergue.jsx';
 import RegistroAlbergue from './views/albergue/registroAlbergue.jsx';
 
 //abastecimiento
-import MenuPrincipal from './views/abastecimiento/menuPrincipal.jsx';
-import ResumenFinal from './views/abastecimiento/resumenFinal.jsx';
+import MenuPrincipal from './views/abastecimiento/abarrotesMenuPrincipal';
+import ResumenFinal from './views/abastecimiento/resumenFinal';
+import FormularioAbastecimiento from './views/abastecimiento/formularioAbarrotes';
+
 
 //Solos
 import AjusteInventario from "./views/ajusteInventario.jsx";
 import AyudaForm from './views/ayudaForm.jsx';
-import FormularioAbastecimiento from './views/formularioAbarrotes.jsx';
 import Inicio from './views/inicio.jsx';
 import RegistroAmenazas from './views/registroAmenazas.jsx';
 import RegistroMascotas from "./views/registroMascota.jsx";
@@ -67,6 +68,7 @@ const App = () => {
           <Route path="/recuperarContrasena" element={<RecuperarContrasena />} />
         </Routes>
       ) : (
+
           <div className="">
             <CustomDrawer onLogout={handleLogout}>
               <div
@@ -107,7 +109,7 @@ const App = () => {
                     <Route path="/registroUsuario.jsx" element={<RegistroUsuario />} />
                     <Route path="/listaProducto.jsx" element={<ListaProducto />} />
                     <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
-                    <Route path="/menuPrincipal" element={<MenuPrincipal />} />
+                    <Route path="/abarrotesMenuPrincipal" element={<MenuPrincipal />} />
                     <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
                     <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
                     <Route path="/familiaFormulario.jsx" element={<FamiliaFormulario />} />
