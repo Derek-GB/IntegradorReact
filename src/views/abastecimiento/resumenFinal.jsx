@@ -6,6 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import GlobalDataTable from "../../components/globalComponents/GlobalDataTable.jsx";
 import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
 import useResumenFinal from "../../hooks/abastecimineto/useResumenFinal.js";
+import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@mui/material";
 
 const ResumenFinal = () => {
@@ -115,6 +116,7 @@ const ResumenFinal = () => {
 
   return (
     <div className="space-y-6">
+      <CustomToaster />
       {/* Datos del Formulario */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">

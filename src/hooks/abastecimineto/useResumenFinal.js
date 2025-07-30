@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { contextoAbastecimiento } from "../../context/contextoAbastecimiento";
+import { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
 import { useNavigate } from "react-router-dom";
 
 const useResumenFinal = () => {
@@ -14,21 +15,20 @@ const useResumenFinal = () => {
 
   const guardarDatos = () => {
     if (!datosFormulario.nombreAlbergue || !datosFormulario.tipoComida || !datosFormulario.cantidadPersonas || !datosFormulario.fecha) {
-      alert("Faltan datos del formulario principal. Por favor complete todos los campos.");
+      showCustomToast('Faltan datos. Por favor complete todos los campos.', 'error');
       return;
     }
 
     if (items.length === 0) {
-      alert("Debe agregar al menos un producto antes de guardar.");
+      showCustomToast("Agregar un producto para guardar.", 'error');
       return;
     }
-
-    alert("Datos guardados exitosamente.");
+    showCustomToast("Datos guardados exitosamente.", 'success');
   };
 
   const descargarResumen = () => {
     if (items.length === 0) {
-      alert("No hay datos para descargar.");
+      showCustomToast("No hay datos para descargar.", 'error');
       return;
     }
 
