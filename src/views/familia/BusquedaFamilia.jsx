@@ -62,7 +62,7 @@ const BusquedaFamilia = () => {
             required
           />
           <div className="mt-4">
-            <SubmitButton width="w-full" loading={loading}>
+            <SubmitButton color="text-black" width="w-full" loading={loading}>
               Buscar
             </SubmitButton>
           </div>
