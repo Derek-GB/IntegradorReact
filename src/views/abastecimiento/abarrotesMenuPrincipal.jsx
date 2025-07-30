@@ -80,7 +80,7 @@ function FormularioAbastecimiento() {
             <SubmitButton
               type="button"
               width="w-full"
-              color="text-black"
+              color="text-white"
               onClick={handleSiguiente}
               loading={loading}
             >
