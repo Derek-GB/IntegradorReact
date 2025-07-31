@@ -4,7 +4,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import CustomDrawer from './CustomDrawer.jsx';
 
 //Familia
-import PreFormulario from './views/familia/preFormulario.jsx';
+import FormularioRegistro from './views/familia/formularioRegistro.jsx';
 import FamiliaFormulario from './views/familia/familiaFormulario.jsx';
 import BusquedaFamilia from './views/familia/busquedaFamilia.jsx';
 
@@ -27,13 +27,14 @@ import ListaAlbergue from './views/albergue/listaAlbergue.jsx';
 import RegistroAlbergue from './views/albergue/registroAlbergue.jsx';
 
 //abastecimiento
-import MenuPrincipal from './views/abastecimiento/menuPrincipal.jsx';
-import ResumenFinal from './views/abastecimiento/resumenFinal.jsx';
+import MenuPrincipal from './views/abastecimiento/abarrotesMenuPrincipal';
+import ResumenFinal from './views/abastecimiento/resumenFinal';
+import FormularioAbastecimiento from './views/abastecimiento/formularioAbarrotes';
+
 
 //Solos
 import AjusteInventario from "./views/ajusteInventario.jsx";
 import AyudaForm from './views/ayudaForm.jsx';
-import FormularioAbastecimiento from './views/formularioAbarrotes.jsx';
 import Inicio from './views/inicio.jsx';
 import RegistroAmenazas from './views/registroAmenazas.jsx';
 import RegistroMascotas from "./views/registroMascota.jsx";
@@ -48,7 +49,7 @@ const App = () => {
   const location = useLocation();
   const isLogin = 
     location.pathname === '/' || 
-    location.pathname === '/recuperarContrasena.jsx';
+    location.pathname === '/recuperarContrasena';
 
   // Simple función de logout (puedes mejorarla)
   const handleLogout = () => {
@@ -56,7 +57,7 @@ const App = () => {
     window.location.href = '/';
   };
 
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [drawerOpen] = React.useState(false);
   const drawerWidth = drawerOpen ? 270 : 64;
 
   return (
@@ -64,9 +65,10 @@ const App = () => {
       {isLogin ? (
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/recuperarContrasena.jsx" element={<RecuperarContrasena />} />
+          <Route path="/recuperarContrasena" element={<RecuperarContrasena />} />
         </Routes>
       ) : (
+
           <div className="">
             <CustomDrawer onLogout={handleLogout}>
               <div
@@ -97,7 +99,7 @@ const App = () => {
                 >
                   <Routes>
                     <Route path="/inicio" element={<Inicio />} />
-                    <Route path="/preFormulario.jsx" element={<PreFormulario />} />
+                    <Route path="/preFormulario.jsx" element={<FormularioRegistro />} />
                     <Route path="/registroSuministros.jsx" element={<RegistroSuministros />} />
                     <Route path="/asignacionRecursos.jsx" element={<AsignacionRecursos />} />
                     <Route path="/busquedaAlbergue.jsx" element={<BusquedaAlbergue />} />
@@ -107,7 +109,7 @@ const App = () => {
                     <Route path="/registroUsuario.jsx" element={<RegistroUsuario />} />
                     <Route path="/listaProducto.jsx" element={<ListaProducto />} />
                     <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
-                    <Route path="/menuPrincipal" element={<MenuPrincipal />} />
+                    <Route path="/abarrotesMenuPrincipal" element={<MenuPrincipal />} />
                     <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
                     <Route path="/ajusteInventario.jsx" element={<AjusteInventario />} />
                     <Route path="/familiaFormulario.jsx" element={<FamiliaFormulario />} />

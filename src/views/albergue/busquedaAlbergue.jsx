@@ -152,7 +152,7 @@ const BusquedaAlbergue = () => {
               columns={columns}
               data={resultados}
               loading={loading}
-              rowsPerPage={3}
+              rowsPerPage={5}
             />
           </div>
         )}

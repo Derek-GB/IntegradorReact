@@ -32,7 +32,7 @@ export default function RegistroAlbergue() {
         const muniRes = await municipalidadAPI.getAll();
         const lista = Array.isArray(muniRes) ? muniRes : muniRes.data ?? [];
         setMunicipalidades(lista);
-      } catch (error) {
+      } catch{
         setMunicipalidades([]);
       }
     };
@@ -115,7 +115,7 @@ export default function RegistroAlbergue() {
       showCustomToast("Éxito", "Albergue registrado correctamente.", "success");
       setForm({});
       setCantones([]);
-    } catch (error) {
+    } catch {
       showCustomToast("Error", "Error al registrar albergue.", "error");
     } finally {
       setLoading(false);

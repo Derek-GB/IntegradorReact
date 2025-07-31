@@ -15,19 +15,29 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
-import InventoryIcon from "@mui/icons-material/Inventory";
+import Inventory from "@mui/icons-material/Inventory2";
 import LocalDiningIcon from "@mui/icons-material/LocalDining";
 import HotelIcon from "@mui/icons-material/Hotel";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PetsIcon from "@mui/icons-material/Pets";
 import ReportIcon from "@mui/icons-material/Report";
 import BusinessIcon from "@mui/icons-material/Business";
-import WarehouseIcon from "@mui/icons-material/Warehouse";
 import ListIcon from "@mui/icons-material/List";
 import SearchIcon from "@mui/icons-material/Search";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
+import LocalShipping from "@mui/icons-material/localShipping";
+import AssignmentReturned from "@mui/icons-material/assignmentreturned";
+import Shelves from "@mui/icons-material/shelves";
+
+
+
+
+
+
+
+
 import { Link, useLocation } from "react-router-dom";
 
 const drawerWidth = 270;
@@ -38,41 +48,8 @@ const dividerColor = "#F8B701";
 const textColor = "#fff";
 const mutedText = "#e0e0e0";
 
-const openedMixin = (theme) => ({
-  width: drawerWidth,
-  background: bgColor,
-  color: textColor,
-  transition: theme.transitions.create(["width", "background", "color"], {
-    easing: theme.transitions.easing.easeInOut,
-    duration: 500,
-  }),
-  overflowX: "hidden",
-  border: "none",
-  boxShadow: "2px 0 12px #0004",
-  position: "fixed",
-  top: 0,
-  left: 0,
-  height: "100vh",
-  zIndex: 1300,
-});
 
-const closedMixin = (theme) => ({
-  background: bgColor,
-  color: textColor,
-  transition: theme.transitions.create(["width", "background", "color"], {
-    easing: theme.transitions.easing.easeInOut,
-    duration: 500,
-  }),
-  overflowX: "hidden",
-  width: `64px`,
-  border: "none",
-  boxShadow: "2px 0 12px #0004",
-  position: "fixed",
-  top: 0,
-  left: 0,
-  height: "100vh",
-  zIndex: 1300,
-});
+
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -83,37 +60,37 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 1),
 }));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" })(
-  ({ theme, open }) => ({
-    flexShrink: 0,
-    whiteSpace: "nowrap",
-    boxSizing: "border-box",
-    "& .MuiDrawer-paper": {
-      background: bgColor,
-      color: textColor,
-      border: "none",
-      boxShadow: "2px 0 12px #0004",
-      width: open ? drawerWidth : 64,
-      transition: theme.transitions.create(["width", "background", "color"], {
-        easing: theme.transitions.easing.easeInOut,
-        duration: 500,
-      }),
-      overflowX: "hidden",
-      // Solo aplicar posición fija en desktop
-      [theme.breakpoints.up('sm')]: {
-        position: "fixed",
-        top: 0,
-        left: 0,
-        height: "100vh",
-        zIndex: 1300,
-      },
-      [theme.breakpoints.down('sm')]: {
-        width: drawerWidth,
-        position: "relative",
-      },
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  flexShrink: 0,
+  whiteSpace: "nowrap",
+  boxSizing: "border-box",
+  "& .MuiDrawer-paper": {
+    background: bgColor,
+    color: textColor,
+    border: "none",
+    boxShadow: "2px 0 12px #0004",
+    width: open ? drawerWidth : 64,
+    transition: theme.transitions.create(["width", "background", "color"], {
+      easing: theme.transitions.easing.easeInOut,
+      duration: 500,
+    }),
+    overflowX: "hidden",
+    // Solo aplicar posición fija en desktop
+    [theme.breakpoints.up("sm")]: {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      height: "100vh",
+      zIndex: 1300,
     },
-  })
-);
+    [theme.breakpoints.down("sm")]: {
+      width: drawerWidth,
+      position: "relative",
+    },
+  },
+}));
 
 const routeGroups = [
   {
@@ -121,40 +98,47 @@ const routeGroups = [
     icon: <GroupIcon />,
     routes: [
       { to: "/preFormulario.jsx", label: "Familia", icon: <GroupIcon /> },
+
       { to: "/familiaFormulario.jsx", label: "Integrante", icon: <GroupIcon /> },
       { to: "/BusquedaFamilia.jsx", label: "Buscar Familia", icon: <SearchIcon /> },
-      { to: "/formularioIntegrantes.jsx", label: "Formulario Integrantes", icon: <GroupIcon /> },
+
     ],
   },
   {
     label: "Suministros",
-    icon: <InventoryIcon />,
+    icon: <Inventory />,
     routes: [
-      { to: "/registroSuministros.jsx", label: "Registrar Suministros", icon: <InventoryIcon /> },
+
+      { to: "/registroSuministros.jsx", label: "Registrar Suministros", icon: <Shelves /> },
       { to: "/registrarConsumibles.jsx", label: "Consumibles", icon: <LocalDiningIcon /> },
       { to: "/listaProducto.jsx", label: "Lista Producto", icon: <ListIcon /> },
-      { to: "/ajusteInventario.jsx", label: "Ajuste Inventario", icon: <WarehouseIcon /> },
-      { to: "/formularioAbarrotes.jsx", label: "Formulario Abastecimiento", icon: <InventoryIcon /> },
-      { to: "/asignacionRecursos.jsx", label: "Asignación Recursos", icon: <InventoryIcon /> },
-      { to: "/menuPrincipal", label: "Abastecimiento", icon: <InventoryIcon /> },
-      { to: "/resumenFinal", label: "Resumen Final", icon: <ListIcon /> },
+      { to: "/ajusteInventario.jsx", label: "Ajuste Inventario", icon: <Inventory /> },
+      { to: "/asignacionRecursos.jsx", label: "Asignación Recursos", icon: <AssignmentReturned  /> },
+      { to: "/abarrotesMenuPrincipal", label: "Abastecimiento", icon: <LocalShipping /> },
+
     ],
   },
   {
     label: "Albergue",
     icon: <HotelIcon />,
     routes: [
+
       { to: "/registroAlbergue.jsx", label: "Registrar Albergue", icon: <HotelIcon /> },
-      { to: "/listaAlbergue.jsx", label: "Lista Albergue", icon: <ListIcon /> },
+
       { to: "/busquedaAlbergue.jsx", label: "Buscar Albergue", icon: <SearchIcon /> },
-      { to: "/ActualizarAlbergue.jsx", label: "Actualizar Albergue", icon: <BusinessIcon /> },
+      { to: "/ActualizarAlbergue.jsx", label: "Lista Albergue", icon: <BusinessIcon /> },
+
     ],
   },
   {
     label: "Usuario",
     icon: <PersonAddIcon />,
     routes: [
-      { to: "/registroUsuario.jsx", label: "Registrar Usuario", icon: <PersonAddIcon /> },
+      {
+        to: "/registroUsuario.jsx",
+        label: "Registrar Usuario",
+        icon: <PersonAddIcon />,
+      },
     ],
   },
   {
@@ -170,7 +154,9 @@ const routeGroups = [
 
 export default function CustomDrawer({ onLogout, children }) {
   const [open, setOpen] = React.useState(false);
-  const [openGroups, setOpenGroups] = React.useState(routeGroups.map(() => false));
+  const [openGroups, setOpenGroups] = React.useState(
+    routeGroups.map(() => false)
+  );
   const [isMobile, setIsMobile] = React.useState(window.innerWidth < 768);
   const location = useLocation();
 
@@ -187,7 +173,7 @@ export default function CustomDrawer({ onLogout, children }) {
   const handleGroupToggle = (idx) => {
     setOpen(true);
     setOpenGroups((prev) =>
-      prev.map((val, i) => i === idx ? !prev[idx] : false)
+      prev.map((val, i) => (i === idx ? !prev[idx] : false))
     );
   };
 
@@ -311,7 +297,6 @@ export default function CustomDrawer({ onLogout, children }) {
           }}
         >
           <List>
-          
             {/* Botón de Inicio independiente */}
             <ListItem disablePadding sx={{ display: "block", mb: 2 }}>
               <ListItemButton
@@ -324,8 +309,12 @@ export default function CustomDrawer({ onLogout, children }) {
                   mb: 1,
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
-                  color: location.pathname === "/inicio" ? accentColor : textColor,
-                  background: location.pathname === "/inicio" ? selectedBg : "transparent",
+                  color:
+                    location.pathname === "/inicio" ? accentColor : textColor,
+                  background:
+                    location.pathname === "/inicio"
+                      ? selectedBg
+                      : "transparent",
                   "&:hover": {
                     background: selectedBg,
                     color: accentColor,
@@ -338,7 +327,17 @@ export default function CustomDrawer({ onLogout, children }) {
                   transition: "background 0.2s, color 0.2s",
                 }}
               >
-                <ListItemIcon sx={{ color: location.pathname === "/inicio" ? accentColor : accentColor, minWidth: 0, mr: open ? 3 : "auto", justifyContent: "center" }}>
+                <ListItemIcon
+                  sx={{
+                    color:
+                      location.pathname === "/inicio"
+                        ? accentColor
+                        : accentColor,
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
                   <HomeIcon />
                 </ListItemIcon>
                 <ListItemText
@@ -347,7 +346,8 @@ export default function CustomDrawer({ onLogout, children }) {
                     opacity: open ? 1 : 0,
                     fontWeight: 700,
                     fontSize: 18,
-                    color: location.pathname === "/inicio" ? accentColor : textColor,
+                    color:
+                      location.pathname === "/inicio" ? accentColor : textColor,
                   }}
                 />
               </ListItemButton>
@@ -355,7 +355,11 @@ export default function CustomDrawer({ onLogout, children }) {
 
             {/* Grupos desplegables */}
             {routeGroups.map((group, idx) => (
-              <ListItem disablePadding sx={{ display: "block" }} key={group.label}>
+              <ListItem
+                disablePadding
+                sx={{ display: "block" }}
+                key={group.label}
+              >
                 <ListItemButton
                   onClick={() => handleGroupToggle(idx)}
                   sx={{
@@ -373,7 +377,14 @@ export default function CustomDrawer({ onLogout, children }) {
                     transition: "background 0.2s, color 0.2s",
                   }}
                 >
-                  <ListItemIcon sx={{ color: accentColor, minWidth: 0, mr: open ? 3 : "auto", justifyContent: "center" }}>
+                  <ListItemIcon
+                    sx={{
+                      color: accentColor,
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
                     {group.icon}
                   </ListItemIcon>
                   <ListItemText
@@ -386,7 +397,11 @@ export default function CustomDrawer({ onLogout, children }) {
                     }}
                   />
                   {open ? (
-                    openGroups[idx] ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />
+                    openGroups[idx] ? (
+                      <KeyboardArrowUpIcon />
+                    ) : (
+                      <KeyboardArrowDownIcon />
+                    )
                   ) : null}
                 </ListItemButton>
                 <Collapse
@@ -407,7 +422,10 @@ export default function CustomDrawer({ onLogout, children }) {
                         selected={location.pathname === route.to}
                         sx={{
                           pl: open ? 7 : 2.5,
-                          color: location.pathname === route.to ? accentColor : mutedText,
+                          color:
+                            location.pathname === route.to
+                              ? accentColor
+                              : mutedText,
                           "&.Mui-selected": {
                             color: accentColor,
                             background: selectedBg,
@@ -417,10 +435,20 @@ export default function CustomDrawer({ onLogout, children }) {
                           transition: "background 0.2s, color 0.2s",
                         }}
                       >
-                        <ListItemIcon sx={{ color: accentColor, minWidth: 0, mr: open ? 2 : "auto", justifyContent: "center" }}>
+                        <ListItemIcon
+                          sx={{
+                            color: accentColor,
+                            minWidth: 0,
+                            mr: open ? 2 : "auto",
+                            justifyContent: "center",
+                          }}
+                        >
                           {route.icon}
                         </ListItemIcon>
-                        <ListItemText primary={route.label} sx={{ opacity: open ? 1 : 0 }} />
+                        <ListItemText
+                          primary={route.label}
+                          sx={{ opacity: open ? 1 : 0 }}
+                        />
                       </ListItemButton>
                     ))}
                   </List>
@@ -430,7 +458,15 @@ export default function CustomDrawer({ onLogout, children }) {
           </List>
         </Box>
         <Divider sx={{ background: dividerColor, mx: 2 }} />
-        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", px: 2, pb: 3 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            px: 2,
+            pb: 3,
+          }}
+        >
           <Box
             component="button"
             onClick={onLogout}
@@ -479,15 +515,17 @@ export default function CustomDrawer({ onLogout, children }) {
           transition: "margin-left 0.3s",
         }}
       >
-        <div style={{
-          width: "100%",
-          maxWidth: "1200px",
-          margin: "0 auto",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "100%",
-        }}>
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "1200px",
+            margin: "0 auto",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100%",
+          }}
+        >
           {children}
         </div>
       </Box>

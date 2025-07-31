@@ -9,7 +9,7 @@ export default function RegistroAmenazas() {
   const [evento, setEvento] = useState("");
   const [peligro, setPeligro] = useState("");
   const [eventoEspecifico, setEventoEspecifico] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
 
   const handleRegistro = (e) => {
     e.preventDefault();
@@ -76,7 +76,7 @@ export default function RegistroAmenazas() {
           </div>
         </div>
         <div className="flex justify-center mt-8">
-          <SubmitButton width="w-full" loading={loading}>
+          <SubmitButton color="text-black" width="w-full" loading={loading}>
             Registrar
           </SubmitButton>
         </div>
