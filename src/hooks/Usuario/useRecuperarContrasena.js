@@ -122,7 +122,7 @@ const useRecuperarContrasena = () => {
       setConfirmarContrasena('');
       setCorreoValido(false);
       localStorage.removeItem('pinInfo');
-    } catch (err) {
+    } catch {
       setError("No se pudo actualizar la contraseña. Intenta más tarde.");
       setMostrarAlertaError(true);
     }

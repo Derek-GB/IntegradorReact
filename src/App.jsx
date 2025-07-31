@@ -57,7 +57,7 @@ const App = () => {
     window.location.href = '/';
   };
 
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [drawerOpen] = React.useState(false);
   const drawerWidth = drawerOpen ? 270 : 64;
 
   return (
