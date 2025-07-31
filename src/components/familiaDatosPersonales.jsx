@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../styles/familiaFormulario.css"; // Asegúrate de que este CSS esté creado
+
 
 const FamiliaDatosPersonales = ({ datos = {}, setDatos }) => {
   const [edad, setEdad] = useState("");
