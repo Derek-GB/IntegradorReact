@@ -21,7 +21,7 @@ const toastStyles = {
     icon: <InfoIcon style={{ color: '#1976d2', fontSize: 24, marginRight: 10 }} />,
   },
 };
-
+// eslint-disable-next-line react-refresh/only-export-components
 export function showCustomToast(
   title,
   subtitle,

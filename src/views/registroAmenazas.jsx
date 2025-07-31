@@ -9,7 +9,7 @@ export default function RegistroAmenazas() {
   const [evento, setEvento] = useState("");
   const [peligro, setPeligro] = useState("");
   const [eventoEspecifico, setEventoEspecifico] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
 
   const handleRegistro = (e) => {
     e.preventDefault();

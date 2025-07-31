@@ -12,24 +12,23 @@ import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
 
 const FormularioAbastecimiento = () => {
   const {
-    openResumenParcial,
+    
     openResumenFinal,
     tipoCarne,
     tipoProteina,
     tipoVerdura,
     seccionAbierta,
     personas,
-    modalStyle,
+  
     carnesProductos,
-    proteinasProductos,
+  
     verdurasProductos,
     categorias,
     items,
     setTipoCarne,
     setTipoProteina,
     setTipoVerdura,
-    handleOpenResumenParcial,
-    handleCloseResumenParcial,
+    
     handleOpenResumenFinal,
     handleCloseResumenFinal,
     toggleSeccion,

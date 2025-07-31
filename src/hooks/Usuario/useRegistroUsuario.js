@@ -31,7 +31,7 @@ export const useRegistroUsuario = () => {
         const data = await municipalidadAPI.getAll();
         const lista = Array.isArray(data) ? data : data.data ?? [];
         setMunicipalidades(lista || []);
-      } catch (error) {
+      } catch {
         showCustomToast('Error', 'Error al cargar municipalidades.', 'error');
         setMunicipalidades([]);
       }
