@@ -1,16 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authHelper from '../../helpers/sesion';
+import { toast } from 'react-hot-toast';
 
 export const useLogin = () => {
   const [form, setForm] = useState({
     usuario: '',
     contrasena: ''
   });
-  const [error, setError] = useState('');
-  const [mostrarAlerta, setMostrarAlerta] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
   const navigate = useNavigate();
 
   // Verifica si hay un token válido
@@ -31,8 +29,7 @@ export const useLogin = () => {
   // Valida el formulario
   const validarFormulario = () => {
     if (!form.usuario.trim() || !form.contrasena.trim()) {
-      setError("Por favor complete todos los campos");
-      setMostrarAlerta(true);
+      toast.error("Por favor complete todos los campos");
       return false;
     }
     return true;
@@ -50,8 +47,7 @@ export const useLogin = () => {
       mensajeError = error.message;
     }
 
-    setError(mensajeError);
-    setMostrarAlerta(true);
+    toast.error(mensajeError);
   };
 
   // Maneja el envío del formulario
@@ -66,12 +62,10 @@ export const useLogin = () => {
       await authHelper.login(form.usuario, form.contrasena);
 
       if (verificarToken()) {
-        setError('');
-        setMostrarAlerta(false);
+        toast.success('Inicio de sesión exitoso');
         navigate('/inicio');
       } else {
-        setError('Inicio de sesión fallido. Token no generado.');
-        setMostrarAlerta(true);
+        toast.error('Inicio de sesión fallido. Token no generado.');
       }
     } catch (error) {
       manejarError(error);
@@ -82,11 +76,8 @@ export const useLogin = () => {
 
   return {
     form,
-    error,
-    mostrarAlerta,
     isLoading,
     handleChange,
-    handleSubmit,
-    setMostrarAlerta
+    handleSubmit
   };
 };
