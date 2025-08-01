@@ -8,6 +8,24 @@ import useIntegrante from "../../hooks/familia/useIntegrante.js";
 import { personasAPI } from "../../helpers/api.js";
 
 const FamiliaFormulario = () => {
+  const cantidad = parseInt(localStorage.getItem("cantidadIntegrantes")) || 0;
+  const [indice, setIndice] = useState(0);
+
+  const handleSiguiente = () => {
+    if (indice < cantidad - 1) {
+      setIndice(indice + 1);
+    } else {
+      // Ejecutar la lógica de guardar cuando sea el último integrante
+      handleSubmit();
+    }
+  };
+
+  const handleRegresar = () => {
+    if (indice > 0) {
+      setIndice(indice - 1);
+    }
+  };
+
   const [datos, setDatos] = useState({
     FamiliaDatosPersonales: {},
     FamiliaCondicionesEspeciales: {},
@@ -46,6 +64,7 @@ const FamiliaFormulario = () => {
       },
     }));
   };
+  
 
   const obtenerIdUsuario = () => localStorage.getItem("idUsuario") || "";
 
@@ -107,8 +126,7 @@ const FamiliaFormulario = () => {
     return ids;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setLoading(true);
     setError(null);
     setSuccess(null);
@@ -142,6 +160,8 @@ const FamiliaFormulario = () => {
       const personaPayload = construirPersonaPayload(dp, ce, cp, fd, codigoFamilia, idUsuarioCreacion);
       await crearPersonas([personaPayload]);
       setSuccess("¡Datos guardados correctamente!");
+      alert("Registro de integrantes completado.");
+      // Aquí puedes navegar a otra página si lo deseas
     } catch (err) {
       setError("Error al guardar los datos: " + (err.message || err));
       console.error(err);
@@ -151,9 +171,9 @@ const FamiliaFormulario = () => {
   };
 
   return (
+
     <FormContainer
-      title="Formulario de Registro Familiar"
-      onSubmit={handleSubmit}
+      title={`Formulario de Registro Familiar - Integrante ${indice + 1} de ${cantidad}`}
     >
       {/* Información Personal */}
       <FoldDownComponent title="Información Personal" open>
@@ -250,8 +270,8 @@ const FamiliaFormulario = () => {
               dp.estaACargoMenor === true
                 ? "Sí"
                 : dp.estaACargoMenor === false
-                ? "No"
-                : ""
+                  ? "No"
+                  : ""
             }
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
             options={["Sí", "No"]}
@@ -439,12 +459,30 @@ const FamiliaFormulario = () => {
       {error && <p className="error">{error}</p>}
       {success && <p className="success">{success}</p>}
 
-      <div className="flex justify-center mt-8">
-        <SubmitButton width="w-full" loading={loading}>
-          Guardar Datos
+      {/* Botones de paginación con estados usando SubmitButton */}
+      <div className="flex justify-center gap-4 mt-4">
+        <SubmitButton
+          type="button"
+          onClick={handleRegresar}
+          disabled={indice === 0 || loading}
+          width="w-72"
+          className="!bg-yellow-500 !text-black font-bold hover:!bg-yellow-600"
+        >
+          Regresar
+        </SubmitButton>
+        <SubmitButton
+          type="button"
+          onClick={handleSiguiente}
+          disabled={loading}
+          loading={loading}
+          width="w-72"
+          className="!bg-yellow-500 !text-black font-bold hover:!bg-yellow-600"
+        >
+          {indice < cantidad - 1 ? "Siguiente" : "Guardar Datos"}
         </SubmitButton>
       </div>
     </FormContainer>
+
   );
 };
 
