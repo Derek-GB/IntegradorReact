@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://apiintegrador-production-8ad3.up.railway.app/api";
+const BASE_URL = "http://192.168.0.12:4000/api";
 
 const customAxios = axios.create({
   baseURL: BASE_URL,
