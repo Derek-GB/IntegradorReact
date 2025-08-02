@@ -3,9 +3,9 @@ import FormContainer from "../../components/FormComponents/FormContainer.jsx";
 import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
 import FoldDownComponent from "../../components/otros/FoldDownComponent.jsx";
 import FamiliaDatosPersonales from "../../components/familiaDatosPersonales.jsx";
-import FamiliaCondicionesEspeciales from "../../components/familiaCondicionesEspeciales.jsx";
-import FamiliaCaracteristicasPoblacionales from "../../components/familiaCaracteristicasPoblacionales.jsx";
-import FamiliaFirmaDigital from "../../components/familiaFirmaDigital.jsx";
+import FamiliaCondicionesEspeciales from "../../components/FamiliaCondicionesEspeciales.jsx";
+import FamiliaCaracteristicasPoblacionales from "../../components/FamiliaCaracteristicasPoblacionales.jsx";
+import FamiliaFirmaDigital from "../../components/FamiliaFirmaDigital.jsx";
 import { personasAPI } from "../../helpers/api.js";
 
 const FamiliaFormulario = () => {

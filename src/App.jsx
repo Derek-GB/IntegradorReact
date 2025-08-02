@@ -6,7 +6,7 @@ import CustomDrawer from './CustomDrawer.jsx';
 //Familia
 import FormularioRegistro from './views/familia/formularioRegistro.jsx';
 import FamiliaFormulario from './views/familia/familiaFormulario.jsx';
-import BusquedaFamilia from './views/familia/BusquedaFamilia.jsx';
+import BusquedaFamilia from './views/familia/busquedaFamilia.jsx';
 
 //Producto
 import AsignacionRecursos from './views/producto/asignacionRecursos.jsx';
@@ -21,7 +21,7 @@ import RegistroUsuario from './views/usuario/registroUsuario.jsx';
 
 //Albergue
 
-import ActualizarAlbergue from './views/albergue/actualizarAlbergue.jsx';
+import ActualizarAlbergue from './views/albergue/ActualizarAlbergue.jsx';
 import BusquedaAlbergue from './views/albergue/busquedaAlbergue.jsx';
 import ListaAlbergue from './views/albergue/listaAlbergue.jsx';
 import RegistroAlbergue from './views/albergue/registroAlbergue.jsx';
