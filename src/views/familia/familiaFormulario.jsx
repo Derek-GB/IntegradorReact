@@ -5,16 +5,78 @@ import FoldDownComponent from "../../components/otros/FoldDownComponent.jsx";
 import InputField from "../../components/FormComponents/InputField.jsx";
 import SelectField from "../../components/FormComponents/SelectField.jsx";
 import useIntegrante from "../../hooks/familia/useIntegrante.js";
-import { personasAPI } from "../../helpers/api.js";
+import { personasAPI,firmasDigitalesAPI } from "../../helpers/api.js";
+import Alerta from "../../components/Alerta.jsx"; // Importar el componente Alerta
 
 const FamiliaFormulario = () => {
   const cantidad = parseInt(localStorage.getItem("cantidadIntegrantes")) || 0;
   const [indice, setIndice] = useState(0);
+  
+  // Estados para la alerta
+  const [mostrarAlerta, setMostrarAlerta] = useState(false);
+  const [mensajeAlerta, setMensajeAlerta] = useState("");
+  const [tipoAlerta, setTipoAlerta] = useState("warning");
+  
+  // Array para guardar los datos de cada integrante
+  const [datosIntegrantes, setDatosIntegrantes] = useState(
+    Array(cantidad).fill(null).map(() => ({
+      FamiliaDatosPersonales: {},
+      FamiliaCondicionesEspeciales: {},
+      FamiliaCaracteristicasPoblacionales: {},
+      FamiliaFirmaDigital: {},
+    }))
+  );
+
+  // Estado actual basado en el índice
+  const [datos, setDatos] = useState(datosIntegrantes[indice] || {
+    FamiliaDatosPersonales: {},
+    FamiliaCondicionesEspeciales: {},
+    FamiliaCaracteristicasPoblacionales: {},
+    FamiliaFirmaDigital: {},
+  });
+
+  // Función para guardar los datos del integrante actual
+  const guardarDatosIntegrante = () => {
+    setDatosIntegrantes(prev => {
+      const nuevos = [...prev];
+      nuevos[indice] = { ...datos };
+      return nuevos;
+    });
+  };
+
+  // Función para cargar los datos del integrante
+  const cargarDatosIntegrante = (indiceIntegrante) => {
+    const datosIntegrante = datosIntegrantes[indiceIntegrante];
+    if (datosIntegrante) {
+      setDatos(datosIntegrante);
+    } else {
+      setDatos({
+        FamiliaDatosPersonales: {},
+        FamiliaCondicionesEspeciales: {},
+        FamiliaCaracteristicasPoblacionales: {},
+        FamiliaFirmaDigital: {},
+      });
+    }
+  };
 
   const handleSiguiente = () => {
     if (indice < cantidad - 1) {
-      setIndice(indice + 1);
+      // Guardar los datos del integrante actual
+      guardarDatosIntegrante();
+      
+      // Limpiar mensajes de estado
+      setError(null);
+      setSuccess(null);
+      
+      // Avanzar al siguiente integrante
+      const nuevoIndice = indice + 1;
+      setIndice(nuevoIndice);
+      
+      // Cargar los datos del siguiente integrante (puede estar vacío)
+      cargarDatosIntegrante(nuevoIndice);
     } else {
+      // Guardar datos actuales antes de enviar
+      guardarDatosIntegrante();
       // Ejecutar la lógica de guardar cuando sea el último integrante
       handleSubmit();
     }
@@ -22,16 +84,21 @@ const FamiliaFormulario = () => {
 
   const handleRegresar = () => {
     if (indice > 0) {
-      setIndice(indice - 1);
+      // Guardar los datos del integrante actual
+      guardarDatosIntegrante();
+      
+      // Limpiar mensajes de estado
+      setError(null);
+      setSuccess(null);
+      
+      // Regresar al integrante anterior
+      const nuevoIndice = indice - 1;
+      setIndice(nuevoIndice);
+      
+      // Cargar los datos del integrante anterior
+      cargarDatosIntegrante(nuevoIndice);
     }
   };
-
-  const [datos, setDatos] = useState({
-    FamiliaDatosPersonales: {},
-    FamiliaCondicionesEspeciales: {},
-    FamiliaCaracteristicasPoblacionales: {},
-    FamiliaFirmaDigital: {},
-  });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -53,7 +120,14 @@ const FamiliaFormulario = () => {
   const cp = datos.FamiliaCaracteristicasPoblacionales;
   const fd = datos.FamiliaFirmaDigital;
 
-  const codigoFamilia = dp.idFamilia || localStorage.getItem("codigoFamilia") || "";
+  // Función para obtener la fecha máxima (hoy)
+  const obtenerFechaMaxima = () => {
+    const hoy = new Date();
+    return hoy.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+  };
+
+  // Corregir la obtención del código de familia
+  const codigoFamilia = localStorage.getItem("codigoFamilia") || "";
 
   const updateCampo = (campo, valor) => {
     setDatos(prev => ({
@@ -68,43 +142,123 @@ const FamiliaFormulario = () => {
 
   const obtenerIdUsuario = () => localStorage.getItem("idUsuario") || "";
 
+  // Función para verificar si ya existe un jefe de familia
+  const verificarJefeFamilia = () => {
+    let jefeExistente = false;
+    let indiceJefe = -1;
+    
+    // Revisar en los datos guardados de otros integrantes
+    for (let i = 0; i < datosIntegrantes.length; i++) {
+      if (i !== indice) { // Excluir el integrante actual
+        const integranteDatos = datosIntegrantes[i];
+        const esJefe = integranteDatos?.FamiliaDatosPersonales?.esJefeFamilia === "Sí" || 
+                      integranteDatos?.FamiliaDatosPersonales?.esJefeFamilia === true;
+        if (esJefe) {
+          jefeExistente = true;
+          indiceJefe = i;
+          break;
+        }
+      }
+    }
+    
+    return { jefeExistente, indiceJefe };
+  };
+
+  // Función modificada para manejar el cambio de jefe de familia
+  const handleJefeFamiliaChange = (e) => {
+    const nuevoValor = e.target.value;
+    
+    if (nuevoValor === "Sí") {
+      const { jefeExistente, indiceJefe } = verificarJefeFamilia();
+      
+      if (jefeExistente) {
+        // Mostrar alerta en lugar de window.confirm
+        setMensajeAlerta(
+          `Ya existe un jefe de familia en el integrante ${indiceJefe + 1}. ` +
+          `¿Desea cambiar el jefe de familia al integrante actual?`
+        );
+        setTipoAlerta("warning");
+        setMostrarAlerta(true);
+        
+        // No proceder automáticamente, esperar confirmación del usuario
+        return;
+      }
+    }
+    
+    // Si no hay conflicto o está seleccionando "No", proceder normalmente
+    handleChange(e, "FamiliaDatosPersonales");
+  };
+
+  // Función para confirmar el cambio de jefe de familia
+  const confirmarCambioJefe = () => {
+    const { indiceJefe } = verificarJefeFamilia();
+    
+    // Quitar el rol de jefe al integrante anterior
+    setDatosIntegrantes(prev => {
+      const nuevos = [...prev];
+      if (nuevos[indiceJefe] && nuevos[indiceJefe].FamiliaDatosPersonales) {
+        nuevos[indiceJefe].FamiliaDatosPersonales.esJefeFamilia = false;
+      }
+      return nuevos;
+    });
+    
+    // Asignar el rol al integrante actual
+    setDatos(prev => ({
+      ...prev,
+      FamiliaDatosPersonales: {
+        ...prev.FamiliaDatosPersonales,
+        esJefeFamilia: "Sí"
+      }
+    }));
+    
+    // Cerrar alerta y mostrar mensaje de éxito
+    setMostrarAlerta(false);
+    setMensajeAlerta("Jefe de familia cambiado exitosamente");
+    setTipoAlerta("success");
+    setMostrarAlerta(true);
+  };
+
+  // Función para cancelar el cambio
+  const cancelarCambioJefe = () => {
+    setMostrarAlerta(false);
+    // No hacer nada más, mantener el valor anterior
+  };
+
+  // Validación adicional en validarDatos
   const validarDatos = (dp) => {
     if (!dp.nombre?.trim()) return "Falta el nombre.";
     if (!dp.numeroIdentificacion?.trim()) return "Falta el número de identificación.";
     if (!dp.tipoIdentificacion?.trim()) return "Falta el tipo de identificación.";
     return null;
   };
+  
 
-  const construirPersonaPayload = (
-    dp, ce, cp, fd, codigoFamilia, idUsuarioCreacion
-  ) => ({
-    tieneCondicionSalud: ce.tieneCondicionSalud ?? true,
-    descripcionCondicionSalud: ce.descripcionCondicionSalud || ce.otrasCondiciones || "",
-    discapacidad: ce.discapacidad ?? false,
-    tipoDiscapacidad: ce.tipoDiscapacidad || "",
-    subtipoDiscapacidad: ce.subtipoDiscapacidad || "",
-    paisOrigen: cp.paises || "",
-    autoidentificacionCultural: cp.autoidentificacionCultural || "",
-    puebloIndigena: cp.grupoIndigena || "",
-    firma: fd.imagen || "",
-    idFamilia: codigoFamilia,
-    nombre: dp.nombre || "",
-    primerApellido: dp.primerApellido || "",
-    segundoApellido: dp.segundoApellido || "",
-    tipoIdentificacion: dp.tipoIdentificacion || "Cédula",
-    numeroIdentificacion: dp.numeroIdentificacion || "",
-    nacionalidad: dp.nacionalidad || "",
-    parentesco: dp.parentesco || "",
-    esJefeFamilia: dp.esJefeFamilia ?? false,
-    fechaNacimiento: dp.fechaNacimiento || "",
-    genero: dp.genero || "",
-    sexo: dp.sexo || "",
-    telefono: dp.telefono || "",
-    contactoEmergencia: dp.contactoEmergencia || "",
-    observaciones: dp.observaciones || "",
-    estaACargoMenor: dp.estaACargoMenor ?? false,
-    idUsuarioCreacion,
-  });
+  // Validación adicional antes de enviar
+  const validarJefeFamiliaGlobal = () => {
+    const todosLosIntegrantes = [...datosIntegrantes];
+    todosLosIntegrantes[indice] = datos; // Incluir el integrante actual
+    
+    let contadorJefes = 0;
+    
+    for (let i = 0; i < todosLosIntegrantes.length; i++) {
+      const integranteDatos = todosLosIntegrantes[i];
+      const esJefe = integranteDatos?.FamiliaDatosPersonales?.esJefeFamilia === "Sí" || 
+                    integranteDatos?.FamiliaDatosPersonales?.esJefeFamilia === true;
+      if (esJefe) {
+        contadorJefes++;
+      }
+    }
+    
+    if (contadorJefes === 0) {
+      return "Debe designar un jefe de familia.";
+    }
+    
+    if (contadorJefes > 1) {
+      return "Solo puede haber un jefe de familia por familia.";
+    }
+    
+    return null;
+  };
 
   const crearPersonas = async (payloadArray) => {
     const res = await personasAPI.create({ personas: payloadArray });
@@ -126,11 +280,62 @@ const FamiliaFormulario = () => {
     return ids;
   };
 
+  // Nueva función para crear firma digital
+  const crearFirmaDigital = async (idPersona, firma) => {
+    const firmaPayload = {
+      idPersona: idPersona,
+      firma: firma
+    };
+    
+    const res = await firmasDigitalesAPI.create(firmaPayload);
+    return res;
+  };
+
+  const construirPersonaPayload = (
+    dp, ce, cp, fd, codigoFamilia, idUsuarioCreacion
+  ) => ({
+    tieneCondicionSalud: ce.tieneCondicionSalud ?? true,
+    descripcionCondicionSalud: ce.descripcionCondicionSalud || ce.otrasCondiciones || "",
+    discapacidad: ce.discapacidad ?? false,
+    tipoDiscapacidad: ce.tipoDiscapacidad || "",
+    subtipoDiscapacidad: ce.subtipoDiscapacidad || "",
+    paisOrigen: cp.paises || "",
+    autoidentificacionCultural: cp.autoidentificacionCultural || "",
+    puebloIndigena: cp.grupoIndigena || "",
+    // Removemos la firma de aquí ya que va en el segundo POST
+    idFamilia: codigoFamilia,
+    nombre: dp.nombre || "",
+    primerApellido: dp.primerApellido || "",
+    segundoApellido: dp.segundoApellido || "",
+    tipoIdentificacion: dp.tipoIdentificacion || "Cédula",
+    numeroIdentificacion: dp.numeroIdentificacion || "",
+    nacionalidad: dp.nacionalidad || "",
+    parentesco: dp.parentesco || "",
+    esJefeFamilia: dp.esJefeFamilia ?? false,
+    fechaNacimiento: dp.fechaNacimiento || "",
+    genero: dp.genero || "",
+    sexo: dp.sexo || "",
+    telefono: dp.telefono || "",
+    contactoEmergencia: dp.contactoEmergencia || "",
+    observaciones: dp.observaciones || "",
+    estaACargoMenor: dp.estaACargoMenor ?? false,
+    idUsuarioCreacion,
+  });
+
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
     setSuccess(null);
 
+    // Validación de jefe de familia antes de enviar
+    const errorJefe = validarJefeFamiliaGlobal();
+    if (errorJefe) {
+      setError("Error: " + errorJefe);
+      setLoading(false);
+      return;
+    }
+
+    // Usar los datos actuales para el último integrante
     const dp = datos.FamiliaDatosPersonales;
     const ce = datos.FamiliaCondicionesEspeciales;
     const cp = datos.FamiliaCaracteristicasPoblacionales;
@@ -157,11 +362,43 @@ const FamiliaFormulario = () => {
     }
 
     try {
-      const personaPayload = construirPersonaPayload(dp, ce, cp, fd, codigoFamilia, idUsuarioCreacion);
-      await crearPersonas([personaPayload]);
-      setSuccess("¡Datos guardados correctamente!");
-      alert("Registro de integrantes completado.");
-      // Aquí puedes navegar a otra página si lo deseas
+      // Procesar todos los integrantes guardados
+      const todosLosIntegrantes = [...datosIntegrantes];
+      todosLosIntegrantes[indice] = datos; // Incluir el último integrante actual
+
+      for (let i = 0; i < todosLosIntegrantes.length; i++) {
+        const integranteDatos = todosLosIntegrantes[i];
+        const dpInt = integranteDatos.FamiliaDatosPersonales;
+        const ceInt = integranteDatos.FamiliaCondicionesEspeciales;
+        const cpInt = integranteDatos.FamiliaCaracteristicasPoblacionales;
+        const fdInt = integranteDatos.FamiliaFirmaDigital;
+
+        // Validar cada integrante
+        const errorInt = validarDatos(dpInt);
+        if (errorInt) {
+          setError(`Error en integrante ${i + 1}: ${errorInt}`);
+          setLoading(false);
+          return;
+        }
+
+        // 1. Crear la persona
+        const personaPayload = construirPersonaPayload(dpInt, ceInt, cpInt, fdInt, codigoFamilia, idUsuarioCreacion);
+        const ids = await crearPersonas([personaPayload]);
+        
+        // 2. Si hay firma digital y se creó la persona exitosamente, crear la firma
+        if (fdInt.imagen && ids.length > 0) {
+          await crearFirmaDigital(ids[0], fdInt.imagen);
+        }
+      }
+      
+      setSuccess("¡Datos de todos los integrantes guardados correctamente!");
+      
+      // Mostrar mensaje de finalización
+      setTimeout(() => {
+        alert("Registro de integrantes completado.");
+        // Aquí puedes navegar a otra página si lo deseas
+      }, 1000);
+      
     } catch (err) {
       setError("Error al guardar los datos: " + (err.message || err));
       console.error(err);
@@ -171,16 +408,49 @@ const FamiliaFormulario = () => {
   };
 
   return (
-
     <FormContainer
       title={`Formulario de Registro Familiar - Integrante ${indice + 1} de ${cantidad}`}
     >
+      {/* Mostrar alerta si está activa */}
+      {mostrarAlerta && (
+        <div className="mb-4">
+          <Alerta
+            mensaje={mensajeAlerta}
+            tipo={tipoAlerta}
+            duracion={tipoAlerta === "warning" ? 0 : 3000} // No cerrar automáticamente si es warning
+            onClose={() => setMostrarAlerta(false)}
+          />
+          
+          {/* Botones de confirmación solo para alertas de warning */}
+          {tipoAlerta === "warning" && (
+            <div className="flex justify-center gap-4 mt-4">
+              <SubmitButton
+                type="button"
+                onClick={confirmarCambioJefe}
+                width="w-auto"
+                className="!bg-green-500 hover:!bg-green-600 !text-white"
+              >
+                Sí, cambiar jefe
+              </SubmitButton>
+              <SubmitButton
+                type="button"
+                onClick={cancelarCambioJefe}
+                width="w-auto"
+                className="!bg-red-500 hover:!bg-red-600 !text-white"
+              >
+                No, mantener actual
+              </SubmitButton>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Información Personal */}
       <FoldDownComponent title="Información Personal" open>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <InputField
             label="Código de Familia"
-            name="idFamilia"
+            name="codigoFamilia"
             value={codigoFamilia}
             readOnly
           />
@@ -225,6 +495,7 @@ const FamiliaFormulario = () => {
             type="date"
             value={dp.fechaNacimiento || ""}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            max={obtenerFechaMaxima()}
           />
           <InputField
             label="Edad"
@@ -237,6 +508,29 @@ const FamiliaFormulario = () => {
             name="nacionalidad"
             value={dp.nacionalidad || ""}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+          />
+          <SelectField
+            label="Usted diría que se identifica como (Género)"
+            name="genero"
+            value={dp.genero || "Prefiero no decir"}
+            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            options={["Hombre", "Mujer","Hombre trans/transmasculino","Mujer trans/transfemenina","No se identifica con ninguna de las anteriores","Otro", "Prefiero no decir"]}
+          />
+          
+          <SelectField
+            label="Sexo"
+            name="sexo"
+            value={dp.sexo || ""}
+            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            options={["Masculino", "Femenino","Intersexo","Prefiero no decir"]}
+          />
+          
+          <InputField
+            label="Observaciones"
+            name="observaciones"
+            value={dp.observaciones || ""}
+            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            type="textarea"
           />
           <InputField
             label="Parentesco"
@@ -259,8 +553,8 @@ const FamiliaFormulario = () => {
           <SelectField
             label="¿Es jefe de familia?"
             name="esJefeFamilia"
-            value={dp.esJefeFamilia ? "Sí" : "No"}
-            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            value={dp.esJefeFamilia === true || dp.esJefeFamilia === "Sí" ? "Sí" : "No"}
+            onChange={handleJefeFamiliaChange}
             options={["No", "Sí"]}
           />
           <SelectField
