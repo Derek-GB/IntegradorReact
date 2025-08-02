@@ -1,14 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import authHelper from '../helpers/sesion'; // importa tu helper con login/logout
-
 const Inicio = () => {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    authHelper.logout();  // limpia token e idUsuario
-    navigate('/');        // redirige a login
-  };
 
   return (
     <>

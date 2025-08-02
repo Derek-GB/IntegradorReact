@@ -12,24 +12,23 @@ import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
 
 const FormularioAbastecimiento = () => {
   const {
-    openResumenParcial,
+    
     openResumenFinal,
     tipoCarne,
     tipoProteina,
     tipoVerdura,
     seccionAbierta,
     personas,
-    modalStyle,
+  
     carnesProductos,
-    proteinasProductos,
+  
     verdurasProductos,
     categorias,
     items,
     setTipoCarne,
     setTipoProteina,
     setTipoVerdura,
-    handleOpenResumenParcial,
-    handleCloseResumenParcial,
+    
     handleOpenResumenFinal,
     handleCloseResumenFinal,
     toggleSeccion,
@@ -134,7 +133,7 @@ const FormularioAbastecimiento = () => {
                   type="button"
                   onClick={handleAgregarCarne}
                   width="w-full"
-                  className="bg-yellow-500 "
+                  className="text-black"
                 >
                   Agregar Carne
                 </SubmitButton>

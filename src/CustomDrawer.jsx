@@ -27,9 +27,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
-import LocalShipping from "@mui/icons-material/localShipping";
-import AssignmentReturned from "@mui/icons-material/assignmentreturned";
-import Shelves from "@mui/icons-material/shelves";
+import LocalShipping from "@mui/icons-material/LocalShipping";
+import AssignmentReturned from "@mui/icons-material/AssignmentReturned";
+import Shelves from "@mui/icons-material/Shelves";
 
 
 
@@ -48,41 +48,8 @@ const dividerColor = "#F8B701";
 const textColor = "#fff";
 const mutedText = "#e0e0e0";
 
-const openedMixin = (theme) => ({
-  width: drawerWidth,
-  background: bgColor,
-  color: textColor,
-  transition: theme.transitions.create(["width", "background", "color"], {
-    easing: theme.transitions.easing.easeInOut,
-    duration: 500,
-  }),
-  overflowX: "hidden",
-  border: "none",
-  boxShadow: "2px 0 12px #0004",
-  position: "fixed",
-  top: 0,
-  left: 0,
-  height: "100vh",
-  zIndex: 1300,
-});
 
-const closedMixin = (theme) => ({
-  background: bgColor,
-  color: textColor,
-  transition: theme.transitions.create(["width", "background", "color"], {
-    easing: theme.transitions.easing.easeInOut,
-    duration: 500,
-  }),
-  overflowX: "hidden",
-  width: `64px`,
-  border: "none",
-  boxShadow: "2px 0 12px #0004",
-  position: "fixed",
-  top: 0,
-  left: 0,
-  height: "100vh",
-  zIndex: 1300,
-});
+
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",

@@ -12,7 +12,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } 
 const ResumenFinal = () => {
   const {
     items,
-    guardarDatos,
+   
     descargarResumen,
     datosFormulario,
     eliminarItem,

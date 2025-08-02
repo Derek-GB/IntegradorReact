@@ -42,7 +42,7 @@ export const useRegistroConsumibles = () => {
         unidadMedida: "",
         cantidad: "",
       });
-    } catch (err) {
+    } catch {
       showCustomToast("Error", "Error al registrar consumible.", "error");
     } finally {
       setLoading(false);

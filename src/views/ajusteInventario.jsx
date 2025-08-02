@@ -20,7 +20,7 @@ export default function AjusteInventario() {
     try {
       const res = await productosAPI.getAll();
       setProductos(res.data || []);
-    } catch (error) {
+    } catch {
       showCustomToast("Error", "Error al cargar productos.", "error");
     }
   };
@@ -63,7 +63,7 @@ export default function AjusteInventario() {
       setCantidadReal("");
       setBusquedaProducto("");
       fetchProductos();
-    } catch (error) {
+    } catch  {
       showCustomToast("Error", "Error al registrar el ajuste.", "error");
     } finally {
       setLoading(false);
