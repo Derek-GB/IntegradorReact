@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import DataTable from "react-data-table-component";
+import * as XLSX from "xlsx";
 
 // Generador de páginas con elipsis
 function getPageNumbers(current, total, max = 5) {
@@ -40,7 +41,6 @@ export default function GlobalDataTable({
       },
     },
   },
-  
   dense = false,
   highlightOnHover = false,
   rowsPerPage = 10,
@@ -121,13 +121,28 @@ export default function GlobalDataTable({
     </div>
   );
 
+  // Exportar la página actual a Excel
+  const exportToExcel = () => {
+    const exportData = paginatedData.map((row) =>
+      columns.reduce((acc, col) => {
+        const selector = col.selector;
+        acc[col.name] = typeof selector === "function" ? selector(row) : row[selector];
+        return acc;
+      }, {})
+    );
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Datos");
+    XLSX.writeFile(wb, "datos.xlsx");
+  };
+
   return (
     <div
       className="w-full bg-white p-4 rounded-xl border border-gray-100 shadow-sm"
       style={{
         overflowX: "auto",
-        scrollbarWidth: "thin", // Firefox
-        scrollbarColor: "#00796B #E0E0E0", // Firefox
+        scrollbarWidth: "thin",
+        scrollbarColor: "#00796B #E0E0E0",
       }}
     >
       <style>
@@ -150,6 +165,16 @@ export default function GlobalDataTable({
           }
         `}
       </style>
+
+      {/* Botón exportar Excel */}
+      <div className="flex justify-end mb-2">
+        <button
+          onClick={exportToExcel}
+          className="bg-[#F8B601] ${color} font-bold py-1 px-4 px-3 rounded-xl transition ${width} ${className} hover:bg-[#d9a100] focus:outline-none focus:ring-2 focus:ring-[#F8B601]/50 duration-200"
+        >
+          Exportar Excel
+        </button>
+      </div>
 
       <DataTable
         columns={columns}
