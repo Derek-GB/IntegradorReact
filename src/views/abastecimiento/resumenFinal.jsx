@@ -1,91 +1,224 @@
-// src/components/ResumenFinal.jsx
-import React, { useContext } from 'react';
-import { contextoAbastecimiento } from '../../context/contextoAbastecimiento';
-import { useNavigate } from 'react-router-dom';
-import '../../styles/resumenFinal.css'; // Asegúrate de tener o crear este archivo CSS
+import React, { useState } from "react";
+import SaveIcon from "@mui/icons-material/Save";
+import DownloadIcon from "@mui/icons-material/Download";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import GlobalDataTable from "../../components/globalComponents/GlobalDataTable.jsx";
+import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
+import useResumenFinal from "../../hooks/abastecimineto/useResumenFinal.js";
+import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@mui/material";
 
 const ResumenFinal = () => {
-  const { items, datosFormulario } = useContext(contextoAbastecimiento);
-  const navigate = useNavigate();
+  const {
+    items,
+   
+    descargarResumen,
+    datosFormulario,
+    eliminarItem,
+    editarItem,
+  } = useResumenFinal();
 
-  const agrupados = items.reduce((acc, item) => {
-    if (!acc[item.seccion]) acc[item.seccion] = [];
-    acc[item.seccion].push(item);
-    return acc;
-  }, {});
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editIndex, setEditIndex] = useState(null);
+  const [editCantidad, setEditCantidad] = useState("");
 
-  const guardarDatos = () => {
-    alert('Datos guardados exitosamente.');
-    console.log('Datos:', { datosFormulario, productos: items });
+  const handleOpenModal = (index) => {
+    setEditIndex(index);
+    setEditCantidad(items[index].cantidad);
+    setModalOpen(true);
   };
 
-  const descargarResumen = () => {
-    const texto = items.map(i =>
-      `${i.seccion},${i.tipo},${i.unidad},${i.cantidad}`
-    ).join('\n');
-    const blob = new Blob([texto], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'resumen_abastecimiento.csv';
-    a.click();
-    URL.revokeObjectURL(url);
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setEditIndex(null);
+    setEditCantidad("");
   };
+
+  const handleGuardarEdicion = () => {
+    const nuevoItem = { ...items[editIndex], cantidad: editCantidad };
+    editarItem(editIndex, nuevoItem);
+    handleCloseModal();
+  };
+
+  const datosFormularioColumns = [
+    {
+      name: "Fecha",
+      selector: (row) => row.fecha,
+      sortable: true,
+      cell: (row) => <span className="font-medium">{row.fecha || "-"}</span>,
+    },
+    {
+      name: "Tipo de Comida",
+      selector: (row) => row.tipo,
+      sortable: true,
+      cell: (row) => <span className="font-medium">{row.tipo || "-"}</span>,
+    },
+    {
+      name: "Cantidad de Personas",
+      selector: (row) => row.cantidad,
+      sortable: true,
+      cell: (row) => <span className="font-medium">{row.cantidad || "-"}</span>,
+    },
+    {
+      name: "Nombre del Albergue",
+      selector: (row) => row.albergue,
+      sortable: true,
+      cell: (row) => <span className="font-medium">{row.albergue || "-"}</span>,
+    },
+  ];
+
+  const productosColumns = [
+    {
+      name: "Categoría",
+      selector: (row) => row.seccion,
+      sortable: true,
+      cell: (row) => (
+        <span className="font-medium text-teal-700 bg-teal-50 px-2 py-1 rounded-full text-sm">
+          {row.seccion}
+        </span>
+      ),
+    },
+    {
+      name: "Producto",
+      selector: (row) => row.tipo,
+      sortable: true,
+      cell: (row) => <span className="font-medium text-gray-900">{row.tipo}</span>,
+    },
+    {
+      name: "Unidad",
+      selector: (row) => row.unidad,
+      sortable: true,
+      cell: (row) => <span className="text-gray-600">{row.unidad}</span>,
+    },
+    {
+      name: "Cantidad",
+      selector: (row) => row.cantidad,
+      sortable: true,
+      cell: (row) => <span className="font-semibold text-gray-900">{row.cantidad}</span>,
+    },
+    {
+      name: "Acciones",
+      cell: (row, index) => (
+        <div className="flex gap-2">
+          <button onClick={() => handleOpenModal(index)} className="text-black hover:text-yellow-600" title="Editar">
+            <EditIcon fontSize="small" />
+          </button>
+          <button onClick={() => eliminarItem(index)} className="text-black hover:text-red-600" title="Eliminar">
+            <DeleteIcon fontSize="small" />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  const datosFormularioData = [datosFormulario || {}];
 
   return (
-    <div className="resumen-container">
-      <section className="seccion">
-        <h2>Datos del Formulario</h2>
-        <table className="tabla">
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Tipo de Comida</th>
-              <th>Cantidad de Personas</th>
-              <th>Nombre del Albergue</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{datosFormulario?.fecha || '-'}</td>
-              <td>{datosFormulario?.tipo || '-'}</td>
-              <td>{datosFormulario?.cantidad || '-'}</td>
-              <td>{datosFormulario?.albergue || '-'}</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section className="seccion">
-        <h2>Productos Registrados</h2>
-        <table className="tabla">
-          <thead>
-            <tr>
-              <th>Categoría</th>
-              <th>Producto</th>
-              <th>Unidad</th>
-              <th>Cantidad</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.entries(agrupados).map(([categoria, productos]) =>
-              productos.map((item, index) => (
-                <tr key={`${categoria}-${index}`}>
-                  <td>{categoria}</td>
-                  <td>{item.tipo}</td>
-                  <td>{item.unidad}</td>
-                  <td>{item.cantidad}</td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </section>
-
-      <div className="botones">
-        <button onClick={guardarDatos} className="btn-amarillo">Guardar datos</button>
-        <button onClick={descargarResumen} className="btn-amarillo">Descargar Formulario</button>
+    <div className="space-y-6">
+      <CustomToaster />
+      {/* Datos del Formulario */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+          <h2 className="text-xl font-semibold text-gray-800">Datos del Formulario</h2>
+        </div>
+        <div className="p-4">
+          <GlobalDataTable
+            columns={datosFormularioColumns}
+            data={datosFormularioData}
+            pagination={false}
+            noDataComponent={
+              <div className="px-6 py-4 text-center text-sm text-gray-500">
+                No hay datos del formulario disponibles
+              </div>
+            }
+          />
+        </div>
       </div>
+
+      {/* Productos Registrados */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+          <h2 className="text-xl font-semibold text-gray-800">Productos Registrados</h2>
+        </div>
+        <div className="p-4">
+          <GlobalDataTable
+            columns={productosColumns}
+            data={items}
+            pagination={true}
+            paginationPerPage={10}
+            noDataComponent={
+              <div className="px-6 py-4 text-center text-sm text-gray-500">
+                No hay productos registrados
+              </div>
+            }
+          />
+        </div>
+      </div>
+
+      {/* Boton */}
+      <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+        <SubmitButton
+          type="button"
+          onClick={descargarResumen}
+          width="flex-1 sm:max-w-xs"
+          className="bg-yellow-500"
+        >
+          <div className="flex items-center justify-center gap-2">
+            <DownloadIcon sx={{ fontSize: 20, color: "black"  }} />
+          </div>
+        </SubmitButton>
+      </div>
+
+      {/* Modal de Edición */}
+<Dialog
+  open={modalOpen}
+  onClose={handleCloseModal}
+  maxWidth="sm"
+  fullWidth
+  PaperProps={{
+    style: {
+      padding: '24px',
+      borderRadius: '5px',
+    },
+  }}
+>
+  <DialogTitle
+    sx={{ fontSize: '1.5rem', fontWeight: 'bold', textAlign: 'center' }}
+  >
+    Editar Cantidad del Producto
+  </DialogTitle>
+
+  <DialogContent sx={{ mt: 2 }}>
+    <TextField
+      label="Cantidad"
+      value={editCantidad}
+      onChange={(e) => setEditCantidad(e.target.value)}
+      type="number"
+      fullWidth
+      autoFocus
+      InputLabelProps={{ style: { whiteSpace: 'nowrap' } }} 
+      inputProps={{ min: 0, step: "any" }}
+      sx={{ fontSize: '1.2rem', mb: 2 }}
+    />
+  </DialogContent>
+
+  <DialogActions sx={{ justifyContent: 'space-between', px: 3 }}>
+    <button
+      onClick={handleCloseModal}
+      className="bg-yellow-500 text-black px-6 py-2 rounded-md hover:bg-yellow-600 transition"
+    >
+      Cancelar
+    </button>
+<button
+  type="button"
+  onClick={handleGuardarEdicion}
+  className="bg-yellow-500 text-black px-6 py-2 rounded-md hover:bg-yellow-600 transition"
+>
+  Guardar
+</button>
+  </DialogActions>
+</Dialog>
     </div>
   );
 };
