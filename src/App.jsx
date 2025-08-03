@@ -38,9 +38,11 @@ import AyudaForm from './views/ayudaForm.jsx';
 import Inicio from './views/inicio.jsx';
 import RegistroAmenazas from './views/registroAmenazas.jsx';
 import RegistroMascotas from "./views/registroMascota.jsx";
+import ReportesAlbergue from './views/reportes.jsx';
 
 //No categorizado
 import FormularioIntegrantes from "./components/formularioIntegrantes.jsx";
+
 
 // Importa el proveedor de contexto aquí
 import { AbastecimientoProvider } from './context/contextoAbastecimiento';
@@ -119,6 +121,7 @@ const App = () => {
                     <Route path="/ActualizarAlbergue.jsx" element={<ActualizarAlbergue idAlbergue={17} />} />
                     <Route path="/registroAmenazas.jsx" element={<RegistroAmenazas />} />
                     <Route path="/resumenFinal" element={<ResumenFinal />} />
+                    <Route path="/reportes.jsx" element={<ReportesAlbergue />} />
                   </Routes>
                 </div>
               </div>

@@ -30,6 +30,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import LocalShipping from "@mui/icons-material/localShipping";
 import AssignmentReturned from "@mui/icons-material/assignmentreturned";
 import Shelves from "@mui/icons-material/shelves";
+import DatasetLinked from "@mui/icons-material/datasetLinked";
+import QuickReferenceAll from "@mui/icons-material/assignmentLate";
+
 
 
 
@@ -147,7 +150,9 @@ const routeGroups = [
     routes: [
       { to: "/registroMascota.jsx", label: "Mascotas", icon: <PetsIcon /> },
       { to: "/registroAmenazas.jsx", label: "Amenazas", icon: <ReportIcon /> },
-      { to: "/ayudaForm.jsx", label: "Referencias", icon: <ReportIcon /> },
+      { to: "/ayudaForm.jsx", label: "Referencias", icon: <DatasetLinked /> },
+      { to: "/reportes.jsx", label: "Reportes", icon: <QuickReferenceAll /> },
+      
     ],
   },
 ];
