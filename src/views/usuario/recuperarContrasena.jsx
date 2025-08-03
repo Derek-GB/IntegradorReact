@@ -24,6 +24,7 @@ const RecuperarContrasena = () => {
     validarCorreo,
     setMostrarAlertaMensaje,
     setMostrarAlertaError,
+    isLoading,
   } = useRecuperarContrasena();
 
   // Mostrar mensajes con toast
@@ -60,14 +61,17 @@ const RecuperarContrasena = () => {
                 value={correo}
                 onChange={(e) => setCorreo(e.target.value)}
                 required
+                disabled={isLoading} // Opcional, evitar cambios mientras carga
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00897B] transition"
               />
               <button
                 type="button"
                 onClick={validarCorreo}
-                className="w-full mt-2 py-2 rounded-lg bg-[#00897B] text-white font-semibold hover:bg-[#00796B] transition"
+                disabled={isLoading}
+                className={`w-full mt-2 py-2 rounded-lg text-white font-semibold transition
+                  ${isLoading ? 'bg-[#00796B] opacity-70 cursor-not-allowed' : 'bg-[#00897B] hover:bg-[#00796B]'}`}
               >
-                Validar Correo
+                {isLoading ? 'Validando...' : 'Validar Correo'}
               </button>
             </div>
 
@@ -82,7 +86,7 @@ const RecuperarContrasena = () => {
                 placeholder="Ingrese el PIN (revisar correo electrónico)"
                 value={pin}
                 onChange={(e) => setPin(e.target.value)}
-                disabled={!correoValido}
+                disabled={!correoValido || isLoading}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00897B] transition"
               />
@@ -99,7 +103,7 @@ const RecuperarContrasena = () => {
                 placeholder="Nueva contraseña"
                 value={nuevaContrasena}
                 onChange={(e) => setNuevaContrasena(e.target.value)}
-                disabled={!correoValido}
+                disabled={!correoValido || isLoading}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00897B] transition"
               />
@@ -116,7 +120,7 @@ const RecuperarContrasena = () => {
                 placeholder="Confirme la contraseña"
                 value={confirmarContrasena}
                 onChange={(e) => setConfirmarContrasena(e.target.value)}
-                disabled={!correoValido}
+                disabled={!correoValido || isLoading}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00897B] transition"
               />
@@ -125,15 +129,17 @@ const RecuperarContrasena = () => {
             <div className="flex flex-col gap-2 mt-4">
               <button
                 type="submit"
-                className="w-full py-2 rounded-lg bg-[#00897B] text-white font-semibold hover:bg-[#00796B] transition"
-                disabled={!correoValido}
+                disabled={!correoValido || isLoading}
+                className={`w-full py-2 rounded-lg text-white font-semibold transition
+                  ${isLoading ? 'bg-[#00796B] opacity-70 cursor-not-allowed' : 'bg-[#00897B] hover:bg-[#00796B]'}`}
               >
-                Restablecer Contraseña
+                {isLoading ? 'Restableciendo...' : 'Restablecer Contraseña'}
               </button>
               <button
                 type="button"
                 className="w-full py-2 rounded-lg bg-gray-200 text-[#00897B] font-semibold hover:bg-gray-300 transition"
                 onClick={() => navigate('/')}
+                disabled={isLoading}
               >
                 Volver
               </button>

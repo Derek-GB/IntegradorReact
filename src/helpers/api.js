@@ -164,8 +164,12 @@ export const categoriaConsumiblesAPI = createApiMethods("categoriaConsumibles");
 export const usuariosAPI = createApiMethods("usuarios", {
   validarCorreo: async (correo) => {
     try {
-      await customAxios.post(`public/usuarios/validar/correo`, { correo });
-      return { existe: false };
+      const res = await customAxios.post(`public/usuarios/validar/correo`, { correo });
+      console.log(res);
+      if (res.data.success==true) {
+        return { existe: false };
+      }
+      return { existe: true };
     } catch (error) {
       if (error.response?.status === 400) {
         return { existe: true };
