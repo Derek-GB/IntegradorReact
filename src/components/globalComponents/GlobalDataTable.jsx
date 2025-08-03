@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import DataTable from "react-data-table-component";
+import useExcelExport from "../../hooks/useExcelExport"; 
 
 // Generador de páginas con elipsis
 function getPageNumbers(current, total, max = 5) {
@@ -40,7 +41,6 @@ export default function GlobalDataTable({
       },
     },
   },
-  
   dense = false,
   highlightOnHover = false,
   rowsPerPage = 10,
@@ -64,6 +64,8 @@ export default function GlobalDataTable({
 
   const start = (page - 1) * rowsPerPage + 1;
   const end = Math.min(start + paginatedData.length - 1, totalRows);
+
+  const { exportToExcel } = useExcelExport();
 
   const buttonClass = (disabled, active) =>
     `relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 border ${
@@ -126,13 +128,12 @@ export default function GlobalDataTable({
       className="w-full bg-white p-4 rounded-xl border border-gray-100 shadow-sm"
       style={{
         overflowX: "auto",
-        scrollbarWidth: "thin", // Firefox
-        scrollbarColor: "#00796B #E0E0E0", // Firefox
+        scrollbarWidth: "thin",
+        scrollbarColor: "#00796B #E0E0E0",
       }}
     >
       <style>
         {`
-          /* Scrollbar Webkit */
           div::-webkit-scrollbar {
             height: 8px;
           }
@@ -150,6 +151,16 @@ export default function GlobalDataTable({
           }
         `}
       </style>
+
+      {/* Botón exportar Excel */}
+      <div className="flex justify-end mb-2">
+        <button
+          onClick={() => exportToExcel(paginatedData, columns, "consulta")}
+          className="bg-[#F8B601] font-bold py-1 px-4 rounded-xl transition hover:bg-[#d9a100] focus:outline-none focus:ring-2 focus:ring-[#F8B601]/50 duration-200"
+        >
+          Exportar Excel
+        </button>
+      </div>
 
       <DataTable
         columns={columns}

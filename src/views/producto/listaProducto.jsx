@@ -50,8 +50,14 @@ const ListaProducto = () => {
   };
 
   const handleSelectProducto = (producto) => {
-    setForm(producto || {});
-    setBusquedaProducto(producto ? `Código: ${producto.codigoProducto} - ${producto.nombre}` : '');
+    if (producto) {
+      const { id, descripcion, cantidad, ...rest } = producto;
+      setForm({ id, descripcion, cantidad, ...rest });
+      setBusquedaProducto(`Código: ${producto.codigoProducto} - ${producto.nombre}`);
+    } else {
+      setForm({});
+      setBusquedaProducto('');
+    }
   };
 
   const actualizarProducto = async (e) => {
@@ -64,13 +70,17 @@ const ListaProducto = () => {
         setLoading(false);
         return;
       }
+
       const payload = {
         id: form.id,
         descripcion: form.descripcion || '',
         cantidad: cantidadNum,
       };
+
       await productosAPI.update(payload);
+
       showCustomToast("Éxito", "Producto actualizado con éxito.", "success");
+
       setProductos(prev =>
         prev.map(p =>
           p.id === form.id ? { ...p, descripcion: payload.descripcion, cantidad: payload.cantidad } : p
@@ -94,7 +104,7 @@ const ListaProducto = () => {
       setProductos(prev => prev.filter(p => p.id !== form.id));
       setBusquedaProducto('');
       setForm({});
-    } catch (error) {
+    } catch {
       showCustomToast("Error", "Error al eliminar el producto.", "error");
     } finally {
       setLoading(false);
@@ -117,16 +127,11 @@ const ListaProducto = () => {
             placeholder="Código o nombre del producto..."
           />
         </div>
-        {form.id && (
-          <>
-            <div className="flex-1">
-              <InputField
-                label="ID"
-                name="id"
-                value={form.id}
-                readOnly
-              />
-            </div>
+      </div>
+
+      {form.id && (
+        <>
+          <div className="flex flex-col md:flex-row gap-6 mt-4">
             <div className="flex-1">
               <InputField
                 label="Código del Producto"
@@ -143,11 +148,8 @@ const ListaProducto = () => {
                 readOnly
               />
             </div>
-          </>
-        )}
-      </div>
-      {form.id && (
-        <>
+          </div>
+
           <div className="flex flex-col md:flex-row gap-6 mt-4">
             <div className="flex-1">
               <InputField
@@ -192,6 +194,7 @@ const ListaProducto = () => {
               />
             </div>
           </div>
+
           <div className="flex flex-col md:flex-row gap-6 mt-8">
             <div className="flex-1 flex gap-4">
               <SubmitButton
