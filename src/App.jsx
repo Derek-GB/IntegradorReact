@@ -10,7 +10,7 @@ import BusquedaFamilia from './views/familia/busquedaFamilia.jsx';
 
 //Producto
 import AsignacionRecursos from './views/producto/asignacionRecursos.jsx';
-import ListaProducto from './views/producto/listaProducto.jsx';
+import ListaSuministro from './views/producto/listaSuministro.jsx';
 import RegistrarConsumible from './views/producto/registrarConsumibles.jsx';
 import RegistroSuministros from './views/producto/registrarSuministro.jsx';
 
@@ -107,7 +107,7 @@ const App = () => {
                     <Route path="/registrarConsumibles.jsx" element={<RegistrarConsumible />} />
                     <Route path="/registroAlbergue.jsx" element={<RegistroAlbergue />} />
                     <Route path="/registroUsuario.jsx" element={<RegistroUsuario />} />
-                    <Route path="/listaProducto.jsx" element={<ListaProducto />} />
+                    <Route path="/listaSuministro.jsx" element={<ListaSuministro />} />
                     <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
                     <Route path="/abarrotesMenuPrincipal" element={<MenuPrincipal />} />
                     <Route path="/formularioAbarrotes.jsx" element={<FormularioAbastecimiento />} />
