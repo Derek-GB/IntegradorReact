@@ -14,29 +14,35 @@ const FamiliaCondicionesEspeciales = ({ datos = {}, setDatos }) => {
   return (
     <details open>
       <summary><strong>Condiciones Especiales</strong></summary>
+
       <fieldset className="mt-2">
+
         <label>¿Tiene alguna condición especial?</label>
         <br />
-        <label className="me-3">
+        <div className="radio-group">
           <input
+            id="discapacidad-si"
             type="radio"
             name="discapacidad"
             value={true}
             checked={datos.discapacidad === true}
             onChange={() => setDatos({ ...datos, discapacidad: true })}
-          />{" "}
-          Sí
-        </label>
-        <label>
+
+          />
+          <label htmlFor="discapacidad-si">Sí</label>
+
           <input
+            id="discapacidad-no"
             type="radio"
             name="discapacidad"
             value={false}
             checked={datos.discapacidad === false}
             onChange={() => setDatos({ ...datos, discapacidad: false })}
-          />{" "}
-          No
-        </label>
+
+          />
+          <label htmlFor="discapacidad-no">No</label>
+        </div>
+
 
         {mostrarCondiciones && (
           <>
@@ -95,7 +101,20 @@ const FamiliaCondicionesEspeciales = ({ datos = {}, setDatos }) => {
                 className="form-control mb-2"
               />
             )}
+            <label className="form-label mt-2">
+              Describa brevemente la condición especial:
+            </label>
+            <textarea
+              name="descripcionCondicionSalud"
+              value={datos.descripcionCondicionSalud || ""}
+              onChange={handleChange}
+              className="form-control mb-2"
+              rows={3}
+              placeholder="Ejemplo: Hipertensión controlada con medicamento diario"
+            ></textarea>
+
           </>
+
         )}
       </fieldset>
     </details>

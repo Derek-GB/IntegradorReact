@@ -6,12 +6,9 @@ import CustomToaster from '../../components/globalComponents/CustomToaster';
 const Login = () => {
   const {
     form,
-    error,
-    mostrarAlerta,
     isLoading,
     handleChange,
     handleSubmit,
-    setMostrarAlerta
   } = useLogin();
 
   return (
