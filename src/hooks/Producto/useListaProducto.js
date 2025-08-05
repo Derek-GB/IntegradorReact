@@ -61,6 +61,9 @@ export const useListaSuministro = () => {
           p.id === form.id ? { ...p, descripcion: payload.descripcion, cantidad: payload.cantidad } : p
         )
       );
+      setForm({});
+      setBusquedaProducto('');
+      
     } catch {
       showCustomToast("Error", "Error al actualizar el producto.", "error");
     } finally {
