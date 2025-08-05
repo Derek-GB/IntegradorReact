@@ -8,7 +8,7 @@ const login = async (correo, contrasena) => {
     });
 
     const { token, usuario } = res.data;
-    const { id } = usuario;
+    const { id, nombre } = usuario;
     if (!usuario) {
       throw new Error("No se recibió información de usuario");
     }
@@ -20,6 +20,8 @@ const login = async (correo, contrasena) => {
     } else {
       localStorage.setItem("token", token); // ahora se usará en todas las peticiones
       localStorage.setItem("idUsuario", id);
+      localStorage.setItem("nombreUsuario", nombre || "");
+      localStorage.setItem("userData", JSON.stringify({ username: correo, nombre: nombre || correo }));
     }
   } catch (err) {
     console.error("Error al iniciar sesión", err.message);
