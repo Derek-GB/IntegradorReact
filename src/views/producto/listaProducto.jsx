@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { productosAPI } from '../../helpers/api';
+import React from 'react';
 import FormContainer from '../../components/FormComponents/FormContainer.jsx';
 import InputField from '../../components/FormComponents/InputField.jsx';
 import SelectField from '../../components/FormComponents/SelectField.jsx';
 import SubmitButton from '../../components/FormComponents/SubmitButton.jsx';
-import CustomToaster, { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
+import CustomToaster from '../../components/globalComponents/CustomToaster.jsx';
 import SearchAutocompleteInput from '../../components/FormComponents/SearchAutocompleteInput.jsx';
+import { useListaSuministro } from '../../hooks/Producto/useListaProducto.js';
 
 const categorias = [
   { nombre: "Carne", value: "1" },
@@ -25,202 +25,80 @@ const unidades = [
 ];
 
 const ListaProducto = () => {
-  const [productos, setProductos] = useState([]);
-  const [busquedaProducto, setBusquedaProducto] = useState('');
-  const [showSugerencias, setShowSugerencias] = useState(false);
-  const [form, setForm] = useState({});
-  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchProductos = async () => {
-      try {
-        const data = await productosAPI.getAll();
-        const lista = Array.isArray(data) ? data : data.data || [];
-        setProductos(lista);
-      } catch {
-        showCustomToast('Error', 'Error al cargar productos. Verifica si tu sesión expiró.', 'error');
-      }
-    };
-    fetchProductos();
-  }, []);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSelectProducto = (producto) => {
-    if (producto) {
-      const { id, descripcion, cantidad, ...rest } = producto;
-      setForm({ id, descripcion, cantidad, ...rest });
-      setBusquedaProducto(`Código: ${producto.codigoProducto} - ${producto.nombre}`);
-    } else {
-      setForm({});
-      setBusquedaProducto('');
-    }
-  };
-
-  const actualizarProducto = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const cantidadNum = Number(form.cantidad);
-      if (isNaN(cantidadNum) || cantidadNum < 0) {
-        showCustomToast('Error', 'Cantidad debe ser un número válido mayor o igual a 0', 'error');
-        setLoading(false);
-        return;
-      }
-
-      const payload = {
-        id: form.id,
-        descripcion: form.descripcion || '',
-        cantidad: cantidadNum,
-      };
-
-      await productosAPI.update(payload);
-
-      showCustomToast("Éxito", "Producto actualizado con éxito.", "success");
-
-      setProductos(prev =>
-        prev.map(p =>
-          p.id === form.id ? { ...p, descripcion: payload.descripcion, cantidad: payload.cantidad } : p
-        )
-      );
-    } catch {
-      showCustomToast("Error", "Error al actualizar el producto.", "error");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const eliminarProducto = async () => {
-    const confirmar = window.confirm("¿Seguro que deseas eliminar este producto?");
-    if (!confirmar) return;
-
-    setLoading(true);
-    try {
-      await productosAPI.remove(form.id);
-      showCustomToast("Éxito", "Producto eliminado con éxito.", "success");
-      setProductos(prev => prev.filter(p => p.id !== form.id));
-      setBusquedaProducto('');
-      setForm({});
-    } catch {
-      showCustomToast("Error", "Error al eliminar el producto.", "error");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    productos,
+    busquedaProducto,
+    setBusquedaProducto,
+    showSugerencias,
+    setShowSugerencias,
+    form,
+    handleChange,
+    handleSelectProducto,
+    actualizarProducto,
+    eliminarProducto,
+    loading,
+  } = useListaSuministro();
 
   return (
-    <FormContainer title="Lista de Suministros" size="md" onSubmit={actualizarProducto}>
-      <div className="flex flex-col md:flex-row gap-6">
+ <FormContainer title="Lista de Suministros" size="md" onSubmit={actualizarProducto}>
+  <div className="flex flex-col md:flex-row gap-6">
+    <div className="flex-1">
+      <SearchAutocompleteInput
+        label="Buscar Suministro"
+        busqueda={busquedaProducto}
+        setBusqueda={setBusquedaProducto}
+        showSugerencias={showSugerencias}
+        setShowSugerencias={setShowSugerencias}
+        resultados={productos}
+        onSelect={handleSelectProducto}
+        optionLabelKeys={["codigoProducto", "nombre"]}
+        placeholder="Código o nombre del producto..."
+      />
+    </div>
+  </div>
+
+  {form.id && (
+    <>
+      <div className="flex flex-col md:flex-row gap-6 mt-4">
         <div className="flex-1">
-          <SearchAutocompleteInput
-            label="Buscar Suministro"
-            busqueda={busquedaProducto}
-            setBusqueda={setBusquedaProducto}
-            showSugerencias={showSugerencias}
-            setShowSugerencias={setShowSugerencias}
-            resultados={productos}
-            onSelect={handleSelectProducto}
-            optionLabelKeys={["codigoProducto", "nombre"]}
-            placeholder="Código o nombre del producto..."
-          />
+          <InputField label="ID" name="id" value={form.id} readOnly />
+        </div>
+        <div className="flex-1">
+          <InputField label="Código del Producto" name="codigoProducto" value={form.codigoProducto || ''} readOnly />
+        </div>
+        <div className="flex-1">
+          <InputField label="Nombre" name="nombre" value={form.nombre || ''} readOnly />
         </div>
       </div>
 
-      {form.id && (
-        <>
-          <div className="flex flex-col md:flex-row gap-6 mt-4">
-            <div className="flex-1">
-              <InputField
-                label="Código del Producto"
-                name="codigoProducto"
-                value={form.codigoProducto || ''}
-                readOnly
-              />
-            </div>
-            <div className="flex-1">
-              <InputField
-                label="Nombre"
-                name="nombre"
-                value={form.nombre || ''}
-                readOnly
-              />
-            </div>
-          </div>
+      <div className="flex flex-col md:flex-row gap-6 mt-4">
+        <div className="flex-1">
+          <InputField label="Descripción" name="descripcion" value={form.descripcion || ''} onChange={handleChange} required />
+        </div>
+        <div className="flex-1">
+          <InputField label="Cantidad" name="cantidad" type="number" min="0" value={form.cantidad ?? ''} onChange={handleChange} required />
+        </div>
+        <div className="flex-1">
+          <SelectField label="Categoría" name="categoria" value={form.categoria || ''} options={categorias} optionLabel="nombre" optionValue="value" disabled />
+        </div>
+        <div className="flex-1">
+          <SelectField label="Unidad de Medida" name="unidadMedida" value={form.unidadMedida || ''} options={unidades} optionLabel="nombre" optionValue="value" disabled />
+        </div>
+      </div>
 
-          <div className="flex flex-col md:flex-row gap-6 mt-4">
-            <div className="flex-1">
-              <InputField
-                label="Descripción"
-                name="descripcion"
-                value={form.descripcion || ''}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="flex-1">
-              <InputField
-                label="Cantidad"
-                name="cantidad"
-                type="number"
-                min="0"
-                value={form.cantidad !== undefined && form.cantidad !== null ? form.cantidad : ''}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="flex-1">
-              <SelectField
-                label="Categoría"
-                name="categoria"
-                value={form.categoria || ''}
-                options={categorias}
-                optionLabel="nombre"
-                optionValue="value"
-                disabled
-              />
-            </div>
-            <div className="flex-1">
-              <SelectField
-                label="Unidad de Medida"
-                name="unidadMedida"
-                value={form.unidadMedida || ''}
-                options={unidades}
-                optionLabel="nombre"
-                optionValue="value"
-                disabled
-              />
-            </div>
-          </div>
+      <div className="flex flex-col md:flex-row gap-6 mt-8">
+        <div className="flex-1 flex gap-4">
+          <SubmitButton type="submit" width="w-full" loading={loading} color="text-black">Actualizar</SubmitButton>
+          <SubmitButton type="button" width="w-full" color="text-black bg-red-600 hover:bg-red-700" onClick={eliminarProducto} disabled={loading}>Eliminar</SubmitButton>
+        </div>
+      </div>
+    </>
+  )}
 
-          <div className="flex flex-col md:flex-row gap-6 mt-8">
-            <div className="flex-1 flex gap-4">
-              <SubmitButton
-                type="submit"
-                width="w-full"
-                loading={loading}
-                color='text-black'
-              >
-                Actualizar
-              </SubmitButton>
-              <SubmitButton
-                type="button"
-                width="w-full"
-                color="text-black bg-red-600 hover:bg-red-700"
-                onClick={eliminarProducto}
-                disabled={loading}
-              >
-                Eliminar
-              </SubmitButton>
-            </div>
-          </div>
-        </>
-      )}
-      <CustomToaster />
-    </FormContainer>
-  );
+  <CustomToaster />
+</FormContainer>
+  )
 };
 
 export default ListaProducto;
