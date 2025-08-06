@@ -218,7 +218,7 @@ export const caracteristicasPoblacionalesAPI = createApiMethods("caracteristicas
 export const firmasDigitalesAPI = createApiMethods("firmasDigitales");
 export const infraestructuraAlberguesAPI = createApiMethods("infraestructuraAlbergues");
 export const amenazasAPI = createApiMethods("amenazas");
-export const mascotasAPI = createApiMethods("mascotas");
+//export const mascotasAPI = createApiMethods("mascotas");
 export const categoriaConsumiblesAPI = createApiMethods("categoriaConsumibles");
 export const consumiblesAPI = createApiMethods("consumibles");
 export const detallePedidoConsumiblesAPI = createApiMethods("detallePedidoConsumibles");
@@ -254,3 +254,28 @@ export const usuariosAPI = createApiMethods("usuarios", {
     }
   },
 });
+export const mascotasAPI = {
+  getByCodigoFamilia: async (codigoFamilia) => {
+    try {
+      const url = `/mascotas/consulta/familia/${encodeURIComponent(codigoFamilia)}`;
+      const res = await customAxios.get(url);
+
+      const mascotasFiltradas = res.data.data.map(mascota => ({
+        codigoFamilia: mascota.codigoFamilia,
+        nombreMascota: mascota.nombreMascota,
+        tipo: mascota.tipo,
+        tamaño: mascota.tamaño
+      }));
+
+      return {
+        success: true,
+        data: mascotasFiltradas,
+        message: res.data.message
+      };
+
+    } catch (error) {
+      console.error("Error al buscar mascotas:", error.response?.data || error);
+      throw new Error(error.response?.data?.message || "Error en la búsqueda");
+    }
+  }
+};

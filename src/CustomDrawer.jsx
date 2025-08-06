@@ -105,17 +105,22 @@ const routeGroups = [
     icon: <GroupIcon />,
     routes: [
       { to: "/preFormulario.jsx", label: "Familia", icon: <GroupIcon /> },
-
       { to: "/familiaFormulario.jsx", label: "Integrante", icon: <GroupIcon /> },
       { to: "/BusquedaFamilia.jsx", label: "Buscar Familia", icon: <SearchIcon /> },
-
+    ],
+  },
+  {
+    label: "Mascotas",  // Nueva sección
+    icon: <PetsIcon />,
+    routes: [
+      { to: "/registroMascota.jsx", label: "Registrar Mascota", icon: <PetsIcon /> },
+      { to: "/busquedaMascotas.jsx", label: "Buscar Mascotas", icon: <SearchIcon /> },
     ],
   },
   {
     label: "Suministros",
     icon: <Inventory />,
     routes: [
-
       { to: "/registroSuministros.jsx", label: "Registrar Suministros", icon: <Shelves /> },
       { to: "/registrarConsumibles.jsx", label: "Consumibles", icon: <LocalDiningIcon /> },
       { to: "/listaProducto.jsx", label: "Lista Producto", icon: <ListIcon /> },
@@ -123,42 +128,32 @@ const routeGroups = [
       { to: "/asignacionRecursos.jsx", label: "Asignación Recursos", icon: <AssignmentReturned /> },
       { to: "/abarrotesMenuPrincipal", label: "Abastecimiento", icon: <LocalShipping /> },
       { to: "/buscarSuministros.jsx", label: "Buscar Suministros", icon: <SearchIcon /> },
-
     ],
   },
   {
     label: "Albergue",
     icon: <HotelIcon />,
     routes: [
-
       { to: "/registroAlbergue.jsx", label: "Registrar Albergue", icon: <HotelIcon /> },
       { to: "/busquedaAlbergue.jsx", label: "Buscar Albergue", icon: <SearchIcon /> },
       { to: "/ActualizarAlbergue.jsx", label: "Lista Albergue", icon: <BusinessIcon /> },
       { to: "/mapaAlbergues", label: "Ubicaciones Albergues", icon: <LocationOnIcon /> },
-
     ],
   },
-
   {
     label: "Usuario",
     icon: <PersonAddIcon />,
     routes: [
-      {
-        to: "/registroUsuario.jsx",
-        label: "Registrar Usuario",
-        icon: <PersonAddIcon />,
-      },
+      { to: "/registroUsuario.jsx", label: "Registrar Usuario", icon: <PersonAddIcon /> },
     ],
   },
   {
     label: "Otros",
     icon: <MoreHorizIcon />,
     routes: [
-      { to: "/registroMascota.jsx", label: "Mascotas", icon: <PetsIcon /> },
       { to: "/registroAmenazas.jsx", label: "Amenazas", icon: <ReportIcon /> },
       { to: "/ayudaForm.jsx", label: "Referencias", icon: <DatasetLinked /> },
       { to: "/reportes.jsx", label: "Reportes", icon: <QuickReferenceAll /> },
-
     ],
   },
 ];
