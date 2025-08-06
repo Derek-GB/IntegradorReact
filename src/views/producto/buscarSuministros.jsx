@@ -25,7 +25,8 @@ const BuscarSuministros = () => {
 
     try {
       const data = await productosAPI.getByFamilia(codigoFamilia);
-      setResultados(data);
+      console.log("Datos recibidos:", data);
+      setResultados(data.data);
     } catch (error) {
       toast.error(error.message || "Error al buscar productos.");
     } finally {
@@ -34,12 +35,12 @@ const BuscarSuministros = () => {
   };
 
   const columns = [
-    { name: "Código", selector: row => row.codigo, sortable: true },
+    { name: "Código Producto", selector: row => row.codigoProducto, sortable: true },
+    { name: "Nombre Producto", selector: row => row.nombreProducto },
     { name: "Descripción", selector: row => row.descripcion },
-    { name: "Unidad", selector: row => row.unidad },
-    { name: "Cantidad", selector: row => row.cantidad },
+    { name: "Cantidad Asignada", selector: row => row.cantidadAsignada },
+    { name: "Persona Asignada", selector: row => row.personaAsignada },
     { name: "Código Familia", selector: row => row.codigoFamilia },
-    { name: "Fecha Ingreso", selector: row => row.fechaIngreso },
   ];
 
   return (
