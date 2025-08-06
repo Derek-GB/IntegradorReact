@@ -211,6 +211,7 @@ const FamiliaFormulario = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(personasPayload)
     });
+    console.log("Response crearPersonas:", JSON.stringify(personasPayload));
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(`Error ${response.status}: ${errorText}`);
