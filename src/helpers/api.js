@@ -218,7 +218,6 @@ export const caracteristicasPoblacionalesAPI = createApiMethods("caracteristicas
 export const firmasDigitalesAPI = createApiMethods("firmasDigitales");
 export const infraestructuraAlberguesAPI = createApiMethods("infraestructuraAlbergues");
 export const amenazasAPI = createApiMethods("amenazas");
-//export const mascotasAPI = createApiMethods("mascotas");
 export const categoriaConsumiblesAPI = createApiMethods("categoriaConsumibles");
 export const consumiblesAPI = createApiMethods("consumibles");
 export const detallePedidoConsumiblesAPI = createApiMethods("detallePedidoConsumibles");
@@ -255,6 +254,7 @@ export const usuariosAPI = createApiMethods("usuarios", {
   },
 });
 export const mascotasAPI = {
+  ...createApiMethods("mascotas"),
   getByCodigoFamilia: async (codigoFamilia) => {
     try {
       const url = `/mascotas/consulta/familia/${encodeURIComponent(codigoFamilia)}`;

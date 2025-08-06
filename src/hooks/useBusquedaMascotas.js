@@ -21,14 +21,16 @@ export const useBusquedaMascotas = () => {
     try {
       const response = await mascotasAPI.getByCodigoFamilia(codigoFamilia);
       setResultados(response.data || []);
-      
+
       if (!response.data || response.data.length === 0) {
-        toast.success("No se encontraron mascotas para esta familia.");
+        toast.error("No se encontraron mascotas para esta familia.");
+      } else if (response.success) {
+        toast.success("Mascotas encontradas exitosamente.");
       }
     } catch (error) {
       toast.error(error.message || "Error al buscar mascotas.");
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   };
 
