@@ -88,6 +88,17 @@ export const familiasAPI = createApiMethods("familias", {
       handleError(error);
     }
   },
+  // Nuevo método para obtener el autonumérico por cantón
+ getNextNumero: async (canton) => {
+    try {
+      const res = await customAxios.get(
+        `/familias/requerimiento/indentificador/${encodeURIComponent(canton)}`
+      );
+      return res.data.identificador; 
+    } catch (error) {
+      handleError(error);
+    }
+  },
 });
 
 export const alberguesAPI = {
@@ -180,7 +191,7 @@ export const condicionesEspecialesAPI = {
 export const inventarioAPI = createApiMethods("inventario", {
   getSuministrosPorAlbergue: async (idAlbergue) => {
     try {
-      const res = await customAxios.get(`/inventario/suministros/id/${idAlbergue}`);
+      const res = await customAxios.get(`/inventario/resumen/id/${idAlbergue}`);
       return res.data;
     } catch (error) {
       handleError(error);
