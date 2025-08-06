@@ -13,6 +13,7 @@ import AsignacionRecursos from './views/producto/asignacionRecursos.jsx';
 import ListaProducto from './views/producto/listaProducto.jsx';
 import RegistrarConsumible from './views/producto/registrarConsumibles.jsx';
 import RegistroSuministros from './views/producto/registrarSuministro.jsx';
+import BuscarSuministros from './views/producto/buscarSuministros.jsx';
 
 //Usuario
 import Login from './views/usuario/login.jsx';
@@ -124,6 +125,7 @@ const App = () => {
                     <Route path="/resumenFinal" element={<ResumenFinal />} />
                     <Route path="/reportes.jsx" element={<ReportesAlbergue />} />
                     <Route path="/mapaAlbergues" element={<MapaAlbergues />} />
+                    <Route path="/buscarSuministros.jsx" element={<BuscarSuministros />} />
                   </Routes>
                 </div>
               </div>
