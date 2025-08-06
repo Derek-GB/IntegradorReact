@@ -169,7 +169,7 @@ export const condicionesEspecialesAPI = {
   ...createApiMethods("condicionesEspeciales"),
   getResumenPorAlbergue: async (idAlbergue) => {
     try {
-      const res = await customAxios.get(`/condicionesEspeciales/id/${idAlbergue}`);
+      const res = await customAxios.get(`/condicionesEspeciales/resumen/id/${idAlbergue}`);
       return res.data;
     } catch (error) {
       handleError(error);
