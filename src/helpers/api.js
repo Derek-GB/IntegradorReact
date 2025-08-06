@@ -75,6 +75,16 @@ export const productosAPI = createApiMethods("productos", {
       handleError(error);
     }
   },
+  getByFamilia: async (codigoFamilia) => {
+    try {
+      const url = `/productos/consulta/ProductosPorFamilia/${encodeURIComponent(codigoFamilia)}`;
+      console.log("Llamando a:", url);
+      const res = await customAxios.get(url);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
 });
 
 export const familiasAPI = createApiMethods("familias", {
@@ -161,7 +171,6 @@ export const alberguesAPI = {
       handleError(error);
     }
   }
-
 };
 
 export const personasAPI = {
