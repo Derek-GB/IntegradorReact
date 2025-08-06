@@ -180,7 +180,7 @@ export const condicionesEspecialesAPI = {
 export const inventarioAPI = createApiMethods("inventario", {
   getSuministrosPorAlbergue: async (idAlbergue) => {
     try {
-      const res = await customAxios.get(`/inventario/suministros/id/${idAlbergue}`);
+      const res = await customAxios.get(`/inventario/resumen/id/${idAlbergue}`);
       return res.data;
     } catch (error) {
       handleError(error);
