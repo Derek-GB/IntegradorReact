@@ -42,6 +42,7 @@ import ReportesAlbergue from './views/reportes.jsx';
 
 //No categorizado
 import FormularioIntegrantes from "./components/formularioIntegrantes.jsx";
+import MapaAlbergues from './MapaAlbergues';
 
 
 // Importa el proveedor de contexto aquí
@@ -122,6 +123,7 @@ const App = () => {
                     <Route path="/registroAmenazas.jsx" element={<RegistroAmenazas />} />
                     <Route path="/resumenFinal" element={<ResumenFinal />} />
                     <Route path="/reportes.jsx" element={<ReportesAlbergue />} />
+                    <Route path="/mapaAlbergues" element={<MapaAlbergues />} />
                   </Routes>
                 </div>
               </div>
