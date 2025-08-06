@@ -25,6 +25,7 @@ const unidades = [
 ];
 
 const ListaProducto = () => {
+
   const {
     productos,
     busquedaProducto,
@@ -40,62 +41,64 @@ const ListaProducto = () => {
   } = useListaSuministro();
 
   return (
-    <FormContainer title="Lista de Suministros" size="md" onSubmit={actualizarProducto}>
-      <div className="flex flex-col md:flex-row gap-6">
+ <FormContainer title="Lista de Suministros" size="md" onSubmit={actualizarProducto}>
+  <div className="flex flex-col md:flex-row gap-6">
+    <div className="flex-1">
+      <SearchAutocompleteInput
+        label="Buscar Suministro"
+        busqueda={busquedaProducto}
+        setBusqueda={setBusquedaProducto}
+        showSugerencias={showSugerencias}
+        setShowSugerencias={setShowSugerencias}
+        resultados={productos}
+        onSelect={handleSelectProducto}
+        optionLabelKeys={["codigoProducto", "nombre"]}
+        placeholder="Código o nombre del producto..."
+      />
+    </div>
+  </div>
+
+  {form.id && (
+    <>
+      <div className="flex flex-col md:flex-row gap-6 mt-4">
         <div className="flex-1">
-          <SearchAutocompleteInput
-            label="Buscar Suministro"
-            busqueda={busquedaProducto}
-            setBusqueda={setBusquedaProducto}
-            showSugerencias={showSugerencias}
-            setShowSugerencias={setShowSugerencias}
-            resultados={productos}
-            onSelect={handleSelectProducto}
-            optionLabelKeys={["codigoProducto", "nombre"]}
-            placeholder="Código o nombre del producto..."
-          />
+          <InputField label="ID" name="id" value={form.id} readOnly />
         </div>
-        {form.id && (
-          <>
-            <div className="flex-1">
-              <InputField label="ID" name="id" value={form.id} readOnly />
-            </div>
-            <div className="flex-1">
-              <InputField label="Código del Producto" name="codigoProducto" value={form.codigoProducto || ''} readOnly />
-            </div>
-            <div className="flex-1">
-              <InputField label="Nombre" name="nombre" value={form.nombre || ''} readOnly />
-            </div>
-          </>
-        )}
+        <div className="flex-1">
+          <InputField label="Código del Producto" name="codigoProducto" value={form.codigoProducto || ''} readOnly />
+        </div>
+        <div className="flex-1">
+          <InputField label="Nombre" name="nombre" value={form.nombre || ''} readOnly />
+        </div>
       </div>
-      {form.id && (
-        <>
-          <div className="flex flex-col md:flex-row gap-6 mt-4">
-            <div className="flex-1">
-              <InputField label="Descripción" name="descripcion" value={form.descripcion || ''} onChange={handleChange} required />
-            </div>
-            <div className="flex-1">
-              <InputField label="Cantidad" name="cantidad" type="number" min="0" value={form.cantidad ?? ''} onChange={handleChange} required />
-            </div>
-            <div className="flex-1">
-              <SelectField label="Categoría" name="categoria" value={form.categoria || ''} options={categorias} optionLabel="nombre" optionValue="value" disabled />
-            </div>
-            <div className="flex-1">
-              <SelectField label="Unidad de Medida" name="unidadMedida" value={form.unidadMedida || ''} options={unidades} optionLabel="nombre" optionValue="value" disabled />
-            </div>
-          </div>
-          <div className="flex flex-col md:flex-row gap-6 mt-8">
-            <div className="flex-1 flex gap-4">
-              <SubmitButton type="submit" width="w-full" loading={loading} color="text-black">Actualizar</SubmitButton>
-              <SubmitButton type="button" width="w-full" color="text-black bg-red-600 hover:bg-red-700" onClick={eliminarProducto} disabled={loading}>Eliminar</SubmitButton>
-            </div>
-          </div>
-        </>
-      )}
-      <CustomToaster />
-    </FormContainer>
-  );
+
+      <div className="flex flex-col md:flex-row gap-6 mt-4">
+        <div className="flex-1">
+          <InputField label="Descripción" name="descripcion" value={form.descripcion || ''} onChange={handleChange} required />
+        </div>
+        <div className="flex-1">
+          <InputField label="Cantidad" name="cantidad" type="number" min="0" value={form.cantidad ?? ''} onChange={handleChange} required />
+        </div>
+        <div className="flex-1">
+          <SelectField label="Categoría" name="categoria" value={form.categoria || ''} options={categorias} optionLabel="nombre" optionValue="value" disabled />
+        </div>
+        <div className="flex-1">
+          <SelectField label="Unidad de Medida" name="unidadMedida" value={form.unidadMedida || ''} options={unidades} optionLabel="nombre" optionValue="value" disabled />
+        </div>
+      </div>
+
+      <div className="flex flex-col md:flex-row gap-6 mt-8">
+        <div className="flex-1 flex gap-4">
+          <SubmitButton type="submit" width="w-full" loading={loading} color="text-black">Actualizar</SubmitButton>
+          <SubmitButton type="button" width="w-full" color="text-black bg-red-600 hover:bg-red-700" onClick={eliminarProducto} disabled={loading}>Eliminar</SubmitButton>
+        </div>
+      </div>
+    </>
+  )}
+
+  <CustomToaster />
+</FormContainer>
+  )
 };
 
 export default ListaProducto;

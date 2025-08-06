@@ -2,9 +2,9 @@ import customAxios from "./customAxios";
 
 const handleError = (error) => {
   const apiMessage =
-    error.response?.data?.message ||  // Mensaje principal del backend
-    error.response?.data?.error ||    // Otro campo de error
-    error.message ||                  // Mensaje genérico de Axios
+    error.response?.data?.message ||
+    error.response?.data?.error ||
+    error.message ||
     "Error desconocido";
 
   console.error("Detalles del error:", error.response?.data);
@@ -66,7 +66,6 @@ const createApiMethods = (endpoint, extraMethods = {}) => {
   };
 };
 
-// Productos API con update personalizado (sin id en URL)
 export const productosAPI = createApiMethods("productos", {
   update: async (data) => {
     try {
@@ -78,7 +77,6 @@ export const productosAPI = createApiMethods("productos", {
   },
 });
 
-// Familias API con consulta por identificación
 export const familiasAPI = createApiMethods("familias", {
   getById: async (identificacion) => {
     try {
@@ -92,8 +90,8 @@ export const familiasAPI = createApiMethods("familias", {
   },
 });
 
-// Albergues API con consultas específicas
-export const alberguesAPI = createApiMethods("albergues", {
+export const alberguesAPI = {
+  ...createApiMethods("albergues"),
   getById: async (id) => {
     try {
       const res = await customAxios.get(`/albergues/consulta/id/${encodeURIComponent(id)}`);
@@ -142,15 +140,58 @@ export const alberguesAPI = createApiMethods("albergues", {
       handleError(error);
     }
   },
+  getByColor: async (color) => {
+    try {
+      const url = `/albergues/consulta/color/${encodeURIComponent(color)}`;
+      console.log("URL llamada:", url);
+      const res = await customAxios.get(url);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+};
+
+export const personasAPI = {
+  ...createApiMethods("personas"),
+  getDiscapacidadPorAlbergue: async (idAlbergue) => {
+    try {
+      const res = await customAxios.get(`/personas/discapacidad/id/${idAlbergue}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+};
+
+export const condicionesEspecialesAPI = {
+  ...createApiMethods("condicionesEspeciales"),
+  getResumenPorAlbergue: async (idAlbergue) => {
+    try {
+      const res = await customAxios.get(`/condicionesEspeciales/resumen/id/${idAlbergue}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+};
+
+export const inventarioAPI = createApiMethods("inventario", {
+  getSuministrosPorAlbergue: async (idAlbergue) => {
+    try {
+      const res = await customAxios.get(`/inventario/suministros/id/${idAlbergue}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
 });
 
-// Otros APIs estándar sin modificaciones
 export const municipalidadAPI = createApiMethods("municipalidad");
 export const capacidadAlberguesAPI = createApiMethods("capacidadAlbergues");
 export const ubicacionesAPI = createApiMethods("ubicaciones");
-export const condicionesEspecialesAPI = createApiMethods("condicionesEspeciales");
 export const referenciasAPI = createApiMethods("referencias");
-export const personasAPI = createApiMethods("personas");
 export const condicionesSaludAPI = createApiMethods("condicionesSalud");
 export const recursosAsignadosAPI = createApiMethods("recursosAsignados");
 export const caracteristicasPoblacionalesAPI = createApiMethods("caracteristicasPoblacionales");
@@ -159,13 +200,20 @@ export const infraestructuraAlberguesAPI = createApiMethods("infraestructuraAlbe
 export const amenazasAPI = createApiMethods("amenazas");
 export const mascotasAPI = createApiMethods("mascotas");
 export const categoriaConsumiblesAPI = createApiMethods("categoriaConsumibles");
+export const consumiblesAPI = createApiMethods("consumibles");
+export const detallePedidoConsumiblesAPI = createApiMethods("detallePedidoConsumibles");
+export const pedidoConsumiblesAPI = createApiMethods("pedidoConsumibles");
+export const unidadMedidasAPI = createApiMethods("unidadMedidas");
+export const ajusteInventarioAPI = createApiMethods("ajusteInventario");
 
-// Usuarios API con validación especial
 export const usuariosAPI = createApiMethods("usuarios", {
   validarCorreo: async (correo) => {
     try {
-      await customAxios.post(`public/usuarios/validar/correo`, { correo });
-      return { existe: false };
+      const res = await customAxios.post(`public/usuarios/validar/correo`, { correo });
+      if (res.data.success === true) {
+        return { existe: false };
+      }
+      return { existe: true };
     } catch (error) {
       if (error.response?.status === 400) {
         return { existe: true };
@@ -186,10 +234,3 @@ export const usuariosAPI = createApiMethods("usuarios", {
     }
   },
 });
-
-// APIs estándar restantes
-export const consumiblesAPI = createApiMethods("consumibles");
-export const detallePedidoConsumiblesAPI = createApiMethods("detallePedidoConsumibles");
-export const pedidoConsumiblesAPI = createApiMethods("pedidoConsumibles");
-export const unidadMedidasAPI = createApiMethods("unidadMedidas");
-export const ajusteInventarioAPI = createApiMethods("ajusteInventario");

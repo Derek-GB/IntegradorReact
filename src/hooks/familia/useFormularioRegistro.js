@@ -132,7 +132,7 @@ const useFormularioRegistro = () => {
     }
 
     localStorage.setItem("cantidadIntegrantes", integrantes);
-    navigate("/formularioIntegrantes.jsx");
+    navigate("/familiaFormulario.jsx");
   };
 
   return {
