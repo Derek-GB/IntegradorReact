@@ -150,44 +150,46 @@ export const useFormularioAbarrotes = () => {
 
   // CARNES
   const handleAgregarCarne = () => {
-  if (!tipoCarne || personas <= 0) {
-    showCustomToast('Warning','Seleccione 2 tipos de carne y asegúrese que la cantidad de personas está definida en el menú principal.');
-    return;
-  }
-  const carnesAgregadas = items.filter(i => i.seccion === 'Carnes');
-  const yaExiste = carnesAgregadas.some(i => i.tipo === tipoCarne);
-  if (yaExiste) {
-    showCustomToast( 'Warning','Esta ya fue agregada.');
-    return;
-  }
-  if (carnesAgregadas.length >= 2) {
-    showCustomToast('Warning','Solo 2 tipos de carne.');
-    return;
-  }
-  const producto = carnesProductos.find(p => p.nombre === tipoCarne);
-  if (!producto) return;
-  const gramosTotales = producto.gramosPorPersona * personas;
-  const cantidadKg = (gramosTotales / 1000).toFixed(2);
+    if (!tipoCarne || personas <= 0) {
+      showCustomToast('Warning', 'Seleccione 2 tipos de carne y asegúrese que la cantidad de personas está definida en el menú principal.');
+      return;
+    }
+    const carnesAgregadas = items.filter(i => i.seccion === 'Carnes');
+    const yaExiste = carnesAgregadas.some(i => i.tipo === tipoCarne);
+    if (yaExiste) {
+      showCustomToast('Warning', 'Esta ya fue agregada.');
+      return;
+    }
+    if (carnesAgregadas.length >= 2) {
+      showCustomToast('Warning', 'Solo 2 tipos de carne.');
+      return;
+    }
+    const producto = carnesProductos.find(p => p.nombre === tipoCarne);
+    if (!producto) return;
+    const gramosTotales = producto.gramosPorPersona * personas;
+    const cantidadKg = (gramosTotales / 1000).toFixed(2);
 
-  agregarItem({
-    seccion: 'Carnes',
-    tipo: tipoCarne,
-    unidad: 'kg',
-    cantidad: cantidadKg,
-  });
+    agregarItem({
+      tipoComida: 'Carnes',
+      seccion: 'Carnes',
+      tipo: tipoCarne,
+      unidad: 'kg',
+      cantidad: cantidadKg,
+      cantidadPersonas: personas
+    });
 
-  setTipoCarne('');
-};
+    setTipoCarne('');
+  };
 
   // PROTEINAS
   const handleAgregarProteina = () => {
     if (!tipoProteina || personas <= 0) {
-      showCustomToast('Warning','Seleccione proteína y asegúrese que hay cantidad de personas definida en el menú principal.');
+      showCustomToast('Warning', 'Seleccione proteína y asegúrese que hay cantidad de personas definida en el menú principal.');
       return;
     }
     const proteinasAgregadas = items.filter(i => i.seccion === 'Proteínas');
     if (proteinasAgregadas.length >= 1) {
-      showCustomToast('Warning','Solo una proteína.');
+      showCustomToast('Warning', 'Solo una proteína.');
       return;
     }
     let unidad = 'Unidad';
@@ -210,10 +212,12 @@ export const useFormularioAbarrotes = () => {
         break;
     }
     agregarItem({
+      tipoComida: 'Proteínas',
       seccion: 'Proteínas',
       tipo: tipoProteina,
       unidad,
-      cantidad
+      cantidad,
+      cantidadPersonas: personas
     });
     setTipoProteina('');
   };
@@ -241,10 +245,12 @@ export const useFormularioAbarrotes = () => {
     }
     const cantidadKg = ((gramosPorPersonaVerdura * personas) / 1000).toFixed(2);
     agregarItem({
+      tipoComida: 'Verduras',
       seccion: 'Verduras',
       tipo: tipoVerdura,
       unidad: 'kg',
-      cantidad: cantidadKg
+      cantidad: cantidadKg,
+      cantidadPersonas: personas
     });
     setTipoVerdura('');
   };
@@ -267,14 +273,16 @@ export const useFormularioAbarrotes = () => {
     if (items.some(i => i.seccion === categoria && i.tipo === producto.nombre)) return;
     const cantidad = calcularCantidad(producto);
     if (!cantidad || cantidad <= 0) {
-       showCustomToast('Error', "Debe definir la cantidad de personas en el menú principal.");
+      showCustomToast('Error', "Debe definir la cantidad de personas en el menú principal.");
       return;
     }
     agregarItem({
-      seccion: categoria,
-      tipo: producto.nombre,
-      unidad: producto.unidad,
-      cantidad
+    tipoComida: categoria,  // <- esto es lo importante para la API
+    seccion: categoria,
+    tipo: producto.nombre,
+    unidad: producto.unidad,
+    cantidad,
+    cantidadPersonas: personas
     });
   };
 
@@ -288,25 +296,25 @@ export const useFormularioAbarrotes = () => {
     seccionAbierta,
     personas,
     modalStyle,
-    
+
     // Datos
     carnesProductos,
     proteinasProductos,
     verdurasProductos,
     categorias,
     items,
-    
+
     // Manejadores de estado
     setTipoCarne,
     setTipoProteina,
     setTipoVerdura,
-    
+
     // Manejadores de modales
     handleOpenResumenParcial,
     handleCloseResumenParcial,
     handleOpenResumenFinal,
     handleCloseResumenFinal,
-    
+
     // Manejadores de funcionalidad
     toggleSeccion,
     handleAgregarCarne,
@@ -314,7 +322,7 @@ export const useFormularioAbarrotes = () => {
     handleAgregarVerdura,
     handleAgregarProducto,
     eliminarItem,
-    
+
     // Funciones de cálculo
     calcularCantidad
   };
