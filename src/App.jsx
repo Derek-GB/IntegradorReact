@@ -6,8 +6,7 @@ import CustomDrawer from './CustomDrawer.jsx';
 //Familia
 import FormularioRegistro from './views/familia/formularioRegistro.jsx';
 import FamiliaFormulario from './views/familia/familiaFormulario.jsx';
-import BusquedaFamilia from './views/familia/busquedaFamilia.jsx';
-
+import BusquedaFamilia from './views/familia/BusquedaFamilia.jsx';
 //Producto
 import AsignacionRecursos from './views/producto/asignacionRecursos.jsx';
 import ListaProducto from './views/producto/listaProducto.jsx';
