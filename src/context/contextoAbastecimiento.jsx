@@ -1,5 +1,7 @@
-import { createContext, useState } from 'react';
-// eslint-disable-next-line react-refresh/only-export-components
+import { createContext, useState, useEffect } from 'react';
+import { pedidoConsumiblesAPI } from '../helpers/api.js';
+import { showCustomToast } from '../components/globalComponents/CustomToaster.jsx';
+
 export const contextoAbastecimiento = createContext();
 
 export const AbastecimientoProvider = ({ children }) => {
@@ -8,17 +10,57 @@ export const AbastecimientoProvider = ({ children }) => {
     const datosGuardados = localStorage.getItem('datosFormulario');
     return datosGuardados ? JSON.parse(datosGuardados) : {};
   });
+  const [loading, setLoading] = useState(false);
 
-  const agregarItem = (nuevoItem) => {
-    setItems(prev => [...prev, nuevoItem]);
+  // Carga inicial desde API
+  useEffect(() => {
+    cargarItemsDesdeAPI();
+  }, []);
+
+  const cargarItemsDesdeAPI = async () => {
+    setLoading(true);
+    try {
+      const data = await pedidoConsumiblesAPI.getAll();
+      setItems(Array.isArray(data) ? data : []);
+    } catch (error) {
+      showCustomToast("Error cargando datos desde API: " + error.message, "error");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const eliminarItem = (index) => {
-    setItems(prev => prev.filter((_, i) => i !== index));
+  const agregarItem = async (nuevoItem) => {
+    try {
+      const creado = await pedidoConsumiblesAPI.create(nuevoItem);
+      setItems(prev => [...prev, creado]);
+      showCustomToast("Item agregado correctamente", "success");
+    } catch (error) {
+      showCustomToast("Error agregando item: " + error.message, "error");
+    }
   };
 
-  const editarItem = (index, nuevoItem) => {
-    setItems(prev => prev.map((item, i) => i === index ? nuevoItem : item));
+  const eliminarItem = async (index) => {
+    try {
+      const id = items[index]?.id;
+      if (!id) throw new Error("ID inválido para eliminar");
+      await pedidoConsumiblesAPI.remove(id);
+      setItems(prev => prev.filter((_, i) => i !== index));
+      showCustomToast("Item eliminado correctamente", "success");
+    } catch (error) {
+      showCustomToast("Error eliminando item: " + error.message, "error");
+    }
+  };
+
+  const editarItem = async (index, nuevoItem) => {
+    try {
+      const id = items[index]?.id;
+      if (!id) throw new Error("ID inválido para editar");
+      const actualizado = await pedidoConsumiblesAPI.update(id, nuevoItem);
+      setItems(prev => prev.map((item, i) => i === index ? actualizado : item));
+      showCustomToast("Item actualizado correctamente", "success");
+    } catch (error) {
+      showCustomToast("Error actualizando item: " + error.message, "error");
+    }
   };
 
   const limpiarItems = () => {
@@ -35,10 +77,12 @@ export const AbastecimientoProvider = ({ children }) => {
       items,
       agregarItem,
       eliminarItem,
-      editarItem, 
+      editarItem,
       limpiarItems,
       guardarDatosFormulario,
-      datosFormulario 
+      datosFormulario,
+      loading,
+      cargarItemsDesdeAPI,
     }}>
       {children}
     </contextoAbastecimiento.Provider>

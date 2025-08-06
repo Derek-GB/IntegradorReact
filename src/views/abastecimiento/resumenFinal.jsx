@@ -7,16 +7,23 @@ import GlobalDataTable from "../../components/globalComponents/GlobalDataTable.j
 import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
 import useResumenFinal from "../../hooks/abastecimineto/useResumenFinal.js";
 import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+} from "@mui/material";
 
 const ResumenFinal = () => {
   const {
     items,
-   
     descargarResumen,
     datosFormulario,
     eliminarItem,
     editarItem,
+    guardarPedidosDesdeFormulario, // ✅ FUNCIÓN IMPORTADA DESDE EL HOOK
   } = useResumenFinal();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -83,7 +90,9 @@ const ResumenFinal = () => {
       name: "Producto",
       selector: (row) => row.tipo,
       sortable: true,
-      cell: (row) => <span className="font-medium text-gray-900">{row.tipo}</span>,
+      cell: (row) => (
+        <span className="font-medium text-gray-900">{row.tipo}</span>
+      ),
     },
     {
       name: "Unidad",
@@ -95,16 +104,26 @@ const ResumenFinal = () => {
       name: "Cantidad",
       selector: (row) => row.cantidad,
       sortable: true,
-      cell: (row) => <span className="font-semibold text-gray-900">{row.cantidad}</span>,
+      cell: (row) => (
+        <span className="font-semibold text-gray-900">{row.cantidad}</span>
+      ),
     },
     {
       name: "Acciones",
       cell: (row, index) => (
         <div className="flex gap-2">
-          <button onClick={() => handleOpenModal(index)} className="text-black hover:text-yellow-600" title="Editar">
+          <button
+            onClick={() => handleOpenModal(index)}
+            className="text-black hover:text-yellow-600"
+            title="Editar"
+          >
             <EditIcon fontSize="small" />
           </button>
-          <button onClick={() => eliminarItem(index)} className="text-black hover:text-red-600" title="Eliminar">
+          <button
+            onClick={() => eliminarItem(index)}
+            className="text-black hover:text-red-600"
+            title="Eliminar"
+          >
             <DeleteIcon fontSize="small" />
           </button>
         </div>
@@ -117,6 +136,7 @@ const ResumenFinal = () => {
   return (
     <div className="space-y-6">
       <CustomToaster />
+
       {/* Datos del Formulario */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
@@ -156,8 +176,20 @@ const ResumenFinal = () => {
         </div>
       </div>
 
-      {/* Boton */}
+      {/* Botones: GUARDAR Y DESCARGAR */}
       <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+        <SubmitButton
+          type="button"
+          onClick={guardarPedidosDesdeFormulario} // ✅ BOTÓN GUARDAR
+          width="flex-1 sm:max-w-xs"
+          className="bg-yellow-500"
+        >
+          <div className="flex items-center justify-center gap-2">
+            <SaveIcon sx={{ fontSize: 20, color: "black" }} />
+            <span className="text-black font-medium">Guardar</span>
+          </div>
+        </SubmitButton>
+
         <SubmitButton
           type="button"
           onClick={descargarResumen}
@@ -165,60 +197,61 @@ const ResumenFinal = () => {
           className="bg-yellow-500"
         >
           <div className="flex items-center justify-center gap-2">
-            <DownloadIcon sx={{ fontSize: 20, color: "black"  }} />
+            <DownloadIcon sx={{ fontSize: 20, color: "black" }} />
+            <span className="text-black font-medium">Descargar</span>
           </div>
         </SubmitButton>
       </div>
 
       {/* Modal de Edición */}
-<Dialog
-  open={modalOpen}
-  onClose={handleCloseModal}
-  maxWidth="sm"
-  fullWidth
-  PaperProps={{
-    style: {
-      padding: '24px',
-      borderRadius: '5px',
-    },
-  }}
->
-  <DialogTitle
-    sx={{ fontSize: '1.5rem', fontWeight: 'bold', textAlign: 'center' }}
-  >
-    Editar Cantidad del Producto
-  </DialogTitle>
+      <Dialog
+        open={modalOpen}
+        onClose={handleCloseModal}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          style: {
+            padding: "24px",
+            borderRadius: "5px",
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{ fontSize: "1.5rem", fontWeight: "bold", textAlign: "center" }}
+        >
+          Editar Cantidad del Producto
+        </DialogTitle>
 
-  <DialogContent sx={{ mt: 2 }}>
-    <TextField
-      label="Cantidad"
-      value={editCantidad}
-      onChange={(e) => setEditCantidad(e.target.value)}
-      type="number"
-      fullWidth
-      autoFocus
-      InputLabelProps={{ style: { whiteSpace: 'nowrap' } }} 
-      inputProps={{ min: 0, step: "any" }}
-      sx={{ fontSize: '1.2rem', mb: 2 }}
-    />
-  </DialogContent>
+        <DialogContent sx={{ mt: 2 }}>
+          <TextField
+            label="Cantidad"
+            value={editCantidad}
+            onChange={(e) => setEditCantidad(e.target.value)}
+            type="number"
+            fullWidth
+            autoFocus
+            InputLabelProps={{ style: { whiteSpace: "nowrap" } }}
+            inputProps={{ min: 0, step: "any" }}
+            sx={{ fontSize: "1.2rem", mb: 2 }}
+          />
+        </DialogContent>
 
-  <DialogActions sx={{ justifyContent: 'space-between', px: 3 }}>
-    <button
-      onClick={handleCloseModal}
-      className="bg-yellow-500 text-black px-6 py-2 rounded-md hover:bg-yellow-600 transition"
-    >
-      Cancelar
-    </button>
-<button
-  type="button"
-  onClick={handleGuardarEdicion}
-  className="bg-yellow-500 text-black px-6 py-2 rounded-md hover:bg-yellow-600 transition"
->
-  Guardar
-</button>
-  </DialogActions>
-</Dialog>
+        <DialogActions sx={{ justifyContent: "space-between", px: 3 }}>
+          <button
+            onClick={handleCloseModal}
+            className="bg-yellow-500 text-black px-6 py-2 rounded-md hover:bg-yellow-600 transition"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            onClick={handleGuardarEdicion}
+            className="bg-yellow-500 text-black px-6 py-2 rounded-md hover:bg-yellow-600 transition"
+          >
+            Guardar
+          </button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
