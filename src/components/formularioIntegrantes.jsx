@@ -25,7 +25,7 @@ const FormularioIntegrantes = () => {
       </h4>
       <FamiliaFormulario numero={indice + 1} />
       <button
-        className="btn btn-primary mt-3"
+        className="btn-familia-paso"
         onClick={handleSiguiente}
         disabled={indice >= cantidad - 1}
       >

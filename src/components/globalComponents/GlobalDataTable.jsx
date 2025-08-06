@@ -40,7 +40,6 @@ export default function GlobalDataTable({
       },
     },
   },
-  
   dense = false,
   highlightOnHover = false,
   rowsPerPage = 10,
@@ -126,13 +125,12 @@ export default function GlobalDataTable({
       className="w-full bg-white p-4 rounded-xl border border-gray-100 shadow-sm"
       style={{
         overflowX: "auto",
-        scrollbarWidth: "thin", // Firefox
-        scrollbarColor: "#00796B #E0E0E0", // Firefox
+        scrollbarWidth: "thin",
+        scrollbarColor: "#00796B #E0E0E0",
       }}
     >
       <style>
         {`
-          /* Scrollbar Webkit */
           div::-webkit-scrollbar {
             height: 8px;
           }
