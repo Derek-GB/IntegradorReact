@@ -32,6 +32,8 @@ import AssignmentReturned from "@mui/icons-material/assignmentreturned";
 import Shelves from "@mui/icons-material/shelves";
 import DatasetLinked from "@mui/icons-material/datasetLinked";
 import QuickReferenceAll from "@mui/icons-material/assignmentLate";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import MapIcon from "@mui/icons-material/Map";
 
 
 
@@ -129,12 +131,13 @@ const routeGroups = [
     routes: [
 
       { to: "/registroAlbergue.jsx", label: "Registrar Albergue", icon: <HotelIcon /> },
-
       { to: "/busquedaAlbergue.jsx", label: "Buscar Albergue", icon: <SearchIcon /> },
       { to: "/ActualizarAlbergue.jsx", label: "Lista Albergue", icon: <BusinessIcon /> },
+      { to: "/mapaAlbergues", label: "Ubicaciones Albergues", icon: <LocationOnIcon /> },
 
     ],
   },
+
   {
     label: "Usuario",
     icon: <PersonAddIcon />,
