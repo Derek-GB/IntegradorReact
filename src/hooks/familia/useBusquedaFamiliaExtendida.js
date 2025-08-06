@@ -23,7 +23,7 @@ const useBusquedaFamiliaExtendida = () => {
         if (res && res.data) {
           setAlbergues(res.data);
         }
-      } catch (err) {
+      } catch{
         showCustomToast("Error", "Error al cargar los albergues.", "error");
       } finally {
         setLoadingAlbergues(false);

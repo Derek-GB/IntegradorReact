@@ -88,6 +88,17 @@ export const familiasAPI = createApiMethods("familias", {
       handleError(error);
     }
   },
+  // Nuevo método para obtener el autonumérico por cantón
+ getNextNumero: async (canton) => {
+    try {
+      const res = await customAxios.get(
+        `/familias/requerimiento/indentificador/${encodeURIComponent(canton)}`
+      );
+      return res.data.identificador; 
+    } catch (error) {
+      handleError(error);
+    }
+  },
 });
 
 export const alberguesAPI = {
