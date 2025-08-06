@@ -6,16 +6,12 @@ import InputField from "../../components/FormComponents/InputField.jsx";
 import SelectField from "../../components/FormComponents/SelectField.jsx";
 import useIntegrante from "../../hooks/familia/useIntegrante.js";
 import { personasAPI,firmasDigitalesAPI } from "../../helpers/api.js";
-import Alerta from "../../components/Alerta.jsx"; // Importar el componente Alerta
+import { showCustomToast } from "../../components/globalComponents/CustomToaster.jsx";
 
 const FamiliaFormulario = () => {
   const cantidad = parseInt(localStorage.getItem("cantidadIntegrantes")) || 0;
   const [indice, setIndice] = useState(0);
   
-  // Estados para la alerta
-  const [mostrarAlerta, setMostrarAlerta] = useState(false);
-  const [mensajeAlerta, setMensajeAlerta] = useState("");
-  const [tipoAlerta, setTipoAlerta] = useState("warning");
   
   // Array para guardar los datos de cada integrante
   const [datosIntegrantes, setDatosIntegrantes] = useState(
@@ -164,7 +160,7 @@ const FamiliaFormulario = () => {
     return { jefeExistente, indiceJefe };
   };
 
-  // Función modificada para manejar el cambio de jefe de familia
+  // REEMPLAZAR la función handleJefeFamiliaChange:
   const handleJefeFamiliaChange = (e) => {
     const nuevoValor = e.target.value;
     
@@ -172,15 +168,21 @@ const FamiliaFormulario = () => {
       const { jefeExistente, indiceJefe } = verificarJefeFamilia();
       
       if (jefeExistente) {
-        // Mostrar alerta en lugar de window.confirm
-        setMensajeAlerta(
-          `Ya existe un jefe de familia en el integrante ${indiceJefe + 1}. ` +
-          `¿Desea cambiar el jefe de familia al integrante actual?`
+        // Usar CustomToast para confirmar cambio
+        showCustomToast(
+          "Jefe de familia existente",
+          `Ya existe un jefe de familia en el integrante ${indiceJefe + 1}. ¿Desea cambiar el jefe de familia al integrante actual?`,
+          "info"
         );
-        setTipoAlerta("warning");
-        setMostrarAlerta(true);
         
-        // No proceder automáticamente, esperar confirmación del usuario
+        // Confirmar con window.confirm temporal (hasta que implementes modal)
+        const confirmar = window.confirm(
+          `Ya existe un jefe de familia en el integrante ${indiceJefe + 1}. ¿Desea cambiar el jefe de familia al integrante actual?`
+        );
+        
+        if (confirmar) {
+          confirmarCambioJefe();
+        }
         return;
       }
     }
@@ -211,11 +213,12 @@ const FamiliaFormulario = () => {
       }
     }));
     
-    // Cerrar alerta y mostrar mensaje de éxito
-    setMostrarAlerta(false);
-    setMensajeAlerta("Jefe de familia cambiado exitosamente");
-    setTipoAlerta("success");
-    setMostrarAlerta(true);
+    // Mostrar toast de éxito
+    showCustomToast(
+      "Jefe de familia cambiado",
+      "El jefe de familia ha sido cambiado exitosamente",
+      "success"
+    );
   };
 
   // Función para cancelar el cambio
@@ -280,15 +283,45 @@ const FamiliaFormulario = () => {
     return ids;
   };
 
-  // Nueva función para crear firma digital
-  const crearFirmaDigital = async (idPersona, firma) => {
-    const firmaPayload = {
-      idPersona: idPersona,
-      firma: firma
-    };
-    
-    const res = await firmasDigitalesAPI.create(firmaPayload);
-    return res;
+  // REEMPLAZAR la función crearFirmaDigital:
+  const crearFirmaDigital = async (idPersona, firmaBase64) => {
+    try {
+      console.log(`Enviando firma PNG para persona ID: ${idPersona}`);
+      
+      // Crear FormData para enviar la firma como archivo PNG en el body
+      const formData = new FormData();
+      formData.append('idPersona', idPersona.toString());
+      
+      // Convertir base64 a PNG blob
+      const pngBlob = convertirBase64APng(firmaBase64);
+      formData.append('firma', pngBlob, `firma_persona_${idPersona}.png`);
+
+      console.log('Datos a enviar:', {
+        idPersona: idPersona,
+        firmaSize: pngBlob.size,
+        firmaType: pngBlob.type
+      });
+
+      // Usar fetch directo para enviar FormData con PNG
+      const response = await fetch('/firmasDigitales', {
+        method: 'POST',
+        body: formData
+        // NO agregar Content-Type header, FormData lo maneja automáticamente
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error ${response.status}: ${errorText}`);
+      }
+
+      const result = await response.json();
+      console.log('✅ Firma PNG enviada exitosamente:', result);
+      return result;
+      
+    } catch (error) {
+      console.error('❌ Error al crear firma digital PNG:', error);
+      throw new Error(`Error al crear firma digital: ${error.message}`);
+    }
   };
 
   const construirPersonaPayload = (
@@ -322,6 +355,7 @@ const FamiliaFormulario = () => {
     idUsuarioCreacion,
   });
 
+  // REEMPLAZAR las validaciones en handleSubmit:
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
@@ -330,7 +364,7 @@ const FamiliaFormulario = () => {
     // Validación de jefe de familia antes de enviar
     const errorJefe = validarJefeFamiliaGlobal();
     if (errorJefe) {
-      setError("Error: " + errorJefe);
+      showCustomToast("Error de validación", errorJefe, "error");
       setLoading(false);
       return;
     }
@@ -343,20 +377,20 @@ const FamiliaFormulario = () => {
 
     const mensajeError = validarDatos(dp);
     if (mensajeError) {
-      setError("Error: " + mensajeError);
+      showCustomToast("Error en los datos", mensajeError, "error");
       setLoading(false);
       return;
     }
 
     if (!codigoFamilia) {
-      setError("No se encontró el código de familia. Asegúrese de ingresarlo.");
+      showCustomToast("Código faltante", "No se encontró el código de familia", "error");
       setLoading(false);
       return;
     }
 
     const idUsuarioCreacion = obtenerIdUsuario();
     if (!idUsuarioCreacion) {
-      setError("No se encontró el idUsuario en localStorage.");
+      showCustomToast("Usuario no encontrado", "No se encontró el idUsuario en localStorage", "error");
       setLoading(false);
       return;
     }
@@ -364,7 +398,7 @@ const FamiliaFormulario = () => {
     try {
       // Procesar todos los integrantes guardados
       const todosLosIntegrantes = [...datosIntegrantes];
-      todosLosIntegrantes[indice] = datos; // Incluir el último integrante actual
+      todosLosIntegrantes[indice] = datos;
 
       for (let i = 0; i < todosLosIntegrantes.length; i++) {
         const integranteDatos = todosLosIntegrantes[i];
@@ -376,7 +410,11 @@ const FamiliaFormulario = () => {
         // Validar cada integrante
         const errorInt = validarDatos(dpInt);
         if (errorInt) {
-          setError(`Error en integrante ${i + 1}: ${errorInt}`);
+          showCustomToast(
+            `Error en integrante ${i + 1}`, 
+            errorInt, 
+            "error"
+          );
           setLoading(false);
           return;
         }
@@ -385,25 +423,85 @@ const FamiliaFormulario = () => {
         const personaPayload = construirPersonaPayload(dpInt, ceInt, cpInt, fdInt, codigoFamilia, idUsuarioCreacion);
         const ids = await crearPersonas([personaPayload]);
         
-        // 2. Si hay firma digital y se creó la persona exitosamente, crear la firma
+        // 2. Si hay firma digital, crear la firma como PNG
         if (fdInt.imagen && ids.length > 0) {
-          await crearFirmaDigital(ids[0], fdInt.imagen);
+          await crearFirmaDigitalPNG(ids[0], fdInt.imagen);
         }
       }
       
-      setSuccess("¡Datos de todos los integrantes guardados correctamente!");
+      // Toast de éxito
+      showCustomToast(
+        "¡Registro completado!", 
+        "Todos los integrantes han sido guardados correctamente", 
+        "success"
+      );
       
-      // Mostrar mensaje de finalización
+      // Mensaje adicional después de un delay
       setTimeout(() => {
-        alert("Registro de integrantes completado.");
-        // Aquí puedes navegar a otra página si lo deseas
-      }, 1000);
+        showCustomToast(
+          "Proceso finalizado", 
+          "El registro de la familia ha sido completado", 
+          "info"
+        );
+      }, 2000);
       
     } catch (err) {
-      setError("Error al guardar los datos: " + (err.message || err));
-      console.error(err);
+      console.error('Error completo:', err);
+      showCustomToast(
+        "Error al guardar", 
+        err.message || "Error desconocido al guardar los datos", 
+        "error"
+      );
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Función para convertir base64 a PNG blob
+  const convertirBase64APng = (base64String) => {
+    try {
+      const base64Data = base64String.replace(/^data:image\/[^;]+;base64,/, '');
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      return new Blob([byteArray], { type: 'image/png' });
+    } catch (error) {
+      console.error('Error al convertir base64 a PNG:', error);
+      throw new Error('Error al procesar imagen de firma');
+    }
+  };
+
+  // Función para crear firma digital como PNG
+  const crearFirmaDigitalPNG = async (idPersona, firmaBase64) => {
+    try {
+      console.log(`Enviando firma PNG para persona ID: ${idPersona}`);
+      
+      const formData = new FormData();
+      formData.append('idPersona', idPersona.toString());
+      
+      const pngBlob = convertirBase64APng(firmaBase64);
+      formData.append('firma', pngBlob, `firma_persona_${idPersona}.png`);
+
+      const response = await fetch('/firmasDigitales', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error ${response.status}: ${errorText}`);
+      }
+
+      const result = await response.json();
+      console.log('✅ Firma PNG creada exitosamente:', result);
+      return result;
+      
+    } catch (error) {
+      console.error('❌ Error al crear firma digital PNG:', error);
+      throw new Error(`Error al crear firma digital: ${error.message}`);
     }
   };
 
@@ -411,40 +509,6 @@ const FamiliaFormulario = () => {
     <FormContainer
       title={`Formulario de Registro Familiar - Integrante ${indice + 1} de ${cantidad}`}
     >
-      {/* Mostrar alerta si está activa */}
-      {mostrarAlerta && (
-        <div className="mb-4">
-          <Alerta
-            mensaje={mensajeAlerta}
-            tipo={tipoAlerta}
-            duracion={tipoAlerta === "warning" ? 0 : 3000} // No cerrar automáticamente si es warning
-            onClose={() => setMostrarAlerta(false)}
-          />
-          
-          {/* Botones de confirmación solo para alertas de warning */}
-          {tipoAlerta === "warning" && (
-            <div className="flex justify-center gap-4 mt-4">
-              <SubmitButton
-                type="button"
-                onClick={confirmarCambioJefe}
-                width="w-auto"
-                className="!bg-green-500 hover:!bg-green-600 !text-white"
-              >
-                Sí, cambiar jefe
-              </SubmitButton>
-              <SubmitButton
-                type="button"
-                onClick={cancelarCambioJefe}
-                width="w-auto"
-                className="!bg-red-500 hover:!bg-red-600 !text-white"
-              >
-                No, mantener actual
-              </SubmitButton>
-            </div>
-          )}
-        </div>
-      )}
-
       {/* Información Personal */}
       <FoldDownComponent title="Información Personal" open>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
