@@ -22,7 +22,7 @@ const useBusquedaFamiliaExtendida = () => {
         if (res && res.data) {
           setAlbergues(res.data);
         }
-      } catch  {
+      } catch {
         showCustomToast("Error", "Error al cargar los albergues.", "error");
       } finally {
         setLoadingAlbergues(false);
@@ -110,6 +110,8 @@ const useBusquedaFamiliaExtendida = () => {
                 : "No disponible",
               cedulaJefe: jefeFamilia ? jefeFamilia.numeroIdentificacion : null,
               nombreAlbergue: albergue.nombre,
+              egresado: familia.egresado || false,
+              fechaEgreso: familia.fechaEgreso || "No disponible",
             });
           }
         }
@@ -124,7 +126,7 @@ const useBusquedaFamiliaExtendida = () => {
           );
         }
       }
-    } catch  {
+    } catch {
       showCustomToast("Error", "Error al cargar las familias del albergue.", "error");
     } finally {
       setLoadingFamilias(false);
@@ -177,7 +179,7 @@ const useBusquedaFamiliaExtendida = () => {
         }]);
         setVistaActual("detalle");
       }
-    } catch  {
+    } catch {
       showCustomToast("Error", "Error al cargar los detalles de la familia.", "error");
     } finally {
       setLoadingFamilias(false);
