@@ -1,10 +1,8 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { alberguesAPI, amenazasAPI } from "../../helpers/api";
+import { alberguesAPI, amenazasAPI, familiasAPI } from "../../helpers/api"; // <-- importa familiasAPI
 import obtenerTodos from "../../helpers/obtenerUbicaciones";
 import customAxios from "../../helpers/customAxios";
-import { generarCodigoFamilia } from "../../helpers/generarCodigoFamilia";
 import { showCustomToast } from "../../components/globalComponents/CustomToaster";
 
 const useFormularioRegistro = () => {
@@ -83,13 +81,26 @@ const useFormularioRegistro = () => {
     cargarDistritos();
   }, [cantonSeleccionado]);
 
-  useEffect(() => {
+useEffect(() => {
+ const generarIdentificador = async () => {
     if (nombreProvincia && nombreCanton && integrantes) {
-      const numeroFamilia = 1;
-      const nuevoCodigo = generarCodigoFamilia(nombreProvincia, nombreCanton, numeroFamilia);
-      setCodigoFamilia(nuevoCodigo);
+      try {
+        const numeroFamilia = await familiasAPI.getNextNumero(nombreCanton);
+        const year = new Date().getFullYear();
+        const nuevoCodigo = `${year}-${nombreProvincia}-${nombreCanton}-${numeroFamilia}`;
+        setCodigoFamilia(nuevoCodigo);
+        console.log("Código de familia generado:", nuevoCodigo);
+      } catch {
+        setCodigoFamilia("");
+        showCustomToast("Error", "No se pudo generar el código de familia.", "error");
+      }
+    } else {
+      setCodigoFamilia("");
     }
-  }, [nombreProvincia, nombreCanton, integrantes]);
+  };
+
+  generarIdentificador();
+}, [nombreProvincia, nombreCanton, integrantes]);
 
   const crearFamilia = async (e) => {
     e.preventDefault();
@@ -126,6 +137,7 @@ const useFormularioRegistro = () => {
       const res = await customAxios.post("/familias", datos);
       const idFamilia = res.data.idFamilia;
       localStorage.setItem("idFamilia", idFamilia);
+      localStorage.setItem("codigoFamilia", codigoFamilia); // <-- Agrega esta línea
       showCustomToast("Éxito", "Familia registrada correctamente.", "success");
     } catch {
       showCustomToast("Error", "No se pudo registrar la familia.", "error");
