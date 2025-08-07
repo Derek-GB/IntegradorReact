@@ -23,9 +23,15 @@ const useRegistrarSuministro = () => {
 
   useEffect(() => {
     const cargarAlbergues = async () => {
+      const idUsuario = localStorage.getItem("idUsuario");
+      if (!idUsuario) {
+        showCustomToast("Error", "Usuario no identificado.", "error");
+        setAlbergues([]);
+        return;
+      }
+
       try {
-        const res = await alberguesAPI.getAll();
-        // Suponemos que res es un array de objetos albergue
+        const res = await alberguesAPI.getByUsuario(idUsuario);
         const listaAlbergues = Array.isArray(res) ? res : res.data || [];
         setAlbergues(listaAlbergues);
       } catch (err) {

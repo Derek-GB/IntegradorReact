@@ -5,6 +5,7 @@ import { showCustomToast } from "../components/globalComponents/CustomToaster";
 
 const useAyudaForm = () => {
   const idUsuario = localStorage.getItem("idUsuario");
+  console.log("🔎 ID del usuario desde localStorage:", idUsuario);
 
   const [familias, setFamilias] = useState([]);
   const [form, setForm] = useState({
@@ -22,17 +23,31 @@ const useAyudaForm = () => {
   useEffect(() => {
     const fetchFamilias = async () => {
       try {
-        const res = await familiasAPI.getAll();
-        setFamilias(Array.isArray(res) ? res : res.data ?? []);
-      } catch {
+        if (!idUsuario) {
+          console.warn("⚠️ No hay idUsuario disponible");
+          return;
+        }
+
+        const res = await familiasAPI.getByUsuario(idUsuario);
+        console.log("📦 Respuesta de familiasAPI.getByUsuario:", res);
+
+        const lista = Array.isArray(res?.data?.[0]) ? res.data[0] : [];
+        console.log("✅ Lista de familias parseada:", lista);
+
+        setFamilias(lista);
+      } catch (error) {
+        console.error("❌ Error al obtener familias:", error);
         showCustomToast("Error", "Error al cargar familias", "error");
       }
     };
+
     fetchFamilias();
-  }, []);
+  }, [idUsuario]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(`✏️ Cambio en el campo "${name}":`, value);
+
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -65,9 +80,12 @@ const useAyudaForm = () => {
         idUsuarioCreacion: Number(idUsuario),
       };
 
+      console.log("📤 Payload enviado:", payload);
+
       await referenciasAPI.create(payload);
 
       showCustomToast("Éxito", "Ayuda registrada correctamente", "success");
+
       setForm({
         idFamilia: "",
         tipoAyuda: "",
@@ -76,7 +94,8 @@ const useAyudaForm = () => {
         responsable: "",
       });
       setBusquedaFamilia("");
-    } catch {
+    } catch (error) {
+      console.error("❌ Error al enviar el formulario:", error);
       showCustomToast("Error", "No se pudo registrar la ayuda. Inténtelo de nuevo.", "error");
     } finally {
       setLoading(false);
@@ -84,10 +103,13 @@ const useAyudaForm = () => {
   };
 
   const onSelectFamilia = (familia) => {
+    console.log("👈 Familia seleccionada:", familia);
+
     setForm((prev) => ({
       ...prev,
       idFamilia: familia.id || familia.ID,
     }));
+
     setBusquedaFamilia(familia.codigoFamilia || familia.codigo);
   };
 
