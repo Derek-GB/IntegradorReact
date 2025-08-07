@@ -2,8 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
 import { contextoAbastecimiento } from '../../context/contextoAbastecimiento.jsx';
-import { pedidoConsumiblesAPI } from '../../helpers/api.js';
-import { alberguesAPI } from '../../helpers/api.js';
+import { pedidoConsumiblesAPI, alberguesAPI } from '../../helpers/api.js';
 
 const opcionesComida = [
   { nombre: "Desayuno", value: "desayuno" },
@@ -11,49 +10,53 @@ const opcionesComida = [
   { nombre: "Cena", value: "cena" },
 ];
 
-const opcionesAlbergue=await alberguesAPI.getAll().then(data => {
-    console.log("Cargando opciones de albergue:", data);
-    const resultados = data.data.map(albergue => ({
-    id: albergue.id,
-    nombre: albergue.nombre
-  }));
-    console.log("Opciones de albergue cargadas:", resultados);
-    return resultados;
-}).catch(error => {
-  console.error("Error cargando albergues:", error);
-  return opcionesAlbergue; // Retorna las opciones por defecto en caso de error
-});
-
 export const useAbarrotesMenuPrincipal = () => {
   const navigate = useNavigate();
   const { guardarDatosFormulario } = useContext(contextoAbastecimiento);
+
+  const [opcionesAlbergue, setOpcionesAlbergue] = useState([]);
 
   const [formData, setFormData] = useState({
     fecha: '',
     tipo: '',
     cantidad: '',
-    albergue: '', // aquí guardaremos el id del albergue
+    albergue: '', // aquí guardamos el id (string) del albergue seleccionado
   });
 
   const [loading, setLoading] = useState(false);
   const today = new Date().toISOString().split('T')[0];
 
+  // Cargar albergues desde API al montar
   useEffect(() => {
-    console.log('useEffect - Inicializando formData');
-    setFormData({
-      fecha: '',
-      tipo: '',
-      cantidad: '',
-      albergue: '',
-    });
+    const cargarAlbergues = async () => {
+      try {
+        const res = await alberguesAPI.getAll();
+        // Asumimos que res.data es el array de albergues
+        const listaAlbergues = Array.isArray(res.data) ? res.data : [];
+        const opciones = listaAlbergues.map(a => ({
+          id: a.id,
+          nombre: a.nombre,
+        }));
+        setOpcionesAlbergue(opciones);
+        console.log("Opciones de albergue cargadas:", opciones);
+      } catch (error) {
+        console.error("Error cargando albergues:", error);
+        showCustomToast("Error", "No se pudieron cargar los albergues", "error");
+        setOpcionesAlbergue([]);
+      }
+    };
+    cargarAlbergues();
   }, []);
 
   const handleChange = (e) => {
-    console.log('handleChange - Evento:', e.target.name, e.target.value);
+    const { name, value } = e.target;
+    console.log('handleChange - Evento:', name, value);
+
+    // Si es albergue, guardar el valor como string pero lo convertiremos a número al enviar
     setFormData((prev) => {
       const updatedForm = {
         ...prev,
-        [e.target.name]: e.target.value,
+        [name]: value,
       };
       console.log('handleChange - formData actualizado:', updatedForm);
       return updatedForm;
@@ -77,8 +80,8 @@ export const useAbarrotesMenuPrincipal = () => {
       const pedidoData = {
         fechaCreacion: fecha,
         tipoComida: tipo,
-        cantidadPersonas: parseInt(cantidad),
-        idAlbergue: parseInt(albergue),  // Aquí enviamos el ID, convertido a número
+        cantidadPersonas: parseInt(cantidad, 10),
+        idAlbergue: parseInt(albergue, 10), // convertir string a número aquí
         idUsuarioCreacion: 1, // ID fijo o del usuario logueado
       };
 
@@ -92,6 +95,7 @@ export const useAbarrotesMenuPrincipal = () => {
         ...formData,
         idPedido: pedidoCreado.id, // Guarda el ID para usarlo después
       });
+
       console.log('handleSiguiente - Datos guardados en contexto');
 
       showCustomToast('Éxito', 'Formulario guardado correctamente', 'success');
