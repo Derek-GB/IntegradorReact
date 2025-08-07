@@ -14,99 +14,97 @@ export const useAbarrotesMenuPrincipal = () => {
   const navigate = useNavigate();
   const { guardarDatosFormulario } = useContext(contextoAbastecimiento);
 
-  const [opcionesAlbergue, setOpcionesAlbergue] = useState([]);
+  // Para autocomplete albergues
+  const [busquedaAlbergue, setBusquedaAlbergue] = useState("");
+  const [showSugerenciasAlbergue, setShowSugerenciasAlbergue] = useState(false);
+  const [resultadosAlbergue, setResultadosAlbergue] = useState([]);
 
   const [formData, setFormData] = useState({
     fecha: '',
     tipo: '',
     cantidad: '',
-    albergue: '', // aquí guardamos el id (string) del albergue seleccionado
+    albergue: null, // Guardamos el objeto seleccionado o null
   });
 
   const [loading, setLoading] = useState(false);
   const today = new Date().toISOString().split('T')[0];
 
-  // Cargar albergues desde API al montar
+  // Cargar albergues para el usuario
   useEffect(() => {
-    const cargarAlbergues = async () => {
+    const cargarAlberguesPorUsuario = async () => {
       try {
-        const res = await alberguesAPI.getAll();
-        // Asumimos que res.data es el array de albergues
+        const idUsuario = localStorage.getItem("idUsuario"); // Asumiendo que está guardado aquí
+        if (!idUsuario) {
+          showCustomToast("Error", "Usuario no identificado", "error");
+          setResultadosAlbergue([]);
+          return;
+        }
+        const res = await alberguesAPI.getByUsuario(idUsuario);
         const listaAlbergues = Array.isArray(res.data) ? res.data : [];
-        const opciones = listaAlbergues.map(a => ({
-          id: a.id,
-          nombre: a.nombre,
-        }));
-        setOpcionesAlbergue(opciones);
-        console.log("Opciones de albergue cargadas:", opciones);
+        setResultadosAlbergue(listaAlbergues);
+        console.log("Albergues cargados para usuario:", listaAlbergues);
       } catch (error) {
-        console.error("Error cargando albergues:", error);
-        showCustomToast("Error", "No se pudieron cargar los albergues", "error");
-        setOpcionesAlbergue([]);
+        console.error("Error cargando albergues por usuario:", error);
+        showCustomToast("Error", "No se pudieron cargar los albergues para el usuario", "error");
+        setResultadosAlbergue([]);
       }
     };
-    cargarAlbergues();
+
+    cargarAlberguesPorUsuario();
   }, []);
 
+  // Maneja cambios en inputs que no son albergue
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log('handleChange - Evento:', name, value);
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-    // Si es albergue, guardar el valor como string pero lo convertiremos a número al enviar
-    setFormData((prev) => {
-      const updatedForm = {
-        ...prev,
-        [name]: value,
-      };
-      console.log('handleChange - formData actualizado:', updatedForm);
-      return updatedForm;
-    });
+  // Maneja selección de albergue en autocomplete
+  const handleSelectAlbergue = (albergueSeleccionado) => {
+    setFormData(prev => ({
+      ...prev,
+      albergue: albergueSeleccionado,
+    }));
+    setShowSugerenciasAlbergue(false);
   };
 
   const handleSiguiente = async () => {
-    console.log('handleSiguiente - formData al enviar:', formData);
     const { fecha, tipo, cantidad, albergue } = formData;
 
     if (!fecha || !tipo || !cantidad || !albergue) {
-      console.warn('handleSiguiente - Falta completar campos:', { fecha, tipo, cantidad, albergue });
       showCustomToast('Error', 'Complete todos los campos', 'error');
       return;
     }
 
     try {
       setLoading(true);
-      console.log('handleSiguiente - Preparando datos para API');
 
       const pedidoData = {
         fechaCreacion: fecha,
         tipoComida: tipo,
         cantidadPersonas: parseInt(cantidad, 10),
-        idAlbergue: parseInt(albergue, 10), // convertir string a número aquí
-        idUsuarioCreacion: 1, // ID fijo o del usuario logueado
+        idAlbergue: albergue.id, // Usamos el id del objeto seleccionado
+        idUsuarioCreacion: parseInt(localStorage.getItem("idUsuario"), 10) || 1,
       };
-
-      console.log('handleSiguiente - Datos enviados a API:', pedidoData);
 
       const pedidoCreado = await pedidoConsumiblesAPI.create(pedidoData);
 
-      console.log('handleSiguiente - Respuesta API:', pedidoCreado);
-
       guardarDatosFormulario({
         ...formData,
-        idPedido: pedidoCreado.id, // Guarda el ID para usarlo después
+        idPedido: pedidoCreado.id,
       });
-
-      console.log('handleSiguiente - Datos guardados en contexto');
 
       showCustomToast('Éxito', 'Formulario guardado correctamente', 'success');
 
       setTimeout(() => {
-        console.log('handleSiguiente - Navegando a formularioAbarrotes.jsx');
-        navigate('/formularioAbarrotes.jsx');
         setLoading(false);
+        navigate('/formularioAbarrotes.jsx');
       }, 1500);
     } catch (error) {
-      console.error('handleSiguiente - Error al crear el pedido:', error);
+      console.error('Error al crear el pedido:', error);
       showCustomToast('Error', 'No se pudo guardar el formulario.', 'error');
       setLoading(false);
     }
@@ -117,8 +115,13 @@ export const useAbarrotesMenuPrincipal = () => {
     loading,
     today,
     opcionesComida,
-    opcionesAlbergue,
+    busquedaAlbergue,
+    setBusquedaAlbergue,
+    showSugerenciasAlbergue,
+    setShowSugerenciasAlbergue,
+    resultadosAlbergue,
     handleChange,
+    handleSelectAlbergue,
     handleSiguiente,
   };
 };
