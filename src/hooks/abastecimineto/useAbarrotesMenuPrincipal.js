@@ -2,88 +2,119 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
 import { contextoAbastecimiento } from '../../context/contextoAbastecimiento.jsx';
+import { pedidoConsumiblesAPI } from '../../helpers/api.js';
+import { alberguesAPI } from '../../helpers/api.js';
 
 const opcionesComida = [
-    { nombre: "Desayuno", value: "desayuno" },
-    { nombre: "Almuerzo", value: "almuerzo" },
-    { nombre: "Cena", value: "cena" },
+  { nombre: "Desayuno", value: "desayuno" },
+  { nombre: "Almuerzo", value: "almuerzo" },
+  { nombre: "Cena", value: "cena" },
 ];
 
-const opcionesAlbergue = [
-    { nombre: "Liceo de Bebedero" },
-    { nombre: "Escuela de Bebedero" },
-    { nombre: "Gimnasio Municipal - Manuel Melico Corella" },
-    { nombre: "Universidad Invenio" },
-    { nombre: "Salón Comunal de Javilla" },
-    { nombre: "Salón Comunal de Paso Lajas" },
-    { nombre: "Salón de Eventos de eventos Municipal" },
-    { nombre: "Escuela San Cristobal" },
-    { nombre: "Colegio Técnico Profesional de Cañas" },
-    { nombre: "Salón comunal de Barrio Las Palmas" },
-    { nombre: "Escuela Monseñor Luis Leipold" },
-    { nombre: "Escuela Antonio Obando Espinoza" },
-    { nombre: "Salón Comunal de Porozal" },
-    { nombre: "Escuela San Miguel" },
-    { nombre: "Escuela Barrio Hotel de Cañas" },
-    { nombre: "Escuela Corobicí" },
-    { nombre: "Gimnasio Antonio Obando Espinoza" },
-    { nombre: "Salón Comunal Hotel" },
-];
+const opcionesAlbergue=await alberguesAPI.getAll().then(data => {
+    console.log("Cargando opciones de albergue:", data);
+    const resultados = data.data.map(albergue => ({
+    id: albergue.id,
+    nombre: albergue.nombre
+  }));
+    console.log("Opciones de albergue cargadas:", resultados);
+    return resultados;
+}).catch(error => {
+  console.error("Error cargando albergues:", error);
+  return opcionesAlbergue; // Retorna las opciones por defecto en caso de error
+});
 
 export const useAbarrotesMenuPrincipal = () => {
-    const navigate = useNavigate();
-    const { guardarDatosFormulario } = useContext(contextoAbastecimiento);
+  const navigate = useNavigate();
+  const { guardarDatosFormulario } = useContext(contextoAbastecimiento);
 
-    const [formData, setFormData] = useState({
-        fecha: '',
-        tipo: '',
-        cantidad: '',
-        albergue: '',
+  const [formData, setFormData] = useState({
+    fecha: '',
+    tipo: '',
+    cantidad: '',
+    albergue: '', // aquí guardaremos el id del albergue
+  });
+
+  const [loading, setLoading] = useState(false);
+  const today = new Date().toISOString().split('T')[0];
+
+  useEffect(() => {
+    console.log('useEffect - Inicializando formData');
+    setFormData({
+      fecha: '',
+      tipo: '',
+      cantidad: '',
+      albergue: '',
     });
+  }, []);
 
-    const [loading, setLoading] = useState(false);
+  const handleChange = (e) => {
+    console.log('handleChange - Evento:', e.target.name, e.target.value);
+    setFormData((prev) => {
+      const updatedForm = {
+        ...prev,
+        [e.target.name]: e.target.value,
+      };
+      console.log('handleChange - formData actualizado:', updatedForm);
+      return updatedForm;
+    });
+  };
 
-    const today = new Date().toISOString().split('T')[0];
+  const handleSiguiente = async () => {
+    console.log('handleSiguiente - formData al enviar:', formData);
+    const { fecha, tipo, cantidad, albergue } = formData;
 
-    useEffect(() => {
-        setFormData({
-            fecha: '',
-            tipo: '',
-            cantidad: '',
-            albergue: '',
-        });
-    }, []);
+    if (!fecha || !tipo || !cantidad || !albergue) {
+      console.warn('handleSiguiente - Falta completar campos:', { fecha, tipo, cantidad, albergue });
+      showCustomToast('Error', 'Complete todos los campos', 'error');
+      return;
+    }
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
+    try {
+      setLoading(true);
+      console.log('handleSiguiente - Preparando datos para API');
 
-    const handleSiguiente = () => {
-        const { fecha, tipo, cantidad, albergue } = formData;
-        if (!fecha || !tipo || !cantidad || !albergue) {
-            showCustomToast('Error', 'Complete todos los campos', 'error');
-            return;
-        }
+      const pedidoData = {
+        fechaCreacion: fecha,
+        tipoComida: tipo,
+        cantidadPersonas: parseInt(cantidad),
+        idAlbergue: parseInt(albergue),  // Aquí enviamos el ID, convertido a número
+        idUsuarioCreacion: 1, // ID fijo o del usuario logueado
+      };
 
-        setLoading(true);
-        guardarDatosFormulario(formData);
-        showCustomToast('Éxito', 'Formulario guardado correctamente', 'success');
-        setTimeout(() => {
-            navigate('/formularioAbarrotes.jsx');
-            setLoading(false);
-        }, 2000);
-    };
+      console.log('handleSiguiente - Datos enviados a API:', pedidoData);
 
-    return {
-        formData,
-        loading,
-        today,
-        opcionesComida,
-        opcionesAlbergue,
-        handleChange,
-        handleSiguiente,
-    };
+      const pedidoCreado = await pedidoConsumiblesAPI.create(pedidoData);
+
+      console.log('handleSiguiente - Respuesta API:', pedidoCreado);
+
+      guardarDatosFormulario({
+        ...formData,
+        idPedido: pedidoCreado.id, // Guarda el ID para usarlo después
+      });
+      console.log('handleSiguiente - Datos guardados en contexto');
+
+      showCustomToast('Éxito', 'Formulario guardado correctamente', 'success');
+
+      setTimeout(() => {
+        console.log('handleSiguiente - Navegando a formularioAbarrotes.jsx');
+        navigate('/formularioAbarrotes.jsx');
+        setLoading(false);
+      }, 1500);
+    } catch (error) {
+      console.error('handleSiguiente - Error al crear el pedido:', error);
+      showCustomToast('Error', 'No se pudo guardar el formulario.', 'error');
+      setLoading(false);
+    }
+  };
+
+  return {
+    formData,
+    loading,
+    today,
+    opcionesComida,
+    opcionesAlbergue,
+    handleChange,
+    handleSiguiente,
+  };
 };
