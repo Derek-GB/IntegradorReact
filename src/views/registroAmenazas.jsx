@@ -11,40 +11,58 @@ export default function RegistroAmenazas() {
   const [peligro, setPeligro] = useState("");
   const [causa, setCausa] = useState("");
   const [categoriaEvento, setCategoriaEvento] = useState("");
-
-  const idUsuarioCreacion = localStorage.getItem("idUsuario");
-
   const [loading, setLoading] = useState(false);
+
+  const idUsuarioCreacion = parseInt(localStorage.getItem("idUsuario"), 10);
+
+  const resetForm = () => {
+    setFamilia("");
+    setEvento("");
+    setPeligro("");
+    setCausa("");
+    setCategoriaEvento("");
+  };
 
   const handleRegistro = async (e) => {
     e.preventDefault();
 
-    if (!familia || !evento || !peligro || !causa || !categoriaEvento) {
+    if (
+      !familia.trim() ||
+      !evento.trim() ||
+      !peligro.trim() ||
+      !causa.trim() ||
+      !categoriaEvento.trim() ||
+      !idUsuarioCreacion
+    ) {
       showCustomToast("Error", "Por favor completa todos los campos.", "error");
       return;
     }
 
     setLoading(true);
 
+    const data = {
+      familiaEvento: familia.trim(),
+      evento: evento.trim(),
+      peligro: peligro.trim(),
+      causa: causa.trim(),
+      categoriaEvento: categoriaEvento.trim(),
+      idUsuarioCreacion,
+    };
+
+    console.log("Enviando a la API:", data);
+
     try {
-      await amenazasAPI.create({
-        familiaEvento: familia,
-        evento,
-        peligro,
-        causa,
-        categoriaEvento,
-        idUsuarioCreacion,
-      });
+      await amenazasAPI.create(data);
 
       showCustomToast("Éxito", "Amenaza registrada correctamente.", "success");
-
-      setFamilia("");
-      setEvento("");
-      setPeligro("");
-      setCausa("");
-      setCategoriaEvento("");
+      resetForm();
     } catch (error) {
-      showCustomToast("Error", error.message || "Error al registrar amenaza", "error");
+      const apiMessage =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        error.message ||
+        "Error al registrar amenaza";
+      showCustomToast("Error", apiMessage, "error");
     } finally {
       setLoading(false);
     }
