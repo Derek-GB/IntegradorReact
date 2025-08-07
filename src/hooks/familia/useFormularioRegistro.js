@@ -30,9 +30,15 @@ const useFormularioRegistro = () => {
 
   useEffect(() => {
     const cargarDatos = async () => {
+      const idUsuario = localStorage.getItem("idUsuario");
+      if (!idUsuario) {
+        showCustomToast("Error", "Usuario no identificado.", "error");
+        return;
+      }
+
       try {
         const [resAlbergues, resAmenazas] = await Promise.all([
-          alberguesAPI.getAll(),
+          alberguesAPI.getByUsuario(idUsuario),
           amenazasAPI.getAll(),
         ]);
         setAlbergues(resAlbergues?.data || []);
@@ -81,26 +87,26 @@ const useFormularioRegistro = () => {
     cargarDistritos();
   }, [cantonSeleccionado]);
 
-useEffect(() => {
- const generarIdentificador = async () => {
-    if (nombreProvincia && nombreCanton && integrantes) {
-      try {
-        const numeroFamilia = await familiasAPI.getNextNumero(nombreCanton);
-        const year = new Date().getFullYear();
-        const nuevoCodigo = `${year}-${nombreProvincia}-${nombreCanton}-${numeroFamilia}`;
-        setCodigoFamilia(nuevoCodigo);
-        console.log("Código de familia generado:", nuevoCodigo);
-      } catch {
+  useEffect(() => {
+    const generarIdentificador = async () => {
+      if (nombreProvincia && nombreCanton && integrantes) {
+        try {
+          const numeroFamilia = await familiasAPI.getNextNumero(nombreCanton);
+          const year = new Date().getFullYear();
+          const nuevoCodigo = `${year}-${nombreProvincia}-${nombreCanton}-${numeroFamilia}`;
+          setCodigoFamilia(nuevoCodigo);
+          console.log("Código de familia generado:", nuevoCodigo);
+        } catch {
+          setCodigoFamilia("");
+          showCustomToast("Error", "No se pudo generar el código de familia.", "error");
+        }
+      } else {
         setCodigoFamilia("");
-        showCustomToast("Error", "No se pudo generar el código de familia.", "error");
       }
-    } else {
-      setCodigoFamilia("");
-    }
-  };
+    };
 
-  generarIdentificador();
-}, [nombreProvincia, nombreCanton, integrantes]);
+    generarIdentificador();
+  }, [nombreProvincia, nombreCanton, integrantes]);
 
   const crearFamilia = async (e) => {
     e.preventDefault();

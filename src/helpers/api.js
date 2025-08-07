@@ -84,7 +84,19 @@ export const productosAPI = createApiMethods("productos", {
     } catch (error) {
       handleError(error);
     }
+  },
+  getByUsuario: async (idUsuario) => {
+  try {
+    const url = `/productos/consulta/porUsuario/${encodeURIComponent(idUsuario)}`;
+    console.log("📦 Consultando productos por usuario:", url);
+    const res = await customAxios.get(url);
+    return res.data;
+  } catch (error) {
+    handleError(error);
   }
+}
+
+  
 });
 
 export const familiasAPI = createApiMethods("familias", {
@@ -109,6 +121,14 @@ export const familiasAPI = createApiMethods("familias", {
       handleError(error);
     }
   },
+  getByUsuario: async (idUsuario) => {
+  try {
+    const res = await customAxios.get(`/familias/consulta/porUsuario/${encodeURIComponent(idUsuario)}`);
+    return res.data;
+  } catch (error) {
+    handleError(error);
+  }
+},
 });
 
 export const alberguesAPI = {
@@ -165,6 +185,16 @@ export const alberguesAPI = {
     try {
       const url = `/albergues/consulta/color/${encodeURIComponent(color)}`;
       console.log("URL llamada:", url);
+      const res = await customAxios.get(url);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+  getByUsuario: async (idUsuario) => {
+    try {
+      const url = `/albergues/consulta/porUsuario/${encodeURIComponent(idUsuario)}`;
+      console.log("📥 Consultando albergues por usuario:", url);
       const res = await customAxios.get(url);
       return res.data;
     } catch (error) {
