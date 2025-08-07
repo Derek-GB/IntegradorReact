@@ -102,7 +102,7 @@ const FamiliaFormulario = () => {
   };
 
   const codigoFamilia = localStorage.getItem("codigoFamilia") || "";
-  const idFamilia = localStorage.getItem("idFamilia");
+  const idFamilia = Number(localStorage.getItem("idFamilia"));
 
   const updateCampo = (campo, valor) => {
     setDatos(prev => ({
@@ -237,7 +237,7 @@ const FamiliaFormulario = () => {
   };
 
   const construirPersonaPayload = (
-    dp, ce, cp, fd, codigoFamilia, idUsuarioCreacion
+    dp, ce, cp, fd, idFamilia, idUsuarioCreacion
   ) => ({
     tieneCondicionSalud: ce.tieneCondicionSalud ?? true,
     descripcionCondicionSalud: ce.descripcionCondicionSalud || ce.otrasCondiciones || "",
@@ -247,7 +247,7 @@ const FamiliaFormulario = () => {
     paisOrigen: cp.paises || "",
     autoidentificacionCultural: cp.autoidentificacionCultural || "",
     puebloIndigena: cp.grupoIndigena || "",
-    idFamilia: codigoFamilia,
+    idFamilia: idFamilia, // <-- aquí
     nombre: dp.nombre || "",
     primerApellido: dp.primerApellido || "",
     segundoApellido: dp.segundoApellido || "",
@@ -337,7 +337,7 @@ const FamiliaFormulario = () => {
           <InputField
             label="ID Familia"
             name="idFamilia"
-            value={idFamilia || ""}
+            value={codigoFamilia || ""}
             readOnly
           />
 
