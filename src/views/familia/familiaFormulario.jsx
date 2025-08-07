@@ -5,7 +5,7 @@ import FoldDownComponent from "../../components/otros/FoldDownComponent.jsx";
 import InputField from "../../components/FormComponents/InputField.jsx";
 import SelectField from "../../components/FormComponents/SelectField.jsx";
 import useIntegrante from "../../hooks/familia/useIntegrante.js";
-import { personasAPI,firmasDigitalesAPI } from "../../helpers/api.js";
+import { personasAPI } from "../../helpers/api.js";
 import { showCustomToast } from "../../components/globalComponents/CustomToaster.jsx";
 
 const FamiliaFormulario = () => {
@@ -87,8 +87,7 @@ const FamiliaFormulario = () => {
     canvasRef,
     signaturePadRef,
     guardarFirma,
-    limpiarFirma,
-    validarIntegrante
+    limpiarFirma
   } = useIntegrante(datos, setDatos);
 
   const dp = datos.FamiliaDatosPersonales;
@@ -113,9 +112,6 @@ const FamiliaFormulario = () => {
       },
     }));
   };
-
-  const obtenerIdUsuario = () => localStorage.getItem("idUsuario") || "";
-  const obtenerIdUsuarioAutoincremental = (index) => index + 1;
 
   const verificarJefeFamilia = () => {
     let jefeExistente = false;
@@ -205,105 +201,96 @@ const FamiliaFormulario = () => {
     return null;
   };
 
-  const crearPersonas = async (personasPayload) => {
-    const response = await fetch('/api/personas', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(personasPayload)
-    });
-    console.log("Response crearPersonas:", JSON.stringify(personasPayload));
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Error ${response.status}: ${errorText}`);
-    }
-    const res = await response.json();
-    return res?.resultados?.map(r => r.id) || [];
-  };
+ 
+  
+ 
 
-  const crearFirmaDigital = async (idPersona, firmaBase64) => {
+  const construirPersonaPayload = (datosIntegrantes, idFamilia) => {
     const formData = new FormData();
-    formData.append('idPersona', idPersona.toString());
-    const pngBlob = convertirBase64APng(firmaBase64);
-    formData.append('firma', pngBlob, `firma_persona_${idPersona}.png`);
-    const response = await fetch('/api/firmasDigitales', {
-      method: 'POST',
-      body: formData
+
+    const personasArray = datosIntegrantes.map((integrante, idx) => {
+      const dp = integrante.FamiliaDatosPersonales;
+      const ce = integrante.FamiliaCondicionesEspeciales;
+      const cp = integrante.FamiliaCaracteristicasPoblacionales;
+      const fd = integrante.FamiliaFirmaDigital;
+
+      let firmaFileName = "";
+      if (fd.imagen) {
+        firmaFileName = `firma_persona_${idx + 1}.png`;
+      }
+
+      return {
+        tieneCondicionSalud: ce.tieneCondicionSalud ?? true,
+        descripcionCondicionSalud: ce.descripcionCondicionSalud || ce.otrasCondiciones || null,
+        discapacidad: ce.discapacidad ?? false,
+        tipoDiscapacidad: ce.tipoDiscapacidad || null,
+        subtipoDiscapacidad: ce.subtipoDiscapacidad || null,
+        paisOrigen: cp.paises || null,
+        autoidentificacionCultural: cp.autoidentificacionCultural || null,
+        puebloIndigena: cp.grupoIndigena || null,
+        idFamilia: idFamilia,
+        nombre: dp.nombre || "",
+        primerApellido: dp.primerApellido || "",
+        segundoApellido: dp.segundoApellido || "",
+        tipoIdentificacion: dp.tipoIdentificacion || "Cédula",
+        numeroIdentificacion: dp.numeroIdentificacion || "",
+        nacionalidad: dp.nacionalidad || "",
+        parentesco: dp.parentesco || "",
+        esJefeFamilia: dp.esJefeFamilia === true || dp.esJefeFamilia === "Sí",
+        fechaNacimiento: dp.fechaNacimiento || "",
+        genero: dp.genero || "",
+        sexo: dp.sexo || "",
+        telefono: dp.telefono || "",
+        contactoEmergencia: dp.contactoEmergencia || null,
+        observaciones: dp.observaciones || null,
+        estaACargoMenor: dp.estaACargoMenor === true || dp.estaACargoMenor === "Sí",
+        idUsuarioCreacion: idx + 1,
+        firma: firmaFileName
+      };
     });
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Error ${response.status}: ${errorText}`);
+
+    formData.append("personas", JSON.stringify(personasArray));
+
+    datosIntegrantes.forEach((integrante, idx) => {
+      const fd = integrante.FamiliaFirmaDigital;
+      if (fd.imagen) {
+        const pngBlob = convertirBase64APng(fd.imagen);
+        formData.append("firma", pngBlob, `firma_persona_${idx + 1}.png`);
+      }
+    });
+
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
     }
-    return await response.json();
+
+    return formData;
   };
 
-  const construirPersonaPayload = (
-    dp, ce, cp, fd, idFamilia, idUsuarioCreacion
-  ) => ({
-    tieneCondicionSalud: ce.tieneCondicionSalud ?? true,
-    descripcionCondicionSalud: ce.descripcionCondicionSalud || ce.otrasCondiciones || "",
-    discapacidad: ce.discapacidad ?? false,
-    tipoDiscapacidad: ce.tipoDiscapacidad || "",
-    subtipoDiscapacidad: ce.subtipoDiscapacidad || "",
-    paisOrigen: cp.paises || "",
-    autoidentificacionCultural: cp.autoidentificacionCultural || "",
-    puebloIndigena: cp.grupoIndigena || "",
-    idFamilia: idFamilia, // <-- aquí
-    nombre: dp.nombre || "",
-    primerApellido: dp.primerApellido || "",
-    segundoApellido: dp.segundoApellido || "",
-    tipoIdentificacion: dp.tipoIdentificacion || "Cédula",
-    numeroIdentificacion: dp.numeroIdentificacion || "",
-    nacionalidad: dp.nacionalidad || "",
-    parentesco: dp.parentesco || "",
-    esJefeFamilia: dp.esJefeFamilia ?? false,
-    fechaNacimiento: dp.fechaNacimiento || "",
-    genero: dp.genero || "",
-    sexo: dp.sexo || "",
-    telefono: dp.telefono || "",
-    contactoEmergencia: dp.contactoEmergencia || "",
-    observaciones: dp.observaciones || "",
-    estaACargoMenor: dp.estaACargoMenor ?? false,
-    idUsuarioCreacion,
-  });
+  const crearPersonasConFirmas = async (formData) => {
+    const res = await personasAPI.create(formData);
+    return res;
+  };
 
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
     setSuccess(null);
 
-    // Validación de datos personales usando el hook
-    const errorDatos = validarIntegrante(datos.FamiliaDatosPersonales);
-    if (errorDatos) {
-      setError(errorDatos);
+    const errorJefe = validarJefeFamiliaGlobal();
+    if (errorJefe) {
+      setError(errorJefe);
       setLoading(false);
       return;
     }
 
+    const nuevosIntegrantes = [...datosIntegrantes];
+    nuevosIntegrantes[indice] = { ...datos };
+
     try {
-      const personasPayload = datosIntegrantes.map((integrante, idx) => {
-        const dp = integrante.FamiliaDatosPersonales;
-        const ce = integrante.FamiliaCondicionesEspeciales;
-        const cp = integrante.FamiliaCaracteristicasPoblacionales;
-        const fd = integrante.FamiliaFirmaDigital;
-        return construirPersonaPayload(dp, ce, cp, fd, idFamilia, obtenerIdUsuarioAutoincremental(idx));
-      });
+      const formData = construirPersonaPayload(nuevosIntegrantes, idFamilia);
+      await crearPersonasConFirmas(formData);
 
-      
-      console.log("personasPayload:", personasPayload);
-
-      const ids = await crearPersonas(personasPayload);
-
-      const jefeIndex = datosIntegrantes.findIndex(
-        i => i.FamiliaDatosPersonales.esJefeFamilia === "Sí" || i.FamiliaDatosPersonales.esJefeFamilia === true
-      );
-      if (jefeIndex === -1) throw new Error("Debe designar un jefe de familia.");
-
-      const jefeFirma = datosIntegrantes[jefeIndex].FamiliaFirmaDigital.imagen;
-      if (!jefeFirma) throw new Error("Debe registrar la firma digital del jefe de familia.");
-
-      await crearFirmaDigital(ids[jefeIndex], jefeFirma);
-
-      showCustomToast("¡Registro completado!", "Todos los integrantes y la firma han sido guardados correctamente", "success");
+      showCustomToast("¡Registro completado!", "Todos los integrantes y las firmas han sido guardados correctamente", "success");
       setTimeout(() => {
         showCustomToast("Proceso finalizado", "El registro de la familia ha sido completado", "info");
       }, 2000);
