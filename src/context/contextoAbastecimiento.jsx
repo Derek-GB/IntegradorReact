@@ -31,7 +31,14 @@ export const AbastecimientoProvider = ({ children }) => {
 
   const agregarItem = async (nuevoItem) => {
     try {
-      const creado = await pedidoConsumiblesAPI.create(nuevoItem);
+      const idAlbergue = datosFormulario?.idAlbergue;
+      if (!idAlbergue) {
+        showCustomToast("Error: falta idAlbergue en los datos del formulario", "error");
+        return;
+      }
+      const payload = { ...nuevoItem, idAlbergue };
+
+      const creado = await pedidoConsumiblesAPI.create(payload);
       setItems(prev => [...prev, creado]);
       showCustomToast("Item agregado correctamente", "success");
     } catch (error) {
@@ -55,7 +62,14 @@ export const AbastecimientoProvider = ({ children }) => {
     try {
       const id = items[index]?.id;
       if (!id) throw new Error("ID inválido para editar");
-      const actualizado = await pedidoConsumiblesAPI.update(id, nuevoItem);
+      const idAlbergue = datosFormulario?.idAlbergue;
+      if (!idAlbergue) {
+        showCustomToast("Error: falta idAlbergue en los datos del formulario", "error");
+        return;
+      }
+      const payload = { ...nuevoItem, idAlbergue };
+
+      const actualizado = await pedidoConsumiblesAPI.update(id, payload);
       setItems(prev => prev.map((item, i) => i === index ? actualizado : item));
       showCustomToast("Item actualizado correctamente", "success");
     } catch (error) {
