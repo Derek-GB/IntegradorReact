@@ -86,17 +86,17 @@ export const productosAPI = createApiMethods("productos", {
     }
   },
   getByUsuario: async (idUsuario) => {
-  try {
-    const url = `/productos/consulta/porUsuario/${encodeURIComponent(idUsuario)}`;
-    console.log("📦 Consultando productos por usuario:", url);
-    const res = await customAxios.get(url);
-    return res.data;
-  } catch (error) {
-    handleError(error);
+    try {
+      const url = `/productos/consulta/porUsuario/${encodeURIComponent(idUsuario)}`;
+      console.log("📦 Consultando productos por usuario:", url);
+      const res = await customAxios.get(url);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
   }
-}
 
-  
+
 });
 
 export const familiasAPI = createApiMethods("familias", {
@@ -111,24 +111,24 @@ export const familiasAPI = createApiMethods("familias", {
     }
   },
   // Nuevo método para obtener el autonumérico por cantón
- getNextNumero: async (canton) => {
+  getNextNumero: async (canton) => {
     try {
       const res = await customAxios.get(
         `/familias/requerimiento/indentificador/${encodeURIComponent(canton)}`
       );
-      return res.data.identificador; 
+      return res.data.identificador;
     } catch (error) {
       handleError(error);
     }
   },
   getByUsuario: async (idUsuario) => {
-  try {
-    const res = await customAxios.get(`/familias/consulta/porUsuario/${encodeURIComponent(idUsuario)}`);
-    return res.data;
-  } catch (error) {
-    handleError(error);
-  }
-},
+    try {
+      const res = await customAxios.get(`/familias/consulta/porUsuario/${encodeURIComponent(idUsuario)}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
 });
 
 export const alberguesAPI = {
@@ -208,6 +208,16 @@ export const personasAPI = {
   getDiscapacidadPorAlbergue: async (idAlbergue) => {
     try {
       const res = await customAxios.get(`/personas/discapacidad/id/${idAlbergue}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+  getByUsuario: async (idUsuario) => {
+    try {
+      const url = `/personas/user/${encodeURIComponent(idUsuario)}`;
+      console.log("📥 Consultando personas por usuario:", url);
+      const res = await customAxios.get(url);
       return res.data;
     } catch (error) {
       handleError(error);
