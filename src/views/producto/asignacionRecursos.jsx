@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAsignarRecurso } from '../../hooks/Producto/useAsignarRecurso.js';
 import FormContainer from '../../components/FormComponents/FormContainer.jsx';
-import SelectField from '../../components/FormComponents/SelectField.jsx';
 import SearchAutocompleteInput from '../../components/FormComponents/SearchAutocompleteInput.jsx';
 import SubmitButton from '../../components/FormComponents/SubmitButton.jsx';
 import CustomToaster from '../../components/globalComponents/CustomToaster.jsx'; // Ajusta ruta si hace falta
@@ -20,6 +19,10 @@ const AsignarRecurso = () => {
     handleSelectPersona,
     handleSubmit
   } = useAsignarRecurso();
+
+  // Estados para el autocomplete de productos
+  const [busquedaProducto, setBusquedaProducto] = useState('');
+  const [showSugerenciasProducto, setShowSugerenciasProducto] = useState(false);
 
   return (
     <>
@@ -42,18 +45,23 @@ const AsignarRecurso = () => {
           </div>
 
           <div className="lg:col-span-1">
-            <SelectField
+            <SearchAutocompleteInput
               label="Producto"
-              name="idProducto"
-              value={form.idProducto}
-              onChange={handleChange}
-              options={productos.map(p => ({
-                id: p.id,
-                nombre: p.nombre || `Producto ${p.id}`
-              }))}
-              optionLabel="nombre"
-              optionValue="id"
-              required
+              busqueda={busquedaProducto}
+              setBusqueda={setBusquedaProducto}
+              showSugerencias={showSugerenciasProducto}
+              setShowSugerencias={setShowSugerenciasProducto}
+              resultados={productos}
+              onSelect={(producto) => {
+                handleChange({
+                  target: {
+                    name: 'idProducto',
+                    value: producto.id,
+                  }
+                });
+              }}
+              optionLabelKeys={["nombre"]}
+              placeholder="Buscar producto por nombre..."
               disabled={loading}
             />
           </div>

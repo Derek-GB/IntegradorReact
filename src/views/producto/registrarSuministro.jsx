@@ -1,26 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useRegistrarSuministro from '../../hooks/Producto/useRegistrarSuministro.js';
 import FormContainer from '../../components/FormComponents/FormContainer.jsx';
 import InputField from '../../components/FormComponents/InputField.jsx';
 import SelectField from '../../components/FormComponents/SelectField.jsx';
 import SubmitButton from '../../components/FormComponents/SubmitButton.jsx';
 import CustomToast from '../../components/globalComponents/CustomToaster.jsx';
+import SearchAutocompleteInput from '../../components/FormComponents/SearchAutocompleteInput';
+
 
 const categorias = [
-  { id: 1, nombre: "Carne" },
-  { id: 2, nombre: "Proteina" },
-  { id: 3, nombre: "Verdura" },
-  { id: 4, nombre: "Reperte" },
-  { id: 5, nombre: "Olores" },
-  { id: 6, nombre: "Abarrotes" },
-  { id: 7, nombre: "Limpieza" },
-  { id: 8, nombre: "Mobiliario" },
+  { value: 1, nombre: "Carne" },
+  { value: 2, nombre: "Proteína" },
+  { value: 3, nombre: "Verdura" },
+  { value: 4, nombre: "Reperte" },
+  { value: 5, nombre: "Olores" },
+  { value: 6, nombre: "Abarrotes" },
+  { value: 7, nombre: "Limpieza" },
+  { value: 8, nombre: "Mobiliario" },
 ];
 
 const unidades = [
-  { id: 1, nombre: "Mililitros" },
-  { id: 2, nombre: "Gramos" },
-  { id: 3, nombre: "Unidades" },
+  { value: 1, nombre: "Mililitros" },
+  { value: 2, nombre: "Gramos" },
+  { value: 3, nombre: "Unidades" },
 ];
 
 const RegistrarSuministro = () => {
@@ -34,16 +36,36 @@ const RegistrarSuministro = () => {
     mostrarAlertaError,
     setMostrarAlertaMensaje,
     setMostrarAlertaError,
-    loading
+    loading,
+    albergues,
   } = useRegistrarSuministro();
+
+  // Estado para controlar el texto de búsqueda y mostrar sugerencias del autocomplete
+  const [busquedaAlbergue, setBusquedaAlbergue] = useState('');
+  const [showSugerenciasAlbergue, setShowSugerenciasAlbergue] = useState(false);
+
+  // Actualizar el formulario y el texto visible cuando se selecciona un albergue
+  const onSelectAlbergue = (albergue) => {
+    handleChange({ target: { name: 'idAlbergue', value: albergue.id } });
+    setBusquedaAlbergue(`${albergue.idAlbergue} - ${albergue.nombre}`);
+    setShowSugerenciasAlbergue(false);
+  };
+
+  // Sincronizar el texto visible si el idAlbergue cambia por otro medio (ejemplo edición)
+  React.useEffect(() => {
+    if (form.idAlbergue) {
+      const albergueSel = albergues.find(a => a.id === form.idAlbergue);
+      if (albergueSel) {
+        setBusquedaAlbergue(`${albergueSel.idAlbergue} - ${albergueSel.nombre}`);
+      }
+    } else {
+      setBusquedaAlbergue('');
+    }
+  }, [form.idAlbergue, albergues]);
 
   return (
     <>
-      <FormContainer
-        title="Registrar Suministros"
-        onSubmit={handleSubmit}
-        size="md"
-      >
+      <FormContainer title="Registrar Suministros" onSubmit={handleSubmit} size="md">
         {mostrarAlertaMensaje && (
           <Alerta
             mensaje={mensaje}
@@ -82,6 +104,7 @@ const RegistrarSuministro = () => {
               />
             </div>
           </div>
+
           <div className="flex flex-col md:flex-row md:gap-6 gap-4 mt-4">
             <div className="flex-1">
               <InputField
@@ -104,6 +127,7 @@ const RegistrarSuministro = () => {
               />
             </div>
           </div>
+
           <div className="flex flex-col md:flex-row md:gap-6 gap-4 mt-4">
             <div className="flex-1">
               <SelectField
@@ -113,7 +137,7 @@ const RegistrarSuministro = () => {
                 onChange={handleChange}
                 options={categorias}
                 optionLabel="nombre"
-                optionValue="id"
+                optionValue="value"
                 required
               />
             </div>
@@ -125,14 +149,32 @@ const RegistrarSuministro = () => {
                 onChange={handleChange}
                 options={unidades}
                 optionLabel="nombre"
-                optionValue="id"
+                optionValue="value"
                 required
               />
             </div>
           </div>
+
+          {/* Aquí el SearchAutocompleteInput para albergues */}
+          <div className="flex flex-col gap-4 mt-4">
+            <SearchAutocompleteInput
+              label="Seleccionar Albergue"
+              busqueda={busquedaAlbergue}
+              setBusqueda={setBusquedaAlbergue}
+              showSugerencias={showSugerenciasAlbergue}
+              setShowSugerencias={setShowSugerenciasAlbergue}
+              resultados={albergues}
+              onSelect={onSelectAlbergue}
+              optionLabelKeys={["idAlbergue", "nombre"]}
+              placeholder="Buscar albergue..."
+              sx={{ width: '100%' }}
+              disabled={loading}
+            />
+          </div>
         </fieldset>
+
         <div className="flex justify-center mt-8">
-          <SubmitButton width="w-full" color='text-black' loading={loading}>
+          <SubmitButton width="w-full" color="text-black" loading={loading}>
             Agregar
           </SubmitButton>
         </div>
