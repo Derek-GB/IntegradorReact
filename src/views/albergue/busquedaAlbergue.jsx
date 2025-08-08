@@ -36,7 +36,7 @@ const BusquedaAlbergue = () => {
 
   // Define columnas para la tabla
   const columns = [
-    { name: "ID", selector: row => row.IdAlbergue || row.id, sortable: true },
+    { name: "ID", selector: row => row.IdAlbergue},
     { name: "Nombre", selector: row => row.Nombre },
     { name: "Región", selector: row => row.Region },
     { name: "Provincia", selector: row => row.provincia },
@@ -81,11 +81,11 @@ const BusquedaAlbergue = () => {
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1">
             <InputField
-              label="ID Albergue"
+              label="Código Albergue"
               name="idAlbergue"
               value={idAlbergue}
               onChange={(e) => setIdAlbergue(e.target.value)}
-              placeholder="ID Albergue"
+              placeholder="Código Albergue"
             />
           </div>
           <div className="flex-1">
