@@ -126,7 +126,7 @@ export const useFormularioAbarrotes = () => {
   const agregarProducto = (categoria, producto, cantidadCalculada) => {
     const cantidad = parseFloat(cantidadCalculada);
     if (items.some((i) => i.seccion === categoria && i.tipo === producto.nombre)) {
-      showCustomToast("Advertencia", Producto "${producto.nombre}" ya agregado.);
+      showCustomToast("Advertencia", `Producto "${producto.nombre}" ya agregado.`);
       return false;
     }
     if (!cantidad || cantidad <= 0) {
