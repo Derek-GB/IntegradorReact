@@ -10,7 +10,6 @@ export const AbastecimientoProvider = ({ children }) => {
     return datosGuardados ? JSON.parse(datosGuardados) : {};
   });
 
-  // Cargar datos guardados localmente si los hay
   useEffect(() => {
     const itemsGuardados = localStorage.getItem('items');
     if (itemsGuardados) {
@@ -24,7 +23,6 @@ export const AbastecimientoProvider = ({ children }) => {
   };
 
   const agregarItem = (nuevoItem) => {
-    // Validar duplicados
     const yaExiste = items.some(item =>
       item.tipo === nuevoItem.tipo &&
       item.unidad === nuevoItem.unidad &&
@@ -32,26 +30,26 @@ export const AbastecimientoProvider = ({ children }) => {
     );
 
     if (yaExiste) {
-      showCustomToast("Este producto ya fue agregado", "warning");
+      showCustomToast("Advertencia", "Producto ya agregado.");
       return;
     }
 
     const nuevosItems = [...items, nuevoItem];
     guardarItemsEnLocalStorage(nuevosItems);
-    showCustomToast("Item agregado correctamente", "success");
+    showCustomToast("Exito", "Producto agregado correctamente.");
   };
 
   const eliminarItem = (index) => {
     const nuevosItems = items.filter((_, i) => i !== index);
     guardarItemsEnLocalStorage(nuevosItems);
-    showCustomToast("Item eliminado correctamente", "success");
+    showCustomToast("Exito", "Producto eliminado correctamente.");
   };
 
   const editarItem = (index, nuevoItem) => {
     const nuevosItems = [...items];
     nuevosItems[index] = nuevoItem;
     guardarItemsEnLocalStorage(nuevosItems);
-    showCustomToast("Item editado correctamente", "success");
+    showCustomToast("Exito", "Producto editado correctamente.");
   };
 
   const limpiarItems = () => {
