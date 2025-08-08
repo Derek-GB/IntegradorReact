@@ -182,15 +182,20 @@ export const alberguesAPI = {
     }
   },
   getByColor: async (color) => {
-    try {
-      const url = `/albergues/consulta/color/${encodeURIComponent(color)}`;
-      console.log("URL llamada:", url);
-      const res = await customAxios.get(url);
-      return res.data;
-    } catch (error) {
-      handleError(error);
+  try {
+    if (!color || color.trim() === "") {
+      throw new Error("Color del albergue es requerido");
     }
-  },
+    const colorNormalized = color.trim().toLowerCase();
+    console.log("URL llamada con color:", colorNormalized);
+    const url = `/albergues/resumen/color/${encodeURIComponent(colorNormalized)}`;
+    const res = await customAxios.get(url);
+    return res.data;
+  } catch (error) {
+    handleError(error);
+  }
+},
+
   getByUsuario: async (idUsuario) => {
     try {
       const url = `/albergues/consulta/porUsuario/${encodeURIComponent(idUsuario)}`;
@@ -205,14 +210,15 @@ export const alberguesAPI = {
 
 export const personasAPI = {
   ...createApiMethods("personas"),
-  getDiscapacidadPorAlbergue: async (idAlbergue) => {
-    try {
-      const res = await customAxios.get(`/personas/discapacidad/id/${idAlbergue}`);
-      return res.data;
-    } catch (error) {
-      handleError(error);
-    }
-  },
+  getPorDiscapacidad: async (id) => {
+  try {
+    const url = `personas/discapacidad/id/${id}`;
+    const response = await customAxios.get(url);
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+},
   getByUsuario: async (idUsuario) => {
     try {
       const url = `/personas/user/${encodeURIComponent(idUsuario)}`;
@@ -222,20 +228,23 @@ export const personasAPI = {
     } catch (error) {
       handleError(error);
     }
+  },
+ getPorAlbergueSexoEdad: async ({ idAlbergue, sexo, edad }) => {
+  try {
+    const _idAlbergue = idAlbergue || "null";
+    const _sexo = sexo || "null";
+    const _edad = (edad !== undefined && edad !== null && edad !== "") ? edad : "null";
+
+    const url = `/personas/albergue/${_idAlbergue}/sexo/${_sexo}/edad/${_edad}`;
+
+    const response = await customAxios.get(url);
+    return response.data;
+  } catch (error) {
+    return handleError(error);
   }
+}
 };
 
-export const condicionesEspecialesAPI = {
-  ...createApiMethods("condicionesEspeciales"),
-  getResumenPorAlbergue: async (idAlbergue) => {
-    try {
-      const res = await customAxios.get(`/condicionesEspeciales/resumen/id/${idAlbergue}`);
-      return res.data;
-    } catch (error) {
-      handleError(error);
-    }
-  }
-};
 
 export const inventarioAPI = createApiMethods("inventario", {
   getSuministrosPorAlbergue: async (idAlbergue) => {
@@ -264,6 +273,8 @@ export const detallePedidoConsumiblesAPI = createApiMethods("detallePedidoConsum
 export const pedidoConsumiblesAPI = createApiMethods("pedidoConsumibles");
 export const unidadMedidasAPI = createApiMethods("unidadMedidas");
 export const ajusteInventarioAPI = createApiMethods("ajusteInventario");
+export const condicionesEspecialesAPI = createApiMethods("condicionesEspeciales");
+
 
 export const usuariosAPI = createApiMethods("usuarios", {
   validarCorreo: async (correo) => {

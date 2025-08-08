@@ -27,7 +27,7 @@ const opcionesReporte = [
   {
     label: "Resumen de personas con discapacidad",
     value: "personas_discapacidad",
-    campos: [{ label: "Código del albergue", name: "idAlbergue" }],
+    campos: [{ label: "ID Albergue", name: "id" }], // <-- Cambiado a "id"
   },
   {
     label: "Resumen de condiciones especiales",
@@ -69,41 +69,75 @@ const ReportesAlbergue = () => {
     setResultados([]);
 
     try {
-      for (const campo of reporteSeleccionado.campos) {
-        if (!parametros[campo.name] || parametros[campo.name].trim() === "") {
-          toast.error(`Debe completar el campo: ${campo.label}`);
-          setLoading(false);
-          return;
-        }
-      }
-
       switch (reporteSeleccionado.value) {
+        case "personas_por_albergue": {
+          const todosVacios = Object.values(parametros).every((v) => !v || v.trim() === "");
+          if (todosVacios) {
+            toast.error("Debe ingresar al menos un filtro");
+            setLoading(false);
+            return;
+          }
+
+          const personas = await personasAPI.getPorAlbergueSexoEdad(parametros);
+          setResultados(personas);
+          break;
+        }
+
         case "personas_discapacidad": {
-          const discapacidad = await personasAPI.getDiscapacidadPorAlbergue(parametros.idAlbergue);
-          setResultados(discapacidad);
+          const { id } = parametros;
+          if (!id || id.trim() === "") {
+            toast.error("Debe completar el campo: ID Persona");
+            setLoading(false);
+            return;
+          }
+          const discapacidad = await personasAPI.getPorDiscapacidad(id);
+
+          setResultados(Array.isArray(discapacidad) ? discapacidad : [discapacidad]); // Por si devuelve un objeto
           break;
         }
 
         case "condiciones_especiales_jefe": {
-          const condiciones = await condicionesEspecialesAPI.getResumenPorAlbergue(parametros.idAlbergue);
-          setResultados(condiciones);
+          const { idAlbergue } = parametros;
+          if (!idAlbergue || idAlbergue.trim() === "") {
+            toast.error("Debe completar el campo: Código del albergue");
+            setLoading(false);
+            return;
+          }
+          const data = await condicionesEspecialesAPI.getResumenPorAlbergue(idAlbergue);
+
+          setResultados(data);
           break;
         }
 
         case "suministros_albergue": {
-          const suministros = await inventarioAPI.getSuministrosPorAlbergue(parametros.idAlbergue);
+          const { idAlbergue } = parametros;
+          if (!idAlbergue || idAlbergue.trim() === "") {
+            toast.error("Debe completar el campo: Código del albergue");
+            setLoading(false);
+            return;
+          }
+          const suministros = await inventarioAPI.getSuministrosPorAlbergue(idAlbergue);
           setResultados(suministros);
           break;
         }
 
         case "albergues_por_color": {
-          const porColor = await alberguesAPI.getByColor(parametros.color);
-          setResultados(porColor);
-          break;
-        }
+          let { color } = parametros;
+          color = color?.trim().toLowerCase();
 
-        case "personas_por_albergue": {
-          toast("Ruta aún no implementada");
+          if (!color) {
+            toast.error("Debe completar el campo: Color del albergue");
+            setLoading(false);
+            return;
+          }
+
+          try {
+            const porColor = await alberguesAPI.getByColor(color);
+            setResultados(porColor);
+          } catch (error) {
+            console.error("Error generando reporte por color:", error);
+            toast.error(error.message);
+          }
           break;
         }
 
