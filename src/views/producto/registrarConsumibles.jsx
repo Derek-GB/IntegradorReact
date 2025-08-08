@@ -40,7 +40,7 @@ const RegistroConsumibles = () => {
             </div>
             <div className="flex-1">
               <InputField
-                label="Cantidad"
+                label="Cantidad por Persona"
                 name="cantidad"
                 type="number"
                 min="0"

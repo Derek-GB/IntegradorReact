@@ -1,14 +1,9 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { contextoAbastecimiento } from '../../context/contextoAbastecimiento';
 import { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
+import { consumiblesAPI } from '../../helpers/api.js';
 
-// Productos por categoría
-const carnesProductos = [
-  { nombre: "Pollo", gramosPorPersona: 120 },
-  { nombre: "Carne de res", gramosPorPersona: 120 },
-  { nombre: "Carne de cerdo", gramosPorPersona: 120 }
-];
-
+// Productos estáticos excepto carnes que se cargarán desde API
 const proteinasProductos = [
   { nombre: 'Huevos', unidad: 'Unidad', factor: 1 },
   { nombre: 'Mortadela', unidad: 'kg', gramosPorPersona: 25 },
@@ -97,7 +92,7 @@ const productosLimpieza = [
 ];
 
 const categorias = {
-  Carnes: carnesProductos,
+  Carnes: [], // Se llenará desde la API
   Proteínas: proteinasProductos,
   Verduras: verdurasProductos,
   Olores: productosOlores,
@@ -107,6 +102,8 @@ const categorias = {
 
 export const useFormularioAbarrotes = () => {
   const { agregarItem, eliminarItem, items, datosFormulario } = useContext(contextoAbastecimiento);
+
+  const [carnesProductos, setCarnesProductos] = useState([]);
 
   const [openResumenParcial, setOpenResumenParcial] = useState(false);
   const [openResumenFinal, setOpenResumenFinal] = useState(false);
@@ -131,6 +128,37 @@ export const useFormularioAbarrotes = () => {
     maxHeight: '80vh',
     overflowY: 'auto',
   };
+
+
+useEffect(() => {
+  async function fetchCarnes() {
+    try {
+      // Llamar a la API usando api.js
+      const data = await consumiblesAPI.getAll();
+
+      // data puede ser un objeto con .data, o directamente el array (depende del backend)
+      // Ajusta según lo que recibas realmente (console.log para confirmar)
+      // Ejemplo:
+      const consumibles = data.data || data || [];
+
+      // Filtrar carnes
+      const carnesFiltradas = consumibles.filter(item => item.nombreCategoria === 'Carnes');
+
+      const carnesMapeadas = carnesFiltradas.map(c => ({
+        nombre: c.nombreConsumible,
+        gramosPorPersona: c.cantidadPorPersona ? parseFloat(c.cantidadPorPersona) : 120,
+        unidad: c.nombreUnidadMedida || 'kg',
+      }));
+
+      setCarnesProductos(carnesMapeadas);
+
+    } catch (error) {
+      console.error('Error cargando carnes:', error);
+      showCustomToast('Error', 'No se pudieron cargar las carnes desde el servidor.');
+    }
+  }
+  fetchCarnes();
+}, []);
 
   const toggleSeccion = (nombre) => {
     setSeccionAbierta(prev => (prev === nombre ? '' : nombre));
@@ -305,7 +333,7 @@ export const useFormularioAbarrotes = () => {
     personas,
     modalStyle,
 
-    carnesProductos,
+    carnesProductos,  // carnes dinámicas
     proteinasProductos,
     verdurasProductos,
     categorias,
