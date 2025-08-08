@@ -1,10 +1,8 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { alberguesAPI, amenazasAPI } from "../../helpers/api";
+import { alberguesAPI, amenazasAPI, familiasAPI } from "../../helpers/api"; // <-- importa familiasAPI
 import obtenerTodos from "../../helpers/obtenerUbicaciones";
 import customAxios from "../../helpers/customAxios";
-import { generarCodigoFamilia } from "../../helpers/generarCodigoFamilia";
 import { showCustomToast } from "../../components/globalComponents/CustomToaster";
 
 const useFormularioRegistro = () => {
@@ -32,9 +30,15 @@ const useFormularioRegistro = () => {
 
   useEffect(() => {
     const cargarDatos = async () => {
+      const idUsuario = localStorage.getItem("idUsuario");
+      if (!idUsuario) {
+        showCustomToast("Error", "Usuario no identificado.", "error");
+        return;
+      }
+
       try {
         const [resAlbergues, resAmenazas] = await Promise.all([
-          alberguesAPI.getAll(),
+          alberguesAPI.getByUsuario(idUsuario),
           amenazasAPI.getAll(),
         ]);
         setAlbergues(resAlbergues?.data || []);
@@ -84,11 +88,24 @@ const useFormularioRegistro = () => {
   }, [cantonSeleccionado]);
 
   useEffect(() => {
-    if (nombreProvincia && nombreCanton && integrantes) {
-      const numeroFamilia = 1;
-      const nuevoCodigo = generarCodigoFamilia(nombreProvincia, nombreCanton, numeroFamilia);
-      setCodigoFamilia(nuevoCodigo);
-    }
+    const generarIdentificador = async () => {
+      if (nombreProvincia && nombreCanton && integrantes) {
+        try {
+          const numeroFamilia = await familiasAPI.getNextNumero(nombreCanton);
+          const year = new Date().getFullYear();
+          const nuevoCodigo = `${year}-${nombreProvincia}-${nombreCanton}-${numeroFamilia}`;
+          setCodigoFamilia(nuevoCodigo);
+          console.log("Código de familia generado:", nuevoCodigo);
+        } catch {
+          setCodigoFamilia("");
+          showCustomToast("Error", "No se pudo generar el código de familia.", "error");
+        }
+      } else {
+        setCodigoFamilia("");
+      }
+    };
+
+    generarIdentificador();
   }, [nombreProvincia, nombreCanton, integrantes]);
 
   const crearFamilia = async (e) => {
@@ -126,6 +143,7 @@ const useFormularioRegistro = () => {
       const res = await customAxios.post("/familias", datos);
       const idFamilia = res.data.idFamilia;
       localStorage.setItem("idFamilia", idFamilia);
+      localStorage.setItem("codigoFamilia", codigoFamilia); // <-- Agrega esta línea
       showCustomToast("Éxito", "Familia registrada correctamente.", "success");
     } catch {
       showCustomToast("Error", "No se pudo registrar la familia.", "error");
