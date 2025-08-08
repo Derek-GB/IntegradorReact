@@ -213,6 +213,8 @@ const BusquedaFamilia = () => {
                 { name: "Subtipo Discapacidad", selector: (row) => (row.discapacidad === 1 ? row.subtipoDiscapacidad || "" : "-") },
                 { name: "Tipo Condición Poblacional", selector: (row) => row.tipoCondicionPoblacional || "" },
                 { name: "Contacto de Emergencia", selector: (row) => row.contactoEmergencia || "" },
+                {name: "Egresado",selector: (row) => (row.egresado ? "Sí" : "No"), },
+                {name: "Fecha de Egreso",selector: (row) => row.fechaEgreso || "No disponible", },
               ]}
               data={familiaData}
               pagination

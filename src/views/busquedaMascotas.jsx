@@ -32,7 +32,7 @@ const BuscarMascotas = () => {
               name="codigoFamilia"
               value={codigoFamilia}
               onChange={(e) => setCodigoFamilia(e.target.value)}
-              placeholder="Ej: FAM-2023-001"
+              placeholder="Ej: 2025-AL-Zarcero-022"
               required
             />
           </div>

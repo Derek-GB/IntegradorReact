@@ -40,6 +40,8 @@ import RegistroAmenazas from './views/registroAmenazas.jsx';
 import RegistroMascotas from "./views/registroMascota.jsx";
 import BuscarMascotas from './views/busquedaMascotas.jsx';
 import ReportesAlbergue from './views/reportes.jsx';
+import BuscarReferencias from './views/buscarReferencia.jsx';
+import BuscarAjustesInventario from './views/buscarAjuste.jsx';
 
 //No categorizado
 import FormularioIntegrantes from "./components/formularioIntegrantes.jsx";
@@ -127,6 +129,8 @@ const App = () => {
                     <Route path="/mapaAlbergues" element={<MapaAlbergues />} />
                     <Route path="/buscarSuministros.jsx" element={<BuscarSuministros />} />
                     <Route path="/busquedaMascotas.jsx" element={<BuscarMascotas />} />
+                    <Route path="/buscarReferencia.jsx" element={<BuscarReferencias />} />
+                    <Route path="/buscarAjuste.jsx" element={<BuscarAjustesInventario />} />
                   </Routes>
                 </div>
               </div>

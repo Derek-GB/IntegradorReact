@@ -14,6 +14,11 @@ const camposFormulario = [
   "bodega", "menajeMobiliario", "tanqueAgua", "areaTotalM2", "municipalidad", "color"
 ];
 
+const camposNumericos = [
+  "capacidadPersonas", "capacidadColectiva", "cantidadFamilias",
+  "ocupacion", "areaTotalM2"
+];
+
 const formatearLabel = (texto) =>
   texto.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase());
 
@@ -24,14 +29,13 @@ const ActualizarAlbergue = () => {
   const [form, setForm] = useState({});
   const [loading, setLoading] = useState(false);
 
-  // Carga todos los albergues al inicio para la búsqueda
   useEffect(() => {
     const fetchAlbergues = async () => {
       try {
         const data = await alberguesAPI.getAll();
         const lista = Array.isArray(data) ? data : data.data || [];
         setAlbergues(lista);
-      } catch  {
+      } catch {
         showCustomToast(
           "Error",
           "Error al cargar albergues. Verifica si tu sesión expiró.",
@@ -42,22 +46,37 @@ const ActualizarAlbergue = () => {
     fetchAlbergues();
   }, []);
 
-  // Cuando seleccionas un albergue, cargas sus datos en el formulario
-  const handleSelectAlbergue = (albergue) => {
+  const handleSelectAlbergue = async (albergue) => {
     if (!albergue) {
       setForm({});
       setBusquedaAlbergue("");
       return;
     }
-    // Construir objeto con todos los campos (por si faltan)
-    const datosCompletos = { idAlbergue: albergue.idAlbergue || "" };
-    camposFormulario.forEach((campo) => {
-      datosCompletos[campo] = albergue[campo] ?? "";
-    });
-    setForm(datosCompletos);
-    setBusquedaAlbergue(
-      `ID: ${datosCompletos.idAlbergue} - ${datosCompletos.nombre}`
-    );
+
+    try {
+      const albergueCompleto = await alberguesAPI.getById(albergue.idAlbergue);
+      const datosCompletos = { idAlbergue: albergue.idAlbergue };
+
+      camposFormulario.forEach((campo) => {
+        const valor = albergueCompleto[campo];
+
+        if (typeof valor === "boolean") {
+          datosCompletos[campo] = valor;
+        } else if (typeof valor === "number") {
+          datosCompletos[campo] = valor.toString();
+        } else {
+          datosCompletos[campo] = valor ?? "";
+        }
+      });
+
+      setForm(datosCompletos);
+      setBusquedaAlbergue(
+        `ID: ${datosCompletos.idAlbergue} - ${datosCompletos.nombre}`
+      );
+    } catch (error) {
+      showCustomToast("Error", "No se pudo cargar el albergue completo", "error");
+      console.error(error);
+    }
   };
 
   const handleChange = (e) => {
@@ -149,20 +168,21 @@ const ActualizarAlbergue = () => {
 
       {form.idAlbergue && (
         <>
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-  {camposFormulario
-    .filter((campo) => campo !== "nombre")
-    .map((campo) => (
-      <InputField
-        key={campo}
-        label={formatearLabel(campo)}
-        name={campo}
-        value={form[campo] || ""}
-        onChange={handleChange}
-        type={typeof form[campo] === "number" ? "number" : "text"}
-      />
-    ))}
-</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+            {camposFormulario
+              .filter((campo) => campo !== "nombre")
+              .map((campo) => (
+                <InputField
+                  key={campo}
+                  label={formatearLabel(campo)}
+                  name={campo}
+                  value={form[campo] ?? ""}
+                  onChange={handleChange}
+                  type={camposNumericos.includes(campo) ? "number" : "text"}
+                />
+              ))}
+          </div>
+
           <div className="flex flex-col md:flex-row gap-6 mt-8">
             <div className="flex-1 flex gap-4">
               <SubmitButton

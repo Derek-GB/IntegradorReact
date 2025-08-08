@@ -1,8 +1,10 @@
+import React from "react";
 import FormContainer from "../../components/FormComponents/FormContainer.jsx";
 import InputField from "../../components/FormComponents/InputField.jsx";
 import SelectField from "../../components/FormComponents/SelectField.jsx";
 import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
 import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
+import SearchAutocompleteInput from "../../components/FormComponents/SearchAutocompleteInput.jsx";
 import { useAbarrotesMenuPrincipal } from "../../hooks/abastecimineto/useAbarrotesMenuPrincipal.js";
 
 function FormularioAbastecimiento() {
@@ -11,8 +13,13 @@ function FormularioAbastecimiento() {
     loading,
     today,
     opcionesComida,
-    opcionesAlbergue,
+    busquedaAlbergue,
+    setBusquedaAlbergue,
+    showSugerenciasAlbergue,
+    setShowSugerenciasAlbergue,
+    resultadosAlbergue,
     handleChange,
+    handleSelectAlbergue,
     handleSiguiente,
   } = useAbarrotesMenuPrincipal();
 
@@ -50,15 +57,16 @@ function FormularioAbastecimiento() {
 
         <div className="flex flex-col md:flex-row gap-6 mt-4">
           <div className="flex-1">
-            <SelectField
+            <SearchAutocompleteInput
               label="Nombre del albergue"
-              name="albergue"
-              value={formData.albergue}
-              onChange={handleChange}
-              options={opcionesAlbergue}
-              optionLabel="nombre"
-              optionValue="nombre"
-              required
+              busqueda={busquedaAlbergue}
+              setBusqueda={setBusquedaAlbergue}
+              showSugerencias={showSugerenciasAlbergue}
+              setShowSugerencias={setShowSugerenciasAlbergue}
+              resultados={resultadosAlbergue}
+              onSelect={handleSelectAlbergue}
+              optionLabelKeys={["nombre", "codigo"]}
+              placeholder="Busca un albergue..."
             />
           </div>
           <div className="flex-1">
