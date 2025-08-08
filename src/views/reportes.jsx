@@ -88,10 +88,7 @@ const ReportesAlbergue = () => {
           }
           const resumen = await personasAPI.getResumenPorAlbergue(idAlbergue);
           console.log("Respuesta API resumen por albergue:", resumen);
-
-          // Si data es un objeto, lo ponemos en arreglo para la tabla
           setResultados(resumen.data ? [resumen.data] : []);
-
           break;
         }
 
@@ -102,10 +99,9 @@ const ReportesAlbergue = () => {
             setLoading(false);
             return;
           }
-          // Aquí asumimos que tienes un método que filtra solo por sexo
-          const personas = await personasAPI.getPorSexo(sexo);
-          console.log("Respuesta API personas_por_sexo:", personas);
-          setResultados(Array.isArray(personas) ? personas : []);
+          const resumenSexo = await personasAPI.getResumenPorSexo(sexo);
+          console.log("Respuesta API resumen por sexo:", resumenSexo);
+          setResultados(resumenSexo.data ? (Array.isArray(resumenSexo.data) ? resumenSexo.data : [resumenSexo.data]) : []);
           break;
         }
 
@@ -116,10 +112,10 @@ const ReportesAlbergue = () => {
             setLoading(false);
             return;
           }
-          // Aquí asumimos que tienes un método que filtra solo por edad
-          const personas = await personasAPI.getPorEdad(edad);
-          console.log("Respuesta API personas_por_edad:", personas);
-          setResultados(Array.isArray(personas) ? personas : []);
+          // Aquí usamos el nuevo método que usa el endpoint correcto
+          const resumenEdad = await personasAPI.getResumenPorEdad(edad);
+          console.log("Respuesta API resumen por edad:", resumenEdad);
+          setResultados(resumenEdad.data ? (Array.isArray(resumenEdad.data) ? resumenEdad.data : [resumenEdad.data]) : []);
           break;
         }
 

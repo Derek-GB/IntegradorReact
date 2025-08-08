@@ -249,6 +249,24 @@ export const personasAPI = {
     const res = await customAxios.get(url);
     return res.data;  // asumiendo que la data está en res.data
   },
+   getResumenPorSexo: async (idSexoPersona) => {
+    if (!idSexoPersona) throw new Error("ID Sexo Persona es requerido");
+    try {
+      const res = await customAxios.get(`/personas/resumen/sexo/${encodeURIComponent(idSexoPersona)}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+ getResumenPorEdad: async (idEdadPersona) => {
+    if (!idEdadPersona) throw new Error("ID Edad Persona es requerido");
+    try {
+      const res = await customAxios.get(`/personas/resumen/edad/${encodeURIComponent(idEdadPersona)}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
 };
 
 
