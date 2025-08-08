@@ -6,7 +6,6 @@ import SubmitButton from "../components/FormComponents/SubmitButton.jsx";
 import GlobalDataTable from "../components/globalComponents/GlobalDataTable.jsx";
 import { toast } from "react-hot-toast";
 
-// APIs específicas
 import {
   personasAPI,
   condicionesEspecialesAPI,
@@ -16,18 +15,24 @@ import {
 
 const opcionesReporte = [
   {
-    label: "Resumen de personas por albergue, por sexo, por edad",
+    label: "Resumen de personas por albergue",
     value: "personas_por_albergue",
-    campos: [
-      { label: "Código del albergue", name: "idAlbergue" },
-      { label: "Sexo", name: "sexo" },
-      { label: "Edad", name: "edad" },
-    ],
+    campos: [{ label: "Código del albergue", name: "idAlbergue" }],
+  },
+  {
+    label: "Resumen de personas por sexo",
+    value: "personas_por_sexo",
+    campos: [{ label: "Sexo", name: "sexo" }],
+  },
+  {
+    label: "Resumen de personas por edad",
+    value: "personas_por_edad",
+    campos: [{ label: "Edad", name: "edad" }],
   },
   {
     label: "Resumen de personas con discapacidad",
     value: "personas_discapacidad",
-    campos: [{ label: "ID Albergue", name: "id" }], // <-- Cambiado a "id"
+    campos: [{ label: "ID Persona", name: "id" }],
   },
   {
     label: "Resumen de condiciones especiales",
@@ -54,12 +59,14 @@ const ReportesAlbergue = () => {
 
   const handleReporteChange = (e) => {
     const selected = opcionesReporte.find((o) => o.value === e.target.value);
+    console.log("Reporte seleccionado:", selected);
     setReporteSeleccionado(selected);
     setParametros({});
     setResultados([]);
   };
 
   const handleChange = (e) => {
+    console.log(`Cambio en campo ${e.target.name}:`, e.target.value);
     setParametros((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
@@ -67,19 +74,52 @@ const ReportesAlbergue = () => {
     e.preventDefault();
     setLoading(true);
     setResultados([]);
+    console.log("Generando reporte:", reporteSeleccionado?.value);
+    console.log("Parámetros:", parametros);
 
     try {
       switch (reporteSeleccionado.value) {
         case "personas_por_albergue": {
-          const todosVacios = Object.values(parametros).every((v) => !v || v.trim() === "");
-          if (todosVacios) {
-            toast.error("Debe ingresar al menos un filtro");
+          const idAlbergue = parametros.idAlbergue?.trim();
+          if (!idAlbergue) {
+            toast.error("Debe completar el campo: Código del albergue");
             setLoading(false);
             return;
           }
+          const resumen = await personasAPI.getResumenPorAlbergue(idAlbergue);
+          console.log("Respuesta API resumen por albergue:", resumen);
 
-          const personas = await personasAPI.getPorAlbergueSexoEdad(parametros);
-          setResultados(personas);
+          // Si data es un objeto, lo ponemos en arreglo para la tabla
+          setResultados(resumen.data ? [resumen.data] : []);
+
+          break;
+        }
+
+        case "personas_por_sexo": {
+          const sexo = parametros.sexo?.trim();
+          if (!sexo) {
+            toast.error("Debe completar el campo: Sexo");
+            setLoading(false);
+            return;
+          }
+          // Aquí asumimos que tienes un método que filtra solo por sexo
+          const personas = await personasAPI.getPorSexo(sexo);
+          console.log("Respuesta API personas_por_sexo:", personas);
+          setResultados(Array.isArray(personas) ? personas : []);
+          break;
+        }
+
+        case "personas_por_edad": {
+          const edad = parametros.edad?.trim();
+          if (!edad) {
+            toast.error("Debe completar el campo: Edad");
+            setLoading(false);
+            return;
+          }
+          // Aquí asumimos que tienes un método que filtra solo por edad
+          const personas = await personasAPI.getPorEdad(edad);
+          console.log("Respuesta API personas_por_edad:", personas);
+          setResultados(Array.isArray(personas) ? personas : []);
           break;
         }
 
@@ -91,8 +131,8 @@ const ReportesAlbergue = () => {
             return;
           }
           const discapacidad = await personasAPI.getPorDiscapacidad(id);
-
-          setResultados(Array.isArray(discapacidad) ? discapacidad : [discapacidad]); // Por si devuelve un objeto
+          console.log("Respuesta API personas_discapacidad:", discapacidad);
+          setResultados(Array.isArray(discapacidad) ? discapacidad : [discapacidad]);
           break;
         }
 
@@ -104,7 +144,7 @@ const ReportesAlbergue = () => {
             return;
           }
           const data = await condicionesEspecialesAPI.getResumenPorAlbergue(idAlbergue);
-
+          console.log("Respuesta API condiciones_especiales_jefe:", data);
           setResultados(data);
           break;
         }
@@ -117,6 +157,7 @@ const ReportesAlbergue = () => {
             return;
           }
           const suministros = await inventarioAPI.getSuministrosPorAlbergue(idAlbergue);
+          console.log("Respuesta API suministros_albergue:", suministros);
           setResultados(suministros);
           break;
         }
@@ -133,7 +174,8 @@ const ReportesAlbergue = () => {
 
           try {
             const porColor = await alberguesAPI.getByColor(color);
-            setResultados(porColor);
+            console.log("Respuesta API albergues_por_color:", porColor);
+            setResultados(Array.isArray(porColor.data) ? porColor.data : []);
           } catch (error) {
             console.error("Error generando reporte por color:", error);
             toast.error(error.message);
@@ -152,6 +194,8 @@ const ReportesAlbergue = () => {
       setLoading(false);
     }
   };
+
+  console.log("Resultados actuales:", resultados);
 
   return (
     <FormContainer title="Generación de Reportes" onSubmit={handleSubmit} size="md">
@@ -186,7 +230,14 @@ const ReportesAlbergue = () => {
             <GlobalDataTable
               columns={Object.keys(resultados[0] || {}).map((key) => ({
                 name: key,
-                selector: (row) => row[key],
+                selector: (row) => {
+                  const val = row[key];
+                  if (val === null || val === undefined) return "";
+                  if (typeof val === "object") {
+                    return val.nombre || JSON.stringify(val);
+                  }
+                  return val.toString();
+                },
                 sortable: true,
               }))}
               data={resultados}

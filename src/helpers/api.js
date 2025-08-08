@@ -241,20 +241,14 @@ export const personasAPI = {
       handleError(error);
     }
   },
- getPorAlbergueSexoEdad: async ({ idAlbergue, sexo, edad }) => {
-  try {
-    const _idAlbergue = idAlbergue || "null";
-    const _sexo = sexo || "null";
-    const _edad = (edad !== undefined && edad !== null && edad !== "") ? edad : "null";
-
-    const url = `/personas/albergue/${_idAlbergue}/sexo/${_sexo}/edad/${_edad}`;
-
-    const response = await customAxios.get(url);
-    return response.data;
-  } catch (error) {
-    return handleError(error);
-  }
-}
+ getResumenPorAlbergue: async (idAlberguePersona) => {
+    if (!idAlberguePersona || idAlberguePersona.toString().trim() === "") {
+      throw new Error("El idAlberguePersona es requerido");
+    }
+    const url = `/personas/resumen/porAlbergue/${encodeURIComponent(idAlberguePersona)}`;
+    const res = await customAxios.get(url);
+    return res.data;  // asumiendo que la data está en res.data
+  },
 };
 
 
