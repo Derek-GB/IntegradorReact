@@ -96,7 +96,6 @@ const productosLimpieza = [
   { nombre: "Cuchara Desechables", unidad: "unidad", gramosPorPersona: null, conversion: 1 }
 ];
 
-// Categorías con sus productos
 const categorias = {
   Carnes: carnesProductos,
   Proteínas: proteinasProductos,
@@ -109,25 +108,14 @@ const categorias = {
 export const useFormularioAbarrotes = () => {
   const { agregarItem, eliminarItem, items, datosFormulario } = useContext(contextoAbastecimiento);
 
-  // Estados para modales
   const [openResumenParcial, setOpenResumenParcial] = useState(false);
   const [openResumenFinal, setOpenResumenFinal] = useState(false);
-
-  // Estados para tipos seleccionados
   const [tipoCarne, setTipoCarne] = useState('');
   const [tipoProteina, setTipoProteina] = useState('');
   const [tipoVerdura, setTipoVerdura] = useState('');
-
-  // Estado para sección abierta
   const [seccionAbierta, setSeccionAbierta] = useState('carnes');
 
   const personas = parseInt(datosFormulario?.cantidad) || 0;
-
-  // Manejadores de modales
-  const handleOpenResumenParcial = () => setOpenResumenParcial(true);
-  const handleCloseResumenParcial = () => setOpenResumenParcial(false);
-  const handleOpenResumenFinal = () => setOpenResumenFinal(true);
-  const handleCloseResumenFinal = () => setOpenResumenFinal(false);
 
   const modalStyle = {
     position: 'absolute',
@@ -148,13 +136,18 @@ export const useFormularioAbarrotes = () => {
     setSeccionAbierta(prev => (prev === nombre ? '' : nombre));
   };
 
-  // Función común para agregar producto validando duplicados
+  const handleOpenResumenParcial = () => setOpenResumenParcial(true);
+  const handleCloseResumenParcial = () => setOpenResumenParcial(false);
+  const handleOpenResumenFinal = () => setOpenResumenFinal(true);
+  const handleCloseResumenFinal = () => setOpenResumenFinal(false);
+
   const agregarProducto = (categoria, producto, cantidadCalculada) => {
+    const cantidad = parseFloat(cantidadCalculada);
     if (items.some(i => i.seccion === categoria && i.tipo === producto.nombre)) {
       showCustomToast('Warning', `El producto "${producto.nombre}" ya fue agregado.`);
       return false;
     }
-    if (!cantidadCalculada || cantidadCalculada <= 0) {
+    if (!cantidad || cantidad <= 0) {
       showCustomToast('Error', "Debe definir la cantidad de personas en el menú principal.");
       return false;
     }
@@ -163,13 +156,12 @@ export const useFormularioAbarrotes = () => {
       seccion: categoria,
       tipo: producto.nombre,
       unidad: producto.unidad || 'Unidad',
-      cantidad: cantidadCalculada,
+      cantidad,
       cantidadPersonas: personas
     });
     return true;
   };
 
-  // CARNES
   const handleAgregarCarne = () => {
     if (!tipoCarne || personas <= 0) {
       showCustomToast('Warning', 'Seleccione 2 tipos de carne y asegúrese que la cantidad de personas está definida en el menú principal.');
@@ -187,15 +179,12 @@ export const useFormularioAbarrotes = () => {
     const producto = carnesProductos.find(p => p.nombre === tipoCarne);
     if (!producto) return;
 
-    const gramosTotales = producto.gramosPorPersona * personas;
-    const cantidadKg = (gramosTotales / 1000).toFixed(2);
-
+    const cantidadKg = (producto.gramosPorPersona * personas) / 1000;
     if (agregarProducto('Carnes', producto, cantidadKg)) {
       setTipoCarne('');
     }
   };
 
-  // PROTEINAS
   const handleAgregarProteina = () => {
     if (!tipoProteina || personas <= 0) {
       showCustomToast('Warning', 'Seleccione proteína y asegúrese que hay cantidad de personas definida.');
@@ -210,6 +199,7 @@ export const useFormularioAbarrotes = () => {
       showCustomToast('Warning', 'Esta proteína ya fue agregada.');
       return;
     }
+
     const producto = proteinasProductos.find(p => p.nombre === tipoProteina);
     if (!producto) return;
 
@@ -219,27 +209,23 @@ export const useFormularioAbarrotes = () => {
         cantidad = personas;
         break;
       case 'Mortadela':
-        cantidad = ((personas * 25) / 1000).toFixed(2);
+        cantidad = (personas * 25) / 1000;
         break;
       case 'Salchichón':
-        cantidad = ((personas * 125) / 1000).toFixed(2);
+        cantidad = (personas * 125) / 1000;
         break;
       default:
         cantidad = 1;
     }
+
     if (agregarProducto('Proteínas', producto, cantidad)) {
       setTipoProteina('');
     }
   };
 
-  // VERDURAS
   const handleAgregarVerdura = () => {
-    if (!tipoVerdura) {
-      showCustomToast('Warning', "Seleccione una verdura.");
-      return;
-    }
-    if (personas <= 0) {
-      showCustomToast('Warning', "Debe definir la cantidad de personas en el menú principal.");
+    if (!tipoVerdura || personas <= 0) {
+      showCustomToast('Warning', "Seleccione una verdura y defina la cantidad de personas.");
       return;
     }
     const verdurasAgregadas = items.filter(i => i.seccion === 'Verduras');
@@ -255,13 +241,12 @@ export const useFormularioAbarrotes = () => {
     const producto = verdurasProductos.find(p => p.nombre === tipoVerdura);
     if (!producto) return;
 
-    const cantidadKg = ((producto.gramosPorPersona * personas) / 1000).toFixed(2);
+    const cantidadKg = (producto.gramosPorPersona * personas) / 1000;
     if (agregarProducto('Verduras', producto, cantidadKg)) {
       setTipoVerdura('');
     }
   };
 
-  // Cálculo genérico de cantidad para otras categorías
   const calcularCantidad = (producto) => {
     if (!personas || personas <= 0) return 0;
 
@@ -275,7 +260,7 @@ export const useFormularioAbarrotes = () => {
       return ((producto.mililitrosPorPersona * personas) / 1000).toFixed(2);
     }
     if (producto.paquetesPorPersona !== undefined) {
-      return personas;
+      return producto.paquetesPorPersona * personas;
     }
     if (producto.rebanadasPorPersona !== undefined) {
       return personas * producto.rebanadasPorPersona;
@@ -290,13 +275,12 @@ export const useFormularioAbarrotes = () => {
     return 1;
   };
 
-  // Maneja agregar producto de otras categorías (Olores, Abarrotes, Limpieza)
   const handleAgregarProducto = (categoria, producto) => {
     if (items.some(i => i.seccion === categoria && i.tipo === producto.nombre)) {
       showCustomToast('Warning', `El producto "${producto.nombre}" ya fue agregado.`);
       return;
     }
-    const cantidad = calcularCantidad(producto);
+    const cantidad = parseFloat(calcularCantidad(producto));
     if (!cantidad || cantidad <= 0) {
       showCustomToast('Error', "Debe definir la cantidad de personas en el menú principal.");
       return;
@@ -342,7 +326,6 @@ export const useFormularioAbarrotes = () => {
     handleAgregarVerdura,
     handleAgregarProducto,
     eliminarItem,
-
     calcularCantidad
   };
 };

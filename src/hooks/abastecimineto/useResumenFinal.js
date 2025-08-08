@@ -96,6 +96,7 @@ const useResumenFinal = () => {
     }
   };
 
+  // Puedes mantener esta función, pero NO la usarás en el componente
   const guardarPedidosDesdeFormulario = async () => {
     if (!items.length) {
       showCustomToast("No hay pedidos para guardar.", "error");
@@ -169,6 +170,8 @@ const useResumenFinal = () => {
     descargarResumen,
     eliminarItem,
     editarItem,
+    // NO exportamos guardarPedidosDesdeFormulario para evitar confusión,
+    // pero si quieres mantenerla exportada, está aquí:
     guardarPedidosDesdeFormulario,
     navigate,
   };

@@ -1,5 +1,4 @@
 import { createContext, useState, useEffect } from 'react';
-import { pedidoConsumiblesAPI } from '../helpers/api.js';
 import { showCustomToast } from '../components/globalComponents/CustomToaster.jsx';
 
 export const contextoAbastecimiento = createContext();
@@ -10,75 +9,54 @@ export const AbastecimientoProvider = ({ children }) => {
     const datosGuardados = localStorage.getItem('datosFormulario');
     return datosGuardados ? JSON.parse(datosGuardados) : {};
   });
-  const [loading, setLoading] = useState(false);
 
-  // Carga inicial desde API
+  // Cargar datos guardados localmente si los hay
   useEffect(() => {
-    cargarItemsDesdeAPI();
+    const itemsGuardados = localStorage.getItem('items');
+    if (itemsGuardados) {
+      setItems(JSON.parse(itemsGuardados));
+    }
   }, []);
 
-  const cargarItemsDesdeAPI = async () => {
-    setLoading(true);
-    try {
-      const data = await pedidoConsumiblesAPI.getAll();
-      setItems(Array.isArray(data) ? data : []);
-    } catch (error) {
-      showCustomToast("Error cargando datos desde API: " + error.message, "error");
-    } finally {
-      setLoading(false);
-    }
+  const guardarItemsEnLocalStorage = (nuevosItems) => {
+    setItems(nuevosItems);
+    localStorage.setItem('items', JSON.stringify(nuevosItems));
   };
 
-  const agregarItem = async (nuevoItem) => {
-    try {
-      const idAlbergue = datosFormulario?.idAlbergue;
-      if (!idAlbergue) {
-        showCustomToast("Error: falta idAlbergue en los datos del formulario", "error");
-        return;
-      }
-      const payload = { ...nuevoItem, idAlbergue };
+  const agregarItem = (nuevoItem) => {
+    // Validar duplicados
+    const yaExiste = items.some(item =>
+      item.tipo === nuevoItem.tipo &&
+      item.unidad === nuevoItem.unidad &&
+      item.seccion === nuevoItem.seccion
+    );
 
-      const creado = await pedidoConsumiblesAPI.create(payload);
-      setItems(prev => [...prev, creado]);
-      showCustomToast("Item agregado correctamente", "success");
-    } catch (error) {
-      showCustomToast("Error agregando item: " + error.message, "error");
+    if (yaExiste) {
+      showCustomToast("Este producto ya fue agregado", "warning");
+      return;
     }
+
+    const nuevosItems = [...items, nuevoItem];
+    guardarItemsEnLocalStorage(nuevosItems);
+    showCustomToast("Item agregado correctamente", "success");
   };
 
-  const eliminarItem = async (index) => {
-    try {
-      const id = items[index]?.id;
-      if (!id) throw new Error("ID inválido para eliminar");
-      await pedidoConsumiblesAPI.remove(id);
-      setItems(prev => prev.filter((_, i) => i !== index));
-      showCustomToast("Item eliminado correctamente", "success");
-    } catch (error) {
-      showCustomToast("Error eliminando item: " + error.message, "error");
-    }
+  const eliminarItem = (index) => {
+    const nuevosItems = items.filter((_, i) => i !== index);
+    guardarItemsEnLocalStorage(nuevosItems);
+    showCustomToast("Item eliminado correctamente", "success");
   };
 
-  const editarItem = async (index, nuevoItem) => {
-    try {
-      const id = items[index]?.id;
-      if (!id) throw new Error("ID inválido para editar");
-      const idAlbergue = datosFormulario?.idAlbergue;
-      if (!idAlbergue) {
-        showCustomToast("Error: falta idAlbergue en los datos del formulario", "error");
-        return;
-      }
-      const payload = { ...nuevoItem, idAlbergue };
-
-      const actualizado = await pedidoConsumiblesAPI.update(id, payload);
-      setItems(prev => prev.map((item, i) => i === index ? actualizado : item));
-      showCustomToast("Item actualizado correctamente", "success");
-    } catch (error) {
-      showCustomToast("Error actualizando item: " + error.message, "error");
-    }
+  const editarItem = (index, nuevoItem) => {
+    const nuevosItems = [...items];
+    nuevosItems[index] = nuevoItem;
+    guardarItemsEnLocalStorage(nuevosItems);
+    showCustomToast("Item editado correctamente", "success");
   };
 
   const limpiarItems = () => {
     setItems([]);
+    localStorage.removeItem('items');
   };
 
   const guardarDatosFormulario = (datos) => {
@@ -95,8 +73,6 @@ export const AbastecimientoProvider = ({ children }) => {
       limpiarItems,
       guardarDatosFormulario,
       datosFormulario,
-      loading,
-      cargarItemsDesdeAPI,
     }}>
       {children}
     </contextoAbastecimiento.Provider>

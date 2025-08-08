@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import SaveIcon from "@mui/icons-material/Save";
 import DownloadIcon from "@mui/icons-material/Download";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import GlobalDataTable from "../../components/globalComponents/GlobalDataTable.jsx";
-import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
 import useResumenFinal from "../../hooks/abastecimineto/useResumenFinal.js";
 import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
 import {
@@ -23,7 +21,7 @@ const ResumenFinal = () => {
     datosFormulario,
     eliminarItem,
     editarItem,
-    guardarPedidosDesdeFormulario, // ✅ FUNCIÓN IMPORTADA DESDE EL HOOK
+    // quitar guardarPedidosDesdeFormulario ya que no usaremos guardar
   } = useResumenFinal();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -176,31 +174,16 @@ const ResumenFinal = () => {
         </div>
       </div>
 
-      {/* Botones: GUARDAR Y DESCARGAR */}
-      <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-        <SubmitButton
-          type="button"
-          onClick={guardarPedidosDesdeFormulario} // ✅ BOTÓN GUARDAR
-          width="flex-1 sm:max-w-xs"
-          className="bg-yellow-500"
-        >
-          <div className="flex items-center justify-center gap-2">
-            <SaveIcon sx={{ fontSize: 20, color: "black" }} />
-            <span className="text-black font-medium">Guardar</span>
-          </div>
-        </SubmitButton>
-
-        <SubmitButton
+      {/* SOLO Botón de DESCARGAR */}
+      <div className="flex justify-center pt-4">
+        <button
           type="button"
           onClick={descargarResumen}
-          width="flex-1 sm:max-w-xs"
-          className="bg-yellow-500"
+          className="bg-yellow-500 text-black px-50 py-2 rounded-md hover:bg-yellow-600 transition flex items-center gap-2"
+          title="Descargar resumen"
         >
-          <div className="flex items-center justify-center gap-2">
-            <DownloadIcon sx={{ fontSize: 20, color: "black" }} />
-            <span className="text-black font-medium">Descargar</span>
-          </div>
-        </SubmitButton>
+          <DownloadIcon sx={{ fontSize: 20, color: "black" }} />
+        </button>
       </div>
 
       {/* Modal de Edición */}
