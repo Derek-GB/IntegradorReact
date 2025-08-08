@@ -291,5 +291,5 @@ export const useFormularioAbarrotes = () => {
     handleToggleProducto,
     eliminarItem,
     calcularCantidad,
-  };
+  };
 };
