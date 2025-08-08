@@ -214,9 +214,12 @@ const FamiliaFormulario = () => {
       const cp = integrante.FamiliaCaracteristicasPoblacionales;
       const fd = integrante.FamiliaFirmaDigital;
 
+      // Generar nombre único para la firma
       let firmaFileName = "";
       if (fd.imagen) {
-        firmaFileName = `firma_persona_${idx + 1}.png`;
+        const identificacion = dp.numeroIdentificacion || `sinid_${idx + 1}`;
+        const timestamp = Date.now();
+        firmaFileName = `firma_${identificacion}_${timestamp}.png`;
       }
 
       return {
@@ -252,16 +255,21 @@ const FamiliaFormulario = () => {
     formData.append("personas", JSON.stringify(personasArray));
 
     datosIntegrantes.forEach((integrante, idx) => {
+      const dp = integrante.FamiliaDatosPersonales;
       const fd = integrante.FamiliaFirmaDigital;
       if (fd.imagen) {
+        const identificacion = dp.numeroIdentificacion || `sinid_${idx + 1}`;
+        const timestamp = Date.now();
+        const firmaFileName = `firma_${identificacion}_${timestamp}.png`;
         const pngBlob = convertirBase64APng(fd.imagen);
-        formData.append("firma", pngBlob, `firma_persona_${idx + 1}.png`);
+        formData.append("firma", pngBlob, firmaFileName);
       }
     });
 
     for (let pair of formData.entries()) {
       console.log(pair[0], pair[1]);
     }
+    console.log("personas enviado:", JSON.stringify(personasArray));
 
     return formData;
   };
@@ -529,8 +537,88 @@ const FamiliaFormulario = () => {
                 type="textarea"
               />
             </>
+            
+          )}
+
+          {/* Discapacidad */}
+          <label className="text-teal-600 font-bold select-none">¿Tiene alguna discapacidad?</label>
+          <div className="flex items-center gap-6 col-span-2 mt-2">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="discapacidad"
+                checked={ce.discapacidad === true}
+                onChange={() =>
+                  setDatos(prev => ({
+                    ...prev,
+                    FamiliaCondicionesEspeciales: {
+                      ...prev.FamiliaCondicionesEspeciales,
+                      discapacidad: true,
+                      tipoDiscapacidad: "",
+                      subtipoDiscapacidad: "",
+                    },
+                  }))
+                }
+                className="form-radio h-5 w-5 text-teal-600 border-teal-600 focus:ring-teal-500"
+              />
+              <span className="text-teal-600 font-semibold select-none">Sí</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="discapacidad"
+                checked={ce.discapacidad === false}
+                onChange={() =>
+                  setDatos(prev => ({
+                    ...prev,
+                    FamiliaCondicionesEspeciales: {
+                      ...prev.FamiliaCondicionesEspeciales,
+                      discapacidad: false,
+                      tipoDiscapacidad: "",
+                      subtipoDiscapacidad: "",
+                    },
+                  }))
+                }
+                className="form-radio h-5 w-5 text-teal-600 border-teal-600 focus:ring-teal-500"
+              />
+              <span className="text-teal-600 font-semibold select-none">No</span>
+            </label>
+          </div>
+          {/* Si tiene discapacidad, mostrar tipo y subtipo */}
+          {ce.discapacidad === true && (
+            <>
+              <SelectField
+                label="Tipo de discapacidad"
+                name="tipoDiscapacidad"
+                value={ce.tipoDiscapacidad || ""}
+                onChange={e => handleChange(e, "FamiliaCondicionesEspeciales")}
+                options={[
+                  "Motora", "Visual", "Auditiva", "Intelectual", "Psicosocial", "Otra"
+                ]}
+                required
+              />
+              <SelectField
+                label="Subtipo de discapacidad"
+                name="subtipoDiscapacidad"
+                value={ce.subtipoDiscapacidad || ""}
+                onChange={e => handleChange(e, "FamiliaCondicionesEspeciales")}
+                options={[
+                  "Parcial", "Total", "Temporal", "Permanente", "Otra"
+                ]}
+                required
+              />
+              {ce.subtipoDiscapacidad === "Otra" && (
+                <InputField
+                  label="Especifique otro subtipo"
+                  name="otroSubtipoDiscapacidad"
+                  value={ce.otroSubtipoDiscapacidad || ""}
+                  onChange={e => handleChange(e, "FamiliaCondicionesEspeciales")}
+                />
+              )}
+            </>
           )}
         </fieldset>
+
       </FoldDownComponent>
 
       {/* Características Poblacionales */}
@@ -649,3 +737,4 @@ const FamiliaFormulario = () => {
 };
 
 export default FamiliaFormulario;
+console.log(localStorage);
