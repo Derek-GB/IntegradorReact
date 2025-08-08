@@ -16,12 +16,23 @@ export default function useRegistroMascotas() {
   const tiposMascota = ["Perro", "Gato", "Ave", "Roedor", "Otro"];
   const tamanosMascota = ["Pequeño", "Mediano", "Grande"];
 
+  // Obtener idUsuario desde localStorage
+  const idUsuario = localStorage.getItem("idUsuario");
+
   const fetchFamilias = async () => {
     try {
       setLoading(true);
-      const data = await familiasAPI.getAll();
-      const lista = Array.isArray(data) ? data : data.data ?? [];
-      setFamilias(lista || []);
+
+      if (!idUsuario) {
+        console.warn("⚠️ No hay idUsuario disponible para cargar familias");
+        setFamilias([]);
+        return;
+      }
+
+      const res = await familiasAPI.getByUsuario(idUsuario);
+      // Extraer la lista real de familias (primer array dentro de res.data)
+      const lista = Array.isArray(res?.data?.[0]) ? res.data[0] : [];
+      setFamilias(lista);
     } catch (error) {
       console.error("Error al cargar familias:", error);
       setFamilias([]);
@@ -88,7 +99,7 @@ export default function useRegistroMascotas() {
 
   useEffect(() => {
     fetchFamilias();
-  }, []);
+  }, [idUsuario]);
 
   return {
     familias,

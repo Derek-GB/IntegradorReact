@@ -75,6 +75,28 @@ export const productosAPI = createApiMethods("productos", {
       handleError(error);
     }
   },
+  getByFamilia: async (codigoFamilia) => {
+    try {
+      const url = `/productos/consulta/ProductosPorFamilia/${encodeURIComponent(codigoFamilia)}`;
+      console.log("Llamando a:", url);
+      const res = await customAxios.get(url);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+  getByUsuario: async (idUsuario) => {
+    try {
+      const url = `/productos/consulta/porUsuario/${encodeURIComponent(idUsuario)}`;
+      console.log("📦 Consultando productos por usuario:", url);
+      const res = await customAxios.get(url);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+
 });
 
 export const familiasAPI = createApiMethods("familias", {
@@ -88,13 +110,33 @@ export const familiasAPI = createApiMethods("familias", {
       handleError(error);
     }
   },
+
+  egresar: async (id, idModificacion) => {
+    try {
+      const res = await customAxios.put(`/familias/egreso`, {
+        id,
+        idModificacion
+      });
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
   // Nuevo método para obtener el autonumérico por cantón
- getNextNumero: async (canton) => {
+  getNextNumero: async (canton) => {
     try {
       const res = await customAxios.get(
         `/familias/requerimiento/indentificador/${encodeURIComponent(canton)}`
       );
-      return res.data.identificador; 
+      return res.data.identificador;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+  getByUsuario: async (idUsuario) => {
+    try {
+      const res = await customAxios.get(`/familias/consulta/porUsuario/${encodeURIComponent(idUsuario)}`);
+      return res.data;
     } catch (error) {
       handleError(error);
     }
@@ -160,8 +202,17 @@ export const alberguesAPI = {
     } catch (error) {
       handleError(error);
     }
+  },
+  getByUsuario: async (idUsuario) => {
+    try {
+      const url = `/albergues/consulta/porUsuario/${encodeURIComponent(idUsuario)}`;
+      console.log("📥 Consultando albergues por usuario:", url);
+      const res = await customAxios.get(url);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
   }
-
 };
 
 export const personasAPI = {
@@ -169,6 +220,16 @@ export const personasAPI = {
   getDiscapacidadPorAlbergue: async (idAlbergue) => {
     try {
       const res = await customAxios.get(`/personas/discapacidad/id/${idAlbergue}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+  getByUsuario: async (idUsuario) => {
+    try {
+      const url = `/personas/user/${encodeURIComponent(idUsuario)}`;
+      console.log("📥 Consultando personas por usuario:", url);
+      const res = await customAxios.get(url);
       return res.data;
     } catch (error) {
       handleError(error);
@@ -209,7 +270,6 @@ export const caracteristicasPoblacionalesAPI = createApiMethods("caracteristicas
 export const firmasDigitalesAPI = createApiMethods("firmasDigitales");
 export const infraestructuraAlberguesAPI = createApiMethods("infraestructuraAlbergues");
 export const amenazasAPI = createApiMethods("amenazas");
-export const mascotasAPI = createApiMethods("mascotas");
 export const categoriaConsumiblesAPI = createApiMethods("categoriaConsumibles");
 export const consumiblesAPI = createApiMethods("consumibles");
 export const detallePedidoConsumiblesAPI = createApiMethods("detallePedidoConsumibles");
@@ -245,3 +305,29 @@ export const usuariosAPI = createApiMethods("usuarios", {
     }
   },
 });
+export const mascotasAPI = {
+  ...createApiMethods("mascotas"),
+  getByCodigoFamilia: async (codigoFamilia) => {
+    try {
+      const url = `/mascotas/consulta/familia/${encodeURIComponent(codigoFamilia)}`;
+      const res = await customAxios.get(url);
+
+      const mascotasFiltradas = res.data.data.map(mascota => ({
+        codigoFamilia: mascota.codigoFamilia,
+        nombreMascota: mascota.nombreMascota,
+        tipo: mascota.tipo,
+        tamaño: mascota.tamaño
+      }));
+
+      return {
+        success: true,
+        data: mascotasFiltradas,
+        message: res.data.message
+      };
+
+    } catch (error) {
+      console.error("Error al buscar mascotas:", error.response?.data || error);
+      throw new Error(error.response?.data?.message || "Error en la búsqueda");
+    }
+  }
+};

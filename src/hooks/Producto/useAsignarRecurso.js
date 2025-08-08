@@ -16,33 +16,58 @@ export const useAsignarRecurso = () => {
   const [showSugerenciasPersona, setShowSugerenciasPersona] = useState(false);
   const [personasFiltradas, setPersonasFiltradas] = useState([]);
 
+  const usuarioId = localStorage.getItem("idUsuario");
+  console.log('🧾 ID del usuario obtenido del localStorage:', usuarioId);
+
   useEffect(() => {
-    const fetchPersonas = async () => {
-      try {
-        const data = await personasAPI.getAll();
-        const lista = Array.isArray(data) ? data : data.data ?? [];
-        setPersonas(lista);
-      } catch (error) {
-        console.error('Error al cargar personas:', error);
-        showCustomToast('Error', 'No se pudieron cargar las personas', 'error');
-      }
-    };
-    fetchPersonas();
-  }, []);
+  const fetchPersonas = async () => {
+    if (!usuarioId) {
+      console.warn('⚠️ No se encontró usuarioId en localStorage.');
+      return;
+    }
+    try {
+      const data = await personasAPI.getByUsuario(usuarioId);
+      console.log('📥 Resultado bruto de personasAPI.getByUsuario:', data);
+      const lista = Array.isArray(data?.data)
+        ? data.data
+        : Array.isArray(data)
+          ? data
+          : [];
+      setPersonas(lista);
+      console.log('✅ Personas cargadas:', lista);
+    } catch (error) {
+      console.error('❌ Error al cargar personas:', error);
+      showCustomToast('Error', 'No se pudieron cargar las personas', 'error');
+    }
+  };
+
+  fetchPersonas();
+}, [usuarioId]);
 
   useEffect(() => {
     const fetchProductos = async () => {
+      if (!usuarioId) {
+        console.warn('⚠️ No se encontró usuarioId en localStorage.');
+        return;
+      }
       try {
-        const data = await productosAPI.getAll();
-        const lista = Array.isArray(data) ? data : data.data ?? [];
+        const data = await productosAPI.getByUsuario(usuarioId);
+        console.log('📥 Resultado bruto de productosAPI.getByUsuario:', data);
+        const lista = Array.isArray(data?.data)
+          ? data.data
+          : Array.isArray(data)
+            ? data
+            : [];
         setProductos(lista);
+        console.log('✅ Productos cargados:', lista);
       } catch (error) {
-        console.error('Error al cargar productos:', error);
+        console.error('❌ Error al cargar productos:', error);
         showCustomToast('Error', 'No se pudieron cargar los productos', 'error');
       }
     };
+
     fetchProductos();
-  }, []);
+  }, [usuarioId]);
 
   useEffect(() => {
     if (busquedaPersona.length > 0) {
@@ -64,7 +89,9 @@ export const useAsignarRecurso = () => {
 
   const handleSelectPersona = (persona) => {
     setForm(prev => ({ ...prev, idPersona: persona.id || persona.ID }));
-    setBusquedaPersona(`${persona.numeroIdentificacion} - ${persona.nombre || ''} ${persona.apellido || ''}`.trim());
+    setBusquedaPersona(
+      `${persona.numeroIdentificacion} - ${persona.nombre || ''} ${persona.apellido || ''}`.trim()
+    );
   };
 
   const handleSubmit = async (e) => {
@@ -91,11 +118,8 @@ export const useAsignarRecurso = () => {
       setForm({ idPersona: '', idProducto: '', cantidad: '' });
       setBusquedaPersona('');
     } catch (error) {
-      console.error('Error al asignar recurso (ignorado para mostrar éxito):', error);
-      // Igual mostramos éxito aunque falle la llamada (por CORS u otro)
-      showCustomToast('¡Éxito!', 'Recurso asignado correctamente', 'success');
-      setForm({ idPersona: '', idProducto: '', cantidad: '' });
-      setBusquedaPersona('');
+      console.error('❌ Error al asignar recurso:', error);
+      showCustomToast('Error', 'No se pudo asignar el recurso', 'error');
     } finally {
       setLoading(false);
     }
