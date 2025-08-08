@@ -222,19 +222,29 @@ export const alberguesAPI = {
 
 export const personasAPI = {
   ...createApiMethods("personas"),
-  getPorDiscapacidad: async (id) => {
-  try {
-    const url = `personas/discapacidad/id/${id}`;
-    const response = await customAxios.get(url);
-    return response.data;
-  } catch (error) {
-    handleError(error);
-  }
-},
+    getPorDiscapacidad: async (idDiscapacidad) => {
+    try {
+      const url = `/personas/resumen/discapacidad/${encodeURIComponent(idDiscapacidad)}`;
+      const response = await customAxios.get(url);
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
   getByUsuario: async (idUsuario) => {
     try {
       const url = `/personas/user/${encodeURIComponent(idUsuario)}`;
       console.log("📥 Consultando personas por usuario:", url);
+      const res = await customAxios.get(url);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+   getResumenPorCondiciones: async (idCondicionesEspeciales) => {
+    if (!idCondicionesEspeciales) throw new Error("ID Condiciones Especiales es requerido");
+    try {
+      const url = `/personas/resumen/condiciones/${encodeURIComponent(idCondicionesEspeciales)}`;
       const res = await customAxios.get(url);
       return res.data;
     } catch (error) {
@@ -247,7 +257,7 @@ export const personasAPI = {
     }
     const url = `/personas/resumen/porAlbergue/${encodeURIComponent(idAlberguePersona)}`;
     const res = await customAxios.get(url);
-    return res.data;  // asumiendo que la data está en res.data
+    return res.data;  
   },
    getResumenPorSexo: async (idSexoPersona) => {
     if (!idSexoPersona) throw new Error("ID Sexo Persona es requerido");
@@ -271,9 +281,9 @@ export const personasAPI = {
 
 
 export const inventarioAPI = createApiMethods("inventario", {
-  getSuministrosPorAlbergue: async (idAlbergue) => {
+  getSuministrosPorId: async (idSuministros) => {
     try {
-      const res = await customAxios.get(`/inventario/resumen/id/${idAlbergue}`);
+      const res = await customAxios.get(`/inventario/resumen/suministros/${encodeURIComponent(idSuministros)}`);
       return res.data;
     } catch (error) {
       handleError(error);
