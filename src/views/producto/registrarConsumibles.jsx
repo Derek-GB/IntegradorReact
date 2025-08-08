@@ -7,11 +7,13 @@ import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
 import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
 
 const categorias = [
-  { nombre: "Alimentos" },
-  { nombre: "Higiene" },
-  { nombre: "Ropa" },
-  { nombre: "Medicamentos" },
-  { nombre: "Otros" },
+  { nombre: "Carnes" },
+  { nombre: "Proteina" },
+  { nombre: "Verduras" },
+  { nombre: "Olores y otros" },
+  { nombre: "Abarrotes" },
+  { nombre: "Productos de limpieza" },
+  
 ];
 
 const unidades = [
