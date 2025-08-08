@@ -102,6 +102,7 @@ const FamiliaFormulario = () => {
 
   const codigoFamilia = localStorage.getItem("codigoFamilia") || "";
   const idFamilia = Number(localStorage.getItem("idFamilia"));
+  const idUsuario = Number(localStorage.getItem("idUsuario")) || 42; // fallback a 42 si no hay nada
 
   const updateCampo = (campo, valor) => {
     setDatos(prev => ({
@@ -246,8 +247,8 @@ const FamiliaFormulario = () => {
         telefono: dp.telefono || "",
         contactoEmergencia: dp.contactoEmergencia || null,
         observaciones: dp.observaciones || null,
-        estaACargoMenor: dp.estaACargoMenor === true || dp.estaACargoMenor === "Sí",
-        idUsuarioCreacion: idx + 1,
+        estaACargoMenor: Boolean(dp.estaACargoMenor),
+        idUsuarioCreacion: idUsuario,
         firma: firmaFileName
       };
     });
@@ -276,6 +277,7 @@ const FamiliaFormulario = () => {
 
   const crearPersonasConFirmas = async (formData) => {
     const res = await personasAPI.create(formData);
+    console.log("Respuesta del backend:", res); // <-- Agrega este log
     return res;
   };
 
@@ -296,8 +298,8 @@ const FamiliaFormulario = () => {
 
     try {
       const formData = construirPersonaPayload(nuevosIntegrantes, idFamilia);
-      await crearPersonasConFirmas(formData);
-
+      const res = await crearPersonasConFirmas(formData);
+      console.log("Respuesta del backend:", res); // <-- Agrega este log
       showCustomToast("¡Registro completado!", "Todos los integrantes y las firmas han sido guardados correctamente", "success");
       setTimeout(() => {
         showCustomToast("Proceso finalizado", "El registro de la familia ha sido completado", "info");
