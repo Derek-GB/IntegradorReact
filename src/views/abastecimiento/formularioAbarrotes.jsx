@@ -18,6 +18,10 @@ const FormularioAbastecimiento = () => {
     seccionAbierta,
     personas,
     carnesProductos,
+
+
+    proteinaProductos, 
+
     verdurasProductos,
     categorias,
     items,
@@ -30,7 +34,7 @@ const FormularioAbastecimiento = () => {
     handleAgregarCarne,
     handleAgregarProteina,
     handleAgregarVerdura,
-    handleAgregarProducto,
+    handleToggleProducto,
     eliminarItem,
   } = useFormularioAbarrotes();
 
@@ -161,17 +165,17 @@ const FormularioAbastecimiento = () => {
         {/* Sección Proteínas */}
         <div className="bg-white rounded-lg shadow-md mb-4 overflow-hidden">
           <div
-            onClick={() => toggleSeccion("Proteínas")}
+            onClick={() => toggleSeccion("Proteina")}
             className="cursor-pointer font-bold py-3 px-6 select-none bg-teal-700 text-white hover:bg-teal-800 transition-colors duration-200"
           >
             <div className="flex justify-between items-center">
               <span>Proteínas</span>
               <span className="text-xl">
-                {seccionAbierta === "Proteínas" ? "▲" : "▼"}
+                {seccionAbierta === "Proteina" ? "▲" : "▼"}
               </span>
             </div>
           </div>
-          {seccionAbierta === "Proteínas" && (
+          {seccionAbierta === "Proteina" && (
             <div className="p-6 bg-gray-50">
               <div className="space-y-4">
                 <SelectField
@@ -179,11 +183,7 @@ const FormularioAbastecimiento = () => {
                   name="tipoProteina"
                   value={tipoProteina}
                   onChange={(e) => setTipoProteina(e.target.value)}
-                  options={[
-                    { nombre: "Huevos" },
-                    { nombre: "Mortadela" },
-                    { nombre: "Salchichón" },
-                  ]}
+                  options={proteinaProductos} 
                   optionLabel="nombre"
                   optionValue="nombre"
                 />
@@ -197,7 +197,7 @@ const FormularioAbastecimiento = () => {
                 </SubmitButton>
               </div>
 
-              {items.filter((i) => i.seccion === "Proteínas").length > 0 && (
+              {items.filter((i) => i.seccion === "Proteina").length > 0 && (
                 <div className="mt-6">
                   <div className="w-full">
                     <h4 className="text-lg font-semibold text-gray-800 text-center mb-4">
@@ -205,8 +205,8 @@ const FormularioAbastecimiento = () => {
                     </h4>
                     <div className="rounded-lg bg-white shadow-sm border border-gray-200 overflow-hidden">
                       <GlobalDataTable
-                        columns={createColumns("proteinas")}
-                        data={items.filter((i) => i.seccion === "Proteínas")}
+                        columns={createColumns("proteina")}
+                        data={items.filter((i) => i.seccion === "Proteina")}
                         pagination={false}
                         noDataComponent={
                           <div className="px-6 py-4 text-center text-sm text-gray-500">
@@ -291,7 +291,7 @@ const FormularioAbastecimiento = () => {
 
         {/* Otras Categorías con checkboxes */}
         {Object.entries(categorias).map(([categoria, productos]) => {
-          if (["Carnes", "Proteínas", "Verduras"].includes(categoria))
+          if (["Carnes", "Proteina", "Verduras"].includes(categoria))
             return null;
 
           return (
@@ -334,7 +334,7 @@ const FormularioAbastecimiento = () => {
                             <input
                               type="checkbox"
                               onChange={() =>
-                                handleAgregarProducto(categoria, producto)
+                                handleToggleProducto(categoria, producto)
                               }
                               className="w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 rounded focus:ring-teal-500 focus:ring-2"
                             />

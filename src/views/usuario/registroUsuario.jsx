@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRegistroUsuario } from '../../hooks/Usuario/useRegistroUsuario.js';
 import FormContainer from '../../components/FormComponents/FormContainer.jsx';
 import InputField from '../../components/FormComponents/InputField.jsx';
+import SearchAutocompleteInput from '../../components/FormComponents/SearchAutocompleteInput.jsx';
 import SelectField from '../../components/FormComponents/SelectField.jsx';
 import SubmitButton from '../../components/FormComponents/SubmitButton.jsx';
 import CustomToaster from '../../components/globalComponents/CustomToaster.jsx';
@@ -13,8 +14,12 @@ const RegistroUsuario = () => {
     roles,
     estados,
     handleChange,
-    handleSubmit
+    handleSubmit,
   } = useRegistroUsuario();
+
+  // Estados para el componente de Autocomplete de municipalidad
+  const [busquedaMunicipalidad, setBusquedaMunicipalidad] = useState('');
+  const [showSugerenciasMunicipalidad, setShowSugerenciasMunicipalidad] = useState(false);
 
   return (
     <>
@@ -33,7 +38,7 @@ const RegistroUsuario = () => {
               required
             />
           </div>
-         
+
           <div className="flex-1">
             <InputField
               label="Identificación"
@@ -44,6 +49,7 @@ const RegistroUsuario = () => {
             />
           </div>
         </div>
+
         <div className="flex flex-col md:flex-row gap-6 mt-4">
           <div className="flex-1">
             <InputField
@@ -66,22 +72,29 @@ const RegistroUsuario = () => {
             />
           </div>
         </div>
+
         <div className="flex flex-col md:flex-row gap-6 mt-4">
           <div className="flex-1">
-            <SelectField
+            <SearchAutocompleteInput
               label="Municipalidad"
-              name="municipalidad"
-              value={form.municipalidad}
-              onChange={handleChange}
-              options={municipalidades.map(m => ({
-                nombre: m.nombre || m.Nombre || 'Sin nombre',
-                value: m.id || m.ID
-              }))}
-              optionLabel="nombre"
-              optionValue="value"
-              required
+              busqueda={busquedaMunicipalidad}
+              setBusqueda={setBusquedaMunicipalidad}
+              showSugerencias={showSugerenciasMunicipalidad}
+              setShowSugerencias={setShowSugerenciasMunicipalidad}
+              resultados={municipalidades}
+              onSelect={(municipalidad) => {
+                handleChange({
+                  target: {
+                    name: 'municipalidad',
+                    value: municipalidad.id || municipalidad.ID,
+                  },
+                });
+              }}
+              optionLabelKeys={['nombre', 'Nombre']}
+              placeholder="Buscar municipalidad..."
             />
           </div>
+
           <div className="flex-1">
             <SelectField
               label="Rol"
@@ -94,6 +107,7 @@ const RegistroUsuario = () => {
               required
             />
           </div>
+
           <div className="flex-1">
             <SelectField
               label="Estado"
@@ -107,13 +121,14 @@ const RegistroUsuario = () => {
             />
           </div>
         </div>
-      
+
         <div className="flex justify-center mt-8">
           <SubmitButton width="w-full" color="twxt-black">
             Registrar
           </SubmitButton>
         </div>
       </FormContainer>
+
       <CustomToaster />
     </>
   );

@@ -1,285 +1,262 @@
-import { useState, useContext } from 'react';
-import { contextoAbastecimiento } from '../../context/contextoAbastecimiento';
-import { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
-
-// Productos por categoría
-const carnesProductos = [
-  { nombre: "Pollo", gramosPorPersona: 120 },
-  { nombre: "Carne de res", gramosPorPersona: 120 },
-  { nombre: "Carne de cerdo", gramosPorPersona: 120 }
-];
-
-const proteinasProductos = [
-  { nombre: 'Huevos', unidad: 'Unidad', factor: 1 },
-  { nombre: 'Mortadela', unidad: 'kg', gramosPorPersona: 25 },
-  { nombre: 'Salchichón', unidad: 'kg', gramosPorPersona: 125 }
-];
-
-const verdurasProductos = [
-  { nombre: 'Yuca', unidad: 'kg', gramosPorPersona: 120 },
-  { nombre: 'Papa', unidad: 'kg', gramosPorPersona: 120 },
-  { nombre: 'Camote', unidad: 'kg', gramosPorPersona: 120 },
-  { nombre: 'Chayote', unidad: 'kg', gramosPorPersona: 120 }
-];
-
-const productosOlores = [
-  { nombre: 'Plátano', unidad: 'Unidad', factor: 0.25 },
-  { nombre: 'Cebolla', unidad: 'kg', factor: 0.02 },
-  { nombre: 'Chile Dulce', unidad: 'Unidad', factor: 0.05 },
-  { nombre: 'Tomate', unidad: 'kg', factor: 0.05 },
-  { nombre: 'Pepino', unidad: 'kg', factor: 0.05 },
-  { nombre: 'Repollo', unidad: 'kg', factor: 0.05 },
-  { nombre: 'Ajo', unidad: 'kg', factor: 0.005 },
-  { nombre: 'Culantro rollo', unidad: 'Rollo', factor: 0.01 },
-  { nombre: 'Apio', unidad: 'kg', factor: 0.01 },
-  { nombre: 'Salsa Lizano', unidad: 'Litro', factor: 0.005 },
-  { nombre: 'Vinagre', unidad: 'Litro', factor: 0.003 },
-  { nombre: 'Oregano', unidad: 'Rollo', factor: 0.003 },
-  { nombre: 'Pimienta', unidad: 'kg', factor: 0.001 },
-  { nombre: 'Comino', unidad: 'kg', factor: 0.001 },
-  { nombre: 'Salsa de Tomate', unidad: 'Litro', factor: 0.005 },
-  { nombre: 'Mayonesa', unidad: 'Litro', factor: 0.005 },
-  { nombre: 'Sal', unidad: 'kg', factor: 0.005 },
-  { nombre: 'Mantequilla', unidad: 'kg', factor: 0.005 },
-  { nombre: 'Achiote', unidad: 'Caja', factor: 0.001 },
-  { nombre: 'Consome', unidad: 'kg', factor: 0.005 }
-];
-
-const productosAbarrotes = [
-  { nombre: "Arroz 80% grano entero", unidad: "kg", gramosPorPersona: 266 },
-  { nombre: "Frijoles", unidad: "kg", gramosPorPersona: 106 },
-  { nombre: "Azúcar", unidad: "kg", gramosPorPersona: 33.3 },
-  { nombre: "Aceite de soya", unidad: "L", mililitrosPorPersona: 33 },
-  { nombre: "Café", unidad: "kg", gramosPorPersona: 33.3 },
-  { nombre: "Espagueti", unidad: "kg", gramosPorPersona: 33.3 },
-  { nombre: "Atún en trozos", unidad: "latas", gramosPorPersona: 21.3 },
-  { nombre: "Avena en polvo", unidad: "kg", gramosPorPersona: 26.6 },
-  { nombre: "Refresco", unidad: "paquetes", paquetesPorPersona: 1 },
-  { nombre: "Leche en polvo", unidad: "kg", gramosPorPersona: 52 },
-  { nombre: "Agua dulce en polvo", unidad: "kg", gramosPorPersona: 13.3 },
-  { nombre: "Pan Cuadrado", unidad: "rebanadas", rebanadasPorPersona: 2 },
-  { nombre: "Tortillas", unidad: "unidades", unidadesPorPersona: 2 },
-  { nombre: "Pasta de tomate", unidad: "kg", gramosPorPersona: 33.3 }
-];
-
-const productosLimpieza = [
-  { nombre: "Bolsas para basura Grande", unidad: "paquete", gramosPorPersona: null, conversion: 10 },
-  { nombre: "Bolsas para basura medianas", unidad: "paquete", gramosPorPersona: null, conversion: 10 },
-  { nombre: "Papel Higiénico", unidad: "rollo", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Pasta dental", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Jabón en polvo", unidad: "kg", gramosPorPersona: null,conversion: 0.01 },
-  { nombre: "Cloro", unidad: "litro", gramosPorPersona: null, conversion: 0.02 },
-  { nombre: "Jabón de baño", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Guantes de Cocina (Hule)", unidad: "par", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Jabón lavamanos", unidad: "litro", gramosPorPersona:  null, conversion:0.01 },
-  { nombre: "Jabón Lavaplatos Caja", unidad: "caja", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Desinfectante", unidad: "litro", gramosPorPersona: null, conversion: 0.02 },
-  { nombre: "Esponja lava platos", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Fosforos", unidad: "caja", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Desodorante unisex", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Champú", unidad: "litro", gramosPorPersona:  null, conversion:0.01 },
-  { nombre: "Escoba", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Trapeador piso", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Limpiones", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Trapos o mechas", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Toallas de papel", unidad: "rollo", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Bomba desatorar servicios", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Toalla sanitaria", unidad: "paquete", gramosPorPersona: null, conversion: 10 },
-  { nombre: "Pañales niño M unidades", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Pañales niño L unidades", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Pañales niño XL unidades", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Pañales niño XXL unidades", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Recarga de Gas de 25 lb", unidad: "recarga", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Cepillo Dental", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Platos Desechables", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Vaso Desechable", unidad: "unidad", gramosPorPersona: null, conversion: 1 },
-  { nombre: "Cuchara Desechables", unidad: "unidad", gramosPorPersona: null, conversion: 1 }
-];
-
-// Categorías con sus productos
-const categorias = {
-  Carnes: carnesProductos,
-  Proteínas: proteinasProductos,
-  Verduras: verdurasProductos,
-  Olores: productosOlores,
-  Abarrotes: productosAbarrotes,
-  Limpieza: productosLimpieza
-};
+import { useState, useContext, useEffect } from "react";
+import { contextoAbastecimiento } from "../../context/contextoAbastecimiento";
+import { showCustomToast } from "../../components/globalComponents/CustomToaster.jsx";
+import { consumiblesAPI } from "../../helpers/api.js";
 
 export const useFormularioAbarrotes = () => {
-  const { agregarItem, eliminarItem, items, datosFormulario } = useContext(contextoAbastecimiento);
-
-  // Estados para modales
+  const { agregarItem, eliminarItem, items, datosFormulario, resetFormulario } = useContext(contextoAbastecimiento);
+  const [carnesProductos, setCarnesProductos] = useState([]);
+  const [proteinaProductos, setProteinaProductos] = useState([]);
+  const [verdurasProductos, setVerdurasProductos] = useState([]);
+  const [oloresProductos, setOloresProductos] = useState([]);
+  const [abarrotesProductos, setAbarrotesProductos] = useState([]);
+  const [limpiezaProductos, setLimpiezaProductos] = useState([]);
+  const [tipoCarne, setTipoCarne] = useState("");
+  const [tipoProteina, setTipoProteina] = useState("");
+  const [tipoVerdura, setTipoVerdura] = useState("");
   const [openResumenParcial, setOpenResumenParcial] = useState(false);
   const [openResumenFinal, setOpenResumenFinal] = useState(false);
-
-  // Estados para tipos seleccionados
-  const [tipoCarne, setTipoCarne] = useState('');
-  const [tipoProteina, setTipoProteina] = useState('');
-  const [tipoVerdura, setTipoVerdura] = useState('');
-
-  // Estado para sección abierta
-  const [seccionAbierta, setSeccionAbierta] = useState('carnes');
-
+  const [seccionAbierta, setSeccionAbierta] = useState("Carnes");
   const personas = parseInt(datosFormulario?.cantidad) || 0;
 
-  // Manejadores de modales
+  const modalStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "80%",
+    maxWidth: 800,
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    p: 4,
+    borderRadius: 2,
+    maxHeight: "80vh",
+    overflowY: "auto",
+  };
+
+  useEffect(() => {
+    async function fetchProductos() {
+      try {
+        const data = await consumiblesAPI.getAll();
+        const consumibles = data.data || data || [];
+        setCarnesProductos(
+          consumibles
+            .filter((item) => item.nombreCategoria === "Carnes")
+            .map((c) => ({
+              nombre: c.nombreConsumible,
+              gramosPorPersona: c.cantidadPorPersona ? parseFloat(c.cantidadPorPersona) : 120,
+              unidad: c.nombreUnidadMedida || "kg",
+            }))
+        );
+
+        setProteinaProductos(
+          consumibles
+            .filter((item) => item.nombreCategoria === "Proteina")
+            .map((p) => ({
+              nombre: p.nombreConsumible,
+              gramosPorPersona: p.cantidadPorPersona ? parseFloat(p.cantidadPorPersona) : 100,
+              unidad: p.nombreUnidadMedida || "Unidad",
+            }))
+        );
+
+        setVerdurasProductos(
+          consumibles
+            .filter((item) => item.nombreCategoria === "Verduras")
+            .map((v) => ({
+              nombre: v.nombreConsumible,
+              gramosPorPersona: v.cantidadPorPersona ? parseFloat(v.cantidadPorPersona) : 120,
+              unidad: v.nombreUnidadMedida || "kg",
+            }))
+        );
+
+        setOloresProductos(
+          consumibles
+            .filter((item) => item.nombreCategoria === "Olores y otros")
+            .map((o) => ({
+              nombre: o.nombreConsumible,
+              factor: o.factor ? parseFloat(o.factor) : 0.01,
+              unidad: o.nombreUnidadMedida || "Unidad",
+            }))
+        );
+
+        setAbarrotesProductos(
+          consumibles
+            .filter((item) => item.nombreCategoria === "Abarrotes")
+            .map((a) => ({
+              nombre: a.nombreConsumible,
+              gramosPorPersona: a.cantidadPorPersona ? parseFloat(a.cantidadPorPersona) : 100,
+              mililitrosPorPersona: a.mililitrosPorPersona ? parseFloat(a.mililitrosPorPersona) : undefined,
+              paquetesPorPersona: a.paquetesPorPersona ? parseFloat(a.paquetesPorPersona) : undefined,
+              rebanadasPorPersona: a.rebanadasPorPersona ? parseFloat(a.rebanadasPorPersona) : undefined,
+              unidadesPorPersona: a.unidadesPorPersona ? parseFloat(a.unidadesPorPersona) : undefined,
+              unidad: a.nombreUnidadMedida || "Unidad",
+            }))
+        );
+
+        setLimpiezaProductos(
+          consumibles
+            .filter((item) => item.nombreCategoria?.toLowerCase().includes("limpieza"))
+            .map((l) => ({
+              nombre: l.nombreConsumible,
+              gramosPorPersona: l.cantidadPorPersona ? parseFloat(l.cantidadPorPersona) : 100,
+              mililitrosPorPersona: l.mililitrosPorPersona ? parseFloat(l.mililitrosPorPersona) : undefined,
+              paquetesPorPersona: l.paquetesPorPersona ? parseFloat(l.paquetesPorPersona) : undefined,
+              rebanadasPorPersona: l.rebanadasPorPersona ? parseFloat(l.rebanadasPorPersona) : undefined,
+              unidadesPorPersona: l.unidadesPorPersona ? parseFloat(l.unidadesPorPersona) : undefined,
+              unidad: l.nombreUnidadMedida || "Unidad",
+            }))
+        );
+      } catch (error) {
+        console.error("Error cargando productos:", error);
+        showCustomToast("Error", "No se pudieron cargar los productos desde el servidor.");
+      }
+    }
+    fetchProductos();
+  }, []);
+
+  const toggleSeccion = (nombre) => {
+    setSeccionAbierta((prev) => (prev === nombre ? "" : nombre));
+  };
+
   const handleOpenResumenParcial = () => setOpenResumenParcial(true);
   const handleCloseResumenParcial = () => setOpenResumenParcial(false);
   const handleOpenResumenFinal = () => setOpenResumenFinal(true);
   const handleCloseResumenFinal = () => setOpenResumenFinal(false);
 
-  const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '80%',
-    maxWidth: 800,
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 2,
-    maxHeight: '80vh',
-    overflowY: 'auto',
+  const agregarProducto = (categoria, producto, cantidadCalculada) => {
+    const cantidad = parseFloat(cantidadCalculada);
+    if (items.some((i) => i.seccion === categoria && i.tipo === producto.nombre)) {
+      showCustomToast("Advertencia", `Producto "${producto.nombre}" ya agregado.`);
+      return false;
+    }
+    if (!cantidad || cantidad <= 0) {
+      showCustomToast("Error", "Debe definir la cantidad de personas en el menú principal.");
+      return false;
+    }
+    agregarItem({
+      tipoComida: categoria,
+      seccion: categoria,
+      tipo: producto.nombre,
+      unidad: producto.unidad || "Unidad",
+      cantidad,
+      cantidadPersonas: personas,
+    });
+    return true;
   };
 
-  const toggleSeccion = (nombre) => {
-    setSeccionAbierta(prev => (prev === nombre ? '' : nombre));
-  };
-
-  // CARNES
   const handleAgregarCarne = () => {
-  if (!tipoCarne || personas <= 0) {
-    showCustomToast('Warning','Seleccione 2 tipos de carne y asegúrese que la cantidad de personas está definida en el menú principal.');
-    return;
-  }
-  const carnesAgregadas = items.filter(i => i.seccion === 'Carnes');
-  const yaExiste = carnesAgregadas.some(i => i.tipo === tipoCarne);
-  if (yaExiste) {
-    showCustomToast( 'Warning','Esta ya fue agregada.');
-    return;
-  }
-  if (carnesAgregadas.length >= 2) {
-    showCustomToast('Warning','Solo 2 tipos de carne.');
-    return;
-  }
-  const producto = carnesProductos.find(p => p.nombre === tipoCarne);
-  if (!producto) return;
-  const gramosTotales = producto.gramosPorPersona * personas;
-  const cantidadKg = (gramosTotales / 1000).toFixed(2);
+    if (!tipoCarne || personas <= 0) {
+      showCustomToast("Error", "Seleccione carne y defina cantidad de personas.");
+      return;
+    }
+    const carnesAgregadas = items.filter((i) => i.seccion === "Carnes");
+    if (carnesAgregadas.length >= 2) {
+      showCustomToast("Advertencia", "Solo 2 tipos de carne permitidos.");
+      return;
+    }
+    if (carnesAgregadas.some((i) => i.tipo === tipoCarne)) {
+      showCustomToast("Advertencia", "Esta carne ya fue agregada.");
+      return;
+    }
+    const producto = carnesProductos.find((p) => p.nombre === tipoCarne);
+    if (!producto) return;
 
-  agregarItem({
-    seccion: 'Carnes',
-    tipo: tipoCarne,
-    unidad: 'kg',
-    cantidad: cantidadKg,
-  });
+    const cantidadKg = (producto.gramosPorPersona * personas) / 1000;
+    if (agregarProducto("Carnes", producto, cantidadKg)) {
+      setTipoCarne("");
+    }
+  };
 
-  setTipoCarne('');
-};
-
-  // PROTEINAS
   const handleAgregarProteina = () => {
     if (!tipoProteina || personas <= 0) {
-      showCustomToast('Warning','Seleccione proteína y asegúrese que hay cantidad de personas definida en el menú principal.');
+      showCustomToast("Error", "Seleccione proteína y defina cantidad de personas.");
       return;
     }
-    const proteinasAgregadas = items.filter(i => i.seccion === 'Proteínas');
+    const proteinasAgregadas = items.filter((i) => i.seccion === "Proteina");
     if (proteinasAgregadas.length >= 1) {
-      showCustomToast('Warning','Solo una proteína.');
+      showCustomToast("Advertencia", "Solo una proteína permitida.");
       return;
     }
-    let unidad = 'Unidad';
-    let cantidad = 1;
-    switch (tipoProteina) {
-      case 'Huevos':
-        unidad = 'Unidad';
-        cantidad = personas;
-        break;
-      case 'Mortadela':
-        unidad = 'kg';
-        cantidad = ((personas * 25) / 1000).toFixed(2);
-        break;
-      case 'Salchichón':
-        unidad = 'kg';
-        cantidad = ((personas * 125) / 1000).toFixed(2);
-        break;
-      default:
-        cantidad = 1;
-        break;
+    if (proteinasAgregadas.some((i) => i.tipo === tipoProteina)) {
+      showCustomToast("Advertencia", "Proteína ya agregada.");
+      return;
     }
-    agregarItem({
-      seccion: 'Proteínas',
-      tipo: tipoProteina,
-      unidad,
-      cantidad
-    });
-    setTipoProteina('');
+    const producto = proteinaProductos.find((p) => p.nombre === tipoProteina);
+    if (!producto) return;
+
+    const cantidadKg = (producto.gramosPorPersona * personas) / 1000;
+    if (agregarProducto("Proteina", producto, cantidadKg)) {
+      setTipoProteina("");
+    }
   };
 
-  // VERDURAS
-  const gramosPorPersonaVerdura = 120;
   const handleAgregarVerdura = () => {
-    if (!tipoVerdura) {
-      showCustomToast('Warning', "Seleccione dos verduras");
+    if (!tipoVerdura || personas <= 0) {
+      showCustomToast("Error", "Seleccione verdura y defina cantidad de personas.");
       return;
     }
-    if (personas <= 0) {
-      showCustomToast('Warning', "Debe definir la cantidad de personas en el menú principal.");
-      return;
-    }
-    const verdurasAgregadas = items.filter(i => i.seccion === 'Verduras');
-    const tiposUnicos = [...new Set(verdurasAgregadas.map(i => i.tipo))];
-    if (tiposUnicos.includes(tipoVerdura)) {
-      showCustomToast('Warning', 'Verdura ya agregada.');
-      return;
-    }
+    const verdurasAgregadas = items.filter((i) => i.seccion === "Verduras");
+    const tiposUnicos = [...new Set(verdurasAgregadas.map((i) => i.tipo))];
     if (tiposUnicos.length >= 2) {
-      showCustomToast('Warning', 'Solo 2 tipos de verdura.');
+      showCustomToast("Advertencia", "Solo 2 tipos de verdura permitidos.");
       return;
     }
-    const cantidadKg = ((gramosPorPersonaVerdura * personas) / 1000).toFixed(2);
-    agregarItem({
-      seccion: 'Verduras',
-      tipo: tipoVerdura,
-      unidad: 'kg',
-      cantidad: cantidadKg
-    });
-    setTipoVerdura('');
+    if (tiposUnicos.includes(tipoVerdura)) {
+      showCustomToast("Advertencia", "Verdura ya agregada.");
+      return;
+    }
+    const producto = verdurasProductos.find((p) => p.nombre === tipoVerdura);
+    if (!producto) return;
+
+    const cantidadKg = (producto.gramosPorPersona * personas) / 1000;
+    if (agregarProducto("Verduras", producto, cantidadKg)) {
+      setTipoVerdura("");
+    }
   };
 
-  // CHECKBOXES
+  const handleToggleProducto = (categoria, producto) => {
+    const yaAgregado = items.find((i) => i.seccion === categoria && i.tipo === producto.nombre);
+    if (yaAgregado) {
+      eliminarItem(yaAgregado);
+    } else {
+      const cantidad = calcularCantidad(producto);
+      if (!cantidad || cantidad <= 0) {
+        showCustomToast("Error", "Debe definir la cantidad de personas en el menú principal.");
+        return;
+      }
+      agregarItem({
+        tipoComida: categoria,
+        seccion: categoria,
+        tipo: producto.nombre,
+        unidad: producto.unidad || "Unidad",
+        cantidad,
+        cantidadPersonas: personas,
+      });
+    }
+  };
+
   const calcularCantidad = (producto) => {
     if (!personas || personas <= 0) return 0;
-    if (producto.factor) return (producto.factor * personas).toFixed(2);
-    if (producto.gramosPorPersona) return ((producto.gramosPorPersona * personas) / 1000).toFixed(2);
-    if (producto.mililitrosPorPersona) return ((producto.mililitrosPorPersona * personas) / 1000).toFixed(2);
-    if (producto.paquetesPorPersona) return personas;
-    if (producto.rebanadasPorPersona) return personas * producto.rebanadasPorPersona;
-    if (producto.unidadesPorPersona) return personas * producto.unidadesPorPersona;
-    if (producto.conversion) return Math.ceil(personas / producto.conversion);
-
+    if (producto.factor !== undefined) return (producto.factor * personas).toFixed(2);
+    if (producto.gramosPorPersona !== undefined) return ((producto.gramosPorPersona * personas) / 1000).toFixed(2);
+    if (producto.mililitrosPorPersona !== undefined) return ((producto.mililitrosPorPersona * personas) / 1000).toFixed(2);
+    if (producto.paquetesPorPersona !== undefined) return producto.paquetesPorPersona * personas;
+    if (producto.rebanadasPorPersona !== undefined) return personas * producto.rebanadasPorPersona;
+    if (producto.unidadesPorPersona !== undefined) return personas * producto.unidadesPorPersona;
+    if (producto.conversion !== undefined) return Math.ceil(personas / producto.conversion);
     return 1;
   };
 
-  const handleAgregarProducto = (categoria, producto) => {
-    if (items.some(i => i.seccion === categoria && i.tipo === producto.nombre)) return;
-    const cantidad = calcularCantidad(producto);
-    if (!cantidad || cantidad <= 0) {
-       showCustomToast('Error', "Debe definir la cantidad de personas en el menú principal.");
-      return;
-    }
-    agregarItem({
-      seccion: categoria,
-      tipo: producto.nombre,
-      unidad: producto.unidad,
-      cantidad
-    });
+  const categorias = {
+    Carnes: carnesProductos,
+    Proteina: proteinaProductos,
+    Verduras: verdurasProductos,
+    "Olores y otros": oloresProductos,
+    Abarrotes: abarrotesProductos,
+    "Productos de Limpieza": limpiezaProductos,
   };
 
   return {
-    // Estados
     openResumenParcial,
     openResumenFinal,
     tipoCarne,
@@ -288,34 +265,31 @@ export const useFormularioAbarrotes = () => {
     seccionAbierta,
     personas,
     modalStyle,
-    
-    // Datos
+
     carnesProductos,
-    proteinasProductos,
+    proteinaProductos,
     verdurasProductos,
+    oloresProductos,
+    abarrotesProductos,
+    limpiezaProductos,
     categorias,
     items,
-    
-    // Manejadores de estado
+
     setTipoCarne,
     setTipoProteina,
     setTipoVerdura,
-    
-    // Manejadores de modales
+
     handleOpenResumenParcial,
     handleCloseResumenParcial,
     handleOpenResumenFinal,
     handleCloseResumenFinal,
-    
-    // Manejadores de funcionalidad
+
     toggleSeccion,
     handleAgregarCarne,
     handleAgregarProteina,
     handleAgregarVerdura,
-    handleAgregarProducto,
+    handleToggleProducto,
     eliminarItem,
-    
-    // Funciones de cálculo
-    calcularCantidad
+    calcularCantidad,
   };
 };

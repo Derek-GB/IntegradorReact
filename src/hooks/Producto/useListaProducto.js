@@ -12,13 +12,32 @@ export const useListaSuministro = () => {
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const data = await productosAPI.getAll();
-        const lista = Array.isArray(data) ? data : data.data || [];
+        setLoading(true);
+        const idUsuario = localStorage.getItem("idUsuario");
+
+        if (!idUsuario) {
+          showCustomToast("Error", "No se encontró el ID del usuario en localStorage.", "error");
+          return;
+        }
+
+        const data = await productosAPI.getByUsuario(idUsuario);
+        const lista = Array.isArray(data) ? data : data?.data ?? [];
+
+        console.log("📦 Productos cargados por usuario:", lista);
+
         setProductos(lista);
-      } catch {
-        showCustomToast('Error', 'Error al cargar productos. Verifica si tu sesión expiró.', 'error');
+      } catch (error) {
+        console.error("❌ Error al cargar productos por usuario:", error);
+        showCustomToast(
+          'Error',
+          'Error al cargar productos. Verifica si tu sesión expiró.',
+          'error'
+        );
+      } finally {
+        setLoading(false);
       }
     };
+
     fetchProductos();
   }, []);
 
@@ -63,7 +82,6 @@ export const useListaSuministro = () => {
       );
       setForm({});
       setBusquedaProducto('');
-      
     } catch {
       showCustomToast("Error", "Error al actualizar el producto.", "error");
     } finally {
@@ -82,7 +100,7 @@ export const useListaSuministro = () => {
       setProductos(prev => prev.filter(p => p.id !== form.id));
       setBusquedaProducto('');
       setForm({});
-    } catch (error) {
+    } catch {
       showCustomToast("Error", "Error al eliminar el producto.", "error");
     } finally {
       setLoading(false);
