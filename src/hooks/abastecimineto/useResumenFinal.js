@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { pedidoConsumiblesAPI } from "../../helpers/api.js";
 import { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
 import { useNavigate } from "react-router-dom";
-import { pedidoConsumiblesAPI } from "../../helpers/api";
+
 
 const useResumenFinal = () => {
   const [items, setItems] = useState([]);
