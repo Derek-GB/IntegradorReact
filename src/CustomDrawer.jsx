@@ -128,6 +128,7 @@ const routeGroups = [
       { to: "/asignacionRecursos.jsx", label: "Asignación Recursos", icon: <AssignmentReturned /> },
       { to: "/abarrotesMenuPrincipal", label: "Abastecimiento", icon: <LocalShipping /> },
       { to: "/buscarSuministros.jsx", label: "Buscar Suministros", icon: <SearchIcon /> },
+      { to: "/buscarAjuste.jsx", label: "Buscar Ajustes de inventario", icon: <SearchIcon /> },
     ],
   },
   {
@@ -154,6 +155,7 @@ const routeGroups = [
       { to: "/registroAmenazas.jsx", label: "Amenazas", icon: <ReportIcon /> },
       { to: "/ayudaForm.jsx", label: "Referencias", icon: <DatasetLinked /> },
       { to: "/reportes.jsx", label: "Reportes", icon: <QuickReferenceAll /> },
+      { to: "/buscarReferencia.jsx", label: "Buscar Referencias", icon: <SearchIcon /> },
     ],
   },
 ];

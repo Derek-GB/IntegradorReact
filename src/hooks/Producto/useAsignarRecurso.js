@@ -20,25 +20,29 @@ export const useAsignarRecurso = () => {
   console.log('🧾 ID del usuario obtenido del localStorage:', usuarioId);
 
   useEffect(() => {
-    const fetchPersonas = async () => {
-      try {
-        const data = await personasAPI.getAll();
-        console.log('📥 Resultado bruto de personasAPI.getAll:', data);
-        const lista = Array.isArray(data?.data)
-          ? data.data
-          : Array.isArray(data)
-            ? data
-            : [];
-        setPersonas(lista);
-        console.log('✅ Personas cargadas:', lista);
-      } catch (error) {
-        console.error('❌ Error al cargar personas:', error);
-        showCustomToast('Error', 'No se pudieron cargar las personas', 'error');
-      }
-    };
+  const fetchPersonas = async () => {
+    if (!usuarioId) {
+      console.warn('⚠️ No se encontró usuarioId en localStorage.');
+      return;
+    }
+    try {
+      const data = await personasAPI.getByUsuario(usuarioId);
+      console.log('📥 Resultado bruto de personasAPI.getByUsuario:', data);
+      const lista = Array.isArray(data?.data)
+        ? data.data
+        : Array.isArray(data)
+          ? data
+          : [];
+      setPersonas(lista);
+      console.log('✅ Personas cargadas:', lista);
+    } catch (error) {
+      console.error('❌ Error al cargar personas:', error);
+      showCustomToast('Error', 'No se pudieron cargar las personas', 'error');
+    }
+  };
 
-    fetchPersonas();
-  }, []);
+  fetchPersonas();
+}, [usuarioId]);
 
   useEffect(() => {
     const fetchProductos = async () => {
