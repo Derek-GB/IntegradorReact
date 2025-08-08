@@ -9,26 +9,21 @@ import SelectField from "../../components/FormComponents/SelectField.jsx";
 import { useFormularioAbarrotes } from "../../hooks/abastecimineto/useFormularioAbarrotes.js";
 import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
 
-
 const FormularioAbastecimiento = () => {
   const {
-    
     openResumenFinal,
     tipoCarne,
     tipoProteina,
     tipoVerdura,
     seccionAbierta,
     personas,
-  
     carnesProductos,
-  
     verdurasProductos,
     categorias,
     items,
     setTipoCarne,
     setTipoProteina,
     setTipoVerdura,
-    
     handleOpenResumenFinal,
     handleCloseResumenFinal,
     toggleSeccion,
@@ -84,8 +79,6 @@ const FormularioAbastecimiento = () => {
         );
       },
       ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
     },
   ];
 
@@ -163,7 +156,7 @@ const FormularioAbastecimiento = () => {
             </div>
           )}
         </div>
-          <CustomToaster />
+        <CustomToaster />
 
         {/* Sección Proteínas */}
         <div className="bg-white rounded-lg shadow-md mb-4 overflow-hidden">
@@ -382,7 +375,7 @@ const FormularioAbastecimiento = () => {
           );
         })}
         <CustomToaster />
-        
+
         {/* Botones para abrir modales resumen*/}
         <div className="bg-white rounded-lg shadow-md p-6 mt-6">
           <div className="border-b border-gray-200 pb-4 mb-6">
@@ -393,7 +386,10 @@ const FormularioAbastecimiento = () => {
           <div className="flex flex-col sm:flex-row gap-4">
             <SubmitButton
               type="button"
-              onClick={handleOpenResumenFinal}
+              onClick={(e) => {
+                e.currentTarget.blur(); // Aquí quitamos el foco para evitar error aria-hidden
+                handleOpenResumenFinal();
+              }}
               width="flex-1"
               color="text-black"
               className="bg-yellow-500"

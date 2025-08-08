@@ -202,7 +202,52 @@ export const mascotasAPI = createApiMethods("mascotas");
 export const categoriaConsumiblesAPI = createApiMethods("categoriaConsumibles");
 export const consumiblesAPI = createApiMethods("consumibles");
 export const detallePedidoConsumiblesAPI = createApiMethods("detallePedidoConsumibles");
-export const pedidoConsumiblesAPI = createApiMethods("pedidoConsumibles");
+export const pedidoConsumiblesAPI = createApiMethods("pedidoConsumibles", {
+  create: async (data) => {
+    try {
+      const res = await customAxios.post(`/pedidoConsumibles`, data);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+
+  update: async (data) => {
+    try {
+      const res = await customAxios.put(`/pedidoConsumibles`, data);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+
+  remove: async (id) => {
+    try {
+      const res = await customAxios.delete(`/pedidoConsumibles/id/${id}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+
+  getById: async (id) => {
+    try {
+      const res = await customAxios.get(`/pedidoConsumibles/id/${id}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+
+  getAll: async () => {
+    try {
+      const res = await customAxios.get(`/pedidoConsumibles/all`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+});
 export const unidadMedidasAPI = createApiMethods("unidadMedidas");
 export const ajusteInventarioAPI = createApiMethods("ajusteInventario");
 
