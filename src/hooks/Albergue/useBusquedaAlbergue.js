@@ -45,29 +45,45 @@ export function useBusquedaAlbergue({ provincias, cantones, distritos, setProvin
 
     try {
       if (idAlbergue.trim() !== "") {
+        console.log("Buscando por ID:", `"${idAlbergue.trim()}"`);
         const res = await alberguesAPI.getById(idAlbergue.trim());
+        console.log("Resultado API ID:", res);
         if (res?.data?.length > 0) setResultados(res.data);
         else setError("No se encontró albergue con ese ID.");
       } else if (nombre.trim() !== "") {
+        console.log("Buscando por nombre:", `"${nombre.trim()}"`);
         const res = await alberguesAPI.getByNombre(nombre.trim());
+        console.log("Resultado API nombre:", res);
         if (res?.data?.length > 0) setResultados(res.data);
         else setError("No se encontró albergue con ese nombre.");
       } else if (distritoSeleccionado) {
-        const res = await alberguesAPI.getByDistrito(distritoSeleccionado);
+        console.log("Buscando por distrito:", `"${distritoSeleccionado}"`);
+        const res = await alberguesAPI.getByDistrito(distritoSeleccionado.trim());
+        console.log("Resultado API distrito:", res);
         if (res?.data?.length > 0) setResultados(res.data);
         else setError("No se encontró albergue en ese distrito.");
       } else if (cantonSeleccionado) {
-        const res = await alberguesAPI.getByCanton(cantonSeleccionado);
-        if (res?.data?.length > 0) setResultados(res.data);
-        else setError("No se encontró albergue en ese cantón.");
+        console.log("Buscando por cantón:", `"${cantonSeleccionado}"`);
+        const res = await alberguesAPI.getByCanton(cantonSeleccionado.trim());
+        console.log("Resultado API cantón:", res);
+
+        if (res?.data?.length > 0) {
+          const resultadosReales = Array.isArray(res.data[0]) ? res.data[0] : res.data;
+          setResultados(resultadosReales);
+        } else {
+          setError("No se encontró albergue en ese cantón.");
+        }
       } else if (provinciaSeleccionada) {
-        const res = await alberguesAPI.getByProvincia(provinciaSeleccionada);
+        console.log("Buscando por provincia:", `"${provinciaSeleccionada}"`);
+        const res = await alberguesAPI.getByProvincia(provinciaSeleccionada.trim());
+        console.log("Resultado API provincia:", res);
         if (res?.data?.length > 0) setResultados(res.data);
         else setError("No se encontró albergue en esa provincia.");
       } else {
         setError("Por favor ingrese ID, Nombre o seleccione una ubicación.");
       }
     } catch (err) {
+      console.error("Error en búsqueda:", err);
       if (err.response?.status === 404 || (err.message && err.message.includes("Albergue no encontrado"))) {
         setError("No se encontró un albergue con esos datos.");
       } else {
