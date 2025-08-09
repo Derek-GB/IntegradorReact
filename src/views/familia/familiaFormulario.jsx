@@ -209,7 +209,8 @@ const FamiliaFormulario = () => {
         firmaFileName = `firma_${identificacion}_${timestamp}.png`;
       }
 
-      return {
+      // Construir el objeto persona
+      const persona = {
         tieneCondicionSalud: ce.tieneCondicionSalud ?? true,
         descripcionCondicionSalud: ce.descripcionCondicionSalud || ce.otrasCondiciones || null,
         discapacidad: ce.discapacidad ?? false,
@@ -235,8 +236,14 @@ const FamiliaFormulario = () => {
         observaciones: dp.observaciones || null,
         estaACargoMenor: Boolean(dp.estaACargoMenor),
         idUsuarioCreacion: idUsuario,
-        firma: firmaFileName
       };
+
+      // Solo agrega la propiedad firma si hay firma
+      if (firmaFileName) {
+        persona.firma = firmaFileName;
+      }
+
+      return persona;
     });
 
     formData.append("personas", JSON.stringify(personasArray));
@@ -274,13 +281,13 @@ const FamiliaFormulario = () => {
     setError(null);
     setSuccess(null);
 
-    const errorJefe = validarJefeFamiliaGlobal();
-    if (errorJefe) {
-      showCustomToast("Error", errorJefe, "error");
-      setError(errorJefe);
-      setLoading(false);
-      return;
-    }
+    // const errorJefe = validarJefeFamiliaGlobal();
+    // if (errorJefe) {
+    //   showCustomToast("Error", errorJefe, "error");
+    //   setError(errorJefe);
+    //   setLoading(false);
+    //   return;
+    // }
 
     const nuevosIntegrantes = [...datosIntegrantes];
     nuevosIntegrantes[indice] = { ...datos };
@@ -290,15 +297,27 @@ const FamiliaFormulario = () => {
       const res = await crearPersonasConFirmas(formData);
 
       if (res?.success) {
-        showCustomToast("¡Registro completado!", "Todos los integrantes y las firmas han sido guardados correctamente", "success");
+        showCustomToast(
+          "Persona agregada correctamente",
+          "La persona fue registrada exitosamente.",
+          "success"
+        );
         setTimeout(() => {
-          navigate("/formularioRegistro"); // Cambia la ruta si es diferente
+          navigate("/preFormulario.jsx");
         }, 2000);
       } else {
-        showCustomToast("Error al guardar", res?.errores?.[0]?.error || "Error desconocido al guardar los datos", "error");
+        showCustomToast(
+          "No se pudo registrar",
+          res?.errores?.[0]?.error || "No se pudo registrar la persona.",
+          "error"
+        );
       }
     } catch (err) {
-      showCustomToast("Error al guardar", err.message || "Error desconocido al guardar los datos", "error");
+      showCustomToast(
+        "No se pudo registrar",
+        err.message || "No se pudo registrar la persona.",
+        "error"
+      );
     } finally {
       setLoading(false);
     }
@@ -349,6 +368,7 @@ const FamiliaFormulario = () => {
             name="segundoApellido"
             value={dp.segundoApellido || ""}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            required
           />
           <SelectField
             label="Tipo de Identificación"
@@ -384,6 +404,7 @@ const FamiliaFormulario = () => {
             name="nacionalidad"
             value={dp.nacionalidad || ""}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            required
           />
           <SelectField
             label="Usted diría que se identifica como (Género)"
@@ -391,16 +412,16 @@ const FamiliaFormulario = () => {
             value={dp.genero || "Prefiero no decir"}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
             options={["Hombre", "Mujer", "Hombre trans/transmasculino", "Mujer trans/transfemenina", "No se identifica con ninguna de las anteriores", "Otro", "Prefiero no decir"]}
+            required
           />
-
           <SelectField
             label="Sexo"
             name="sexo"
             value={dp.sexo || ""}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
             options={["Masculino", "Femenino", "Intersexo", "Prefiero no decir"]}
+            required
           />
-
           <InputField
             label="Observaciones"
             name="observaciones"
@@ -413,12 +434,14 @@ const FamiliaFormulario = () => {
             name="parentesco"
             value={dp.parentesco || ""}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            required
           />
           <InputField
             label="Teléfono"
             name="telefono"
             value={dp.telefono || ""}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            required
           />
           <InputField
             label="Contacto de Emergencia"
@@ -436,9 +459,10 @@ const FamiliaFormulario = () => {
           <SelectField
             label="¿Está a cargo de algún menor?"
             name="estaACargoMenor"
-            value={dp.estaACargoMenor === true || dp.estaACargoMenor === "Sí" ? "Sí" : "No"}
+            value={dp.estaACargoMenor ?? ""}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
             options={["No", "Sí"]}
+            required
           />
         </div>
       </FoldDownComponent>
