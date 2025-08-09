@@ -46,7 +46,7 @@ const useResumenFinal = () => {
     } catch (err) {
       console.error("Error cargando pedidos:", err);
       setError(err.message);
-      showCustomToast("Error", `Error al cargar pedidos: ${err.message}`, "error");
+      showCustomToast("Error", `Error al cargar pedidos: ${err.message}`);
     }
   };
 
@@ -73,7 +73,7 @@ const useResumenFinal = () => {
 
       const errorValidacion = validarPedido(nuevoItem);
       if (errorValidacion) {
-        showCustomToast("Error", errorValidacion, "error");
+        showCustomToast("Error", errorValidacion);
         return;
       }
 
@@ -85,11 +85,11 @@ const useResumenFinal = () => {
       };
 
       await pedidoConsumiblesAPI.update(id, payload);
-      showCustomToast("Éxito", "Pedido actualizado exitosamente", "success");
+      showCustomToast("Éxito", "Pedido actualizado exitosamente");
       await cargarPedidos();
     } catch (err) {
       setError(err.message);
-      showCustomToast("Error", `Error al actualizar pedido: ${err.message}`, "error");
+      showCustomToast("Error", `Error al actualizar pedido: ${err.message}`);
     }
   };
 
@@ -99,11 +99,11 @@ const useResumenFinal = () => {
       if (!id) throw new Error("ID inválido para eliminar");
 
       await pedidoConsumiblesAPI.remove(id);
-      showCustomToast("Éxito", "Pedido eliminado exitosamente", "success");
+      showCustomToast("Éxito", "Pedido eliminado exitosamente");
       await cargarPedidos();
     } catch (err) {
       setError(err.message);
-      showCustomToast("Error", `Error al eliminar pedido: ${err.message}`, "error");
+      showCustomToast("Error", `Error al eliminar pedido: ${err.message}`);
     }
   };
 
@@ -153,7 +153,7 @@ const useResumenFinal = () => {
     });
 
     if (!datosFiltrados.length) {
-      showCustomToast("Warning", "No hay datos válidos para descargar.", 'warning');
+      showCustomToast("Warning", "No hay datos válidos para descargar.");
       return;
     }
 
@@ -171,7 +171,7 @@ const useResumenFinal = () => {
     a.click();
     URL.revokeObjectURL(url);
 
-    showCustomToast("Éxito", "Descarga completada exitosamente.", "success");
+    showCustomToast("Éxito", "Descarga completada exitosamente.");
   };
 
   const guardarDetallePedido = async (idPedido, items) => {
@@ -183,10 +183,10 @@ const useResumenFinal = () => {
           cantidad: item.cantidad,
         });
       }
-      showCustomToast("Éxito", "Detalle del pedido guardado correctamente", "success");
+      showCustomToast("Éxito", "Detalle del pedido guardado correctamente");
     } catch (err) {
       setError(err.message);
-      showCustomToast("Error", `Error al guardar detalle: ${err.message}`, "error");
+      showCustomToast("Error", `Error al guardar detalle: ${err.message}`);
     }
   };
 
@@ -207,7 +207,7 @@ const useResumenFinal = () => {
       if (!idPedido) throw new Error("No se pudo obtener el id del pedido creado");
 
       if (!items || items.length === 0) {
-        showCustomToast("Warning", "No hay productos para guardar en el detalle", "warning");
+        showCustomToast("Warning", "No hay productos para guardar en el detalle");
         return;
       }
 
@@ -225,12 +225,12 @@ const useResumenFinal = () => {
         }
       }
 
-      showCustomToast("Éxito", "Pedido y detalle guardados correctamente", "success");
+      showCustomToast("Éxito", "Pedido y detalle guardados correctamente");
       descargarResumen();
 
     } catch (err) {
       setError(err.message);
-      showCustomToast("Error", `Error al guardar pedido: ${err.message}`, "error");
+      showCustomToast("Error", `Error al guardar pedido: ${err.message}`);
     }
   };
 
