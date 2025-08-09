@@ -13,8 +13,6 @@ const opcionesComida = [
 export const useAbarrotesMenuPrincipal = () => {
   const navigate = useNavigate();
   const { guardarDatosFormulario } = useContext(contextoAbastecimiento);
-
-  // Para autocomplete albergues
   const [busquedaAlbergue, setBusquedaAlbergue] = useState("");
   const [showSugerenciasAlbergue, setShowSugerenciasAlbergue] = useState(false);
   const [resultadosAlbergue, setResultadosAlbergue] = useState([]);
@@ -23,17 +21,16 @@ export const useAbarrotesMenuPrincipal = () => {
     fecha: '',
     tipo: '',
     cantidad: '',
-    albergue: null, // Guardamos el objeto seleccionado o null
+    albergue: null, 
   });
 
   const [loading, setLoading] = useState(false);
   const today = new Date().toISOString().split('T')[0];
 
-  // Cargar albergues para el usuario
   useEffect(() => {
     const cargarAlberguesPorUsuario = async () => {
       try {
-        const idUsuario = localStorage.getItem("idUsuario"); // Asumiendo que está guardado aquí
+        const idUsuario = localStorage.getItem("idUsuario"); 
         if (!idUsuario) {
           showCustomToast("Error", "Usuario no identificado", "error");
           setResultadosAlbergue([]);
@@ -53,7 +50,6 @@ export const useAbarrotesMenuPrincipal = () => {
     cargarAlberguesPorUsuario();
   }, []);
 
-  // Maneja cambios en inputs que no son albergue
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -62,7 +58,6 @@ export const useAbarrotesMenuPrincipal = () => {
     }));
   };
 
-  // Maneja selección de albergue en autocomplete
   const handleSelectAlbergue = (albergueSeleccionado) => {
     setFormData(prev => ({
       ...prev,
@@ -86,7 +81,7 @@ export const useAbarrotesMenuPrincipal = () => {
         fechaCreacion: fecha,
         tipoComida: tipo,
         cantidadPersonas: parseInt(cantidad, 10),
-        idAlbergue: albergue.id, // Usamos el id del objeto seleccionado
+        idAlbergue: albergue.id, 
         idUsuarioCreacion: parseInt(localStorage.getItem("idUsuario"), 10) || 1,
       };
 
