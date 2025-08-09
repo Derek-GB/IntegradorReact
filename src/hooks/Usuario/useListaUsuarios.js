@@ -8,6 +8,7 @@ export const useListaUsuarios = (rolUsuarioActual) => {
   const [busqueda, setBusqueda] = useState("");
   const [usuarioEditando, setUsuarioEditando] = useState(null);
   const [modalAbierto, setModalAbierto] = useState(false);
+  
 
   useEffect(() => {
     fetchUsuarios();
@@ -26,29 +27,27 @@ export const useListaUsuarios = (rolUsuarioActual) => {
     }
   };
 
- const buscarUsuario = async (e) => {
-  e.preventDefault();
-  if (!busqueda.trim()) {
-    fetchUsuarios();
-    return;
-  }
-  setLoading(true);
-  try {
-    const response = await usuariosAPI.getById(busqueda.trim());
-    // Extraemos el usuario correctamente
-    const usuario = response.data?.[0]?.[0] ?? null;
-    setUsuarios(usuario ? [usuario] : []);
-  } catch  {
-    showCustomToast("Error", "Usuario no encontrado.", "error");
-    setUsuarios([]);
-  } finally {
-    setLoading(false);
-  }
-};
+  const buscarUsuario = async (e) => {
+    e.preventDefault();
+    if (!busqueda.trim()) {
+      fetchUsuarios();
+      return;
+    }
+    setLoading(true);
+    try {
+      const response = await usuariosAPI.getById(busqueda.trim());
+      const usuario = response.data?.[0]?.[0] ?? null;
+      setUsuarios(usuario ? [usuario] : []);
+    } catch {
+      showCustomToast("Error", "Usuario no encontrado.", "error");
+      setUsuarios([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const eliminarUsuario = async (id) => {
-    if (rolUsuarioActual !== "admin") return;
-    if (!window.confirm("¿Seguro que desea eliminar este usuario?")) return;
+    if (rolUsuarioActual !== "admin") return; 
     try {
       await usuariosAPI.delete(id);
       showCustomToast("Éxito", "Usuario eliminado correctamente.", "success");
@@ -78,6 +77,7 @@ export const useListaUsuarios = (rolUsuarioActual) => {
     } catch {
       showCustomToast("Error", "Error al actualizar usuario.", "error");
     }
+    
   };
 
   return {
@@ -92,6 +92,6 @@ export const useListaUsuarios = (rolUsuarioActual) => {
     cerrarModal,
     usuarioEditando,
     guardarCambios,
-    rolUsuarioActual
+    rolUsuarioActual,
   };
 };

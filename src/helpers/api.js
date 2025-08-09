@@ -357,7 +357,7 @@ export const usuariosAPI = createApiMethods("usuarios", {
   }
 },
 
-  // 🔍 Nuevo método para buscar usuario por ID
+
  getById: async (id) => {
   console.log(`[usuariosAPI.getById] Llamando a /usuarios/${id}`);
   try {
