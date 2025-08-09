@@ -7,7 +7,6 @@ const opcionesReporte = [
     { label: "Resumen de personas por sexo", value: "personas_por_sexo", campos: [{ label: "Sexo", name: "sexo" }] },
     { label: "Resumen de personas por edad", value: "personas_por_edad", campos: [{ label: "Edad", name: "edad" }] },
     { label: "Resumen de personas con discapacidad", value: "personas_discapacidad", campos: [{ label: "Código del albergue", name: "id" }] },
-    { label: "Resumen de condiciones especiales", value: "condiciones_especiales_jefe", campos: [{ label: "Código del albergue", name: "idAlbergue" }] },
     { label: "Resumen de suministros en albergues", value: "suministros_albergue", campos: [{ label: "Código del albergue", name: "idAlbergue" }] },
     { label: "Resumen de albergues por color de alerta", value: "albergues_por_color", campos: [{ label: "Color del albergue", name: "color" }] },
 ];

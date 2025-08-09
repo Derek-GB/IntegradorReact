@@ -33,7 +33,8 @@ import Shelves from "@mui/icons-material/shelves";
 import DatasetLinked from "@mui/icons-material/datasetLinked";
 import QuickReferenceAll from "@mui/icons-material/assignmentLate";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import MapIcon from "@mui/icons-material/Map";
+import MapIcon from "@mui/icons-material/addBusiness";
+
 
 
 
@@ -110,7 +111,7 @@ const routeGroups = [
     ],
   },
   {
-    label: "Mascotas",  // Nueva sección
+    label: "Mascotas",
     icon: <PetsIcon />,
     routes: [
       { to: "/registroMascota.jsx", label: "Registrar Mascota", icon: <PetsIcon /> },
@@ -127,6 +128,7 @@ const routeGroups = [
       { to: "/ajusteInventario.jsx", label: "Ajuste Inventario", icon: <Inventory /> },
       { to: "/asignacionRecursos.jsx", label: "Asignación Recursos", icon: <AssignmentReturned /> },
       { to: "/abarrotesMenuPrincipal", label: "Abastecimiento", icon: <LocalShipping /> },
+      { to: "/listaAbastecimientos.jsx", label: "Lista Abastecimientos", icon: <ListIcon /> },
       { to: "/buscarSuministros.jsx", label: "Buscar Suministros", icon: <SearchIcon /> },
       { to: "/buscarAjuste.jsx", label: "Buscar Ajustes de inventario", icon: <SearchIcon /> },
     ],
@@ -146,6 +148,7 @@ const routeGroups = [
     icon: <PersonAddIcon />,
     routes: [
       { to: "/registroUsuario.jsx", label: "Registrar Usuario", icon: <PersonAddIcon /> },
+      { to: "/listaUsuarios.jsx", label: "Lista Usuarios", icon: <ListIcon /> },
     ],
   },
   {
@@ -156,6 +159,8 @@ const routeGroups = [
       { to: "/ayudaForm.jsx", label: "Referencias", icon: <DatasetLinked /> },
       { to: "/reportes.jsx", label: "Reportes", icon: <QuickReferenceAll /> },
       { to: "/buscarReferencia.jsx", label: "Buscar Referencias", icon: <SearchIcon /> },
+      { to: "/registroMunicipalidad.jsx", label: "Registro Municipalidad", icon: <MapIcon /> },
+
     ],
   },
 ];

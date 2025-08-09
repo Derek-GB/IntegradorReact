@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-
 const Inicio = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-
   const testimonials = [
     {
       text: "Este sistema ha revolucionado la gestión de emergencias en nuestra región. La rapidez y eficiencia son incomparables.",
@@ -198,12 +196,11 @@ const Inicio = () => {
             </div>
           </div>
 
-
         
         </div>
     </div>
     </>
   );
 };
-
 export default Inicio;
+

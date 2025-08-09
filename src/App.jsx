@@ -19,6 +19,7 @@ import BuscarSuministros from './views/producto/buscarSuministros.jsx';
 import Login from './views/usuario/login.jsx';
 import RecuperarContrasena from './views/usuario/recuperarContrasena.jsx';
 import RegistroUsuario from './views/usuario/registroUsuario.jsx';
+import ListaUsuarios from './views/usuario/listaUsuarios.jsx';
 
 //Albergue
 
@@ -31,7 +32,7 @@ import RegistroAlbergue from './views/albergue/registroAlbergue.jsx';
 import MenuPrincipal from './views/abastecimiento/abarrotesMenuPrincipal';
 import ResumenFinal from './views/abastecimiento/resumenFinal';
 import FormularioAbastecimiento from './views/abastecimiento/formularioAbarrotes';
-
+import ListaAbastecimientos from './views/suministros/listaAbastecimientos.jsx';
 
 //Solos
 import AjusteInventario from "./views/ajusteInventario.jsx";
@@ -43,6 +44,7 @@ import BuscarMascotas from './views/busquedaMascotas.jsx';
 import ReportesAlbergue from './views/reportes.jsx';
 import BuscarReferencias from './views/buscarReferencia.jsx';
 import BuscarAjustesInventario from './views/buscarAjuste.jsx';
+import RegistroMunicipalidad from './views/registroMunicipalidad.jsx';
 
 //No categorizado
 import FormularioIntegrantes from "./components/formularioIntegrantes.jsx";
@@ -114,6 +116,7 @@ const App = () => {
                     <Route path="/registrarConsumibles.jsx" element={<RegistrarConsumible />} />
                     <Route path="/registroAlbergue.jsx" element={<RegistroAlbergue />} />
                     <Route path="/registroUsuario.jsx" element={<RegistroUsuario />} />
+                    <Route path="/listaUsuarios.jsx" element={<ListaUsuarios />} />
                     <Route path="/listaProducto.jsx" element={<ListaProducto />} />
                     <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
                     <Route path="/abarrotesMenuPrincipal" element={<MenuPrincipal />} />
@@ -132,6 +135,8 @@ const App = () => {
                     <Route path="/busquedaMascotas.jsx" element={<BuscarMascotas />} />
                     <Route path="/buscarReferencia.jsx" element={<BuscarReferencias />} />
                     <Route path="/buscarAjuste.jsx" element={<BuscarAjustesInventario />} />
+                    <Route path="/registroMunicipalidad.jsx" element={<RegistroMunicipalidad />} />
+                    <Route path="/listaAbastecimientos.jsx" element={<ListaAbastecimientos />} />
                   </Routes>
                 </div>
               </div>
