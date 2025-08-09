@@ -304,7 +304,16 @@ export const amenazasAPI = createApiMethods("amenazas");
 export const categoriaConsumiblesAPI = createApiMethods("categoriaConsumibles");
 export const consumiblesAPI = createApiMethods("consumibles");
 export const detallePedidoConsumiblesAPI = createApiMethods("detallePedidoConsumibles");
-export const pedidoConsumiblesAPI = createApiMethods("pedidoConsumibles");
+export const pedidoConsumiblesAPI = createApiMethods("pedidoConsumibles", {
+  getAllAbastecimientos: async () => {
+    try {
+      const res = await customAxios.get(`/pedidoConsumibles/all`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+});
 export const unidadMedidasAPI = createApiMethods("unidadMedidas");
 export const condicionesEspecialesAPI = createApiMethods("condicionesEspeciales");
 
