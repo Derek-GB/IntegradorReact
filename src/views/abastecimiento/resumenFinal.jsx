@@ -17,11 +17,11 @@ import {
 const ResumenFinal = () => {
   const {
     items,
-    descargarResumen,
+    pedidos,
     datosFormulario,
+    descargarResumen,
     eliminarItem,
     editarItem,
-    // quitar guardarPedidosDesdeFormulario ya que no usaremos guardar
   } = useResumenFinal();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -30,7 +30,7 @@ const ResumenFinal = () => {
 
   const handleOpenModal = (index) => {
     setEditIndex(index);
-    setEditCantidad(items[index].cantidad);
+    setEditCantidad(pedidos[index].cantidad);
     setModalOpen(true);
   };
 
@@ -41,11 +41,12 @@ const ResumenFinal = () => {
   };
 
   const handleGuardarEdicion = () => {
-    const nuevoItem = { ...items[editIndex], cantidad: editCantidad };
+    const nuevoItem = { ...pedidos[editIndex], cantidad: editCantidad };
     editarItem(editIndex, nuevoItem);
     handleCloseModal();
   };
 
+  // Columnas para datos del formulario actual
   const datosFormularioColumns = [
     {
       name: "Fecha",
@@ -67,12 +68,17 @@ const ResumenFinal = () => {
     },
     {
       name: "Nombre del Albergue",
-      selector: (row) => row.albergue,
+      selector: (row) => row.albergue?.nombre || row.albergue,
       sortable: true,
-      cell: (row) => <span className="font-medium">{row.albergue || "-"}</span>,
+      cell: (row) => (
+        <span className="font-medium">
+          {row.albergue?.nombre || row.albergue || "-"}
+        </span>
+      ),
     },
   ];
 
+  // Columnas para productos del formulario actual
   const productosColumns = [
     {
       name: "Categoría",
@@ -106,6 +112,34 @@ const ResumenFinal = () => {
         <span className="font-semibold text-gray-900">{row.cantidad}</span>
       ),
     },
+  ];
+
+  // Columnas para pedidos de la API
+  const pedidosColumns = [
+    {
+      name: "Fecha",
+      selector: (row) => row.fecha,
+      sortable: true,
+      cell: (row) => <span className="font-medium">{row.fecha}</span>,
+    },
+    {
+      name: "Tipo de Comida",
+      selector: (row) => row.tipo,
+      sortable: true,
+      cell: (row) => <span className="font-medium">{row.tipo}</span>,
+    },
+    {
+      name: "Cantidad de Personas",
+      selector: (row) => row.cantidad,
+      sortable: true,
+      cell: (row) => <span className="font-medium">{row.cantidad}</span>,
+    },
+    {
+      name: "Albergue",
+      selector: (row) => row.albergue,
+      sortable: true,
+      cell: (row) => <span className="font-medium">{row.albergue}</span>,
+    },
     {
       name: "Acciones",
       cell: (row, index) => (
@@ -129,60 +163,90 @@ const ResumenFinal = () => {
     },
   ];
 
-  const datosFormularioData = [datosFormulario || {}];
+  // Preparar datos del formulario actual para mostrar
+  const datosFormularioData = datosFormulario ? [datosFormulario] : [];
 
   return (
     <div className="space-y-6">
       <CustomToaster />
 
-      {/* Datos del Formulario */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-          <h2 className="text-xl font-semibold text-gray-800">Datos del Formulario</h2>
+      {/* Datos del Formulario Actual */}
+      {datosFormulario && (
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+            <h2 className="text-xl font-semibold text-gray-800">
+              Datos del Formulario Actual
+            </h2>
+          </div>
+          <div className="p-4">
+            <GlobalDataTable
+              columns={datosFormularioColumns}
+              data={datosFormularioData}
+              pagination={false}
+              noDataComponent={
+                <div className="px-6 py-4 text-center text-sm text-gray-500">
+                  No hay datos del formulario actual
+                </div>
+              }
+            />
+          </div>
         </div>
-        <div className="p-4">
-          <GlobalDataTable
-            columns={datosFormularioColumns}
-            data={datosFormularioData}
-            pagination={false}
-            noDataComponent={
-              <div className="px-6 py-4 text-center text-sm text-gray-500">
-                No hay datos del formulario disponibles
-              </div>
-            }
-          />
-        </div>
-      </div>
+      )}
 
-      {/* Productos Registrados */}
+      {/* Productos del Formulario Actual */}
+      {items && items.length > 0 && (
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+            <h2 className="text-xl font-semibold text-gray-800">
+              Productos del Formulario Actual
+            </h2>
+          </div>
+          <div className="p-4">
+            <GlobalDataTable
+              columns={productosColumns}
+              data={items}
+              pagination={true}
+              paginationPerPage={10}
+              noDataComponent={
+                <div className="px-6 py-4 text-center text-sm text-gray-500">
+                  No hay productos en el formulario actual
+                </div>
+              }
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Pedidos Guardados (de la API) */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-          <h2 className="text-xl font-semibold text-gray-800">Productos Registrados</h2>
+          <h2 className="text-xl font-semibold text-gray-800">Pedidos Guardados</h2>
         </div>
         <div className="p-4">
           <GlobalDataTable
-            columns={productosColumns}
-            data={items}
+            columns={pedidosColumns}
+            data={pedidos}
             pagination={true}
             paginationPerPage={10}
             noDataComponent={
               <div className="px-6 py-4 text-center text-sm text-gray-500">
-                No hay productos registrados
+                No hay pedidos guardados
               </div>
             }
           />
         </div>
       </div>
 
-      {/* SOLO Botón de DESCARGAR */}
+      {/* Botón de Descarga */}
       <div className="flex justify-center pt-4">
         <button
           type="button"
           onClick={descargarResumen}
-          className="bg-yellow-500 text-black px-50 py-2 rounded-md hover:bg-yellow-600 transition flex items-center gap-2"
-          title="Descargar resumen"
+          className="bg-yellow-500 text-black px-8 py-2 rounded-md hover:bg-yellow-600 transition flex items-center gap-2"
+          title="Descargar resumen completo"
         >
           <DownloadIcon sx={{ fontSize: 20, color: "black" }} />
+          Descargar Resumen Completo
         </button>
       </div>
 
@@ -202,7 +266,7 @@ const ResumenFinal = () => {
         <DialogTitle
           sx={{ fontSize: "1.5rem", fontWeight: "bold", textAlign: "center" }}
         >
-          Editar Cantidad del Producto
+          Editar Cantidad del Pedido
         </DialogTitle>
 
         <DialogContent sx={{ mt: 2 }}>
@@ -222,7 +286,7 @@ const ResumenFinal = () => {
         <DialogActions sx={{ justifyContent: "space-between", px: 3 }}>
           <button
             onClick={handleCloseModal}
-            className="bg-yellow-500 text-black px-6 py-2 rounded-md hover:bg-yellow-600 transition"
+            className="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600 transition"
           >
             Cancelar
           </button>
