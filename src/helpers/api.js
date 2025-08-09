@@ -111,17 +111,20 @@ export const familiasAPI = createApiMethods("familias", {
     }
   },
 
-  egresar: async (id, idModificacion) => {
-    try {
-      const res = await customAxios.put(`/familias/egreso`, {
-        id,
-        idModificacion
-      });
-      return res.data;
-    } catch (error) {
-      handleError(error);
-    }
-  },
+ egresar: async (payload) => {
+  try {
+    
+    const data = {
+      id: payload.id,
+      idModificacion: Number(payload.idModificacion)
+    };
+    
+    const res = await customAxios.put(`/familias/egreso`, data);
+    return res.data;
+  } catch (error) {
+    handleError(error);
+  }
+},
   // Nuevo método para obtener el autonumérico por cantón
   getNextNumero: async (canton) => {
     try {
@@ -194,19 +197,19 @@ export const alberguesAPI = {
     }
   },
   getByColor: async (color) => {
-  try {
-    if (!color || color.trim() === "") {
-      throw new Error("Color del albergue es requerido");
+    try {
+      if (!color || color.trim() === "") {
+        throw new Error("Color del albergue es requerido");
+      }
+      const colorNormalized = color.trim().toLowerCase();
+      console.log("URL llamada con color:", colorNormalized);
+      const url = `/albergues/resumen/color/${encodeURIComponent(colorNormalized)}`;
+      const res = await customAxios.get(url);
+      return res.data;
+    } catch (error) {
+      handleError(error);
     }
-    const colorNormalized = color.trim().toLowerCase();
-    console.log("URL llamada con color:", colorNormalized);
-    const url = `/albergues/resumen/color/${encodeURIComponent(colorNormalized)}`;
-    const res = await customAxios.get(url);
-    return res.data;
-  } catch (error) {
-    handleError(error);
-  }
-},
+  },
 
   getByUsuario: async (idUsuario) => {
     try {
@@ -222,7 +225,7 @@ export const alberguesAPI = {
 
 export const personasAPI = {
   ...createApiMethods("personas"),
-    getPorDiscapacidad: async (idDiscapacidad) => {
+  getPorDiscapacidad: async (idDiscapacidad) => {
     try {
       const url = `/personas/resumen/discapacidad/${encodeURIComponent(idDiscapacidad)}`;
       const response = await customAxios.get(url);
@@ -241,26 +244,26 @@ export const personasAPI = {
       handleError(error);
     }
   },
-getResumenPorCondiciones: async (idCondicion) => {
-  if (!idCondicion) throw new Error("ID Condicion es requerido");
-  try {
-    const url = `/personas/resumen/condicion/${encodeURIComponent(idCondicion)}`;
-    const res = await customAxios.get(url);
-    return res.data;
-  } catch (error) {
-    handleError(error);
-  }
-},
+  getResumenPorCondiciones: async (idCondicion) => {
+    if (!idCondicion) throw new Error("ID Condicion es requerido");
+    try {
+      const url = `/personas/resumen/condicion/${encodeURIComponent(idCondicion)}`;
+      const res = await customAxios.get(url);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
 
- getResumenPorAlbergue: async (idAlberguePersona) => {
+  getResumenPorAlbergue: async (idAlberguePersona) => {
     if (!idAlberguePersona || idAlberguePersona.toString().trim() === "") {
       throw new Error("El idAlberguePersona es requerido");
     }
     const url = `/personas/resumen/porAlbergue/${encodeURIComponent(idAlberguePersona)}`;
     const res = await customAxios.get(url);
-    return res.data;  
+    return res.data;
   },
-   getResumenPorSexo: async (idSexoPersona) => {
+  getResumenPorSexo: async (idSexoPersona) => {
     if (!idSexoPersona) throw new Error("ID Sexo Persona es requerido");
     try {
       const res = await customAxios.get(`/personas/resumen/sexo/${encodeURIComponent(idSexoPersona)}`);
@@ -269,7 +272,7 @@ getResumenPorCondiciones: async (idCondicion) => {
       handleError(error);
     }
   },
- getResumenPorEdad: async (idEdadPersona) => {
+  getResumenPorEdad: async (idEdadPersona) => {
     if (!idEdadPersona) throw new Error("ID Edad Persona es requerido");
     try {
       const res = await customAxios.get(`/personas/resumen/edad/${encodeURIComponent(idEdadPersona)}`);
@@ -346,32 +349,32 @@ export const usuariosAPI = createApiMethods("usuarios", {
     }
   },
   getAll: async () => {
-  console.log("[usuariosAPI.getAll] Llamando a /usuarios/all");
-  try {
-    const res = await customAxios.get(`/usuarios/all`);
-    console.log("[usuariosAPI.getAll] Respuesta:", res.data);
-    return res.data;
-  } catch (error) {
-    console.error("[usuariosAPI.getAll] Error:", error);
-    handleError(error);
-  }
-},
-
-  // 🔍 Nuevo método para buscar usuario por ID
- getById: async (id) => {
-  console.log(`[usuariosAPI.getById] Llamando a /usuarios/${id}`);
-  try {
-    const res = await customAxios.get(`/usuarios/${id}`);
-    console.log("[usuariosAPI.getById] Respuesta:", res.data);
-    return res.data;
-  } catch (error) {
-    console.error("[usuariosAPI.getById] Error:", error);
-    if (error.response?.status === 404) {
-      throw new Error("Usuario no encontrado.");
+    try {
+      const res = await customAxios.get(`/usuarios/all`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
     }
-    throw new Error("Error al buscar usuario por ID.");
+  },
+  delete: async (id) => {
+    try {
+      const res = await customAxios.delete(`/usuarios/${id}`);
+      return res.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getById: async (id) => {
+    try {
+      const res = await customAxios.get(`/usuarios/${id}`);
+      return res.data;
+    } catch (error) {
+      if (error.response?.status === 404) {
+        throw new Error("Usuario no encontrado.");
+      }
+      throw new Error("Error al buscar usuario por ID.");
+    }
   }
-}
 });
 
 

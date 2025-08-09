@@ -106,7 +106,6 @@ const routeGroups = [
     icon: <GroupIcon />,
     routes: [
       { to: "/preFormulario.jsx", label: "Familia", icon: <GroupIcon /> },
-      { to: "/familiaFormulario.jsx", label: "Integrante", icon: <GroupIcon /> },
       { to: "/BusquedaFamilia.jsx", label: "Buscar Familia", icon: <SearchIcon /> },
     ],
   },
