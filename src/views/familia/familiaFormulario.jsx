@@ -134,7 +134,7 @@ const FamiliaFormulario = () => {
           `Ya existe un jefe de familia en el integrante ${indiceJefe + 1}. `,
           "info"
         );
-       
+
         if (confirmar) {
           confirmarCambioJefe();
         }
@@ -160,12 +160,12 @@ const FamiliaFormulario = () => {
         esJefeFamilia: "Sí"
       }
     }));
-   
+
   };
 
- 
 
- 
+
+
 
   const construirPersonaPayload = (datosIntegrantes, idFamilia) => {
     const formData = new FormData();
@@ -250,13 +250,29 @@ const FamiliaFormulario = () => {
     setError(null);
     setSuccess(null);
 
-    // const errorJefe = validarJefeFamiliaGlobal();
-    // if (errorJefe) {
-    //   showCustomToast("Error", errorJefe, "error");
-    //   setError(errorJefe);
-    //   setLoading(false);
-    //   return;
-    // }
+    const regexIdentificacion = /^\d{9}$/;
+    const regexTelefono = /^\d{4}-\d{4}$/;
+
+    if (!regexIdentificacion.test(dp.numeroIdentificacion || "")) {
+      showCustomToast(
+        "Dato inválido",
+        "El número de identificación debe tener exactamente 9 dígitos.",
+        "error"
+      );
+      setLoading(false);
+      return;
+    }
+
+    if (!regexTelefono.test(dp.telefono || "")) {
+      showCustomToast(
+        "Dato inválido",
+        "El teléfono debe tener el formato 8888-8888.",
+        "error"
+      );
+      setLoading(false);
+      return;
+    }
+
 
     const nuevosIntegrantes = [...datosIntegrantes];
     nuevosIntegrantes[indice] = { ...datos };
@@ -351,7 +367,14 @@ const FamiliaFormulario = () => {
             label="Número de Identificación"
             name="numeroIdentificacion"
             value={dp.numeroIdentificacion || ""}
-            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            onChange={(e) => {
+              let val = e.target.value.replace(/\D/g, ""); // solo dígitos
+              if (val.length > 9) val = val.slice(0, 9); // máximo 9
+              handleChange(
+                { target: { name: e.target.name, value: val } },
+                "FamiliaDatosPersonales"
+              );
+            }}
             required
           />
           <InputField
@@ -409,7 +432,18 @@ const FamiliaFormulario = () => {
             label="Teléfono"
             name="telefono"
             value={dp.telefono || ""}
-            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            onChange={(e) => {
+              let val = e.target.value.replace(/\D/g, ""); // solo dígitos
+              if (val.length > 8) val = val.slice(0, 8); // máximo 8 dígitos
+              if (val.length > 4) {
+                val = val.slice(0, 4) + "-" + val.slice(4); // formato ####-####
+              }
+              handleChange(
+                { target: { name: e.target.name, value: val } },
+                "FamiliaDatosPersonales"
+              );
+            }}
+            placeholder="8888-8888"
             required
           />
           <InputField
@@ -524,7 +558,7 @@ const FamiliaFormulario = () => {
                 type="textarea"
               />
             </>
-            
+
           )}
 
           {/* Discapacidad */}
