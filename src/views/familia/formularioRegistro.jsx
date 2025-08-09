@@ -20,8 +20,8 @@ const FormularioRegistro = () => {
     cantonSeleccionado,
     setCantonSeleccionado,
     // NUEVO ESTADO para distrito
-    distritoSeleccionado,
-    setDistritoSeleccionado,
+    idDistritoSeleccionado,
+    setIdDistritoSeleccionado,
     eventoSeleccionado,
     setEventoSeleccionado,
     direccion,
@@ -135,15 +135,14 @@ const FormularioRegistro = () => {
             <div className="flex-1">
               <SelectField
                 label="Distrito"
-                value={distritoSeleccionado}
+                value={idDistritoSeleccionado}
                 onChange={(e) => {
                   const id = e.target.value;
-                  setDistritoSeleccionado(id);
+                  setIdDistritoSeleccionado(id);
                   const texto = e.target.options[e.target.selectedIndex].text;
                   setNombreDistrito(texto);
                 }}
                 options={[
-                  { nombre: "Seleccione distrito", id: "" }, 
                   ...distritos.map((d) => ({ nombre: d.descripcion, id: d.idDistrito })),
                 ]}
                 optionLabel="nombre"
