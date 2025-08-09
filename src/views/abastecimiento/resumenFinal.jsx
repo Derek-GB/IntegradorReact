@@ -17,12 +17,10 @@ import {
 const ResumenFinal = () => {
   const {
     items,
-    pedidos,
     datosFormulario,
     descargarResumen,
     eliminarItem,
     editarItem,
-    guardarDetallePedido,
   } = useResumenFinal();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -31,7 +29,7 @@ const ResumenFinal = () => {
 
   const handleOpenModal = (index) => {
     setEditIndex(index);
-    setEditCantidad(pedidos[index].cantidad);
+    setEditCantidad(items[index].cantidad);
     setModalOpen(true);
   };
 
@@ -42,7 +40,7 @@ const ResumenFinal = () => {
   };
 
   const handleGuardarEdicion = () => {
-    const nuevoItem = { ...pedidos[editIndex], cantidad: editCantidad };
+    const nuevoItem = { ...items[editIndex], cantidad: editCantidad };
     editarItem(editIndex, nuevoItem);
     handleCloseModal();
   };
@@ -79,7 +77,7 @@ const ResumenFinal = () => {
     },
   ];
 
-  // Columnas para productos del formulario actual
+  // Columnas para productos del formulario actual, ahora con acciones
   const productosColumns = [
     {
       name: "Categoría",
@@ -112,34 +110,6 @@ const ResumenFinal = () => {
       cell: (row) => (
         <span className="font-semibold text-gray-900">{row.cantidad}</span>
       ),
-    },
-  ];
-
-  // Columnas para pedidos de la API
-  const pedidosColumns = [
-    {
-      name: "Fecha",
-      selector: (row) => row.fecha,
-      sortable: true,
-      cell: (row) => <span className="font-medium">{row.fecha}</span>,
-    },
-    {
-      name: "Tipo de Comida",
-      selector: (row) => row.tipo,
-      sortable: true,
-      cell: (row) => <span className="font-medium">{row.tipo}</span>,
-    },
-    {
-      name: "Cantidad de Personas",
-      selector: (row) => row.cantidad,
-      sortable: true,
-      cell: (row) => <span className="font-medium">{row.cantidad}</span>,
-    },
-    {
-      name: "Albergue",
-      selector: (row) => row.albergue,
-      sortable: true,
-      cell: (row) => <span className="font-medium">{row.albergue}</span>,
     },
     {
       name: "Acciones",
@@ -194,7 +164,7 @@ const ResumenFinal = () => {
         </div>
       )}
 
-      {/* Productos del Formulario Actual */}
+      {/* Productos del Formulario Actual con acciones */}
       {items && items.length > 0 && (
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
           <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
@@ -218,36 +188,16 @@ const ResumenFinal = () => {
         </div>
       )}
 
-      {/* Pedidos Guardados (de la API) */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-          <h2 className="text-xl font-semibold text-gray-800">Pedidos Guardados</h2>
-        </div>
-        <div className="p-4">
-          <GlobalDataTable
-            columns={pedidosColumns}
-            data={pedidos}
-            pagination={true}
-            paginationPerPage={10}
-            noDataComponent={
-              <div className="px-6 py-4 text-center text-sm text-gray-500">
-                No hay pedidos guardados
-              </div>
-            }
-          />
-        </div>
-      </div>
-
-      {/* Botón de Descarga */}
+      {/* Botón de Descargar pedido */}
       <div className="flex justify-center pt-4">
         <button
           type="button"
           onClick={descargarResumen}
           className="bg-yellow-500 text-black px-8 py-2 rounded-md hover:bg-yellow-600 transition flex items-center gap-2"
-          title="Descargar resumen completo"
+          title="Descargar pedido"
         >
           <DownloadIcon sx={{ fontSize: 20, color: "black" }} />
-          Guardar Pedido Total
+          Descargar Pedido
         </button>
       </div>
 

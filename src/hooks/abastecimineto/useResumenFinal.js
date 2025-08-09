@@ -17,29 +17,22 @@ const useResumenFinal = () => {
   const cargarPedidos = async () => {
     try {
       const data = await pedidoConsumiblesAPI.getAll();
-      console.log("Datos recibidos de la API:", data);
 
       if (data && data.data && Array.isArray(data.data)) {
-        const mapeado = data.data.map(item => ({
-          id: item.id,
-          seccion: "Pedido",
-          tipo: item.tipoComida || "",
-          unidad: "personas",
-          cantidad: item.cantidadPersonas || 0,
-          fecha: item.fechaCreacion ? new Date(item.fechaCreacion).toLocaleDateString() : "-",
-          albergue: `Albergue #${item.idAlbergue}`,
-          idAlbergue: item.idAlbergue,
-          idUsuarioCreacion: item.idUsuarioCreacion,
-        }));
+        const pedidosValidos = data.data.filter(
+          item =>
+            item.tipoComida &&
+            item.tipoComida.trim() !== "" &&
+            item.cantidadPersonas > 0 &&
+            item.idAlbergue
+        );
 
-        setPedidos(mapeado);
-      } else if (Array.isArray(data)) {
-        const mapeado = data.map(item => ({
+        const mapeado = pedidosValidos.map(item => ({
           id: item.id,
           seccion: "Pedido",
-          tipo: item.tipoComida || "",
-          unidad: "personas", 
-          cantidad: item.cantidadPersonas || 0,
+          tipo: item.tipoComida,
+          unidad: "personas",
+          cantidad: item.cantidadPersonas,
           fecha: item.fechaCreacion ? new Date(item.fechaCreacion).toLocaleDateString() : "-",
           albergue: `Albergue #${item.idAlbergue}`,
           idAlbergue: item.idAlbergue,
@@ -115,17 +108,16 @@ const useResumenFinal = () => {
   };
 
   const descargarResumen = () => {
-    // Combinar datos del formulario actual con productos
     const todosLosDatos = [];
-    
+
     if (datosFormulario) {
       todosLosDatos.push({
         seccion: "Formulario Actual",
-        tipo: datosFormulario.tipo || "-",
+        tipo: datosFormulario.tipo && datosFormulario.tipo.trim() !== "" ? datosFormulario.tipo : "-",
         unidad: "personas",
-        cantidad: datosFormulario.cantidad || "-",
+        cantidad: datosFormulario.cantidad && datosFormulario.cantidad > 0 ? datosFormulario.cantidad : "-",
         fecha: datosFormulario.fecha || "-",
-        albergue: datosFormulario.albergue?.nombre || "-"
+        albergue: datosFormulario.albergue?.nombre || "-",
       });
     }
 
@@ -135,24 +127,38 @@ const useResumenFinal = () => {
           seccion: item.seccion || "Producto",
           tipo: item.tipo || "-",
           unidad: item.unidad || "-",
-          cantidad: item.cantidad || "-",
+          cantidad: item.cantidad && item.cantidad > 0 ? item.cantidad : "-",
           fecha: datosFormulario?.fecha || "-",
-          albergue: datosFormulario?.albergue?.nombre || "-"
+          albergue: datosFormulario?.albergue?.nombre || "-",
         });
       });
     }
 
     pedidos.forEach(pedido => {
-      todosLosDatos.push(pedido);
+      todosLosDatos.push({
+        seccion: pedido.seccion || "-",
+        tipo: pedido.tipo && pedido.tipo.trim() !== "" ? pedido.tipo : "-",
+        unidad: pedido.unidad || "-",
+        cantidad: pedido.cantidad && pedido.cantidad > 0 ? pedido.cantidad : "-",
+        fecha: pedido.fecha || "-",
+        albergue: pedido.albergue || "-",
+      });
     });
 
-    if (!todosLosDatos.length) {
-      showCustomToast("Warning", "No hay datos para descargar.", 'warning');
+    // Filtrar para eliminar filas con tipo o cantidad inválidos ("-")
+    const datosFiltrados = todosLosDatos.filter(item => {
+      const tipoValido = item.tipo && item.tipo !== "-";
+      const cantidadValida = item.cantidad && item.cantidad !== "-";
+      return tipoValido && cantidadValida;
+    });
+
+    if (!datosFiltrados.length) {
+      showCustomToast("Warning", "No hay datos válidos para descargar.", 'warning');
       return;
     }
 
     const encabezado = ["Sección", "Tipo", "Unidad", "Cantidad", "Fecha", "Albergue"].join(",");
-    const cuerpo = todosLosDatos
+    const cuerpo = datosFiltrados
       .map(i => `${i.seccion},${i.tipo},${i.unidad},${i.cantidad},${i.fecha},${i.albergue}`)
       .join("\n");
 
@@ -194,10 +200,10 @@ const useResumenFinal = () => {
         idAlbergue: datosFormulario.albergue?.id || datosFormulario.idAlbergue,
         idUsuarioCreacion: idUsuario,
       };
-      
+
       const pedidoRes = await pedidoConsumiblesAPI.create(pedidoPayload);
       const idPedido = pedidoRes.id || pedidoRes.data?.id;
-      
+
       if (!idPedido) throw new Error("No se pudo obtener el id del pedido creado");
 
       if (!items || items.length === 0) {
@@ -229,9 +235,9 @@ const useResumenFinal = () => {
   };
 
   return {
-    items, // Productos del formulario actual
-    pedidos, // Pedidos de la API
-    datosFormulario, // Datos del formulario actual
+    items,
+    pedidos,
+    datosFormulario,
     error,
     descargarResumen,
     eliminarItem,
