@@ -241,16 +241,17 @@ export const personasAPI = {
       handleError(error);
     }
   },
-   getResumenPorCondiciones: async (idCondicionesEspeciales) => {
-    if (!idCondicionesEspeciales) throw new Error("ID Condiciones Especiales es requerido");
-    try {
-      const url = `/personas/resumen/condiciones/${encodeURIComponent(idCondicionesEspeciales)}`;
-      const res = await customAxios.get(url);
-      return res.data;
-    } catch (error) {
-      handleError(error);
-    }
-  },
+getResumenPorCondiciones: async (idCondicion) => {
+  if (!idCondicion) throw new Error("ID Condicion es requerido");
+  try {
+    const url = `/personas/resumen/condicion/${encodeURIComponent(idCondicion)}`;
+    const res = await customAxios.get(url);
+    return res.data;
+  } catch (error) {
+    handleError(error);
+  }
+},
+
  getResumenPorAlbergue: async (idAlberguePersona) => {
     if (!idAlberguePersona || idAlberguePersona.toString().trim() === "") {
       throw new Error("El idAlberguePersona es requerido");

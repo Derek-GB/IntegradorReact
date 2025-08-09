@@ -33,7 +33,8 @@ import Shelves from "@mui/icons-material/shelves";
 import DatasetLinked from "@mui/icons-material/datasetLinked";
 import QuickReferenceAll from "@mui/icons-material/assignmentLate";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import MapIcon from "@mui/icons-material/Map";
+import MapIcon from "@mui/icons-material/addBusiness";
+
 
 
 
@@ -156,6 +157,8 @@ const routeGroups = [
       { to: "/ayudaForm.jsx", label: "Referencias", icon: <DatasetLinked /> },
       { to: "/reportes.jsx", label: "Reportes", icon: <QuickReferenceAll /> },
       { to: "/buscarReferencia.jsx", label: "Buscar Referencias", icon: <SearchIcon /> },
+      { to: "/registroMunicipalidad.jsx", label: "Registro Municipalidad", icon: <MapIcon /> },
+
     ],
   },
 ];

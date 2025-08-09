@@ -43,6 +43,7 @@ import BuscarMascotas from './views/busquedaMascotas.jsx';
 import ReportesAlbergue from './views/reportes.jsx';
 import BuscarReferencias from './views/buscarReferencia.jsx';
 import BuscarAjustesInventario from './views/buscarAjuste.jsx';
+import RegistroMunicipalidad from './views/registroMunicipalidad.jsx';
 
 //No categorizado
 import FormularioIntegrantes from "./components/formularioIntegrantes.jsx";
@@ -132,6 +133,8 @@ const App = () => {
                     <Route path="/busquedaMascotas.jsx" element={<BuscarMascotas />} />
                     <Route path="/buscarReferencia.jsx" element={<BuscarReferencias />} />
                     <Route path="/buscarAjuste.jsx" element={<BuscarAjustesInventario />} />
+                    <Route path="/registroMunicipalidad.jsx" element={<RegistroMunicipalidad />} />
+
                   </Routes>
                 </div>
               </div>
