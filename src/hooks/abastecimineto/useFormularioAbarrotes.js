@@ -4,7 +4,7 @@ import { showCustomToast } from "../../components/globalComponents/CustomToaster
 import { consumiblesAPI } from "../../helpers/api.js";
 
 export const useFormularioAbarrotes = () => {
-  const { agregarItem, eliminarItem, items, datosFormulario, resetFormulario } = useContext(contextoAbastecimiento);
+  const { agregarItem, eliminarItem, items, datosFormulario, limpiarItems } = useContext(contextoAbastecimiento);
   const [carnesProductos, setCarnesProductos] = useState([]);
   const [proteinaProductos, setProteinaProductos] = useState([]);
   const [verdurasProductos, setVerdurasProductos] = useState([]);
@@ -45,7 +45,7 @@ export const useFormularioAbarrotes = () => {
             .map((c) => ({
               nombre: c.nombreConsumible,
               gramosPorPersona: c.cantidadPorPersona ? parseFloat(c.cantidadPorPersona) : 120,
-              unidad: c.nombreUnidadMedida || "kg",
+              unidad: c.nombreUnidadMedida || "kilogramo",
             }))
         );
 
@@ -65,7 +65,7 @@ export const useFormularioAbarrotes = () => {
             .map((v) => ({
               nombre: v.nombreConsumible,
               gramosPorPersona: v.cantidadPorPersona ? parseFloat(v.cantidadPorPersona) : 120,
-              unidad: v.nombreUnidadMedida || "kg",
+              unidad: v.nombreUnidadMedida || "kilogramo",
             }))
         );
 
@@ -291,5 +291,6 @@ export const useFormularioAbarrotes = () => {
     handleToggleProducto,
     eliminarItem,
     calcularCantidad,
-  };
+    resetFormulario: limpiarItems,
+  };
 };
