@@ -2,12 +2,12 @@ import React from 'react';// asegúrate de que esta ruta sea correcta desde App.
 
 import { Routes, Route, useLocation } from 'react-router-dom';
 import CustomDrawer from './CustomDrawer.jsx';
+import CustomToaster from './components/globalComponents/CustomToaster.jsx'; // Asegúrate de que la ruta es correcta
 
 //Familia
 import FormularioRegistro from './views/familia/formularioRegistro.jsx';
 import FamiliaFormulario from './views/familia/familiaFormulario.jsx';
-import BusquedaFamilia from './views/familia/busquedaFamilia.jsx';
-
+import BusquedaFamilia from './views/familia/BusquedaFamilia.jsx';
 //Producto
 import AsignacionRecursos from './views/producto/asignacionRecursos.jsx';
 import ListaProducto from './views/producto/listaProducto.jsx';
@@ -19,6 +19,7 @@ import BuscarSuministros from './views/producto/buscarSuministros.jsx';
 import Login from './views/usuario/login.jsx';
 import RecuperarContrasena from './views/usuario/recuperarContrasena.jsx';
 import RegistroUsuario from './views/usuario/registroUsuario.jsx';
+import ListaUsuarios from './views/usuario/listaUsuarios.jsx';
 
 //Albergue
 
@@ -43,6 +44,7 @@ import BuscarMascotas from './views/busquedaMascotas.jsx';
 import ReportesAlbergue from './views/reportes.jsx';
 import BuscarReferencias from './views/buscarReferencia.jsx';
 import BuscarAjustesInventario from './views/buscarAjuste.jsx';
+import RegistroMunicipalidad from './views/registroMunicipalidad.jsx';
 
 //No categorizado
 import FormularioIntegrantes from "./components/formularioIntegrantes.jsx";
@@ -69,6 +71,7 @@ const App = () => {
 
   return (
     <>
+      <CustomToaster />
       {isLogin ? (
         <Routes>
           <Route path="/" element={<Login />} />
@@ -114,6 +117,7 @@ const App = () => {
                     <Route path="/registrarConsumibles.jsx" element={<RegistrarConsumible />} />
                     <Route path="/registroAlbergue.jsx" element={<RegistroAlbergue />} />
                     <Route path="/registroUsuario.jsx" element={<RegistroUsuario />} />
+                    <Route path="/listaUsuarios.jsx" element={<ListaUsuarios />} />
                     <Route path="/listaProducto.jsx" element={<ListaProducto />} />
                     <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
                     <Route path="/abarrotesMenuPrincipal" element={<MenuPrincipal />} />
@@ -132,6 +136,7 @@ const App = () => {
                     <Route path="/busquedaMascotas.jsx" element={<BuscarMascotas />} />
                     <Route path="/buscarReferencia.jsx" element={<BuscarReferencias />} />
                     <Route path="/buscarAjuste.jsx" element={<BuscarAjustesInventario />} />
+                    <Route path="/registroMunicipalidad.jsx" element={<RegistroMunicipalidad />} />
                     <Route path="/listaAbastecimientos.jsx" element={<ListaAbastecimientos />} />
                   </Routes>
                 </div>

@@ -4,7 +4,7 @@ import { showCustomToast } from "../../components/globalComponents/CustomToaster
 import { consumiblesAPI } from "../../helpers/api.js";
 
 export const useFormularioAbarrotes = () => {
-  const { agregarItem, eliminarItem, items, datosFormulario, resetFormulario } = useContext(contextoAbastecimiento);
+  const { agregarItem, eliminarItem, items, datosFormulario, limpiarItems } = useContext(contextoAbastecimiento);
   const [carnesProductos, setCarnesProductos] = useState([]);
   const [proteinaProductos, setProteinaProductos] = useState([]);
   const [verdurasProductos, setVerdurasProductos] = useState([]);
@@ -39,24 +39,33 @@ export const useFormularioAbarrotes = () => {
       try {
         const data = await consumiblesAPI.getAll();
         const consumibles = data.data || data || [];
+
         setCarnesProductos(
           consumibles
             .filter((item) => item.nombreCategoria === "Carnes")
             .map((c) => ({
               nombre: c.nombreConsumible,
               gramosPorPersona: c.cantidadPorPersona ? parseFloat(c.cantidadPorPersona) : 120,
-              unidad: c.nombreUnidadMedida || "kg",
+              unidad: c.nombreUnidadMedida || "kilogramo",
             }))
         );
 
         setProteinaProductos(
           consumibles
             .filter((item) => item.nombreCategoria === "Proteina")
-            .map((p) => ({
-              nombre: p.nombreConsumible,
-              gramosPorPersona: p.cantidadPorPersona ? parseFloat(p.cantidadPorPersona) : 100,
-              unidad: p.nombreUnidadMedida || "Unidad",
-            }))
+            .map((p) => {
+              const esHuevos = p.nombreConsumible.toLowerCase().includes("huevo");
+              return {
+                nombre: p.nombreConsumible,
+                gramosPorPersona: esHuevos
+                  ? 1 
+                  : p.cantidadPorPersona
+                  ? parseFloat(p.cantidadPorPersona)
+                  : 100,
+                unidad: esHuevos ? "Unidad" : (p.nombreUnidadMedida || "Unidad"),
+                esUnidad: esHuevos, 
+              };
+            })
         );
 
         setVerdurasProductos(
@@ -65,7 +74,7 @@ export const useFormularioAbarrotes = () => {
             .map((v) => ({
               nombre: v.nombreConsumible,
               gramosPorPersona: v.cantidadPorPersona ? parseFloat(v.cantidadPorPersona) : 120,
-              unidad: v.nombreUnidadMedida || "kg",
+              unidad: v.nombreUnidadMedida || "kilogramo",
             }))
         );
 
@@ -184,8 +193,11 @@ export const useFormularioAbarrotes = () => {
     const producto = proteinaProductos.find((p) => p.nombre === tipoProteina);
     if (!producto) return;
 
-    const cantidadKg = (producto.gramosPorPersona * personas) / 1000;
-    if (agregarProducto("Proteina", producto, cantidadKg)) {
+    const cantidad = producto.esUnidad
+      ? producto.gramosPorPersona * personas 
+      : (producto.gramosPorPersona * personas) / 1000;
+
+    if (agregarProducto("Proteina", producto, cantidad)) {
       setTipoProteina("");
     }
   };
@@ -238,6 +250,7 @@ export const useFormularioAbarrotes = () => {
   const calcularCantidad = (producto) => {
     if (!personas || personas <= 0) return 0;
     if (producto.factor !== undefined) return (producto.factor * personas).toFixed(2);
+    if (producto.esUnidad) return producto.gramosPorPersona * personas; 
     if (producto.gramosPorPersona !== undefined) return ((producto.gramosPorPersona * personas) / 1000).toFixed(2);
     if (producto.mililitrosPorPersona !== undefined) return ((producto.mililitrosPorPersona * personas) / 1000).toFixed(2);
     if (producto.paquetesPorPersona !== undefined) return producto.paquetesPorPersona * personas;
@@ -291,5 +304,7 @@ export const useFormularioAbarrotes = () => {
     handleToggleProducto,
     eliminarItem,
     calcularCantidad,
+    resetFormulario: limpiarItems,
   };
 };
+
