@@ -5,7 +5,7 @@ import InputField from "../../components/FormComponents/InputField.jsx";
 import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
 import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
 import GlobalDataTable from "../../components/globalComponents/GlobalDataTable.jsx";
-import Modal from "../../components/globalComponents/GlobalModal.jsx"; // Asumiendo que tienes un modal genérico
+import Modal from "../../components/globalComponents/GlobalModal.jsx";
 import SelectField from "../../components/FormComponents/SelectField.jsx";
 
 const roles = [
@@ -27,7 +27,7 @@ const ListaUsuarios = ({ rolUsuarioActual }) => {
     setBusqueda,
     buscarUsuario,
     eliminarUsuario,
-    abrirModalEdicion,
+    abrirModalEdicion: abrirModalOriginal,
     modalAbierto,
     cerrarModal,
     usuarioEditando,
@@ -37,6 +37,7 @@ const ListaUsuarios = ({ rolUsuarioActual }) => {
 
   const [formEdit, setFormEdit] = React.useState({});
 
+  // Cuando cambia usuarioEditando, actualiza el formulario
   React.useEffect(() => {
     if (usuarioEditando) {
       setFormEdit({ ...usuarioEditando });
@@ -46,6 +47,19 @@ const ListaUsuarios = ({ rolUsuarioActual }) => {
   const handleChangeEdit = (e) => {
     const { name, value } = e.target;
     setFormEdit((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Aquí mapeamos explícitamente el usuario para que tenga los nombres de campos que usa el formulario
+  const abrirModalEdicion = (usuario) => {
+    abrirModalOriginal({
+      nombreUsuario: usuario.nombreUsuario || "",  // Ajusta según la estructura real
+      correo: usuario.correo || "",
+      identificacion: usuario.identificacion || "",
+      rol: usuario.rol || "",
+      activo: usuario.activo === true || usuario.activo === "true", // asegura booleano
+      id: usuario.id,
+      idMunicipalidad: usuario.idMunicipalidad || "",
+    });
   };
 
   const columns = [
