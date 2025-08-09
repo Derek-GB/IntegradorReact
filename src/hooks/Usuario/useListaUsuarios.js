@@ -2,13 +2,12 @@ import { useState, useEffect } from "react";
 import { usuariosAPI } from "../../helpers/api.js";
 import { showCustomToast } from "../../components/globalComponents/CustomToaster.jsx";
 
-export const useListaUsuarios = (rolUsuarioActual) => {
+export const useListaUsuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(false);
   const [busqueda, setBusqueda] = useState("");
   const [usuarioEditando, setUsuarioEditando] = useState(null);
   const [modalAbierto, setModalAbierto] = useState(false);
-  
 
   useEffect(() => {
     fetchUsuarios();
@@ -47,15 +46,15 @@ export const useListaUsuarios = (rolUsuarioActual) => {
   };
 
   const eliminarUsuario = async (id) => {
-    if (rolUsuarioActual !== "admin") return; 
-    try {
-      await usuariosAPI.delete(id);
-      showCustomToast("Éxito", "Usuario eliminado correctamente.", "success");
-      fetchUsuarios();
-    } catch {
-      showCustomToast("Error", "Error al eliminar usuario.", "error");
-    }
-  };
+  console.log("Eliminar usuario con ID:", id);
+  try {
+    await usuariosAPI.delete(id);
+    showCustomToast("Éxito", "Cambio de estado correctamente.", "success");
+    await fetchUsuarios();
+  } catch (error) {
+    showCustomToast("Error", "Error al cambiar de estado.", "error");
+  }
+};
 
   const abrirModalEdicion = (usuario) => {
     setUsuarioEditando(usuario);
@@ -68,7 +67,6 @@ export const useListaUsuarios = (rolUsuarioActual) => {
   };
 
   const guardarCambios = async (usuarioActualizado) => {
-    if (rolUsuarioActual !== "admin") return;
     try {
       await usuariosAPI.update(usuarioActualizado);
       showCustomToast("Éxito", "Usuario actualizado correctamente.", "success");
@@ -77,7 +75,6 @@ export const useListaUsuarios = (rolUsuarioActual) => {
     } catch {
       showCustomToast("Error", "Error al actualizar usuario.", "error");
     }
-    
   };
 
   return {
@@ -92,6 +89,5 @@ export const useListaUsuarios = (rolUsuarioActual) => {
     cerrarModal,
     usuarioEditando,
     guardarCambios,
-    rolUsuarioActual,
   };
 };

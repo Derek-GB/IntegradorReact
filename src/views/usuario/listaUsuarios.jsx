@@ -6,23 +6,7 @@ import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
 import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
 import GlobalDataTable from "../../components/globalComponents/GlobalDataTable.jsx";
 
-const roles = [
-  { nombre: "Administrador", value: "admin" },
-  { nombre: "Editor", value: "editor" },
-  { nombre: "Visualizador", value: "viewer" },
-];
-
-const estados = [
-  { nombre: "Activo", value: true },
-  { nombre: "Inactivo", value: false },
-];
-
 const ListaUsuarios = () => {
-
-  const idUsuario = localStorage.getItem("idUsuario");
-
-  const [rolUsuarioActual, setRolUsuarioActual] = React.useState(null);
-
   const {
     usuarios,
     loading,
@@ -30,25 +14,7 @@ const ListaUsuarios = () => {
     setBusqueda,
     buscarUsuario,
     eliminarUsuario,
-  } = useListaUsuarios(rolUsuarioActual);
-
-  React.useEffect(() => {
-    const fetchRolUsuario = async () => {
-      if (!idUsuario) return; 
-
-      try {
-        const response = await fetch(`/api/usuarios/${idUsuario}`);
-        if (!response.ok) throw new Error("Error al obtener usuario");
-        const data = await response.json();
-        setRolUsuarioActual(data.rol);
-      } catch (error) {
-        setRolUsuarioActual(null);
-        console.error(error);
-      }
-    };
-
-    fetchRolUsuario();
-  }, [idUsuario]);
+  } = useListaUsuarios();
 
   const columns = [
     { name: "ID", selector: (row) => row.id },
@@ -58,32 +24,12 @@ const ListaUsuarios = () => {
     { name: "Estado", selector: (row) => (row.activo ? "Activo" : "Inactivo") },
     { name: "Identificación", selector: (row) => row.identificacion },
     { name: "Municipalidad", selector: (row) => row.idMunicipalidad },
-  ];
-
-  if (rolUsuarioActual === "admin") {
-    columns.push({
-      name: "Acciones",
-      cell: (row) => (
-        <div className="flex gap-2">
-          <button
-            className="text-blue-500 hover:underline"
-            onClick={() => abrirModalEdicion(row)}
-          >
-            Editar
-          </button>
-          <button
-            className="text-red-500 hover:underline"
-            onClick={() => eliminarUsuario(row.id)}
-          >
-            Eliminar
-          </button>
-        </div>
-      ),
+    {
       ignoreRowClick: true,
       allowOverflow: true,
       button: true,
-    });
-  }
+    },
+  ];
 
   return (
     <>
@@ -120,22 +66,16 @@ const ListaUsuarios = () => {
           />
         </div>
 
-        {usuarios.length === 1 && rolUsuarioActual === "admin" && (
+        {usuarios.length === 1 && (
           <div className="mt-4 flex justify-end">
             <button
               className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
               onClick={() => {
-                if (
-                  window.confirm(
-                    `¿Seguro que desea eliminar al usuario ${usuarios[0].nombreUsuario}?`
-                  )
-                ) {
-                  eliminarUsuario(usuarios[0].id);
-                  setBusqueda("");
-                }
+                eliminarUsuario(usuarios[0].id);
+                setBusqueda("");
               }}
             >
-              Eliminar usuario buscado
+              Cambiar estado a Inactivo
             </button>
           </div>
         )}
