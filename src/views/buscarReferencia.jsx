@@ -1,6 +1,7 @@
-
+// BuscarReferencias.jsx
+import React from "react";
 import FormContainer from "../components/FormComponents/FormContainer.jsx";
-import InputField from "../components/FormComponents/InputField.jsx";
+import SearchAutocompleteInput from "../components/FormComponents/SearchAutocompleteInput.jsx";
 import SubmitButton from "../components/FormComponents/SubmitButton.jsx";
 import CustomToaster from "../components/globalComponents/CustomToaster.jsx";
 import GlobalDataTable from "../components/globalComponents/GlobalDataTable.jsx";
@@ -8,18 +9,22 @@ import { useBusquedaReferencia } from "../hooks/useBusquedaReferencia.js";
 
 const BuscarReferencias = () => {
   const {
+    familias,
     codigoFamilia,
     setCodigoFamilia,
+    showSugerencias,
+    setShowSugerencias,
+    handleFamiliaSelect,
     resultados,
     loading,
     handleSubmit,
   } = useBusquedaReferencia();
 
   const columns = [
-    { name: "Tipo de Ayuda", selector: row => row.tipoAyuda },
-    { name: "Descripción", selector: row => row.descripcion },
-    { name: "Fecha de Entrega", selector: row => row.fechaEntrega },
-    { name: "Responsable", selector: row => row.responsable },
+    { name: "Tipo de Ayuda", selector: (row) => row.tipoAyuda },
+    { name: "Descripción", selector: (row) => row.descripcion },
+    { name: "Fecha de Entrega", selector: (row) => row.fechaEntrega },
+    { name: "Responsable", selector: (row) => row.responsable },
   ];
 
   return (
@@ -27,12 +32,17 @@ const BuscarReferencias = () => {
       <FormContainer title="Búsqueda de Referencia" onSubmit={handleSubmit} size="md">
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1">
-            <InputField
+            <SearchAutocompleteInput
               label="Código Familia"
-              name="codigoFamilia"
-              value={codigoFamilia}
-              onChange={(e) => setCodigoFamilia(e.target.value)}
-              placeholder="Ingrese el código de familia"
+              busqueda={codigoFamilia}
+              setBusqueda={setCodigoFamilia}
+              showSugerencias={showSugerencias}
+              setShowSugerencias={setShowSugerencias}
+              resultados={familias}
+              onSelect={handleFamiliaSelect}
+              optionLabelKeys={["codigoFamilia"]}
+              placeholder="Seleccione un código de familia"
+              disabled={loading || !(familias?.length > 0)}
             />
           </div>
 
@@ -50,6 +60,7 @@ const BuscarReferencias = () => {
               data={resultados}
               loading={loading}
               rowsPerPage={5}
+              pagination
             />
           </div>
         )}
