@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { pedidoConsumiblesAPI } from "../../helpers/api.js";
 import { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
 import { useNavigate } from "react-router-dom";
+import { contextoAbastecimiento } from '../../context/contextoAbastecimiento.jsx';
 
 const useResumenFinal = () => {
-  const [items, setItems] = useState([]);
+  const [pedidos, setPedidos] = useState([]);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { items, datosFormulario } = useContext(contextoAbastecimiento);
 
   useEffect(() => {
     cargarPedidos();
@@ -15,27 +17,43 @@ const useResumenFinal = () => {
   const cargarPedidos = async () => {
     try {
       const data = await pedidoConsumiblesAPI.getAll();
+      console.log("Datos recibidos de la API:", data);
 
-      if (Array.isArray(data)) {
-        const mapeado = data.map(item => ({
+      if (data && data.data && Array.isArray(data.data)) {
+        const mapeado = data.data.map(item => ({
           id: item.id,
           seccion: "Pedido",
           tipo: item.tipoComida || "",
           unidad: "personas",
           cantidad: item.cantidadPersonas || 0,
-          fecha: item.fechaCreacion || "-",
+          fecha: item.fechaCreacion ? new Date(item.fechaCreacion).toLocaleDateString() : "-",
           albergue: `Albergue #${item.idAlbergue}`,
           idAlbergue: item.idAlbergue,
           idUsuarioCreacion: item.idUsuarioCreacion,
         }));
 
-        setItems(mapeado);
+        setPedidos(mapeado);
+      } else if (Array.isArray(data)) {
+        const mapeado = data.map(item => ({
+          id: item.id,
+          seccion: "Pedido",
+          tipo: item.tipoComida || "",
+          unidad: "personas", 
+          cantidad: item.cantidadPersonas || 0,
+          fecha: item.fechaCreacion ? new Date(item.fechaCreacion).toLocaleDateString() : "-",
+          albergue: `Albergue #${item.idAlbergue}`,
+          idAlbergue: item.idAlbergue,
+          idUsuarioCreacion: item.idUsuarioCreacion,
+        }));
+
+        setPedidos(mapeado);
       } else {
-        setItems([]);
+        setPedidos([]);
       }
     } catch (err) {
+      console.error("Error cargando pedidos:", err);
       setError(err.message);
-      showCustomToast(`Error al cargar pedidos: ${err.message}`, "error");
+      showCustomToast("Error", `Error al cargar pedidos: ${err.message}`, "error");
     }
   };
 
@@ -57,12 +75,12 @@ const useResumenFinal = () => {
 
   const editarItem = async (index, nuevoItem) => {
     try {
-      const id = items[index]?.id;
+      const id = pedidos[index]?.id;
       if (!id) throw new Error("ID inválido para editar");
 
       const errorValidacion = validarPedido(nuevoItem);
       if (errorValidacion) {
-        showCustomToast(errorValidacion, "error");
+        showCustomToast("Error", errorValidacion, "error");
         return;
       }
 
@@ -74,105 +92,92 @@ const useResumenFinal = () => {
       };
 
       await pedidoConsumiblesAPI.update(id, payload);
-      showCustomToast("Pedido actualizado exitosamente", "success");
+      showCustomToast("Éxito", "Pedido actualizado exitosamente", "success");
       await cargarPedidos();
     } catch (err) {
       setError(err.message);
-      showCustomToast(`Error al actualizar pedido: ${err.message}`, "error");
+      showCustomToast("Error", `Error al actualizar pedido: ${err.message}`, "error");
     }
   };
 
   const eliminarItem = async (index) => {
     try {
-      const id = items[index]?.id;
+      const id = pedidos[index]?.id;
       if (!id) throw new Error("ID inválido para eliminar");
 
       await pedidoConsumiblesAPI.remove(id);
-      showCustomToast("Pedido eliminado exitosamente", "success");
+      showCustomToast("Éxito", "Pedido eliminado exitosamente", "success");
       await cargarPedidos();
     } catch (err) {
       setError(err.message);
-      showCustomToast(`Error al eliminar pedido: ${err.message}`, "error");
+      showCustomToast("Error", `Error al eliminar pedido: ${err.message}`, "error");
     }
   };
-
-  // Puedes mantener esta función, pero NO la usarás en el componente
-  const guardarPedidosDesdeFormulario = async () => {
-    if (!items.length) {
-      showCustomToast("No hay pedidos para guardar.", "error");
-      return;
-    }
-
-    try {
-      for (const pedido of items) {
-        const errorValidacion = validarPedido(pedido);
-        if (errorValidacion) {
-          showCustomToast(`Error en pedido: ${errorValidacion}`, "error");
-          return;
-        }
-
-        const payload = {
-          tipoComida: pedido.tipo.trim(),
-          cantidadPersonas: Number(pedido.cantidad),
-          idAlbergue: Number(pedido.idAlbergue),
-          idUsuarioCreacion: Number(pedido.idUsuarioCreacion),
-        };
-
-        if (pedido.id) {
-          await pedidoConsumiblesAPI.update(pedido.id, payload);
-        } else {
-          await pedidoConsumiblesAPI.create(payload);
-        }
-      }
-
-      showCustomToast("Pedidos guardados correctamente", "success");
-      await cargarPedidos();
-    } catch (err) {
-      setError(err.message);
-      showCustomToast(`Error al guardar pedidos: ${err.message}`, "error");
-    }
-  };
-
-  const agrupados = Array.isArray(items)
-    ? items.reduce((acc, item) => {
-        if (!acc[item.seccion]) acc[item.seccion] = [];
-        acc[item.seccion].push(item);
-        return acc;
-      }, {})
-    : {};
 
   const descargarResumen = () => {
-    if (!items.length) {
-      showCustomToast("No hay datos para descargar.", 'error');
+    // Combinar datos del formulario actual con productos
+    const todosLosDatos = [];
+    
+    // Agregar datos del formulario actual si existen
+    if (datosFormulario) {
+      todosLosDatos.push({
+        seccion: "Formulario Actual",
+        tipo: datosFormulario.tipo || "-",
+        unidad: "personas",
+        cantidad: datosFormulario.cantidad || "-",
+        fecha: datosFormulario.fecha || "-",
+        albergue: datosFormulario.albergue?.nombre || "-"
+      });
+    }
+
+    // Agregar productos del formulario actual
+    if (items && items.length > 0) {
+      items.forEach(item => {
+        todosLosDatos.push({
+          seccion: item.seccion || "Producto",
+          tipo: item.tipo || "-",
+          unidad: item.unidad || "-",
+          cantidad: item.cantidad || "-",
+          fecha: datosFormulario?.fecha || "-",
+          albergue: datosFormulario?.albergue?.nombre || "-"
+        });
+      });
+    }
+
+    // Agregar pedidos de la API
+    pedidos.forEach(pedido => {
+      todosLosDatos.push(pedido);
+    });
+
+    if (!todosLosDatos.length) {
+      showCustomToast("Warning", "No hay datos para descargar.", 'warning');
       return;
     }
 
-    const encabezado = `"Sección","Tipo","Unidad","Cantidad"`;
-    const cuerpo = items
-      .map(i => `"${i.seccion}","${i.tipo}","${i.unidad}","${i.cantidad}"`)
+    const encabezado = `"Sección","Tipo","Unidad","Cantidad","Fecha","Albergue"`;
+    const cuerpo = todosLosDatos
+      .map(i => `"${i.seccion}","${i.tipo}","${i.unidad}","${i.cantidad}","${i.fecha}","${i.albergue}"`)
       .join("\n");
     const textoConBOM = '\uFEFF' + `${encabezado}\n${cuerpo}`;
     const blob = new Blob([textoConBOM], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "resumen_abastecimiento.csv";
+    a.download = "resumen_abastecimiento_completo.csv";
     a.click();
     URL.revokeObjectURL(url);
 
-    showCustomToast("Descarga completada exitosamente.", "success");
+    showCustomToast("Éxito", "Descarga completada exitosamente.", "success");
   };
 
   return {
-    items,
-    agrupados,
+    items, // Productos del formulario actual
+    pedidos, // Pedidos de la API
+    datosFormulario, // Datos del formulario actual
     error,
     descargarResumen,
     eliminarItem,
     editarItem,
-    // NO exportamos guardarPedidosDesdeFormulario para evitar confusión,
-    // pero si quieres mantenerla exportada, está aquí:
-    guardarPedidosDesdeFormulario,
     navigate,
   };
 };
