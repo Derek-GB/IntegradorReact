@@ -22,6 +22,7 @@ const ResumenFinal = () => {
     descargarResumen,
     eliminarItem,
     editarItem,
+    guardarDetallePedido,
   } = useResumenFinal();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -246,7 +247,7 @@ const ResumenFinal = () => {
           title="Descargar resumen completo"
         >
           <DownloadIcon sx={{ fontSize: 20, color: "black" }} />
-          Descargar Resumen Completo
+          Guardar Pedido Total
         </button>
       </div>
 
