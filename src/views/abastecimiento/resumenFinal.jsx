@@ -13,6 +13,9 @@ import {
   Button,
   TextField,
 } from "@mui/material";
+import { createApiMethods } from "../../helpers/api.js";
+
+export const pedidoConsumiblesAPI = createApiMethods("pedidoConsumibles");
 
 const ResumenFinal = () => {
   const {
@@ -23,6 +26,7 @@ const ResumenFinal = () => {
     eliminarItem,
     editarItem,
     guardarDetallePedido,
+    guardarPedidoYDetalle,
   } = useResumenFinal();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -242,7 +246,7 @@ const ResumenFinal = () => {
       <div className="flex justify-center pt-4">
         <button
           type="button"
-          onClick={descargarResumen}
+          onClick={guardarPedidoYDetalle}
           className="bg-yellow-500 text-black px-8 py-2 rounded-md hover:bg-yellow-600 transition flex items-center gap-2"
           title="Descargar resumen completo"
         >

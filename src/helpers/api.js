@@ -448,3 +448,5 @@ export const detallePedidoConsumibleAPI = {
       body: JSON.stringify(body),
     }).then((r) => r.json()),
 };
+
+export { createApiMethods };
