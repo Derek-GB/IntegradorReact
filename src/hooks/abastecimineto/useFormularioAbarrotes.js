@@ -59,7 +59,7 @@ export const useFormularioAbarrotes = () => {
               if (p.nombreConsumible.toLowerCase().includes("huevo")) {
                 return {
                   nombre: p.nombreConsumible,
-                  unidadesPorPersona: p.unidadesPorPersona ? parseFloat(p.unidadesPorPersona) : 1, // huevo = 1 por persona
+                  unidadesPorPersona: p.unidadesPorPersona ? parseFloat(p.unidadesPorPersona) : 1, 
                   unidad: p.nombreUnidadMedida || "Unidad",
                 };
               } else if (p.nombreConsumible.toLowerCase().includes("mortadela")) {
