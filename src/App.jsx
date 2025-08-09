@@ -31,7 +31,7 @@ import RegistroAlbergue from './views/albergue/registroAlbergue.jsx';
 import MenuPrincipal from './views/abastecimiento/abarrotesMenuPrincipal';
 import ResumenFinal from './views/abastecimiento/resumenFinal';
 import FormularioAbastecimiento from './views/abastecimiento/formularioAbarrotes';
-
+import ListaAbastecimientos from './views/suministros/listaAbastecimientos.jsx';
 
 //Solos
 import AjusteInventario from "./views/ajusteInventario.jsx";
@@ -132,6 +132,7 @@ const App = () => {
                     <Route path="/busquedaMascotas.jsx" element={<BuscarMascotas />} />
                     <Route path="/buscarReferencia.jsx" element={<BuscarReferencias />} />
                     <Route path="/buscarAjuste.jsx" element={<BuscarAjustesInventario />} />
+                    <Route path="/listaAbastecimientos.jsx" element={<ListaAbastecimientos />} />
                   </Routes>
                 </div>
               </div>
