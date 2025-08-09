@@ -131,12 +131,10 @@ const FamiliaFormulario = () => {
       if (jefeExistente) {
         showCustomToast(
           "Jefe de familia existente",
-          `Ya existe un jefe de familia en el integrante ${indiceJefe + 1}. ¿Desea cambiar el jefe de familia al integrante actual?`,
+          `Ya existe un jefe de familia en el integrante ${indiceJefe + 1}. `,
           "info"
         );
-        const confirmar = window.confirm(
-          `Ya existe un jefe de familia en el integrante ${indiceJefe + 1}. ¿Desea cambiar el jefe de familia al integrante actual?`
-        );
+       
         if (confirmar) {
           confirmarCambioJefe();
         }
@@ -162,35 +160,12 @@ const FamiliaFormulario = () => {
         esJefeFamilia: "Sí"
       }
     }));
-    showCustomToast(
-      "Jefe de familia cambiado",
-      "El jefe de familia ha sido cambiado exitosamente",
-      "success"
-    );
+   
   };
 
  
 
-  const validarJefeFamiliaGlobal = () => {
-    const todosLosIntegrantes = [...datosIntegrantes];
-    todosLosIntegrantes[indice] = datos;
-    let contadorJefes = 0;
-    for (let i = 0; i < todosLosIntegrantes.length; i++) {
-      const integranteDatos = todosLosIntegrantes[i];
-      const esJefe = integranteDatos?.FamiliaDatosPersonales?.esJefeFamilia === "Sí" ||
-        integranteDatos?.FamiliaDatosPersonales?.esJefeFamilia === true;
-      if (esJefe) {
-        contadorJefes++;
-      }
-    }
-    if (contadorJefes === 0) {
-      return "Debe designar un jefe de familia.";
-    }
-    if (contadorJefes > 1) {
-      return "Solo puede haber un jefe de familia por familia.";
-    }
-    return null;
-  };
+ 
 
   const construirPersonaPayload = (datosIntegrantes, idFamilia) => {
     const formData = new FormData();
@@ -259,8 +234,6 @@ const FamiliaFormulario = () => {
         formData.append("firma", pngBlob, firmaFileName);
       }
     });
-
-    
 
     return formData;
   };
