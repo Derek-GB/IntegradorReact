@@ -250,13 +250,7 @@ const FamiliaFormulario = () => {
     setError(null);
     setSuccess(null);
 
-    // const errorJefe = validarJefeFamiliaGlobal();
-    // if (errorJefe) {
-    //   showCustomToast("Error", errorJefe, "error");
-    //   setError(errorJefe);
-    //   setLoading(false);
-    //   return;
-    // }
+    
 
     const nuevosIntegrantes = [...datosIntegrantes];
     nuevosIntegrantes[indice] = { ...datos };
