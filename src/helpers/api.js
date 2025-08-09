@@ -144,7 +144,7 @@ export const familiasAPI = createApiMethods("familias", {
 });
 
 export const alberguesAPI = {
-  ...createApiMethods("albergues"),
+  ...createApiMethods("albergues",),
   getById: async (id) => {
     try {
       const res = await customAxios.get(`/albergues/consulta/id/${encodeURIComponent(id)}`);
