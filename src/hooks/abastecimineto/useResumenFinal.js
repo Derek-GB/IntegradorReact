@@ -135,6 +135,7 @@ const useResumenFinal = () => {
       items.forEach(item => {
         todosLosDatos.push({
           seccion: item.seccion || "Producto",
+           idConsumible: Number(producto.id),
           tipo: item.tipo || "-",
           unidad: item.unidad || "-",
           cantidad: item.cantidad || "-",
@@ -188,6 +189,17 @@ const useResumenFinal = () => {
 
   const guardarPedidoYDetalle = async () => {
     try {
+      console.log(" Array items completo:", items);
+    console.log(" Cantidad de items:", items?.length);
+    if (items && items.length > 0) {
+      console.log(" Primer item estructura:", items[0]);
+      console.log(" Keys del primer item:", Object.keys(items[0]));
+      console.log(" Todos los items:", items.map((item, index) => ({
+        index,
+        keys: Object.keys(item),
+        item: item
+      })));
+    }
       const idUsuario = Number(localStorage.getItem("idUsuario")) || 42;
 
       const pedidoPayload = {
@@ -208,18 +220,38 @@ const useResumenFinal = () => {
       }
 
       for (let i = 0; i < items.length; i++) {
-        const item = items[i];
-        const detallePayload = {
-          idPedido,
-          idConsumible: item.idConsumible,
-          cantidad: item.cantidad,
-        };
-        try {
-          await detallePedidoConsumiblesAPI.create(detallePayload);
-        } catch (detalleError) {
-          throw new Error(`Error guardando producto ${i + 1}: ${detalleError.message}`);
-        }
-      }
+  const item = items[i];
+  const detallePayload = {
+    idPedido,
+    idConsumible: item.idConsumible,
+    cantidad: item.cantidad,
+  };
+  
+  //  DEBUG - Ver exactamente qué se envía
+  console.log(` Payload completo item ${i + 1}:`, detallePayload);
+  console.log(` Tipos de datos:`, {
+    idPedido: typeof idPedido,
+    idConsumible: typeof item.idConsumible,
+    cantidad: typeof item.cantidad
+  });
+  console.log(` Valores:`, {
+    idPedido: idPedido,
+    idConsumible: item.idConsumible,
+    cantidad: item.cantidad
+  });
+  
+  try {
+    const detalleRes = await detallePedidoConsumiblesAPI.create(detallePayload);
+    console.log(`Item ${i + 1} guardado:`, detalleRes);
+  } catch (detalleError) {
+    console.error(`Error en item ${i + 1}:`, detalleError);
+    // Si quieres loguear la respuesta del error, asegúrate de que exista:
+    if (detalleError.response && detalleError.response.data) {
+      console.error("Response del error:", detalleError.response.data);
+    }
+    throw new Error(`Error guardando producto ${i + 1}: ${detalleError.message}`);
+  }
+}
 
       showCustomToast("Éxito", "Pedido y detalle guardados correctamente", "success");
       descargarResumen();
