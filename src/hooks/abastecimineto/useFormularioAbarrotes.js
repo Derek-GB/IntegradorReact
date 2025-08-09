@@ -39,6 +39,8 @@ export const useFormularioAbarrotes = () => {
       try {
         const data = await consumiblesAPI.getAll();
         const consumibles = data.data || data || [];
+
+        // Carnes
         setCarnesProductos(
           consumibles
             .filter((item) => item.nombreCategoria === "Carnes")
@@ -49,16 +51,39 @@ export const useFormularioAbarrotes = () => {
             }))
         );
 
+        // Proteínas
         setProteinaProductos(
           consumibles
             .filter((item) => item.nombreCategoria === "Proteina")
-            .map((p) => ({
-              nombre: p.nombreConsumible,
-              gramosPorPersona: p.cantidadPorPersona ? parseFloat(p.cantidadPorPersona) : 100,
-              unidad: p.nombreUnidadMedida || "Unidad",
-            }))
+            .map((p) => {
+              if (p.nombreConsumible.toLowerCase().includes("huevo")) {
+                return {
+                  nombre: p.nombreConsumible,
+                  unidadesPorPersona: p.unidadesPorPersona ? parseFloat(p.unidadesPorPersona) : 1, // huevo = 1 por persona
+                  unidad: p.nombreUnidadMedida || "Unidad",
+                };
+              } else if (p.nombreConsumible.toLowerCase().includes("mortadela")) {
+                return {
+                  nombre: p.nombreConsumible,
+                  gramosPorPersona: p.cantidadPorPersona ? parseFloat(p.cantidadPorPersona) : 25,
+                  unidad: p.nombreUnidadMedida || "kg",
+                };
+              } else if (p.nombreConsumible.toLowerCase().includes("salchichón")) {
+                return {
+                  nombre: p.nombreConsumible,
+                  gramosPorPersona: p.cantidadPorPersona ? parseFloat(p.cantidadPorPersona) : 125,
+                  unidad: p.nombreUnidadMedida || "kg",
+                };
+              }
+              return {
+                nombre: p.nombreConsumible,
+                gramosPorPersona: p.cantidadPorPersona ? parseFloat(p.cantidadPorPersona) : 100,
+                unidad: p.nombreUnidadMedida || "Unidad",
+              };
+            })
         );
 
+        // Verduras
         setVerdurasProductos(
           consumibles
             .filter((item) => item.nombreCategoria === "Verduras")
@@ -69,43 +94,93 @@ export const useFormularioAbarrotes = () => {
             }))
         );
 
+        // Olores y otros
         setOloresProductos(
           consumibles
             .filter((item) => item.nombreCategoria === "Olores y otros")
-            .map((o) => ({
-              nombre: o.nombreConsumible,
-              factor: o.factor ? parseFloat(o.factor) : 0.01,
-              unidad: o.nombreUnidadMedida || "Unidad",
-            }))
+            .map((o) => {
+              let valor = 0;
+              switch (o.nombreConsumible.toLowerCase()) {
+                case "plátano": valor = 333; break;
+                case "chile dulce": valor = 100; break;
+                case "tomate": valor = 200; break;
+                case "pepino": valor = 125; break;
+                case "repollo": valor = 60; break;
+                case "ajo": valor = 100; break;
+                case "culantro rollo": valor = 10; break;
+                case "apio": valor = 5; break;
+                case "salsa lizano": valor = 20; break;
+                case "vinagre": valor = 20; break;
+                case "orégano": valor = 10; break;
+                case "pimienta": valor = 2; break;
+                case "comino": valor = 2; break;
+                case "salsa de tomate": valor = 20; break;
+                case "mayonesa": valor = 20; break;
+                case "sal": valor = 166.7; break;
+                case "mantequilla": valor = 10; break;
+                case "achiote": valor = 100; break;
+                case "consomé": valor = 10; break;
+              }
+              return {
+                nombre: o.nombreConsumible,
+                gramosPorPersona: o.cantidadPorPersona ? parseFloat(o.cantidadPorPersona) : valor,
+                unidad: o.nombreUnidadMedida || "Unidad",
+              };
+            })
         );
 
+        // Abarrotes
         setAbarrotesProductos(
           consumibles
             .filter((item) => item.nombreCategoria === "Abarrotes")
-            .map((a) => ({
-              nombre: a.nombreConsumible,
-              gramosPorPersona: a.cantidadPorPersona ? parseFloat(a.cantidadPorPersona) : 100,
-              mililitrosPorPersona: a.mililitrosPorPersona ? parseFloat(a.mililitrosPorPersona) : undefined,
-              paquetesPorPersona: a.paquetesPorPersona ? parseFloat(a.paquetesPorPersona) : undefined,
-              rebanadasPorPersona: a.rebanadasPorPersona ? parseFloat(a.rebanadasPorPersona) : undefined,
-              unidadesPorPersona: a.unidadesPorPersona ? parseFloat(a.unidadesPorPersona) : undefined,
-              unidad: a.nombreUnidadMedida || "Unidad",
-            }))
+            .map((a) => {
+              let valor = 0;
+              switch (a.nombreConsumible.toLowerCase()) {
+                case "arroz grano entero": valor = 266; break;
+                case "frijoles": valor = 106; break;
+                case "azúcar": valor = 53; break;
+                case "aceite de soya": valor = 33; break;
+                case "café": valor = 21.3; break;
+                case "té en bolsas": valor = 0.21; break;
+                case "atún en trozos": valor = 21.3; break;
+                case "avena en polvo": valor = 26.6; break;
+                case "refresco": valor = 1000; break;
+                case "leche en polvo": valor = 52; break;
+                case "agua dulce en polvo": valor = 53; break;
+                case "pan cuadrado": valor = 2; break;
+                case "tortillas": valor = 2; break;
+                case "pasta de tomate": valor = 33.3; break;
+              }
+              return {
+                nombre: a.nombreConsumible,
+                gramosPorPersona: a.cantidadPorPersona ? parseFloat(a.cantidadPorPersona) : valor,
+                unidad: a.nombreUnidadMedida || "Unidad",
+              };
+            })
         );
 
+        // Productos de Limpieza
         setLimpiezaProductos(
           consumibles
             .filter((item) => item.nombreCategoria?.toLowerCase().includes("limpieza"))
-            .map((l) => ({
-              nombre: l.nombreConsumible,
-              gramosPorPersona: l.cantidadPorPersona ? parseFloat(l.cantidadPorPersona) : 100,
-              mililitrosPorPersona: l.mililitrosPorPersona ? parseFloat(l.mililitrosPorPersona) : undefined,
-              paquetesPorPersona: l.paquetesPorPersona ? parseFloat(l.paquetesPorPersona) : undefined,
-              rebanadasPorPersona: l.rebanadasPorPersona ? parseFloat(l.rebanadasPorPersona) : undefined,
-              unidadesPorPersona: l.unidadesPorPersona ? parseFloat(l.unidadesPorPersona) : undefined,
-              unidad: l.nombreUnidadMedida || "Unidad",
-            }))
+            .map((l) => {
+              let valor = 0;
+              switch (l.nombreConsumible.toLowerCase()) {
+                case "papel higiénico rollo": valor = 0.5; break;
+                case "pasta dental": valor = 0.5; break;
+                case "jabón de baño": valor = 0.33; break;
+                case "cloro": valor = 0.01; break;
+                case "jabón lavaplatos": valor = 0.02; break;
+                case "bolsas plásticas": valor = 2; break;
+              }
+              return {
+                nombre: l.nombreConsumible,
+                unidadesPorPersona: l.unidadesPorPersona ? parseFloat(l.unidadesPorPersona) : valor,
+                unidad: l.nombreUnidadMedida || "Unidad",
+              };
+            })
         );
+
       } catch (error) {
         console.error("Error cargando productos:", error);
         showCustomToast("Error", "No se pudieron cargar los productos desde el servidor.");
@@ -184,8 +259,14 @@ export const useFormularioAbarrotes = () => {
     const producto = proteinaProductos.find((p) => p.nombre === tipoProteina);
     if (!producto) return;
 
-    const cantidadKg = (producto.gramosPorPersona * personas) / 1000;
-    if (agregarProducto("Proteina", producto, cantidadKg)) {
+    let cantidad;
+    if (producto.unidadesPorPersona !== undefined) {
+      cantidad = producto.unidadesPorPersona * personas;
+    } else {
+      cantidad = (producto.gramosPorPersona * personas) / 1000;
+    }
+
+    if (agregarProducto("Proteina", producto, cantidad)) {
       setTipoProteina("");
     }
   };
@@ -292,5 +373,5 @@ export const useFormularioAbarrotes = () => {
     eliminarItem,
     calcularCantidad,
     resetFormulario: limpiarItems,
-  };
+  };
 };
