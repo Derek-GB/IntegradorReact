@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { pedidoConsumiblesAPI } from "../../helpers/api.js";
+import { pedidoConsumiblesAPI, detallePedidoConsumibleAPI } from "../../helpers/api.js";
 import { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
 import { useNavigate } from "react-router-dom";
 import { contextoAbastecimiento } from '../../context/contextoAbastecimiento.jsx';
@@ -170,6 +170,23 @@ const useResumenFinal = () => {
     showCustomToast("Éxito", "Descarga completada exitosamente.", "success");
   };
 
+  const guardarDetallePedido = async (idPedido, items) => {
+    try {
+      // items: [{idConsumible, cantidad}]
+      for (const item of items) {
+        await detallePedidoConsumibleAPI.create({
+          idPedido,
+          idConsumible: item.idConsumible,
+          cantidad: item.cantidad,
+        });
+      }
+      showCustomToast("Éxito", "Detalle del pedido guardado correctamente", "success");
+    } catch (err) {
+      setError(err.message);
+      showCustomToast("Error", `Error al guardar detalle: ${err.message}`, "error");
+    }
+  };
+
   return {
     items, // Productos del formulario actual
     pedidos, // Pedidos de la API
@@ -179,6 +196,7 @@ const useResumenFinal = () => {
     eliminarItem,
     editarItem,
     navigate,
+    guardarDetallePedido,
   };
 };
 
