@@ -148,6 +148,11 @@ const useFormularioRegistro = () => {
     try {
       const res = await customAxios.post("/familias", datos);
       const idFamilia = res.data.idFamilia;
+      console.log("Respuesta backend crear familia:", res.data);
+      if (!idFamilia) {
+        showCustomToast("Error", "El backend no devolvió el id de la familia. No se podrá registrar integrantes.", "error");
+        return;
+      }
       localStorage.setItem("idFamilia", idFamilia);
       localStorage.setItem("codigoFamilia", codigoFamilia);
       showCustomToast("Éxito", "Familia registrada correctamente.", "success");
