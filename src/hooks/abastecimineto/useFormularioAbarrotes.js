@@ -45,7 +45,7 @@ export const useFormularioAbarrotes = () => {
             .map((c) => ({
               nombre: c.nombreConsumible,
               gramosPorPersona: c.cantidadPorPersona ? parseFloat(c.cantidadPorPersona) : 120,
-              unidad: c.nombreUnidadMedida || "kg",
+              unidad: c.nombreUnidadMedida || "kilogramo",
             }))
         );
 
@@ -65,7 +65,7 @@ export const useFormularioAbarrotes = () => {
             .map((v) => ({
               nombre: v.nombreConsumible,
               gramosPorPersona: v.cantidadPorPersona ? parseFloat(v.cantidadPorPersona) : 120,
-              unidad: v.nombreUnidadMedida || "kg",
+              unidad: v.nombreUnidadMedida || "kilogramo",
             }))
         );
 
