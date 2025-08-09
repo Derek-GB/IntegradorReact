@@ -192,6 +192,52 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
     }
   };
 
+const handleEgresarFamilia = async (familiaItem) => {
+  try {
+    const idUsuarioCreacion = localStorage.getItem("idUsuario");
+    
+    if (!familiaItem?.codigoFamilia) {
+      showCustomToast("Error", "No se encontró el código de la familia.", "error");
+      return;
+    }
+
+    if (!idUsuarioCreacion) {
+      showCustomToast("Error", "No se encontró el usuario en sesión.", "error");
+      return;
+    }
+
+   
+    if (isNaN(Number(idUsuarioCreacion))) {
+      showCustomToast("Error", "ID de usuario inválido.", "error");
+      return;
+    }
+
+    const payload = {
+      id: familiaItem.codigoFamilia, 
+      idModificacion: idUsuarioCreacion 
+    };
+
+    console.log("Payload enviado:", payload);
+
+    await familiasAPI.egresar(payload);
+
+    showCustomToast("Éxito", "La familia ha sido egresada correctamente.", "success");
+
+   
+    if (albergueSeleccionado) {
+      await handleSeleccionarAlbergue(albergueSeleccionado);
+    }
+    if (familiaItem.cedulaJefe) {
+      const res = await familiasAPI.getById(familiaItem.cedulaJefe);
+      setFamiliaSeleccionada(res.data);
+    }
+
+  } catch (error) {
+    console.error("Error al egresar familia:", error);
+    showCustomToast("Error", error.message || "No se pudo egresar la familia", "error");
+  }
+};
+
   const irAAlbergues = () => {
     setVistaActual("albergues");
     setFamiliasPorAlbergue([]);
@@ -229,6 +275,7 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
     handleSubmit,
     handleSeleccionarAlbergue,
     handleSeleccionarFamilia,
+    handleEgresarFamilia,
     irAAlbergues,
     volverABusqueda,
     volverAFamilias,

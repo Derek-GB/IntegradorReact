@@ -111,17 +111,20 @@ export const familiasAPI = createApiMethods("familias", {
     }
   },
 
-  egresar: async (id, idModificacion) => {
-    try {
-      const res = await customAxios.put(`/familias/egreso`, {
-        id,
-        idModificacion
-      });
-      return res.data;
-    } catch (error) {
-      handleError(error);
-    }
-  },
+ egresar: async (payload) => {
+  try {
+    
+    const data = {
+      id: payload.id,
+      idModificacion: Number(payload.idModificacion)
+    };
+    
+    const res = await customAxios.put(`/familias/egreso`, data);
+    return res.data;
+  } catch (error) {
+    handleError(error);
+  }
+},
   // Nuevo método para obtener el autonumérico por cantón
   getNextNumero: async (canton) => {
     try {
