@@ -17,10 +17,10 @@ const useResumenFinal = () => {
   const cargarPedidos = async () => {
     try {
       const data = await pedidoConsumiblesAPI.getAll();
-      console.log("Datos recibidos de la API:", data);
+      console.log("📦 Datos recibidos de la API:", data);
 
-      if (data && data.data && Array.isArray(data.data)) {
-        const mapeado = data.data.map(item => ({
+      const procesar = (arr) =>
+        arr.map(item => ({
           id: item.id,
           seccion: "Pedido",
           tipo: item.tipoComida || "",
@@ -32,36 +32,25 @@ const useResumenFinal = () => {
           idUsuarioCreacion: item.idUsuarioCreacion,
         }));
 
-        setPedidos(mapeado);
+      if (data?.data && Array.isArray(data.data)) {
+        setPedidos(procesar(data.data));
       } else if (Array.isArray(data)) {
-        const mapeado = data.map(item => ({
-          id: item.id,
-          seccion: "Pedido",
-          tipo: item.tipoComida || "",
-          unidad: "personas", 
-          cantidad: item.cantidadPersonas || 0,
-          fecha: item.fechaCreacion ? new Date(item.fechaCreacion).toLocaleDateString() : "-",
-          albergue: `Albergue #${item.idAlbergue}`,
-          idAlbergue: item.idAlbergue,
-          idUsuarioCreacion: item.idUsuarioCreacion,
-        }));
-
-        setPedidos(mapeado);
+        setPedidos(procesar(data));
       } else {
         setPedidos([]);
       }
     } catch (err) {
-      console.error("Error cargando pedidos:", err);
+      console.error("❌ Error cargando pedidos:", err);
       setError(err.message);
       showCustomToast("Error", `Error al cargar pedidos: ${err.message}`, "error");
     }
   };
 
   const validarPedido = (pedido) => {
-    if (!pedido.tipo || typeof pedido.tipo !== 'string' || pedido.tipo.trim() === "") {
-      return "El campo 'tipoComida' es obligatorio y debe ser un texto válido.";
+    if (!pedido.tipoComida || typeof pedido.tipoComida !== 'string' || pedido.tipoComida.trim() === "") {
+      return "El campo 'tipoComida' es obligatorio y debe ser texto.";
     }
-    if (!pedido.cantidad || isNaN(pedido.cantidad) || Number(pedido.cantidad) <= 0) {
+    if (!pedido.cantidadPersonas || isNaN(pedido.cantidadPersonas) || Number(pedido.cantidadPersonas) <= 0) {
       return "El campo 'cantidadPersonas' es obligatorio y debe ser mayor que cero.";
     }
     if (!pedido.idAlbergue || isNaN(pedido.idAlbergue) || Number(pedido.idAlbergue) <= 0) {
@@ -78,18 +67,20 @@ const useResumenFinal = () => {
       const id = pedidos[index]?.id;
       if (!id) throw new Error("ID inválido para editar");
 
-      const errorValidacion = validarPedido(nuevoItem);
-      if (errorValidacion) {
-        showCustomToast("Error", errorValidacion, "error");
-        return;
-      }
-
       const payload = {
-        tipoComida: nuevoItem.tipo.trim(),
+        tipoComida: nuevoItem.tipo?.trim(),
         cantidadPersonas: Number(nuevoItem.cantidad),
         idAlbergue: Number(nuevoItem.idAlbergue),
         idUsuarioCreacion: Number(nuevoItem.idUsuarioCreacion),
       };
+
+      console.log("✏️ Editando pedido ID:", id, "con payload:", payload);
+
+      const errorValidacion = validarPedido(payload);
+      if (errorValidacion) {
+        showCustomToast("Error", errorValidacion, "error");
+        return;
+      }
 
       await pedidoConsumiblesAPI.update(id, payload);
       showCustomToast("Éxito", "Pedido actualizado exitosamente", "success");
@@ -105,6 +96,7 @@ const useResumenFinal = () => {
       const id = pedidos[index]?.id;
       if (!id) throw new Error("ID inválido para eliminar");
 
+      console.log("🗑 Eliminando pedido ID:", id);
       await pedidoConsumiblesAPI.remove(id);
       showCustomToast("Éxito", "Pedido eliminado exitosamente", "success");
       await cargarPedidos();
@@ -115,10 +107,8 @@ const useResumenFinal = () => {
   };
 
   const descargarResumen = () => {
-    // Combinar datos del formulario actual con productos
     const todosLosDatos = [];
-    
-    // Agregar datos del formulario actual si existen
+
     if (datosFormulario) {
       todosLosDatos.push({
         seccion: "Formulario Actual",
@@ -130,8 +120,7 @@ const useResumenFinal = () => {
       });
     }
 
-    // Agregar productos del formulario actual
-    if (items && items.length > 0) {
+    if (items?.length) {
       items.forEach(item => {
         todosLosDatos.push({
           seccion: item.seccion || "Producto",
@@ -144,10 +133,7 @@ const useResumenFinal = () => {
       });
     }
 
-    // Agregar pedidos de la API
-    pedidos.forEach(pedido => {
-      todosLosDatos.push(pedido);
-    });
+    pedidos.forEach(pedido => todosLosDatos.push(pedido));
 
     if (!todosLosDatos.length) {
       showCustomToast("Warning", "No hay datos para descargar.", 'warning');
@@ -172,12 +158,25 @@ const useResumenFinal = () => {
 
   const guardarDetallePedido = async (idPedido, items) => {
     try {
-      for (const item of items) {
-        await detallePedidoConsumiblesAPI.create({
-          idPedido,
-          idConsumible: item.idConsumible,
-          cantidad: item.cantidad,
-        });
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        console.log(`🔍 Detalle crudo ${i + 1}:`, item);
+
+        if (!item.idConsumible || isNaN(Number(item.idConsumible))) {
+          throw new Error(`El producto #${i + 1} no tiene un idConsumible válido`);
+        }
+        if (!item.cantidad || isNaN(Number(item.cantidad))) {
+          throw new Error(`El producto #${i + 1} no tiene una cantidad válida`);
+        }
+
+        const detallePayload = {
+          idPedido: Number(idPedido),
+          idConsumible: Number(item.idConsumible),
+          cantidad: Number(item.cantidad),
+        };
+        console.log(`📤 Enviando detalle ${i + 1}:`, detallePayload);
+
+        await detallePedidoConsumiblesAPI.create(detallePayload);
       }
       showCustomToast("Éxito", "Detalle del pedido guardado correctamente", "success");
     } catch (err) {
@@ -191,36 +190,32 @@ const useResumenFinal = () => {
       const idUsuario = Number(localStorage.getItem("idUsuario")) || 42;
 
       const pedidoPayload = {
-        tipoComida: datosFormulario.tipo,
-        cantidadPersonas: datosFormulario.cantidad,
-        idAlbergue: datosFormulario.albergue?.id || datosFormulario.idAlbergue,
+        tipoComida: datosFormulario.tipo?.trim(),
+        cantidadPersonas: Number(datosFormulario.cantidad),
+        idAlbergue: Number(datosFormulario.albergue?.id || datosFormulario.idAlbergue),
         idUsuarioCreacion: idUsuario,
       };
-      
+
+      console.log("📤 Payload pedido enviado:", pedidoPayload);
+
+      const errorValidacion = validarPedido(pedidoPayload);
+      if (errorValidacion) {
+        showCustomToast("Error", errorValidacion, "error");
+        return;
+      }
+
       const pedidoRes = await pedidoConsumiblesAPI.create(pedidoPayload);
       const idPedido = pedidoRes.id || pedidoRes.data?.id;
-      
+      console.log("✅ Pedido creado con ID:", idPedido);
+
       if (!idPedido) throw new Error("No se pudo obtener el id del pedido creado");
 
-      if (!items || items.length === 0) {
+      if (!items?.length) {
         showCustomToast("Warning", "No hay productos para guardar en el detalle", "warning");
         return;
       }
 
-      for (let i = 0; i < items.length; i++) {
-        const item = items[i];
-        const detallePayload = {
-          idPedido,
-          idConsumible: item.idConsumible,
-          cantidad: item.cantidad,
-        };
-        try {
-          await detallePedidoConsumiblesAPI.create(detallePayload);
-        } catch (detalleError) {
-          throw new Error(`Error guardando producto ${i + 1}: ${detalleError.message}`);
-        }
-      }
-
+      await guardarDetallePedido(idPedido, items);
       showCustomToast("Éxito", "Pedido y detalle guardados correctamente", "success");
       descargarResumen();
 
@@ -229,10 +224,11 @@ const useResumenFinal = () => {
       showCustomToast("Error", `Error al guardar pedido: ${err.message}`, "error");
     }
   };
+
   return {
-    items, // Productos del formulario actual
-    pedidos, // Pedidos de la API
-    datosFormulario, // Datos del formulario actual
+    items,
+    pedidos,
+    datosFormulario,
     error,
     descargarResumen,
     eliminarItem,
