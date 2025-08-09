@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Agrega esto arriba
 import FormContainer from "../../components/FormComponents/FormContainer.jsx";
 import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
 import FoldDownComponent from "../../components/otros/FoldDownComponent.jsx";
@@ -104,15 +105,6 @@ const FamiliaFormulario = () => {
   const idFamilia = Number(localStorage.getItem("idFamilia"));
   const idUsuario = Number(localStorage.getItem("idUsuario")) || 42; // fallback a 42 si no hay nada
 
-  const updateCampo = (campo, valor) => {
-    setDatos(prev => ({
-      ...prev,
-      FamiliaDatosPersonales: {
-        ...prev.FamiliaDatosPersonales,
-        [campo]: valor,
-      },
-    }));
-  };
 
   const verificarJefeFamilia = () => {
     let jefeExistente = false;
@@ -177,9 +169,7 @@ const FamiliaFormulario = () => {
     );
   };
 
-  const cancelarCambioJefe = () => {
-    setMostrarAlerta(false);
-  };
+ 
 
   const validarJefeFamiliaGlobal = () => {
     const todosLosIntegrantes = [...datosIntegrantes];
@@ -201,10 +191,6 @@ const FamiliaFormulario = () => {
     }
     return null;
   };
-
- 
-  
- 
 
   const construirPersonaPayload = (datosIntegrantes, idFamilia) => {
     const formData = new FormData();
@@ -281,6 +267,8 @@ const FamiliaFormulario = () => {
     return res;
   };
 
+  const navigate = useNavigate(); // Agrega esto dentro del componente
+
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
@@ -288,6 +276,7 @@ const FamiliaFormulario = () => {
 
     const errorJefe = validarJefeFamiliaGlobal();
     if (errorJefe) {
+      showCustomToast("Error", errorJefe, "error");
       setError(errorJefe);
       setLoading(false);
       return;
@@ -299,12 +288,15 @@ const FamiliaFormulario = () => {
     try {
       const formData = construirPersonaPayload(nuevosIntegrantes, idFamilia);
       const res = await crearPersonasConFirmas(formData);
-      console.log("Respuesta del backend:", res); // <-- Agrega este log
-      showCustomToast("¡Registro completado!", "Todos los integrantes y las firmas han sido guardados correctamente", "success");
-      setTimeout(() => {
-        showCustomToast("Proceso finalizado", "El registro de la familia ha sido completado", "info");
-      }, 2000);
 
+      if (res?.success) {
+        showCustomToast("¡Registro completado!", "Todos los integrantes y las firmas han sido guardados correctamente", "success");
+        setTimeout(() => {
+          navigate("/formularioRegistro"); // Cambia la ruta si es diferente
+        }, 2000);
+      } else {
+        showCustomToast("Error al guardar", res?.errores?.[0]?.error || "Error desconocido al guardar los datos", "error");
+      }
     } catch (err) {
       showCustomToast("Error al guardar", err.message || "Error desconocido al guardar los datos", "error");
     } finally {
