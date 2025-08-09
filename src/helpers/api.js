@@ -241,16 +241,17 @@ export const personasAPI = {
       handleError(error);
     }
   },
-   getResumenPorCondiciones: async (idCondicionesEspeciales) => {
-    if (!idCondicionesEspeciales) throw new Error("ID Condiciones Especiales es requerido");
-    try {
-      const url = `/personas/resumen/condiciones/${encodeURIComponent(idCondicionesEspeciales)}`;
-      const res = await customAxios.get(url);
-      return res.data;
-    } catch (error) {
-      handleError(error);
-    }
-  },
+getResumenPorCondiciones: async (idCondicion) => {
+  if (!idCondicion) throw new Error("ID Condicion es requerido");
+  try {
+    const url = `/personas/resumen/condicion/${encodeURIComponent(idCondicion)}`;
+    const res = await customAxios.get(url);
+    return res.data;
+  } catch (error) {
+    handleError(error);
+  }
+},
+
  getResumenPorAlbergue: async (idAlberguePersona) => {
     if (!idAlberguePersona || idAlberguePersona.toString().trim() === "") {
       throw new Error("El idAlberguePersona es requerido");
@@ -303,7 +304,16 @@ export const amenazasAPI = createApiMethods("amenazas");
 export const categoriaConsumiblesAPI = createApiMethods("categoriaConsumibles");
 export const consumiblesAPI = createApiMethods("consumibles");
 export const detallePedidoConsumiblesAPI = createApiMethods("detallePedidoConsumibles");
-export const pedidoConsumiblesAPI = createApiMethods("pedidoConsumibles");
+export const pedidoConsumiblesAPI = createApiMethods("pedidoConsumibles", {
+  getAllAbastecimientos: async () => {
+    try {
+      const res = await customAxios.get(`/pedidoConsumibles/all`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+});
 export const unidadMedidasAPI = createApiMethods("unidadMedidas");
 export const condicionesEspecialesAPI = createApiMethods("condicionesEspeciales");
 
@@ -335,7 +345,37 @@ export const usuariosAPI = createApiMethods("usuarios", {
       handleError(error);
     }
   },
+  getAll: async () => {
+  console.log("[usuariosAPI.getAll] Llamando a /usuarios/all");
+  try {
+    const res = await customAxios.get(`/usuarios/all`);
+    console.log("[usuariosAPI.getAll] Respuesta:", res.data);
+    return res.data;
+  } catch (error) {
+    console.error("[usuariosAPI.getAll] Error:", error);
+    handleError(error);
+  }
+},
+
+  // 🔍 Nuevo método para buscar usuario por ID
+ getById: async (id) => {
+  console.log(`[usuariosAPI.getById] Llamando a /usuarios/${id}`);
+  try {
+    const res = await customAxios.get(`/usuarios/${id}`);
+    console.log("[usuariosAPI.getById] Respuesta:", res.data);
+    return res.data;
+  } catch (error) {
+    console.error("[usuariosAPI.getById] Error:", error);
+    if (error.response?.status === 404) {
+      throw new Error("Usuario no encontrado.");
+    }
+    throw new Error("Error al buscar usuario por ID.");
+  }
+}
 });
+
+
+
 export const mascotasAPI = {
   ...createApiMethods("mascotas"),
   getByCodigoFamilia: async (codigoFamilia) => {

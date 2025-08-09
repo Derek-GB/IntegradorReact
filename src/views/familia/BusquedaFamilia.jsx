@@ -24,7 +24,7 @@ const BusquedaFamilia = () => {
     irAAlbergues,
     volverABusqueda,
     volverAFamilias,
-    egresarFamilia, // ✅ ahora sí lo incluimos
+    egresarFamilia,
   } = useBusquedaFamiliaExtendida();
 
   // Vista de búsqueda principal
@@ -68,10 +68,6 @@ const BusquedaFamilia = () => {
             { name: "#", selector: (row, i) => i + 1, width: "60px" },
             { name: "Nombre", selector: (row) => row.nombre || "" },
             { name: "Región", selector: (row) => row.region || "" },
-            { name: "Provincia", selector: (row) => row.provincia || "" },
-            { name: "Cantón", selector: (row) => row.canton || "" },
-            { name: "Distrito", selector: (row) => row.distrito || "" },
-            { name: "Capacidad", selector: (row) => row.capacidad || "" },
             { name: "Condición", selector: (row) => row.condicionAlbergue || "" },
             {
               name: "Acciones",
@@ -213,8 +209,11 @@ const BusquedaFamilia = () => {
                 { name: "Subtipo Discapacidad", selector: (row) => (row.discapacidad === 1 ? row.subtipoDiscapacidad || "" : "-") },
                 { name: "Tipo Condición Poblacional", selector: (row) => row.tipoCondicionPoblacional || "" },
                 { name: "Contacto de Emergencia", selector: (row) => row.contactoEmergencia || "" },
-                {name: "Egresado",selector: (row) => (row.egresado ? "Sí" : "No"), },
-                {name: "Fecha de Egreso",selector: (row) => row.fechaEgreso || "No disponible", },
+                { name: "Egresado", selector: (row) => (row.egresado ? "Sí" : "No") },
+                {
+                  name: "Fecha de Egreso",
+                  selector: (row) => (row.fechaEgreso ? row.fechaEgreso.split("T")[0] : "No disponible"),
+                },
               ]}
               data={familiaData}
               pagination

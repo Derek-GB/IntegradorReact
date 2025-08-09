@@ -8,6 +8,7 @@ import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
 import SelectField from "../../components/FormComponents/SelectField.jsx";
 import { useFormularioAbarrotes } from "../../hooks/abastecimineto/useFormularioAbarrotes.js";
 import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
+import { useEffect } from "react"; // <-- Agrega esto
 
 const FormularioAbastecimiento = () => {
   const {
@@ -16,6 +17,7 @@ const FormularioAbastecimiento = () => {
     tipoProteina,
     tipoVerdura,
     seccionAbierta,
+    
     personas,
     carnesProductos,
     proteinaProductos, 
@@ -33,7 +35,15 @@ const FormularioAbastecimiento = () => {
     handleAgregarVerdura,
     handleToggleProducto,
     eliminarItem,
+    // Agrega esto para poder usar resetFormulario:
+    resetFormulario,
   } = useFormularioAbarrotes();
+
+  // Agrega este useEffect para limpiar los productos al entrar o recargar
+  useEffect(() => {
+    resetFormulario();
+    // eslint-disable-next-line
+  }, []);
 
   const createColumns = (tipoColumna = "default") => [
     {
