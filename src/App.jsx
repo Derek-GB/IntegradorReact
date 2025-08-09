@@ -2,6 +2,7 @@ import React from 'react';// asegúrate de que esta ruta sea correcta desde App.
 
 import { Routes, Route, useLocation } from 'react-router-dom';
 import CustomDrawer from './CustomDrawer.jsx';
+import CustomToaster from './components/globalComponents/CustomToaster.jsx'; // Asegúrate de que la ruta es correcta
 
 //Familia
 import FormularioRegistro from './views/familia/formularioRegistro.jsx';
@@ -70,6 +71,7 @@ const App = () => {
 
   return (
     <>
+      <CustomToaster />
       {isLogin ? (
         <Routes>
           <Route path="/" element={<Login />} />
