@@ -441,12 +441,64 @@ export const ajusteInventarioAPI = {
 };
 
 export const detallePedidoConsumibleAPI = {
-  create: (body) =>
-    fetch("/api/detallePedidoConsumible", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }).then((r) => r.json()),
+  create: async (body) => {
+    console.log("Enviando request:", body);
+
+    // Obtener token del localStorage (ajusta el nombre según tu app)
+    const token = localStorage.getItem("authToken") || localStorage.getItem("token");
+    console.log("Token encontrado:", token ? "Sí" : "No");
+
+    if (!token) {
+      throw new Error("No hay token de autenticación disponible");
+    }
+
+    const headers = {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}` // ← Corregido el template string
+    };
+
+    console.log("Headers enviados:", headers);
+
+    try {
+      const response = await fetch("/api/detallePedidoConsumible", { // ← Corregida la URL
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(body),
+      });
+
+      console.log("Response status:", response.status);
+      console.log("Response ok:", response.ok);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error response:", errorText);
+
+        // Manejo específico para errores de auth
+        if (response.status === 401) {
+          throw new Error("No autorizado - Token inválido o expirado");
+        } else if (response.status === 402) {
+          throw new Error("Token expirado - Inicia sesión nuevamente");
+        }
+
+        throw new Error(`HTTP ${response.status}: ${errorText}`);
+      }
+
+      const responseText = await response.text();
+      console.log("Response text:", responseText);
+
+      if (!responseText) {
+        throw new Error("Respuesta vacía del servidor");
+      }
+
+      const data = JSON.parse(responseText);
+      console.log("Response parsed:", data);
+      return data;
+
+    } catch (fetchError) {
+      console.error("Fetch error:", fetchError);
+      throw fetchError;
+    }
+  },
 };
 
 export { createApiMethods };

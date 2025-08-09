@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { pedidoConsumiblesAPI, detallePedidoConsumibleAPI } from "../../helpers/api.js";
+import { pedidoConsumiblesAPI, detallePedidoConsumiblesAPI } from "../../helpers/api.js";
 import { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
 import { useNavigate } from "react-router-dom";
 import { contextoAbastecimiento } from '../../context/contextoAbastecimiento.jsx';
@@ -172,9 +172,8 @@ const useResumenFinal = () => {
 
   const guardarDetallePedido = async (idPedido, items) => {
     try {
-      // items: [{idConsumible, cantidad}]
       for (const item of items) {
-        await detallePedidoConsumibleAPI.create({
+        await detallePedidoConsumiblesAPI.create({
           idPedido,
           idConsumible: item.idConsumible,
           cantidad: item.cantidad,
@@ -189,34 +188,40 @@ const useResumenFinal = () => {
 
   const guardarPedidoYDetalle = async () => {
     try {
-      // OBTENER idUsuario del localStorage
       const idUsuario = Number(localStorage.getItem("idUsuario")) || 42;
 
-      // 1. Crear el pedido principal con el idUsuario
       const pedidoPayload = {
         tipoComida: datosFormulario.tipo,
         cantidadPersonas: datosFormulario.cantidad,
         idAlbergue: datosFormulario.albergue?.id || datosFormulario.idAlbergue,
-        idUsuarioCreacion: idUsuario, // <-- AQUÍ
+        idUsuarioCreacion: idUsuario,
       };
+      
       const pedidoRes = await pedidoConsumiblesAPI.create(pedidoPayload);
-      console.log("Respuesta al crear pedido:", pedidoRes);
-
       const idPedido = pedidoRes.id || pedidoRes.data?.id;
+      
       if (!idPedido) throw new Error("No se pudo obtener el id del pedido creado");
 
-      // 2. Guardar el detalle para cada producto
-      for (const item of items) {
-        await detallePedidoConsumibleAPI.create({
+      if (!items || items.length === 0) {
+        showCustomToast("Warning", "No hay productos para guardar en el detalle", "warning");
+        return;
+      }
+
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        const detallePayload = {
           idPedido,
           idConsumible: item.idConsumible,
           cantidad: item.cantidad,
-        });
+        };
+        try {
+          await detallePedidoConsumiblesAPI.create(detallePayload);
+        } catch (detalleError) {
+          throw new Error(`Error guardando producto ${i + 1}: ${detalleError.message}`);
+        }
       }
 
       showCustomToast("Éxito", "Pedido y detalle guardados correctamente", "success");
-
-      // 3. Descargar el resumen
       descargarResumen();
 
     } catch (err) {
@@ -224,7 +229,6 @@ const useResumenFinal = () => {
       showCustomToast("Error", `Error al guardar pedido: ${err.message}`, "error");
     }
   };
-
   return {
     items, // Productos del formulario actual
     pedidos, // Pedidos de la API
