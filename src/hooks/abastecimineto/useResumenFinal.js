@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react";
-import { pedidoConsumiblesAPI } from "../../helpers/api.js";
+import { useState, useEffect, useContext } from "react";
+import { pedidoConsumiblesAPI, detallePedidoConsumiblesAPI } from "../../helpers/api.js";
 import { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
 import { useNavigate } from "react-router-dom";
+import { contextoAbastecimiento } from '../../context/contextoAbastecimiento.jsx';
 
 const useResumenFinal = () => {
-  const [items, setItems] = useState([]);
+  const [pedidos, setPedidos] = useState([]);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { items, datosFormulario } = useContext(contextoAbastecimiento);
 
   useEffect(() => {
     cargarPedidos();
@@ -16,26 +18,35 @@ const useResumenFinal = () => {
     try {
       const data = await pedidoConsumiblesAPI.getAll();
 
-      if (Array.isArray(data)) {
-        const mapeado = data.map(item => ({
+      if (data && data.data && Array.isArray(data.data)) {
+        const pedidosValidos = data.data.filter(
+          item =>
+            item.tipoComida &&
+            item.tipoComida.trim() !== "" &&
+            item.cantidadPersonas > 0 &&
+            item.idAlbergue
+        );
+
+        const mapeado = pedidosValidos.map(item => ({
           id: item.id,
           seccion: "Pedido",
-          tipo: item.tipoComida || "",
+          tipo: item.tipoComida,
           unidad: "personas",
-          cantidad: item.cantidadPersonas || 0,
-          fecha: item.fechaCreacion || "-",
+          cantidad: item.cantidadPersonas,
+          fecha: item.fechaCreacion ? new Date(item.fechaCreacion).toLocaleDateString() : "-",
           albergue: `Albergue #${item.idAlbergue}`,
           idAlbergue: item.idAlbergue,
           idUsuarioCreacion: item.idUsuarioCreacion,
         }));
 
-        setItems(mapeado);
+        setPedidos(mapeado);
       } else {
-        setItems([]);
+        setPedidos([]);
       }
     } catch (err) {
+      console.error("Error cargando pedidos:", err);
       setError(err.message);
-      showCustomToast(`Error al cargar pedidos: ${err.message}`, "error");
+      showCustomToast("Error", `Error al cargar pedidos: ${err.message}`);
     }
   };
 
@@ -57,12 +68,12 @@ const useResumenFinal = () => {
 
   const editarItem = async (index, nuevoItem) => {
     try {
-      const id = items[index]?.id;
+      const id = pedidos[index]?.id;
       if (!id) throw new Error("ID inválido para editar");
 
       const errorValidacion = validarPedido(nuevoItem);
       if (errorValidacion) {
-        showCustomToast(errorValidacion, "error");
+        showCustomToast("Error", errorValidacion);
         return;
       }
 
@@ -74,106 +85,166 @@ const useResumenFinal = () => {
       };
 
       await pedidoConsumiblesAPI.update(id, payload);
-      showCustomToast("Pedido actualizado exitosamente", "success");
+      showCustomToast("Éxito", "Pedido actualizado exitosamente");
       await cargarPedidos();
     } catch (err) {
       setError(err.message);
-      showCustomToast(`Error al actualizar pedido: ${err.message}`, "error");
+      showCustomToast("Error", `Error al actualizar pedido: ${err.message}`);
     }
   };
 
   const eliminarItem = async (index) => {
     try {
-      const id = items[index]?.id;
+      const id = pedidos[index]?.id;
       if (!id) throw new Error("ID inválido para eliminar");
 
       await pedidoConsumiblesAPI.remove(id);
-      showCustomToast("Pedido eliminado exitosamente", "success");
+      showCustomToast("Éxito", "Pedido eliminado exitosamente");
       await cargarPedidos();
     } catch (err) {
       setError(err.message);
-      showCustomToast(`Error al eliminar pedido: ${err.message}`, "error");
+      showCustomToast("Error", `Error al eliminar pedido: ${err.message}`);
     }
   };
-
-  // Puedes mantener esta función, pero NO la usarás en el componente
-  const guardarPedidosDesdeFormulario = async () => {
-    if (!items.length) {
-      showCustomToast("No hay pedidos para guardar.", "error");
-      return;
-    }
-
-    try {
-      for (const pedido of items) {
-        const errorValidacion = validarPedido(pedido);
-        if (errorValidacion) {
-          showCustomToast(`Error en pedido: ${errorValidacion}`, "error");
-          return;
-        }
-
-        const payload = {
-          tipoComida: pedido.tipo.trim(),
-          cantidadPersonas: Number(pedido.cantidad),
-          idAlbergue: Number(pedido.idAlbergue),
-          idUsuarioCreacion: Number(pedido.idUsuarioCreacion),
-        };
-
-        if (pedido.id) {
-          await pedidoConsumiblesAPI.update(pedido.id, payload);
-        } else {
-          await pedidoConsumiblesAPI.create(payload);
-        }
-      }
-
-      showCustomToast("Pedidos guardados correctamente", "success");
-      await cargarPedidos();
-    } catch (err) {
-      setError(err.message);
-      showCustomToast(`Error al guardar pedidos: ${err.message}`, "error");
-    }
-  };
-
-  const agrupados = Array.isArray(items)
-    ? items.reduce((acc, item) => {
-        if (!acc[item.seccion]) acc[item.seccion] = [];
-        acc[item.seccion].push(item);
-        return acc;
-      }, {})
-    : {};
 
   const descargarResumen = () => {
-    if (!items.length) {
-      showCustomToast("No hay datos para descargar.", 'error');
+    const todosLosDatos = [];
+
+    if (datosFormulario) {
+      todosLosDatos.push({
+        seccion: "Formulario Actual",
+        tipo: datosFormulario.tipo && datosFormulario.tipo.trim() !== "" ? datosFormulario.tipo : "-",
+        unidad: "personas",
+        cantidad: datosFormulario.cantidad && datosFormulario.cantidad > 0 ? datosFormulario.cantidad : "-",
+        fecha: datosFormulario.fecha || "-",
+        albergue: datosFormulario.albergue?.nombre || "-",
+      });
+    }
+
+    if (items && items.length > 0) {
+      items.forEach(item => {
+        todosLosDatos.push({
+          seccion: item.seccion || "Producto",
+          tipo: item.tipo || "-",
+          unidad: item.unidad || "-",
+          cantidad: item.cantidad && item.cantidad > 0 ? item.cantidad : "-",
+          fecha: datosFormulario?.fecha || "-",
+          albergue: datosFormulario?.albergue?.nombre || "-",
+        });
+      });
+    }
+
+    pedidos.forEach(pedido => {
+      todosLosDatos.push({
+        seccion: pedido.seccion || "-",
+        tipo: pedido.tipo && pedido.tipo.trim() !== "" ? pedido.tipo : "-",
+        unidad: pedido.unidad || "-",
+        cantidad: pedido.cantidad && pedido.cantidad > 0 ? pedido.cantidad : "-",
+        fecha: pedido.fecha || "-",
+        albergue: pedido.albergue || "-",
+      });
+    });
+
+    // Filtrar para eliminar filas con tipo o cantidad inválidos ("-")
+    const datosFiltrados = todosLosDatos.filter(item => {
+      const tipoValido = item.tipo && item.tipo !== "-";
+      const cantidadValida = item.cantidad && item.cantidad !== "-";
+      return tipoValido && cantidadValida;
+    });
+
+    if (!datosFiltrados.length) {
+      showCustomToast("Warning", "No hay datos válidos para descargar.");
       return;
     }
 
-    const encabezado = `"Sección","Tipo","Unidad","Cantidad"`;
-    const cuerpo = items
-      .map(i => `"${i.seccion}","${i.tipo}","${i.unidad}","${i.cantidad}"`)
+    const encabezado = ["Sección", "Tipo", "Unidad", "Cantidad", "Fecha", "Albergue"].join(",");
+    const cuerpo = datosFiltrados
+      .map(i => `${i.seccion},${i.tipo},${i.unidad},${i.cantidad},${i.fecha},${i.albergue}`)
       .join("\n");
+
     const textoConBOM = '\uFEFF' + `${encabezado}\n${cuerpo}`;
     const blob = new Blob([textoConBOM], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "resumen_abastecimiento.csv";
+    a.download = "resumen_abastecimiento_completo.csv";
     a.click();
     URL.revokeObjectURL(url);
 
-    showCustomToast("Descarga completada exitosamente.", "success");
+    showCustomToast("Éxito", "Descarga completada exitosamente.");
+  };
+
+  const guardarDetallePedido = async (idPedido, items) => {
+    try {
+      for (const item of items) {
+        await detallePedidoConsumiblesAPI.create({
+          idPedido,
+          idConsumible: item.idConsumible,
+          cantidad: item.cantidad,
+        });
+      }
+      showCustomToast("Éxito", "Detalle del pedido guardado correctamente");
+    } catch (err) {
+      setError(err.message);
+      showCustomToast("Error", `Error al guardar detalle: ${err.message}`);
+    }
+  };
+
+  const guardarPedidoYDetalle = async () => {
+    try {
+      const idUsuario = Number(localStorage.getItem("idUsuario")) || 42;
+
+      const pedidoPayload = {
+        tipoComida: datosFormulario.tipo,
+        cantidadPersonas: datosFormulario.cantidad,
+        idAlbergue: datosFormulario.albergue?.id || datosFormulario.idAlbergue,
+        idUsuarioCreacion: idUsuario,
+      };
+
+      const pedidoRes = await pedidoConsumiblesAPI.create(pedidoPayload);
+      const idPedido = pedidoRes.id || pedidoRes.data?.id;
+
+      if (!idPedido) throw new Error("No se pudo obtener el id del pedido creado");
+
+      if (!items || items.length === 0) {
+        showCustomToast("Warning", "No hay productos para guardar en el detalle");
+        return;
+      }
+
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        const detallePayload = {
+          idPedido,
+          idConsumible: item.idConsumible,
+          cantidad: item.cantidad,
+        };
+        try {
+          await detallePedidoConsumiblesAPI.create(detallePayload);
+        } catch (detalleError) {
+          throw new Error(`Error guardando producto ${i + 1}: ${detalleError.message}`);
+        }
+      }
+
+      showCustomToast("Éxito", "Pedido y detalle guardados correctamente");
+      descargarResumen();
+
+    } catch (err) {
+      setError(err.message);
+      showCustomToast("Error", `Error al guardar pedido: ${err.message}`);
+    }
   };
 
   return {
     items,
-    agrupados,
+    pedidos,
+    datosFormulario,
     error,
     descargarResumen,
     eliminarItem,
     editarItem,
-    // NO exportamos guardarPedidosDesdeFormulario para evitar confusión,
-    // pero si quieres mantenerla exportada, está aquí:
-    guardarPedidosDesdeFormulario,
     navigate,
+    guardarDetallePedido,
+    guardarPedidoYDetalle,
   };
 };
 

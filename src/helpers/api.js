@@ -482,3 +482,12 @@ export const ajusteInventarioAPI = {
     }
   }
 };
+
+export const detallePedidoConsumibleAPI = {
+  create: (body) =>
+    fetch("/api/detallePedidoConsumible", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }).then((r) => r.json()),
+};
