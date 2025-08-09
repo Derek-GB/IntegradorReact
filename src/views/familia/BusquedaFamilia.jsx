@@ -24,7 +24,7 @@ const BusquedaFamilia = () => {
     irAAlbergues,
     volverABusqueda,
     volverAFamilias,
-    egresarFamilia,
+    handleEgresarFamilia,
   } = useBusquedaFamiliaExtendida();
 
   // Vista de búsqueda principal
@@ -183,9 +183,18 @@ const BusquedaFamilia = () => {
             <InputField label="N° Personas" value={familiaData.length} readOnly />
           </div>
 
-          {/* Botón para egresar familia */}
+          {/* Botón para egresar familia con el nuevo formato */}
           <div className="mt-4">
-            <SubmitButton type="button" onClick={() => egresarFamilia(familiaData[0].codigoFamilia)} >
+            <SubmitButton
+              type="button"
+              onClick={() => {
+                if (familiaData[0]?.codigoFamilia) {
+                  handleEgresarFamilia(familiaData[0]);
+                } else {
+                  alert("Código de familia no disponible para egreso");
+                }
+              }}
+            >
               Egresar Familia
             </SubmitButton>
           </div>

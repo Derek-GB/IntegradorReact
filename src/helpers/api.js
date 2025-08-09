@@ -111,17 +111,20 @@ export const familiasAPI = createApiMethods("familias", {
     }
   },
 
-  egresar: async (id, idModificacion) => {
-    try {
-      const res = await customAxios.put(`/familias/egreso`, {
-        id,
-        idModificacion
-      });
-      return res.data;
-    } catch (error) {
-      handleError(error);
-    }
-  },
+ egresar: async (payload) => {
+  try {
+    
+    const data = {
+      id: payload.id,
+      idModificacion: Number(payload.idModificacion)
+    };
+    
+    const res = await customAxios.put(`/familias/egreso`, data);
+    return res.data;
+  } catch (error) {
+    handleError(error);
+  }
+},
   // Nuevo método para obtener el autonumérico por cantón
   getNextNumero: async (canton) => {
     try {
@@ -478,4 +481,13 @@ export const ajusteInventarioAPI = {
       throw new Error(error.response?.data?.message || "Error en la búsqueda de ajustes");
     }
   }
+};
+
+export const detallePedidoConsumibleAPI = {
+  create: (body) =>
+    fetch("/api/detallePedidoConsumible", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }).then((r) => r.json()),
 };
