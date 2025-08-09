@@ -27,9 +27,14 @@ import SearchIcon from "@mui/icons-material/Search";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
-import LocalShipping from "@mui/icons-material/LocalShipping";
-import AssignmentReturned from "@mui/icons-material/AssignmentReturned";
-import Shelves from "@mui/icons-material/Shelves";
+import LocalShipping from "@mui/icons-material/localShipping";
+import AssignmentReturned from "@mui/icons-material/assignmentreturned";
+import Shelves from "@mui/icons-material/shelves";
+import DatasetLinked from "@mui/icons-material/datasetLinked";
+import QuickReferenceAll from "@mui/icons-material/assignmentLate";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import MapIcon from "@mui/icons-material/Map";
+
 
 
 
@@ -58,6 +63,8 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   height: 80,
   position: "relative",
   padding: theme.spacing(0, 1),
+  flexDirection: "column", // Cambiamos a columna para mostrar usuario abajo
+  textAlign: "center",
 }));
 
 const Drawer = styled(MuiDrawer, {
@@ -98,62 +105,65 @@ const routeGroups = [
     icon: <GroupIcon />,
     routes: [
       { to: "/preFormulario.jsx", label: "Familia", icon: <GroupIcon /> },
-
       { to: "/familiaFormulario.jsx", label: "Integrante", icon: <GroupIcon /> },
       { to: "/BusquedaFamilia.jsx", label: "Buscar Familia", icon: <SearchIcon /> },
-
+    ],
+  },
+  {
+    label: "Mascotas",
+    icon: <PetsIcon />,
+    routes: [
+      { to: "/registroMascota.jsx", label: "Registrar Mascota", icon: <PetsIcon /> },
+      { to: "/busquedaMascotas.jsx", label: "Buscar Mascotas", icon: <SearchIcon /> },
     ],
   },
   {
     label: "Suministros",
     icon: <Inventory />,
     routes: [
-
       { to: "/registroSuministros.jsx", label: "Registrar Suministros", icon: <Shelves /> },
       { to: "/registrarConsumibles.jsx", label: "Consumibles", icon: <LocalDiningIcon /> },
       { to: "/listaProducto.jsx", label: "Lista Producto", icon: <ListIcon /> },
       { to: "/ajusteInventario.jsx", label: "Ajuste Inventario", icon: <Inventory /> },
-      { to: "/asignacionRecursos.jsx", label: "Asignación Recursos", icon: <AssignmentReturned  /> },
+      { to: "/asignacionRecursos.jsx", label: "Asignación Recursos", icon: <AssignmentReturned /> },
       { to: "/abarrotesMenuPrincipal", label: "Abastecimiento", icon: <LocalShipping /> },
-
+      { to: "/listaAbastecimientos.jsx", label: "Lista Abastecimientos", icon: <ListIcon /> },
+      { to: "/buscarSuministros.jsx", label: "Buscar Suministros", icon: <SearchIcon /> },
+      { to: "/buscarAjuste.jsx", label: "Buscar Ajustes de inventario", icon: <SearchIcon /> },
     ],
   },
   {
     label: "Albergue",
     icon: <HotelIcon />,
     routes: [
-
       { to: "/registroAlbergue.jsx", label: "Registrar Albergue", icon: <HotelIcon /> },
-
       { to: "/busquedaAlbergue.jsx", label: "Buscar Albergue", icon: <SearchIcon /> },
       { to: "/ActualizarAlbergue.jsx", label: "Lista Albergue", icon: <BusinessIcon /> },
-
+      { to: "/mapaAlbergues", label: "Ubicaciones Albergues", icon: <LocationOnIcon /> },
     ],
   },
   {
     label: "Usuario",
     icon: <PersonAddIcon />,
     routes: [
-      {
-        to: "/registroUsuario.jsx",
-        label: "Registrar Usuario",
-        icon: <PersonAddIcon />,
-      },
+      { to: "/registroUsuario.jsx", label: "Registrar Usuario", icon: <PersonAddIcon /> },
     ],
   },
   {
     label: "Otros",
     icon: <MoreHorizIcon />,
     routes: [
-      { to: "/registroMascota.jsx", label: "Mascotas", icon: <PetsIcon /> },
       { to: "/registroAmenazas.jsx", label: "Amenazas", icon: <ReportIcon /> },
-      { to: "/ayudaForm.jsx", label: "Referencias", icon: <ReportIcon /> },
+      { to: "/ayudaForm.jsx", label: "Referencias", icon: <DatasetLinked /> },
+      { to: "/reportes.jsx", label: "Reportes", icon: <QuickReferenceAll /> },
+      { to: "/buscarReferencia.jsx", label: "Buscar Referencias", icon: <SearchIcon /> },
     ],
   },
 ];
 
 export default function CustomDrawer({ onLogout, children }) {
   const [open, setOpen] = React.useState(false);
+  const [userData, setUserData] = React.useState(null);
   const [openGroups, setOpenGroups] = React.useState(
     routeGroups.map(() => false)
   );
@@ -168,6 +178,13 @@ export default function CustomDrawer({ onLogout, children }) {
     window.addEventListener("resize", handleResize);
     handleResize();
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  React.useEffect(() => {
+    const storedUserData = localStorage.getItem('userData');
+    if (storedUserData) {
+      setUserData(JSON.parse(storedUserData));
+    }
   }, []);
 
   const handleGroupToggle = (idx) => {
@@ -226,11 +243,9 @@ export default function CustomDrawer({ onLogout, children }) {
             border: "none",
             boxShadow: "2px 0 12px #0004",
             overflowX: "hidden",
-            // En móviles (temporary)
             ...(isMobile && {
               width: drawerWidth,
             }),
-            // En desktop (permanent)
             ...(!isMobile && {
               width: open ? drawerWidth : 64,
               transition: "width 0.5s ease-in-out",
@@ -245,22 +260,30 @@ export default function CustomDrawer({ onLogout, children }) {
       >
         <DrawerHeader>
           {open && (
-            <IconButton
-              color="inherit"
-              aria-label="close drawer"
-              onClick={() => setOpen(false)}
-              sx={{
-                zIndex: 1,
-                position: "absolute",
-                top: 16,
-                right: 16,
-                background: bgColor,
-                color: accentColor,
-                "&:hover": { background: selectedBg, color: "#fff" },
-              }}
-            >
-              <ChevronLeftIcon />
-            </IconButton>
+            <>
+              <IconButton
+                color="inherit"
+                aria-label="close drawer"
+                onClick={() => setOpen(false)}
+                sx={{
+                  zIndex: 1,
+                  position: "absolute",
+                  top: 16,
+                  right: 16,
+                  background: bgColor,
+                  color: accentColor,
+                  "&:hover": { background: selectedBg, color: "#fff" },
+                }}
+              >
+                <ChevronLeftIcon />
+              </IconButton>
+              {/* Mostrar nombre de usuario solo si el Drawer está abierto */}
+              {userData && (
+                <span style={{ color: accentColor, fontWeight: 'bold', marginTop: 8, fontSize: 18 }}>
+                  {userData.nombre || userData.username}
+                </span>
+              )}
+            </>
           )}
         </DrawerHeader>
         <Divider sx={{ background: dividerColor, mx: 2 }} />

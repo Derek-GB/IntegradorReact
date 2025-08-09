@@ -2,9 +2,9 @@ import customAxios from "./customAxios";
 
 const handleError = (error) => {
   const apiMessage =
-    error.response?.data?.message ||  // Mensaje principal del backend
-    error.response?.data?.error ||    // Otro campo de error
-    error.message ||                  // Mensaje genérico de Axios
+    error.response?.data?.message ||
+    error.response?.data?.error ||
+    error.message ||
     "Error desconocido";
 
   console.error("Detalles del error:", error.response?.data);
@@ -66,7 +66,6 @@ const createApiMethods = (endpoint, extraMethods = {}) => {
   };
 };
 
-// Productos API con update personalizado (sin id en URL)
 export const productosAPI = createApiMethods("productos", {
   update: async (data) => {
     try {
@@ -76,9 +75,30 @@ export const productosAPI = createApiMethods("productos", {
       handleError(error);
     }
   },
+  getByFamilia: async (codigoFamilia) => {
+    try {
+      const url = `/productos/consulta/ProductosPorFamilia/${encodeURIComponent(codigoFamilia)}`;
+      console.log("Llamando a:", url);
+      const res = await customAxios.get(url);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+  getByUsuario: async (idUsuario) => {
+    try {
+      const url = `/productos/consulta/porUsuario/${encodeURIComponent(idUsuario)}`;
+      console.log("📦 Consultando productos por usuario:", url);
+      const res = await customAxios.get(url);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+
 });
 
-// Familias API con consulta por identificación
 export const familiasAPI = createApiMethods("familias", {
   getById: async (identificacion) => {
     try {
@@ -90,10 +110,41 @@ export const familiasAPI = createApiMethods("familias", {
       handleError(error);
     }
   },
+
+  egresar: async (id, idModificacion) => {
+    try {
+      const res = await customAxios.put(`/familias/egreso`, {
+        id,
+        idModificacion
+      });
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+  // Nuevo método para obtener el autonumérico por cantón
+  getNextNumero: async (canton) => {
+    try {
+      const res = await customAxios.get(
+        `/familias/requerimiento/indentificador/${encodeURIComponent(canton)}`
+      );
+      return res.data.identificador;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+  getByUsuario: async (idUsuario) => {
+    try {
+      const res = await customAxios.get(`/familias/consulta/porUsuario/${encodeURIComponent(idUsuario)}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
 });
 
-// Albergues API con consultas específicas
-export const alberguesAPI = createApiMethods("albergues", {
+export const alberguesAPI = {
+  ...createApiMethods("albergues"),
   getById: async (id) => {
     try {
       const res = await customAxios.get(`/albergues/consulta/id/${encodeURIComponent(id)}`);
@@ -142,30 +193,138 @@ export const alberguesAPI = createApiMethods("albergues", {
       handleError(error);
     }
   },
+  getByColor: async (color) => {
+  try {
+    if (!color || color.trim() === "") {
+      throw new Error("Color del albergue es requerido");
+    }
+    const colorNormalized = color.trim().toLowerCase();
+    console.log("URL llamada con color:", colorNormalized);
+    const url = `/albergues/resumen/color/${encodeURIComponent(colorNormalized)}`;
+    const res = await customAxios.get(url);
+    return res.data;
+  } catch (error) {
+    handleError(error);
+  }
+},
+
+  getByUsuario: async (idUsuario) => {
+    try {
+      const url = `/albergues/consulta/porUsuario/${encodeURIComponent(idUsuario)}`;
+      console.log("📥 Consultando albergues por usuario:", url);
+      const res = await customAxios.get(url);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+};
+
+export const personasAPI = {
+  ...createApiMethods("personas"),
+    getPorDiscapacidad: async (idDiscapacidad) => {
+    try {
+      const url = `/personas/resumen/discapacidad/${encodeURIComponent(idDiscapacidad)}`;
+      const response = await customAxios.get(url);
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+  getByUsuario: async (idUsuario) => {
+    try {
+      const url = `/personas/user/${encodeURIComponent(idUsuario)}`;
+      console.log("📥 Consultando personas por usuario:", url);
+      const res = await customAxios.get(url);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+   getResumenPorCondiciones: async (idCondicionesEspeciales) => {
+    if (!idCondicionesEspeciales) throw new Error("ID Condiciones Especiales es requerido");
+    try {
+      const url = `/personas/resumen/condiciones/${encodeURIComponent(idCondicionesEspeciales)}`;
+      const res = await customAxios.get(url);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+ getResumenPorAlbergue: async (idAlberguePersona) => {
+    if (!idAlberguePersona || idAlberguePersona.toString().trim() === "") {
+      throw new Error("El idAlberguePersona es requerido");
+    }
+    const url = `/personas/resumen/porAlbergue/${encodeURIComponent(idAlberguePersona)}`;
+    const res = await customAxios.get(url);
+    return res.data;  
+  },
+   getResumenPorSexo: async (idSexoPersona) => {
+    if (!idSexoPersona) throw new Error("ID Sexo Persona es requerido");
+    try {
+      const res = await customAxios.get(`/personas/resumen/sexo/${encodeURIComponent(idSexoPersona)}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+ getResumenPorEdad: async (idEdadPersona) => {
+    if (!idEdadPersona) throw new Error("ID Edad Persona es requerido");
+    try {
+      const res = await customAxios.get(`/personas/resumen/edad/${encodeURIComponent(idEdadPersona)}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+};
+
+
+export const inventarioAPI = createApiMethods("inventario", {
+  getSuministrosPorId: async (idSuministros) => {
+    try {
+      const res = await customAxios.get(`/inventario/resumen/suministros/${encodeURIComponent(idSuministros)}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
 });
 
-// Otros APIs estándar sin modificaciones
 export const municipalidadAPI = createApiMethods("municipalidad");
 export const capacidadAlberguesAPI = createApiMethods("capacidadAlbergues");
 export const ubicacionesAPI = createApiMethods("ubicaciones");
-export const condicionesEspecialesAPI = createApiMethods("condicionesEspeciales");
-export const referenciasAPI = createApiMethods("referencias");
-export const personasAPI = createApiMethods("personas");
 export const condicionesSaludAPI = createApiMethods("condicionesSalud");
 export const recursosAsignadosAPI = createApiMethods("recursosAsignados");
 export const caracteristicasPoblacionalesAPI = createApiMethods("caracteristicasPoblacionales");
 export const firmasDigitalesAPI = createApiMethods("firmasDigitales");
 export const infraestructuraAlberguesAPI = createApiMethods("infraestructuraAlbergues");
 export const amenazasAPI = createApiMethods("amenazas");
-export const mascotasAPI = createApiMethods("mascotas");
 export const categoriaConsumiblesAPI = createApiMethods("categoriaConsumibles");
+export const consumiblesAPI = createApiMethods("consumibles");
+export const detallePedidoConsumiblesAPI = createApiMethods("detallePedidoConsumibles");
+export const pedidoConsumiblesAPI = createApiMethods("pedidoConsumibles", {
+  getAllAbastecimientos: async () => {
+    try {
+      const res = await customAxios.get(`/pedidoConsumibles/all`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+});
+export const unidadMedidasAPI = createApiMethods("unidadMedidas");
+export const condicionesEspecialesAPI = createApiMethods("condicionesEspeciales");
 
-// Usuarios API con validación especial
+
 export const usuariosAPI = createApiMethods("usuarios", {
   validarCorreo: async (correo) => {
     try {
-      await customAxios.post(`public/usuarios/validar/correo`, { correo });
-      return { existe: false };
+      const res = await customAxios.post(`public/usuarios/validar/correo`, { correo });
+      if (res.data.success === true) {
+        return { existe: false };
+      }
+      return { existe: true };
     } catch (error) {
       if (error.response?.status === 400) {
         return { existe: true };
@@ -186,10 +345,106 @@ export const usuariosAPI = createApiMethods("usuarios", {
     }
   },
 });
+export const mascotasAPI = {
+  ...createApiMethods("mascotas"),
+  getByCodigoFamilia: async (codigoFamilia) => {
+    try {
+      const url = `/mascotas/consulta/familia/${encodeURIComponent(codigoFamilia)}`;
+      const res = await customAxios.get(url);
 
-// APIs estándar restantes
-export const consumiblesAPI = createApiMethods("consumibles");
-export const detallePedidoConsumiblesAPI = createApiMethods("detallePedidoConsumibles");
-export const pedidoConsumiblesAPI = createApiMethods("pedidoConsumibles");
-export const unidadMedidasAPI = createApiMethods("unidadMedidas");
-export const ajusteInventarioAPI = createApiMethods("ajusteInventario");
+      const mascotasFiltradas = res.data.data.map(mascota => ({
+        codigoFamilia: mascota.codigoFamilia,
+        nombreMascota: mascota.nombreMascota,
+        tipo: mascota.tipo,
+        tamaño: mascota.tamaño
+      }));
+
+      return {
+        success: true,
+        data: mascotasFiltradas,
+        message: res.data.message
+      };
+
+    } catch (error) {
+      console.error("Error al buscar mascotas:", error.response?.data || error);
+      throw new Error(error.response?.data?.message || "Error en la búsqueda");
+    }
+  }
+};
+export const referenciasAPI = {
+  ...createApiMethods("referencias"),
+
+  getByCodigoFamilia: async (codigoFamilia) => {
+    try {
+      const url = `/familias/obtener/referencia/${encodeURIComponent(codigoFamilia)}`;
+      const res = await customAxios.get(url);
+
+      const data = res.data.data;
+
+      let referenciasFiltradas;
+
+      if (Array.isArray(data)) {
+        // Si es array, mapeamos normalmente
+        referenciasFiltradas = data.map(ref => ({
+          idFamilia: ref.idFamilia,
+          tipoAyuda: ref.tipoAyuda,
+          descripcion: ref.descripcion,
+          fechaEntrega: ref.fechaEntrega,
+          responsable: ref.responsable,
+        }));
+      } else if (data && typeof data === "object") {
+        // Si es objeto, envolvemos en array
+        referenciasFiltradas = [{
+          idFamilia: data.idFamilia,
+          tipoAyuda: data.tipoAyuda,
+          descripcion: data.descripcion,
+          fechaEntrega: data.fechaEntrega,
+          responsable: data.responsable,
+        }];
+      } else {
+        referenciasFiltradas = [];
+      }
+
+      return {
+        success: true,
+        data: referenciasFiltradas,
+        message: res.data.message,
+      };
+
+    } catch (error) {
+      console.error("Error al buscar referencias:", error.response?.data || error);
+      throw new Error(error.response?.data?.message || "Error en la búsqueda");
+    }
+  }
+};
+
+
+export const ajusteInventarioAPI = {
+  ...createApiMethods("ajusteInventario"),
+
+  getByNombreProducto: async (nombreProducto) => {
+    try {
+      const url = `/ajusteInventario/producto/${encodeURIComponent(nombreProducto)}`;
+      const res = await customAxios.get(url);
+
+      const ajustesFiltrados = res.data.data.slice(0, 20).map(ajuste => ({
+        nombreProducto: ajuste.nombreProducto,
+        cantidadOriginal: ajuste.cantidadOriginal,
+        cantidadAjustada: ajuste.cantidadAjustada,
+        justificacion: ajuste.justificacion,
+        fechaCreacion: ajuste.fechaCreacion,
+        idUsuario: ajuste.idUsuario,
+      }));
+
+      return {
+        success: true,
+        data: ajustesFiltrados,
+        message: res.data.message,
+      };
+
+    } catch (error) {
+      console.error("Error al buscar ajustes de inventario:", error.response?.data || error);
+      throw new Error(error.response?.data?.message || "Error en la búsqueda de ajustes");
+    }
+  }
+};

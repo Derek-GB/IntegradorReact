@@ -1,6 +1,5 @@
-// src/hooks/useRegistrarSuministro.js
 import { useState, useEffect } from 'react';
-import { productosAPI } from '../../helpers/api';
+import { productosAPI, alberguesAPI } from '../../helpers/api';
 import { showCustomToast } from '../../components/globalComponents/CustomToaster';
 
 const useRegistrarSuministro = () => {
@@ -10,7 +9,8 @@ const useRegistrarSuministro = () => {
     categoria: '',
     producto: '',
     unidad: '',
-    cantidad: ''
+    cantidad: '',
+    idAlbergue: '', // guardamos el id numérico del albergue seleccionado
   });
 
   const [mensaje, setMensaje] = useState('');
@@ -19,17 +19,37 @@ const useRegistrarSuministro = () => {
   const [mostrarAlertaError, setMostrarAlertaError] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (mensaje) setMostrarAlertaMensaje(true);
-  }, [mensaje]);
+  const [albergues, setAlbergues] = useState([]);
 
   useEffect(() => {
-    if (error) setMostrarAlertaError(true);
-  }, [error]);
+    const cargarAlbergues = async () => {
+      const idUsuario = localStorage.getItem("idUsuario");
+      if (!idUsuario) {
+        showCustomToast("Error", "Usuario no identificado.", "error");
+        setAlbergues([]);
+        return;
+      }
+
+      try {
+        const res = await alberguesAPI.getByUsuario(idUsuario);
+        const listaAlbergues = Array.isArray(res) ? res : res.data || [];
+        setAlbergues(listaAlbergues);
+      } catch (err) {
+        console.error("Error cargando albergues:", err);
+        showCustomToast("Error", "No se pudieron cargar los albergues", "error");
+        setAlbergues([]);
+      }
+    };
+
+    cargarAlbergues();
+  }, []);
 
   const handleChange = e => {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+    setForm(prev => ({
+      ...prev,
+      [name]: name === "idAlbergue" && value !== "" ? Number(value) : value,
+    }));
   };
 
   const handleSubmit = async e => {
@@ -40,13 +60,14 @@ const useRegistrarSuministro = () => {
         codigoProducto: form.codigo,
         nombre: form.producto,
         descripcion: form.descripcion,
-        cantidad: parseInt(form.cantidad),
-        categoria: parseInt(form.categoria),
-        unidadMedida: parseInt(form.unidad)
+        cantidad: parseInt(form.cantidad, 10),
+        categoria: parseInt(form.categoria, 10),
+        unidadMedida: parseInt(form.unidad, 10),
+        idAlbergue: form.idAlbergue,  // Aquí envías el id numérico
       };
 
       await productosAPI.create(data);
-      showCustomToast("Exito", "Producto registrado correctamente", "success");
+      showCustomToast("Éxito", "Producto registrado correctamente", "success");
       setError('');
       setForm({
         codigo: '',
@@ -54,9 +75,11 @@ const useRegistrarSuministro = () => {
         categoria: '',
         producto: '',
         unidad: '',
-        cantidad: ''
+        cantidad: '',
+        idAlbergue: '',
       });
-    } catch{
+    } catch (err) {
+      console.error(err);
       showCustomToast("Error", "Hubo un error al registrar el producto. Intente de nuevo.", "error");
       setMensaje('');
     } finally {
@@ -74,7 +97,8 @@ const useRegistrarSuministro = () => {
     mostrarAlertaError,
     setMostrarAlertaMensaje,
     setMostrarAlertaError,
-    loading
+    loading,
+    albergues,
   };
 };
 

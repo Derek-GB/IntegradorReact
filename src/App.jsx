@@ -6,13 +6,14 @@ import CustomDrawer from './CustomDrawer.jsx';
 //Familia
 import FormularioRegistro from './views/familia/formularioRegistro.jsx';
 import FamiliaFormulario from './views/familia/familiaFormulario.jsx';
-import BusquedaFamilia from './views/familia/BusquedaFamilia.jsx';
+import BusquedaFamilia from './views/familia/busquedaFamilia.jsx';
 
 //Producto
 import AsignacionRecursos from './views/producto/asignacionRecursos.jsx';
 import ListaProducto from './views/producto/listaProducto.jsx';
 import RegistrarConsumible from './views/producto/registrarConsumibles.jsx';
 import RegistroSuministros from './views/producto/registrarSuministro.jsx';
+import BuscarSuministros from './views/producto/buscarSuministros.jsx';
 
 //Usuario
 import Login from './views/usuario/login.jsx';
@@ -21,7 +22,7 @@ import RegistroUsuario from './views/usuario/registroUsuario.jsx';
 
 //Albergue
 
-import ActualizarAlbergue from './views/albergue/actualizarAlbergue.jsx';
+import ActualizarAlbergue from './views/albergue/ActualizarAlbergue.jsx';
 import BusquedaAlbergue from './views/albergue/busquedaAlbergue.jsx';
 import ListaAlbergue from './views/albergue/listaAlbergue.jsx';
 import RegistroAlbergue from './views/albergue/registroAlbergue.jsx';
@@ -30,7 +31,7 @@ import RegistroAlbergue from './views/albergue/registroAlbergue.jsx';
 import MenuPrincipal from './views/abastecimiento/abarrotesMenuPrincipal';
 import ResumenFinal from './views/abastecimiento/resumenFinal';
 import FormularioAbastecimiento from './views/abastecimiento/formularioAbarrotes';
-
+import ListaAbastecimientos from './views/suministros/listaAbastecimientos.jsx';
 
 //Solos
 import AjusteInventario from "./views/ajusteInventario.jsx";
@@ -38,9 +39,15 @@ import AyudaForm from './views/ayudaForm.jsx';
 import Inicio from './views/inicio.jsx';
 import RegistroAmenazas from './views/registroAmenazas.jsx';
 import RegistroMascotas from "./views/registroMascota.jsx";
+import BuscarMascotas from './views/busquedaMascotas.jsx';
+import ReportesAlbergue from './views/reportes.jsx';
+import BuscarReferencias from './views/buscarReferencia.jsx';
+import BuscarAjustesInventario from './views/buscarAjuste.jsx';
 
 //No categorizado
 import FormularioIntegrantes from "./components/formularioIntegrantes.jsx";
+import MapaAlbergues from './MapaAlbergues';
+
 
 // Importa el proveedor de contexto aquí
 import { AbastecimientoProvider } from './context/contextoAbastecimiento';
@@ -119,6 +126,13 @@ const App = () => {
                     <Route path="/ActualizarAlbergue.jsx" element={<ActualizarAlbergue idAlbergue={17} />} />
                     <Route path="/registroAmenazas.jsx" element={<RegistroAmenazas />} />
                     <Route path="/resumenFinal" element={<ResumenFinal />} />
+                    <Route path="/reportes.jsx" element={<ReportesAlbergue />} />
+                    <Route path="/mapaAlbergues" element={<MapaAlbergues />} />
+                    <Route path="/buscarSuministros.jsx" element={<BuscarSuministros />} />
+                    <Route path="/busquedaMascotas.jsx" element={<BuscarMascotas />} />
+                    <Route path="/buscarReferencia.jsx" element={<BuscarReferencias />} />
+                    <Route path="/buscarAjuste.jsx" element={<BuscarAjustesInventario />} />
+                    <Route path="/listaAbastecimientos.jsx" element={<ListaAbastecimientos />} />
                   </Routes>
                 </div>
               </div>

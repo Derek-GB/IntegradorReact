@@ -2,88 +2,121 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
 import { contextoAbastecimiento } from '../../context/contextoAbastecimiento.jsx';
+import { pedidoConsumiblesAPI, alberguesAPI } from '../../helpers/api.js';
 
 const opcionesComida = [
-    { nombre: "Desayuno", value: "desayuno" },
-    { nombre: "Almuerzo", value: "almuerzo" },
-    { nombre: "Cena", value: "cena" },
-];
-
-const opcionesAlbergue = [
-    { nombre: "Liceo de Bebedero" },
-    { nombre: "Escuela de Bebedero" },
-    { nombre: "Gimnasio Municipal - Manuel Melico Corella" },
-    { nombre: "Universidad Invenio" },
-    { nombre: "Salón Comunal de Javilla" },
-    { nombre: "Salón Comunal de Paso Lajas" },
-    { nombre: "Salón de Eventos de eventos Municipal" },
-    { nombre: "Escuela San Cristobal" },
-    { nombre: "Colegio Técnico Profesional de Cañas" },
-    { nombre: "Salón comunal de Barrio Las Palmas" },
-    { nombre: "Escuela Monseñor Luis Leipold" },
-    { nombre: "Escuela Antonio Obando Espinoza" },
-    { nombre: "Salón Comunal de Porozal" },
-    { nombre: "Escuela San Miguel" },
-    { nombre: "Escuela Barrio Hotel de Cañas" },
-    { nombre: "Escuela Corobicí" },
-    { nombre: "Gimnasio Antonio Obando Espinoza" },
-    { nombre: "Salón Comunal Hotel" },
+  { nombre: "Desayuno", value: "desayuno" },
+  { nombre: "Almuerzo", value: "almuerzo" },
+  { nombre: "Cena", value: "cena" },
 ];
 
 export const useAbarrotesMenuPrincipal = () => {
-    const navigate = useNavigate();
-    const { guardarDatosFormulario } = useContext(contextoAbastecimiento);
+  const navigate = useNavigate();
+  const { guardarDatosFormulario } = useContext(contextoAbastecimiento);
+  const [busquedaAlbergue, setBusquedaAlbergue] = useState("");
+  const [showSugerenciasAlbergue, setShowSugerenciasAlbergue] = useState(false);
+  const [resultadosAlbergue, setResultadosAlbergue] = useState([]);
 
-    const [formData, setFormData] = useState({
-        fecha: '',
-        tipo: '',
-        cantidad: '',
-        albergue: '',
-    });
+  const [formData, setFormData] = useState({
+    fecha: '',
+    tipo: '',
+    cantidad: '',
+    albergue: null, 
+  });
 
-    const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const today = new Date().toISOString().split('T')[0];
 
-    const today = new Date().toISOString().split('T')[0];
-
-    useEffect(() => {
-        setFormData({
-            fecha: '',
-            tipo: '',
-            cantidad: '',
-            albergue: '',
-        });
-    }, []);
-
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
-
-    const handleSiguiente = () => {
-        const { fecha, tipo, cantidad, albergue } = formData;
-        if (!fecha || !tipo || !cantidad || !albergue) {
-            showCustomToast('Error', 'Complete todos los campos', 'error');
-            return;
+  useEffect(() => {
+    const cargarAlberguesPorUsuario = async () => {
+      try {
+        const idUsuario = localStorage.getItem("idUsuario"); 
+        if (!idUsuario) {
+          showCustomToast("Error", "Usuario no identificado", "error");
+          setResultadosAlbergue([]);
+          return;
         }
-
-        setLoading(true);
-        guardarDatosFormulario(formData);
-        showCustomToast('Éxito', 'Formulario guardado correctamente', 'success');
-        setTimeout(() => {
-            navigate('/formularioAbarrotes.jsx');
-            setLoading(false);
-        }, 2000);
+        const res = await alberguesAPI.getByUsuario(idUsuario);
+        const listaAlbergues = Array.isArray(res.data) ? res.data : [];
+        setResultadosAlbergue(listaAlbergues);
+        console.log("Albergues cargados para usuario:", listaAlbergues);
+      } catch (error) {
+        console.error("Error cargando albergues por usuario:", error);
+        showCustomToast("Error", "No se pudieron cargar los albergues para el usuario", "error");
+        setResultadosAlbergue([]);
+      }
     };
 
-    return {
-        formData,
-        loading,
-        today,
-        opcionesComida,
-        opcionesAlbergue,
-        handleChange,
-        handleSiguiente,
-    };
+    cargarAlberguesPorUsuario();
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSelectAlbergue = (albergueSeleccionado) => {
+    setFormData(prev => ({
+      ...prev,
+      albergue: albergueSeleccionado,
+    }));
+    setShowSugerenciasAlbergue(false);
+  };
+
+  const handleSiguiente = async () => {
+    const { fecha, tipo, cantidad, albergue } = formData;
+
+    if (!fecha || !tipo || !cantidad || !albergue) {
+      showCustomToast('Error', 'Complete todos los campos', 'error');
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const pedidoData = {
+        fechaCreacion: fecha,
+        tipoComida: tipo,
+        cantidadPersonas: parseInt(cantidad, 10),
+        idAlbergue: albergue.id, 
+        idUsuarioCreacion: parseInt(localStorage.getItem("idUsuario"), 10) || 1,
+      };
+
+      const pedidoCreado = await pedidoConsumiblesAPI.create(pedidoData);
+
+      guardarDatosFormulario({
+        ...formData,
+        idPedido: pedidoCreado.id,
+      });
+
+      showCustomToast('Éxito', 'Formulario guardado correctamente', 'success');
+
+      setTimeout(() => {
+        setLoading(false);
+        navigate('/formularioAbarrotes.jsx');
+      }, 1500);
+    } catch (error) {
+      console.error('Error al crear el pedido:', error);
+      showCustomToast('Error', 'No se pudo guardar el formulario.', 'error');
+      setLoading(false);
+    }
+  };
+
+  return {
+    formData,
+    loading,
+    today,
+    opcionesComida,
+    busquedaAlbergue,
+    setBusquedaAlbergue,
+    showSugerenciasAlbergue,
+    setShowSugerenciasAlbergue,
+    resultadosAlbergue,
+    handleChange,
+    handleSelectAlbergue,
+    handleSiguiente,
+  };
 };

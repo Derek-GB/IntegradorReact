@@ -1,5 +1,6 @@
-import { createContext, useState } from 'react';
-// eslint-disable-next-line react-refresh/only-export-components
+import { createContext, useState, useEffect } from 'react';
+import { showCustomToast } from '../components/globalComponents/CustomToaster.jsx';
+
 export const contextoAbastecimiento = createContext();
 
 export const AbastecimientoProvider = ({ children }) => {
@@ -9,20 +10,51 @@ export const AbastecimientoProvider = ({ children }) => {
     return datosGuardados ? JSON.parse(datosGuardados) : {};
   });
 
+  useEffect(() => {
+    const itemsGuardados = localStorage.getItem('items');
+    if (itemsGuardados) {
+      setItems(JSON.parse(itemsGuardados));
+    }
+  }, []);
+
+  const guardarItemsEnLocalStorage = (nuevosItems) => {
+    setItems(nuevosItems);
+    localStorage.setItem('items', JSON.stringify(nuevosItems));
+  };
+
   const agregarItem = (nuevoItem) => {
-    setItems(prev => [...prev, nuevoItem]);
+    const yaExiste = items.some(item =>
+      item.tipo === nuevoItem.tipo &&
+      item.unidad === nuevoItem.unidad &&
+      item.seccion === nuevoItem.seccion
+    );
+
+    if (yaExiste) {
+      showCustomToast("Advertencia", "Producto ya agregado.");
+      return;
+    }
+
+    const nuevosItems = [...items, nuevoItem];
+    guardarItemsEnLocalStorage(nuevosItems);
+    showCustomToast("Exito", "Producto agregado correctamente.");
   };
 
   const eliminarItem = (index) => {
-    setItems(prev => prev.filter((_, i) => i !== index));
+    const nuevosItems = items.filter((_, i) => i !== index);
+    guardarItemsEnLocalStorage(nuevosItems);
+    showCustomToast("Exito", "Producto eliminado correctamente.");
   };
 
   const editarItem = (index, nuevoItem) => {
-    setItems(prev => prev.map((item, i) => i === index ? nuevoItem : item));
+    const nuevosItems = [...items];
+    nuevosItems[index] = nuevoItem;
+    guardarItemsEnLocalStorage(nuevosItems);
+    showCustomToast("Exito", "Producto editado correctamente.");
   };
 
   const limpiarItems = () => {
     setItems([]);
+    localStorage.removeItem('items');
   };
 
   const guardarDatosFormulario = (datos) => {
@@ -35,10 +67,10 @@ export const AbastecimientoProvider = ({ children }) => {
       items,
       agregarItem,
       eliminarItem,
-      editarItem, 
+      editarItem,
       limpiarItems,
       guardarDatosFormulario,
-      datosFormulario 
+      datosFormulario,
     }}>
       {children}
     </contextoAbastecimiento.Provider>

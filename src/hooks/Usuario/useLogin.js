@@ -9,6 +9,7 @@ export const useLogin = () => {
     contrasena: ''
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
 
   // Verifica si hay un token válido
@@ -61,6 +62,11 @@ export const useLogin = () => {
     try {
       await authHelper.login(form.usuario, form.contrasena);
 
+      // Obtener nombre del usuario desde localStorage
+      const nombreUsuario = localStorage.getItem('nombreUsuario') || form.usuario;
+      setUserData({ username: form.usuario, nombre: nombreUsuario });
+      localStorage.setItem('userData', JSON.stringify({ username: form.usuario, nombre: nombreUsuario }));
+
       if (verificarToken()) {
         toast.success('Inicio de sesión exitoso');
         navigate('/inicio');
@@ -77,6 +83,7 @@ export const useLogin = () => {
   return {
     form,
     isLoading,
+    userData,
     handleChange,
     handleSubmit
   };

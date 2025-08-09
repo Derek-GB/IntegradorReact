@@ -2,13 +2,13 @@ import axios from "axios";
 
 const login = async (correo, contrasena) => {
   try {
-    const res = await axios.post("http://192.168.0.10:3000/api/auth/login", {
+    const res = await axios.post("https://apiintegrador-production-8ad3.up.railway.app/api/auth/login", {
       correo,
       contrasena,
     });
 
     const { token, usuario } = res.data;
-    const { id } = usuario;
+    const { id, nombre } = usuario;
     if (!usuario) {
       throw new Error("No se recibió información de usuario");
     }
@@ -20,6 +20,8 @@ const login = async (correo, contrasena) => {
     } else {
       localStorage.setItem("token", token); // ahora se usará en todas las peticiones
       localStorage.setItem("idUsuario", id);
+      localStorage.setItem("nombreUsuario", nombre || "");
+      localStorage.setItem("userData", JSON.stringify({ username: correo, nombre: nombre || correo }));
     }
   } catch (err) {
     console.error("Error al iniciar sesión", err.message);
@@ -33,7 +35,7 @@ const logout = async () => {
     console.warn("No se encontró un usuario autenticado para cerrar sesión");
     return;
   }
-  axios.post("http://192.168.0.10:3000/api/auth/logout", {id: localStorage.getItem("idUsuario")})
+  axios.post("https://apiintegrador-production-8ef8.up.railway.app/api/auth/logout", {id: localStorage.getItem("idUsuario")})
     .then((response) => {
       console.log("Sesión cerrada correctamente", response.data);
     })
