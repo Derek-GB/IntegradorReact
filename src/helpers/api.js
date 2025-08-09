@@ -222,15 +222,15 @@ export const alberguesAPI = {
 
 export const personasAPI = {
   ...createApiMethods("personas"),
-  getPorDiscapacidad: async (id) => {
-  try {
-    const url = `personas/discapacidad/id/${id}`;
-    const response = await customAxios.get(url);
-    return response.data;
-  } catch (error) {
-    handleError(error);
-  }
-},
+    getPorDiscapacidad: async (idDiscapacidad) => {
+    try {
+      const url = `/personas/resumen/discapacidad/${encodeURIComponent(idDiscapacidad)}`;
+      const response = await customAxios.get(url);
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
   getByUsuario: async (idUsuario) => {
     try {
       const url = `/personas/user/${encodeURIComponent(idUsuario)}`;
@@ -241,27 +241,49 @@ export const personasAPI = {
       handleError(error);
     }
   },
- getPorAlbergueSexoEdad: async ({ idAlbergue, sexo, edad }) => {
-  try {
-    const _idAlbergue = idAlbergue || "null";
-    const _sexo = sexo || "null";
-    const _edad = (edad !== undefined && edad !== null && edad !== "") ? edad : "null";
-
-    const url = `/personas/albergue/${_idAlbergue}/sexo/${_sexo}/edad/${_edad}`;
-
-    const response = await customAxios.get(url);
-    return response.data;
-  } catch (error) {
-    return handleError(error);
-  }
-}
+   getResumenPorCondiciones: async (idCondicionesEspeciales) => {
+    if (!idCondicionesEspeciales) throw new Error("ID Condiciones Especiales es requerido");
+    try {
+      const url = `/personas/resumen/condiciones/${encodeURIComponent(idCondicionesEspeciales)}`;
+      const res = await customAxios.get(url);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+ getResumenPorAlbergue: async (idAlberguePersona) => {
+    if (!idAlberguePersona || idAlberguePersona.toString().trim() === "") {
+      throw new Error("El idAlberguePersona es requerido");
+    }
+    const url = `/personas/resumen/porAlbergue/${encodeURIComponent(idAlberguePersona)}`;
+    const res = await customAxios.get(url);
+    return res.data;  
+  },
+   getResumenPorSexo: async (idSexoPersona) => {
+    if (!idSexoPersona) throw new Error("ID Sexo Persona es requerido");
+    try {
+      const res = await customAxios.get(`/personas/resumen/sexo/${encodeURIComponent(idSexoPersona)}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+ getResumenPorEdad: async (idEdadPersona) => {
+    if (!idEdadPersona) throw new Error("ID Edad Persona es requerido");
+    try {
+      const res = await customAxios.get(`/personas/resumen/edad/${encodeURIComponent(idEdadPersona)}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
 };
 
 
 export const inventarioAPI = createApiMethods("inventario", {
-  getSuministrosPorAlbergue: async (idAlbergue) => {
+  getSuministrosPorId: async (idSuministros) => {
     try {
-      const res = await customAxios.get(`/inventario/resumen/id/${idAlbergue}`);
+      const res = await customAxios.get(`/inventario/resumen/suministros/${encodeURIComponent(idSuministros)}`);
       return res.data;
     } catch (error) {
       handleError(error);

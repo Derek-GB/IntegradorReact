@@ -4,7 +4,7 @@ import { showCustomToast } from "../../components/globalComponents/CustomToaster
 import { consumiblesAPI } from "../../helpers/api.js";
 
 export const useFormularioAbarrotes = () => {
-  const { agregarItem, eliminarItem, items, datosFormulario, resetFormulario } = useContext(contextoAbastecimiento);
+  const { agregarItem, eliminarItem, items, datosFormulario, limpiarItems } = useContext(contextoAbastecimiento);
   const [carnesProductos, setCarnesProductos] = useState([]);
   const [proteinaProductos, setProteinaProductos] = useState([]);
   const [verdurasProductos, setVerdurasProductos] = useState([]);
@@ -291,5 +291,6 @@ export const useFormularioAbarrotes = () => {
     handleToggleProducto,
     eliminarItem,
     calcularCantidad,
-  };
+    resetFormulario: limpiarItems,
+  };
 };

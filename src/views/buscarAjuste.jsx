@@ -5,6 +5,7 @@ import SubmitButton from "../components/FormComponents/SubmitButton.jsx";
 import CustomToaster from "../components/globalComponents/CustomToaster.jsx";
 import GlobalDataTable from "../components/globalComponents/GlobalDataTable.jsx";
 import { useBusquedaAjuste } from "../hooks/useBusquedaAjuste.js";
+import ExportPdfButton from "../components/otros/ExportPdfButton.jsx";  // <-- Importa aquí
 
 const BuscarAjustesInventario = () => {
   const {
@@ -15,18 +16,26 @@ const BuscarAjustesInventario = () => {
     handleSubmit,
   } = useBusquedaAjuste();
 
-
-   useEffect(() => {
+  useEffect(() => {
     console.log("Resultados:", resultados);
   }, [resultados]);
 
   const columns = [
-    { name: "Producto", selector: row => row.nombreProducto,},
+    { name: "Producto", selector: row => row.nombreProducto },
     { name: "Cantidad Original", selector: row => row.cantidadOriginal },
     { name: "Cantidad Ajustada", selector: row => row.cantidadAjustada },
     { name: "Justificación", selector: row => row.justificacion },
     { name: "Fecha creacion", selector: row => row.fechaCreacion },
   ];
+
+  // Headers para exportar, con label y key según columnas
+ const exportHeaders = [
+  { label: "Producto", key: "nombreProducto" },
+  { label: "Cantidad Original", key: "cantidadOriginal" },
+  { label: "Cantidad Ajustada", key: "cantidadAjustada" },
+  { label: "Justificación", key: "justificacion" },
+  { label: "Fecha creacion", key: "fechaCreacion" },
+];
 
   return (
     <>
@@ -50,14 +59,27 @@ const BuscarAjustesInventario = () => {
         </div>
 
         {resultados.length > 0 && (
-          <div className="mt-8">
-            <GlobalDataTable
-              columns={columns}
-              data={resultados}
-              loading={loading}
-              rowsPerPage={5}
-            />
-          </div>
+          <>
+            <div className="mt-8">
+              <GlobalDataTable
+                columns={columns}
+                data={resultados}
+                loading={loading}
+                rowsPerPage={5}
+              />
+            </div>
+
+            {/* Botón Exportar PDF debajo de la tabla, centrado */}
+            <div className="flex justify-center mt-4">
+              <ExportPdfButton
+                data={resultados}
+                headers={exportHeaders}
+                fileName="ajustes_inventario.pdf"
+                title="Reporte de Ajustes de Inventario"
+                className="px-4 py-2 text-sm w-auto"
+              />
+            </div>
+          </>
         )}
 
         {resultados.length === 0 && !loading && (
@@ -71,6 +93,5 @@ const BuscarAjustesInventario = () => {
     </>
   );
 };
-
 
 export default BuscarAjustesInventario;
