@@ -148,6 +148,7 @@ const routeGroups = [
     icon: <PersonAddIcon />,
     routes: [
       { to: "/registroUsuario.jsx", label: "Registrar Usuario", icon: <PersonAddIcon /> },
+      { to: "/listaUsuarios.jsx", label: "Lista Usuarios", icon: <ListIcon /> },
     ],
   },
   {

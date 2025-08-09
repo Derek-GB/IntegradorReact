@@ -345,7 +345,37 @@ export const usuariosAPI = createApiMethods("usuarios", {
       handleError(error);
     }
   },
+  getAll: async () => {
+  console.log("[usuariosAPI.getAll] Llamando a /usuarios/all");
+  try {
+    const res = await customAxios.get(`/usuarios/all`);
+    console.log("[usuariosAPI.getAll] Respuesta:", res.data);
+    return res.data;
+  } catch (error) {
+    console.error("[usuariosAPI.getAll] Error:", error);
+    handleError(error);
+  }
+},
+
+  // 🔍 Nuevo método para buscar usuario por ID
+ getById: async (id) => {
+  console.log(`[usuariosAPI.getById] Llamando a /usuarios/${id}`);
+  try {
+    const res = await customAxios.get(`/usuarios/${id}`);
+    console.log("[usuariosAPI.getById] Respuesta:", res.data);
+    return res.data;
+  } catch (error) {
+    console.error("[usuariosAPI.getById] Error:", error);
+    if (error.response?.status === 404) {
+      throw new Error("Usuario no encontrado.");
+    }
+    throw new Error("Error al buscar usuario por ID.");
+  }
+}
 });
+
+
+
 export const mascotasAPI = {
   ...createApiMethods("mascotas"),
   getByCodigoFamilia: async (codigoFamilia) => {

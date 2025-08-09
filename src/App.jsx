@@ -19,6 +19,7 @@ import BuscarSuministros from './views/producto/buscarSuministros.jsx';
 import Login from './views/usuario/login.jsx';
 import RecuperarContrasena from './views/usuario/recuperarContrasena.jsx';
 import RegistroUsuario from './views/usuario/registroUsuario.jsx';
+import ListaUsuarios from './views/usuario/listaUsuarios.jsx';
 
 //Albergue
 
@@ -115,6 +116,7 @@ const App = () => {
                     <Route path="/registrarConsumibles.jsx" element={<RegistrarConsumible />} />
                     <Route path="/registroAlbergue.jsx" element={<RegistroAlbergue />} />
                     <Route path="/registroUsuario.jsx" element={<RegistroUsuario />} />
+                    <Route path="/listaUsuarios.jsx" element={<ListaUsuarios />} />
                     <Route path="/listaProducto.jsx" element={<ListaProducto />} />
                     <Route path="/listaAlbergue.jsx" element={<ListaAlbergue />} />
                     <Route path="/abarrotesMenuPrincipal" element={<MenuPrincipal />} />
