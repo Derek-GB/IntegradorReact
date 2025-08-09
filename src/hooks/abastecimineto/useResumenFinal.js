@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { pedidoConsumiblesAPI } from "../../helpers/api.js";
+import { pedidoConsumiblesAPI, detallePedidoConsumiblesAPI } from "../../helpers/api.js";
 import { showCustomToast } from '../../components/globalComponents/CustomToaster.jsx';
 import { useNavigate } from "react-router-dom";
 import { contextoAbastecimiento } from '../../context/contextoAbastecimiento.jsx';
@@ -118,7 +118,6 @@ const useResumenFinal = () => {
     // Combinar datos del formulario actual con productos
     const todosLosDatos = [];
     
-    // Agregar datos del formulario actual si existen
     if (datosFormulario) {
       todosLosDatos.push({
         seccion: "Formulario Actual",
@@ -130,7 +129,6 @@ const useResumenFinal = () => {
       });
     }
 
-    // Agregar productos del formulario actual
     if (items && items.length > 0) {
       items.forEach(item => {
         todosLosDatos.push({
@@ -144,7 +142,6 @@ const useResumenFinal = () => {
       });
     }
 
-    // Agregar pedidos de la API
     pedidos.forEach(pedido => {
       todosLosDatos.push(pedido);
     });
@@ -154,10 +151,11 @@ const useResumenFinal = () => {
       return;
     }
 
-    const encabezado = `"Sección","Tipo","Unidad","Cantidad","Fecha","Albergue"`;
+    const encabezado = ["Sección", "Tipo", "Unidad", "Cantidad", "Fecha", "Albergue"].join(",");
     const cuerpo = todosLosDatos
-      .map(i => `"${i.seccion}","${i.tipo}","${i.unidad}","${i.cantidad}","${i.fecha}","${i.albergue}"`)
+      .map(i => `${i.seccion},${i.tipo},${i.unidad},${i.cantidad},${i.fecha},${i.albergue}`)
       .join("\n");
+
     const textoConBOM = '\uFEFF' + `${encabezado}\n${cuerpo}`;
     const blob = new Blob([textoConBOM], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
@@ -170,6 +168,66 @@ const useResumenFinal = () => {
     showCustomToast("Éxito", "Descarga completada exitosamente.", "success");
   };
 
+  const guardarDetallePedido = async (idPedido, items) => {
+    try {
+      for (const item of items) {
+        await detallePedidoConsumiblesAPI.create({
+          idPedido,
+          idConsumible: item.idConsumible,
+          cantidad: item.cantidad,
+        });
+      }
+      showCustomToast("Éxito", "Detalle del pedido guardado correctamente", "success");
+    } catch (err) {
+      setError(err.message);
+      showCustomToast("Error", `Error al guardar detalle: ${err.message}`, "error");
+    }
+  };
+
+  const guardarPedidoYDetalle = async () => {
+    try {
+      const idUsuario = Number(localStorage.getItem("idUsuario")) || 42;
+
+      const pedidoPayload = {
+        tipoComida: datosFormulario.tipo,
+        cantidadPersonas: datosFormulario.cantidad,
+        idAlbergue: datosFormulario.albergue?.id || datosFormulario.idAlbergue,
+        idUsuarioCreacion: idUsuario,
+      };
+      
+      const pedidoRes = await pedidoConsumiblesAPI.create(pedidoPayload);
+      const idPedido = pedidoRes.id || pedidoRes.data?.id;
+      
+      if (!idPedido) throw new Error("No se pudo obtener el id del pedido creado");
+
+      if (!items || items.length === 0) {
+        showCustomToast("Warning", "No hay productos para guardar en el detalle", "warning");
+        return;
+      }
+
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        const detallePayload = {
+          idPedido,
+          idConsumible: item.idConsumible,
+          cantidad: item.cantidad,
+        };
+        try {
+          await detallePedidoConsumiblesAPI.create(detallePayload);
+        } catch (detalleError) {
+          throw new Error(`Error guardando producto ${i + 1}: ${detalleError.message}`);
+        }
+      }
+
+      showCustomToast("Éxito", "Pedido y detalle guardados correctamente", "success");
+      descargarResumen();
+
+    } catch (err) {
+      setError(err.message);
+      showCustomToast("Error", `Error al guardar pedido: ${err.message}`, "error");
+    }
+  };
+
   return {
     items, // Productos del formulario actual
     pedidos, // Pedidos de la API
@@ -179,6 +237,8 @@ const useResumenFinal = () => {
     eliminarItem,
     editarItem,
     navigate,
+    guardarDetallePedido,
+    guardarPedidoYDetalle,
   };
 };
 
