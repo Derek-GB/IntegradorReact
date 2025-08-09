@@ -260,17 +260,13 @@ const FamiliaFormulario = () => {
       }
     });
 
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
-    console.log("personas enviado:", JSON.stringify(personasArray));
+    
 
     return formData;
   };
 
   const crearPersonasConFirmas = async (formData) => {
     const res = await personasAPI.create(formData);
-    console.log("Respuesta del backend:", res); // <-- Agrega este log
     return res;
   };
 
@@ -755,4 +751,4 @@ const FamiliaFormulario = () => {
 };
 
 export default FamiliaFormulario;
-console.log(localStorage);
+
