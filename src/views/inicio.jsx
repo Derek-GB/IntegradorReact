@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 const Inicio = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [setCurrentSlide] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const testimonials = [
     {

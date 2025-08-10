@@ -5,7 +5,6 @@ import { showCustomToast } from '../../components/globalComponents/CustomToaster
 const roles = [
   { nombre: "Administrador", value: "admin" },
   { nombre: "Editor", value: "editor" },
-  { nombre: "Visualizador", value: "viewer" },
 ];
 
 const estados = [

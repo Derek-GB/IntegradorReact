@@ -1,46 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import FormContainer from "../../components/FormComponents/FormContainer.jsx";
-import InputField from "../../components/FormComponents/InputField.jsx";
+import SearchAutocompleteInput from "../../components/FormComponents/SearchAutocompleteInput.jsx";
 import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
 import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
 import GlobalDataTable from "../../components/globalComponents/GlobalDataTable.jsx";
-import { productosAPI } from "../../helpers/api.js";
-import toast from "react-hot-toast";
+import { useBusquedaSuministro } from "../../hooks/Producto/useBusquedaSuministro.js";
 
 const BuscarSuministros = () => {
-  const [codigoFamilia, setCodigoFamilia] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [resultados, setResultados] = useState([]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!codigoFamilia.trim()) {
-      toast.error("Debe ingresar un código de familia.");
-      return;
-    }
-
-    setLoading(true);
-    setResultados([]); // Limpia resultados previos
-
-    try {
-      const data = await productosAPI.getByFamilia(codigoFamilia);
-      console.log("Datos recibidos:", data);
-      setResultados(data.data);
-    } catch (error) {
-      toast.error(error.message || "Error al buscar productos.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    familias,
+    busquedaFamilia,
+    setBusquedaFamilia,
+    showSugerencias,
+    setShowSugerencias,
+    handleFamiliaSelect,
+    resultados,
+    loading,
+    handleSubmit,
+  } = useBusquedaSuministro();
 
   const columns = [
-    { name: "Código Producto", selector: row => row.codigoProducto, sortable: true },
-    { name: "Nombre Producto", selector: row => row.nombreProducto },
-    { name: "Descripción", selector: row => row.descripcion },
-    { name: "Cantidad Asignada", selector: row => row.cantidadAsignada },
-    { name: "Persona Asignada", selector: row => row.personaAsignada },
-    { name: "Código Familia", selector: row => row.codigoFamilia },
+    { name: "Código Producto", selector: (row) => row.codigoProducto, sortable: true },
+    { name: "Nombre Producto", selector: (row) => row.nombreProducto },
+    { name: "Descripción", selector: (row) => row.descripcion },
+    { name: "Cantidad Asignada", selector: (row) => row.cantidadAsignada },
+    { name: "Persona Asignada", selector: (row) => row.personaAsignada },
+    { name: "Código Familia", selector: (row) => row.codigoFamilia },
   ];
 
   return (
@@ -48,12 +33,17 @@ const BuscarSuministros = () => {
       <FormContainer title="Búsqueda de Suministro" onSubmit={handleSubmit} size="md">
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1">
-            <InputField
-              label="Código Familia"
-              name="codigoFamilia"
-              value={codigoFamilia}
-              onChange={(e) => setCodigoFamilia(e.target.value)}
-              placeholder="Ingrese el código de familia"
+            <SearchAutocompleteInput
+              label="Familia"
+              busqueda={busquedaFamilia}
+              setBusqueda={setBusquedaFamilia}
+              showSugerencias={showSugerencias}
+              setShowSugerencias={setShowSugerencias}
+              resultados={familias}
+              onSelect={handleFamiliaSelect}
+              optionLabelKeys={["codigoFamilia"]}
+              placeholder="Seleccione una familia"
+              disabled={loading || !(familias?.length > 0)}
             />
           </div>
 
@@ -71,6 +61,7 @@ const BuscarSuministros = () => {
               data={resultados}
               loading={loading}
               rowsPerPage={5}
+              pagination
             />
           </div>
         )}

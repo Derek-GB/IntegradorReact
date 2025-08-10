@@ -147,7 +147,7 @@ export const familiasAPI = createApiMethods("familias", {
 });
 
 export const alberguesAPI = {
-  ...createApiMethods("albergues"),
+  ...createApiMethods("albergues",),
   getById: async (id) => {
     try {
       const res = await customAxios.get(`/albergues/consulta/id/${encodeURIComponent(id)}`);
@@ -356,14 +356,10 @@ export const usuariosAPI = createApiMethods("usuarios", {
       handleError(error);
     }
   },
-  delete: async (id) => {
-    try {
-      const res = await customAxios.delete(`/usuarios/${id}`);
-      return res.data;
-    } catch (error) {
-      throw error;
-    }
-  },
+ delete: async (id) => {
+  const res = await customAxios.delete(`/usuarios/${id}`);
+  return res.data;
+},
   getById: async (id) => {
     try {
       const res = await customAxios.get(`/usuarios/${id}`);

@@ -51,7 +51,7 @@ export const useListaUsuarios = () => {
     await usuariosAPI.delete(id);
     showCustomToast("Éxito", "Cambio de estado correctamente.", "success");
     await fetchUsuarios();
-  } catch (error) {
+  } catch {
     showCustomToast("Error", "Error al cambiar de estado.", "error");
   }
 };

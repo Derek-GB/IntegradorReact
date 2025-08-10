@@ -86,7 +86,6 @@ const FamiliaFormulario = () => {
     paises,
     gruposIndigenasCR,
     canvasRef,
-    signaturePadRef,
     guardarFirma,
     limpiarFirma
   } = useIntegrante(datos, setDatos);
@@ -135,7 +134,7 @@ const FamiliaFormulario = () => {
           "info"
         );
 
-        if (confirmar) {
+        if (window.confirm("Ya existe un jefe de familia, ¿deseas reemplazarlo?")) {
           confirmarCambioJefe();
         }
         return;
