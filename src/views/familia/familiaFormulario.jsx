@@ -86,7 +86,6 @@ const FamiliaFormulario = () => {
     paises,
     gruposIndigenasCR,
     canvasRef,
-    signaturePadRef,
     guardarFirma,
     limpiarFirma
   } = useIntegrante(datos, setDatos);
@@ -135,7 +134,7 @@ const FamiliaFormulario = () => {
           "info"
         );
 
-        if (confirmar) {
+        if (window.confirm("Ya existe un jefe de familia, ¿deseas reemplazarlo?")) {
           confirmarCambioJefe();
         }
         return;
@@ -249,6 +248,7 @@ const FamiliaFormulario = () => {
     setLoading(true);
     setError(null);
     setSuccess(null);
+
 
     const regexIdentificacion = /^\d{9}$/;
     const regexTelefono = /^\d{4}-\d{4}$/;

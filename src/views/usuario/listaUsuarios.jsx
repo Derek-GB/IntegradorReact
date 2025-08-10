@@ -5,21 +5,8 @@ import InputField from "../../components/FormComponents/InputField.jsx";
 import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
 import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
 import GlobalDataTable from "../../components/globalComponents/GlobalDataTable.jsx";
-import Modal from "../../components/globalComponents/GlobalModal.jsx"; // Asumiendo que tienes un modal genérico
-import SelectField from "../../components/FormComponents/SelectField.jsx";
 
-const roles = [
-  { nombre: "Administrador", value: "admin" },
-  { nombre: "Editor", value: "editor" },
-  { nombre: "Visualizador", value: "viewer" },
-];
-
-const estados = [
-  { nombre: "Activo", value: true },
-  { nombre: "Inactivo", value: false },
-];
-
-const ListaUsuarios = ({ rolUsuarioActual }) => {
+const ListaUsuarios = () => {
   const {
     usuarios,
     loading,
@@ -27,58 +14,22 @@ const ListaUsuarios = ({ rolUsuarioActual }) => {
     setBusqueda,
     buscarUsuario,
     eliminarUsuario,
-    abrirModalEdicion,
-    modalAbierto,
-    cerrarModal,
-    usuarioEditando,
-    guardarCambios,
-    rolUsuarioActual: rol
-  } = useListaUsuarios(rolUsuarioActual);
-
-  const [formEdit, setFormEdit] = React.useState({});
-
-  React.useEffect(() => {
-    if (usuarioEditando) {
-      setFormEdit({ ...usuarioEditando });
-    }
-  }, [usuarioEditando]);
-
-  const handleChangeEdit = (e) => {
-    const { name, value } = e.target;
-    setFormEdit((prev) => ({ ...prev, [name]: value }));
-  };
+  } = useListaUsuarios();
 
   const columns = [
-    { name: "ID", selector: row => row.id },
-    { name: "Nombre", selector: row => row.nombreUsuario },
-    { name: "Correo", selector: row => row.correo },
-    { name: "Rol", selector: row => row.rol },
-    { name: "Estado", selector: row => (row.activo ? "Activo" : "Inactivo") },
-    { name: "Identificación", selector: row => row.identificacion },
-    { name: "Municipalidad", selector: row => row.idMunicipalidad },
-    rol === "admin" && {
-      name: "Acciones",
-      cell: (row) => (
-        <div className="flex gap-2">
-          <button
-            className="text-blue-500 hover:underline"
-            onClick={() => abrirModalEdicion(row)}
-          >
-            Editar
-          </button>
-          <button
-            className="text-red-500 hover:underline"
-            onClick={() => eliminarUsuario(row.id)}
-          >
-            Eliminar
-          </button>
-        </div>
-      ),
+    { name: "ID", selector: (row) => row.id },
+    { name: "Nombre", selector: (row) => row.nombreUsuario },
+    { name: "Correo", selector: (row) => row.correo },
+    { name: "Rol", selector: (row) => row.rol },
+    { name: "Estado", selector: (row) => (row.activo ? "Activo" : "Inactivo") },
+    { name: "Identificación", selector: (row) => row.identificacion },
+    { name: "Municipalidad", selector: (row) => row.idMunicipalidad },
+    {
       ignoreRowClick: true,
       allowOverflow: true,
-      button: true
-    }
-  ].filter(Boolean);
+      button: true,
+    },
+  ];
 
   return (
     <>
@@ -114,76 +65,21 @@ const ListaUsuarios = ({ rolUsuarioActual }) => {
             }
           />
         </div>
+
+        {usuarios.length === 1 && (
+          <div className="mt-4 flex justify-end">
+            <button
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              onClick={() => {
+                eliminarUsuario(usuarios[0].id);
+                setBusqueda("");
+              }}
+            >
+              Cambiar estado a Inactivo
+            </button>
+          </div>
+        )}
       </FormContainer>
-
-      {/* Modal de edición */}
-      {modalAbierto && (
-        <Modal title="Editar Usuario" onClose={cerrarModal}>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              guardarCambios(formEdit);
-            }}
-            className="flex flex-col gap-4"
-          >
-            <InputField
-              label="Nombre"
-              name="nombreUsuario"
-              value={formEdit.nombreUsuario || ""}
-              onChange={handleChangeEdit}
-              required
-            />
-            <InputField
-              label="Correo"
-              name="correo"
-              type="email"
-              value={formEdit.correo || ""}
-              onChange={handleChangeEdit}
-              required
-            />
-            <InputField
-              label="Identificación"
-              name="identificacion"
-              value={formEdit.identificacion || ""}
-              onChange={handleChangeEdit}
-              required
-            />
-            <SelectField
-              label="Rol"
-              name="rol"
-              value={formEdit.rol || ""}
-              onChange={handleChangeEdit}
-              options={roles}
-              optionLabel="nombre"
-              optionValue="value"
-              required
-            />
-            <SelectField
-              label="Estado"
-              name="activo"
-              value={formEdit.activo}
-              onChange={handleChangeEdit}
-              options={estados}
-              optionLabel="nombre"
-              optionValue="value"
-              required
-            />
-            <div className="flex justify-end gap-4 mt-4">
-              <button
-                type="button"
-                className="px-4 py-2 bg-gray-300 rounded"
-                onClick={cerrarModal}
-              >
-                Cancelar
-              </button>
-              <SubmitButton color="text-black">
-                Guardar cambios
-              </SubmitButton>
-            </div>
-          </form>
-        </Modal>
-      )}
-
       <CustomToaster />
     </>
   );
