@@ -23,7 +23,7 @@ import ListaUsuarios from './views/usuario/listaUsuarios.jsx';
 
 //Albergue
 
-import ActualizarAlbergue from './views/albergue/ActualizarAlbergue.jsx';
+import ActualizarAlbergue from './views/albergue/actualizarAlbergue.jsx';
 import BusquedaAlbergue from './views/albergue/busquedaAlbergue.jsx';
 import ListaAlbergue from './views/albergue/listaAlbergue.jsx';
 import RegistroAlbergue from './views/albergue/registroAlbergue.jsx';
