@@ -2,7 +2,7 @@ import axios from "axios";
 
 const login = async (correo, contrasena) => {
   try {
-    const res = await axios.post("http://192.168.0.13:4000/api/auth/login", {
+    const res = await axios.post("http://192.168.0.15:4000/api/auth/login", {
       correo,
       contrasena,
     });
@@ -35,7 +35,7 @@ const logout = async () => {
     console.warn("No se encontró un usuario autenticado para cerrar sesión");
     return;
   }
-  axios.post("http://192.168.0.13:4000/api/auth/logout", {id: localStorage.getItem("idUsuario")})
+  axios.post("http://192.168.0.15:4000/api/auth/logout", {id: localStorage.getItem("idUsuario")})
     .then((response) => {
       console.log("Sesión cerrada correctamente", response.data);
     })
