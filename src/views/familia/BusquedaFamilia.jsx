@@ -4,11 +4,21 @@ import InputField from "../../components/FormComponents/InputField";
 import SubmitButton from "../../components/FormComponents/SubmitButton";
 import CustomToaster from "../../components/globalComponents/CustomToaster";
 import GlobalDataTable from "../../components/globalComponents/GlobalDataTable";
+import SearchAutocompleteInput from "../../components/FormComponents/SearchAutocompleteInput";
 
 const BusquedaFamilia = () => {
   const {
-    identificacion,
+    
     setIdentificacion,
+    busquedaCedula,
+    setBusquedaCedula,
+    showSugerenciasCedula,
+    setShowSugerenciasCedula,
+    cedulasDisponibles,
+    busquedaAlbergue,
+    setBusquedaAlbergue,
+    showSugerenciasAlbergue,
+    setShowSugerenciasAlbergue,
     familia,
     loading,
     albergues,
@@ -31,14 +41,24 @@ const BusquedaFamilia = () => {
   const renderVistaBusqueda = () => (
     <FormContainer title="Buscar Familia" onSubmit={handleSubmit} size="xs">
       <div className="flex flex-col gap-4">
-        <InputField
-          label="Número de Identificación"
-          name="identificacion"
-          value={identificacion}
-          onChange={(e) => setIdentificacion(e.target.value)}
-          placeholder="Ingrese el número de identificación"
-          required
+        {/* Nuevo: Autocompletar cédula */}
+        <SearchAutocompleteInput
+          label="Buscar por cédula"
+          busqueda={busquedaCedula}
+          setBusqueda={(value) => {
+            setBusquedaCedula(value);
+            setIdentificacion(value);
+          }}
+          showSugerencias={showSugerenciasCedula}
+          setShowSugerencias={setShowSugerenciasCedula}
+          resultados={cedulasDisponibles}
+          onSelect={(item) => {
+            setBusquedaCedula(item.cedula);
+            setIdentificacion(item.cedula);
+          }}
+          optionLabelKeys={["cedula"]}
         />
+
         <div className="flex flex-col md:flex-row gap-4">
           <SubmitButton color="text-black" width="flex-1" loading={loading}>
             Buscar
@@ -54,10 +74,22 @@ const BusquedaFamilia = () => {
   // Vista de lista de albergues
   const renderVistaAlbergues = () => (
     <FormContainer title="Seleccionar Albergue" size="lg">
-      <div className="mb-4">
+      <div className="mb-4 flex flex-col gap-4">
         <SubmitButton type="button" onClick={volverABusqueda}>
           Volver a Búsqueda
         </SubmitButton>
+
+        {/* Nuevo: Autocompletar albergue */}
+        <SearchAutocompleteInput
+          label="Buscar albergue"
+          busqueda={busquedaAlbergue}
+          setBusqueda={setBusquedaAlbergue}
+          showSugerencias={showSugerenciasAlbergue}
+          setShowSugerencias={setShowSugerenciasAlbergue}
+          resultados={albergues}
+          onSelect={(albergue) => handleSeleccionarAlbergue(albergue)}
+          optionLabelKeys={["nombre"]}
+        />
       </div>
 
       {loadingAlbergues ? (
@@ -141,7 +173,7 @@ const BusquedaFamilia = () => {
     </FormContainer>
   );
 
-  // Vista de detalles de familia
+  // Vista de detalles de familia (no cambia)
   const renderVistaDetalle = () => {
     const familiaData = familia || familiaSeleccionada;
     if (!familiaData || familiaData.length === 0) return null;
@@ -183,7 +215,6 @@ const BusquedaFamilia = () => {
             <InputField label="N° Personas" value={familiaData.length} readOnly />
           </div>
 
-          {/* Botón para egresar familia con el nuevo formato */}
           <div className="mt-4">
             <SubmitButton
               type="button"
@@ -199,7 +230,6 @@ const BusquedaFamilia = () => {
             </SubmitButton>
           </div>
 
-          {/* Tabla de miembros */}
           <div className="mt-4">
             <GlobalDataTable
               columns={[

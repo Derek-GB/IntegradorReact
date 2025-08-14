@@ -6,14 +6,30 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
   const [identificacion, setIdentificacion] = useState("");
   const [familia, setFamilia] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  // Albergues
   const [albergues, setAlbergues] = useState([]);
+  const [busquedaAlbergue, setBusquedaAlbergue] = useState("");
+  const [showSugerenciasAlbergue, setShowSugerenciasAlbergue] = useState(false);
+
+  // Familias y albergue seleccionado
   const [familiasPorAlbergue, setFamiliasPorAlbergue] = useState([]);
   const [albergueSeleccionado, setAlbergueSeleccionado] = useState(null);
   const [familiaSeleccionada, setFamiliaSeleccionada] = useState(null);
+
+  // Vista
   const [vistaActual, setVistaActual] = useState("busqueda");
+
+  // Loaders
   const [loadingAlbergues, setLoadingAlbergues] = useState(false);
   const [loadingFamilias, setLoadingFamilias] = useState(false);
 
+  // Cédulas
+  const [cedulasDisponibles, setCedulasDisponibles] = useState([]);
+  const [busquedaCedula, setBusquedaCedula] = useState("");
+  const [showSugerenciasCedula, setShowSugerenciasCedula] = useState(false);
+
+  // Cargar albergues por usuario
   useEffect(() => {
     const idUsuario = localStorage.getItem("idUsuario");
     const cargarAlbergues = async () => {
@@ -25,17 +41,14 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
 
       setLoadingAlbergues(true);
       try {
-        console.log(`[useBusquedaFamiliaExtendida] Cargando albergues para usuario ${idUsuario}...`);
         const res = await alberguesAPI.getByUsuario(idUsuario);
-        console.log("[useBusquedaFamiliaExtendida] Albergues recibidos:", res);
-
         if (res && Array.isArray(res)) {
           setAlbergues(res);
         } else if (res && res.data) {
           setAlbergues(res.data);
         } else {
           setAlbergues([]);
-          console.warn("[useBusquedaFamiliaExtendida] Respuesta inesperada al obtener albergues", res);
+          console.warn("[useBusquedaFamiliaExtendida] Respuesta inesperada", res);
         }
       } catch (error) {
         console.error("[useBusquedaFamiliaExtendida] Error al cargar albergues:", error);
@@ -48,6 +61,22 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
 
     cargarAlbergues();
   }, [idUsuario]);
+
+  // Cargar cédulas para autocomplete
+  useEffect(() => {
+    const cargarCedulas = async () => {
+      try {
+        const personasRes = await personasAPI.getAll();
+        if (personasRes && personasRes.data) {
+          const cedulasUnicas = [...new Set(personasRes.data.map((p) => p.numeroIdentificacion))];
+          setCedulasDisponibles(cedulasUnicas.map((c) => ({ cedula: c })));
+        }
+      } catch (err) {
+        console.error("[useBusquedaFamiliaExtendida] Error al cargar cédulas:", err);
+      }
+    };
+    cargarCedulas();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,7 +101,6 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
       }
     } catch (err) {
       const status = err.response?.status;
-
       if (status === 404) {
         showCustomToast(
           "No encontrado",
@@ -93,26 +121,25 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
     setVistaActual("familias");
 
     try {
-      console.log("[useBusquedaFamiliaExtendida] Cargando familias para albergue:", albergue);
       const familiasRes = await familiasAPI.getAll();
       const personasRes = await personasAPI.getAll();
 
       if (familiasRes && familiasRes.data && personasRes && personasRes.data) {
-        const familiasFiltradas = familiasRes.data.filter((familia) => familia.idAlbergue === albergue.id);
+        const familiasFiltradas = familiasRes.data.filter((f) => f.idAlbergue === albergue.id);
 
         const familiasConInfo = [];
         const codigosProcesados = new Set();
 
-        for (const familia of familiasFiltradas) {
-          if (!codigosProcesados.has(familia.codigoFamilia)) {
-            codigosProcesados.add(familia.codigoFamilia);
+        for (const f of familiasFiltradas) {
+          if (!codigosProcesados.has(f.codigoFamilia)) {
+            codigosProcesados.add(f.codigoFamilia);
 
             const jefeFamilia = personasRes.data.find(
-              (persona) => persona.esJefeFamilia === 1 && persona.idFamilia === familia.id
+              (p) => p.esJefeFamilia === 1 && p.idFamilia === f.id
             );
 
             familiasConInfo.push({
-              ...familia,
+              ...f,
               nombreJefe: jefeFamilia
                 ? `${jefeFamilia.nombre} ${jefeFamilia.primerApellido} ${jefeFamilia.segundoApellido || ""}`.trim()
                 : "No disponible",
@@ -141,7 +168,6 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
     try {
       if (familiaItem.cedulaJefe) {
         const res = await familiasAPI.getById(familiaItem.cedulaJefe);
-
         if (res && Array.isArray(res.data) && res.data.length > 0) {
           setFamiliaSeleccionada(res.data);
           setVistaActual("detalle");
@@ -192,51 +218,43 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
     }
   };
 
-const handleEgresarFamilia = async (familiaItem) => {
-  try {
-    const idUsuarioCreacion = localStorage.getItem("idUsuario");
-    
-    if (!familiaItem?.codigoFamilia) {
-      showCustomToast("Error", "No se encontró el código de la familia.", "error");
-      return;
+  const handleEgresarFamilia = async (familiaItem) => {
+    try {
+      const idUsuarioCreacion = localStorage.getItem("idUsuario");
+
+      if (!familiaItem?.codigoFamilia) {
+        showCustomToast("Error", "No se encontró el código de la familia.", "error");
+        return;
+      }
+      if (!idUsuarioCreacion) {
+        showCustomToast("Error", "No se encontró el usuario en sesión.", "error");
+        return;
+      }
+      if (isNaN(Number(idUsuarioCreacion))) {
+        showCustomToast("Error", "ID de usuario inválido.", "error");
+        return;
+      }
+
+      const payload = {
+        id: familiaItem.codigoFamilia,
+        idModificacion: idUsuarioCreacion,
+      };
+
+      await familiasAPI.egresar(payload);
+      showCustomToast("Éxito", "La familia ha sido egresada correctamente.", "success");
+
+      if (albergueSeleccionado) {
+        await handleSeleccionarAlbergue(albergueSeleccionado);
+      }
+      if (familiaItem.cedulaJefe) {
+        const res = await familiasAPI.getById(familiaItem.cedulaJefe);
+        setFamiliaSeleccionada(res.data);
+      }
+    } catch (error) {
+      console.error("Error al egresar familia:", error);
+      showCustomToast("Error", error.message || "No se pudo egresar la familia", "error");
     }
-
-    if (!idUsuarioCreacion) {
-      showCustomToast("Error", "No se encontró el usuario en sesión.", "error");
-      return;
-    }
-
-   
-    if (isNaN(Number(idUsuarioCreacion))) {
-      showCustomToast("Error", "ID de usuario inválido.", "error");
-      return;
-    }
-
-    const payload = {
-      id: familiaItem.codigoFamilia, 
-      idModificacion: idUsuarioCreacion 
-    };
-
-    console.log("Payload enviado:", payload);
-
-    await familiasAPI.egresar(payload);
-
-    showCustomToast("Éxito", "La familia ha sido egresada correctamente.", "success");
-
-   
-    if (albergueSeleccionado) {
-      await handleSeleccionarAlbergue(albergueSeleccionado);
-    }
-    if (familiaItem.cedulaJefe) {
-      const res = await familiasAPI.getById(familiaItem.cedulaJefe);
-      setFamiliaSeleccionada(res.data);
-    }
-
-  } catch (error) {
-    console.error("Error al egresar familia:", error);
-    showCustomToast("Error", error.message || "No se pudo egresar la familia", "error");
-  }
-};
+  };
 
   const irAAlbergues = () => {
     setVistaActual("albergues");
@@ -252,6 +270,7 @@ const handleEgresarFamilia = async (familiaItem) => {
     setAlbergueSeleccionado(null);
     setFamiliaSeleccionada(null);
     setIdentificacion("");
+    setBusquedaCedula("");
   };
 
   const volverAFamilias = () => {
@@ -262,9 +281,21 @@ const handleEgresarFamilia = async (familiaItem) => {
   return {
     identificacion,
     setIdentificacion,
+    busquedaCedula,
+    setBusquedaCedula,
+    showSugerenciasCedula,
+    setShowSugerenciasCedula,
+    cedulasDisponibles,
+
     familia,
     loading,
+
+    busquedaAlbergue,
+    setBusquedaAlbergue,
+    showSugerenciasAlbergue,
+    setShowSugerenciasAlbergue,
     albergues,
+
     familiasPorAlbergue,
     albergueSeleccionado,
     familiaSeleccionada,
