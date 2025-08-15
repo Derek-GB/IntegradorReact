@@ -9,7 +9,7 @@ import SearchAutocompleteInput from "../../components/FormComponents/SearchAutoc
 const FormularioRegistro = () => {
   const {
     albergues,
-    amenazas,
+    peligros, // antes amenazas
     provincias,
     cantones,
     distritos,
@@ -63,10 +63,10 @@ const FormularioRegistro = () => {
             </div>
             <div className="flex-1">
               <SelectField
-                label="Tipo de Evento"
+                label="Tipo de Peligro"
                 value={eventoSeleccionado}
                 onChange={(e) => setEventoSeleccionado(e.target.value)}
-                options={amenazas.map((e) => ({ nombre: e.evento, id: e.id }))}
+                options={peligros} // usa directamente el array de peligros
                 optionLabel="nombre"
                 optionValue="id"
                 required

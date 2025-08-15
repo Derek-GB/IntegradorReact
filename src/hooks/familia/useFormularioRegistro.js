@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { alberguesAPI, amenazasAPI, familiasAPI } from "../../helpers/api";
 import obtenerTodos from "../../helpers/obtenerUbicaciones";
 import customAxios from "../../helpers/customAxios";
@@ -19,7 +19,7 @@ const useFormularioRegistro = () => {
   const [idDistritoSeleccionado, setIdDistritoSeleccionado] = useState(""); // ✅ agregado
 
   const [albergues, setAlbergues] = useState([]);
-  const [amenazas, setAmenazas] = useState([]);
+  const [peligros, setPeligros] = useState([]);
   const [provincias, setProvincias] = useState([]);
   const [cantones, setCantones] = useState([]);
   const [distritos, setDistritos] = useState([]);
@@ -27,7 +27,16 @@ const useFormularioRegistro = () => {
   const [busquedaAlbergue, setBusquedaAlbergue] = useState("");
   const [showSugerenciasAlbergue, setShowSugerenciasAlbergue] = useState(false);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+
+  // Cargar peligros (antes amenazas)
+  useEffect(() => {
+    const cargarPeligros = async () => {
+      const datos = await obtenerTodos("https://api-geo-cr.vercel.app/provincias");
+      setProvincias(datos);
+    };
+    cargarPeligros();
+  }, []);
 
   // Cargar datos iniciales
   useEffect(() => {
@@ -44,7 +53,15 @@ const useFormularioRegistro = () => {
           amenazasAPI.getAll(),
         ]);
         setAlbergues(resAlbergues?.data || []);
-        setAmenazas(resAmenazas?.data || []);
+        // Extraer peligros únicos
+        const peligrosUnicos = Array.from(
+          new Set((resAmenazas?.data || []).map((a) => a.peligro))
+        )
+          .filter(Boolean)
+          .map((peligro) => ({ id: peligro, nombre: peligro }));
+        console.log("Datos crudos de amenazas:", resAmenazas?.data);
+        console.log("Peligros únicos extraídos:", peligrosUnicos);
+        setPeligros(peligrosUnicos);
       } catch {
         showCustomToast("Error", "Error al cargar datos internos", "error");
       }
@@ -161,12 +178,12 @@ const useFormularioRegistro = () => {
     }
 
     localStorage.setItem("cantidadIntegrantes", integrantes);
-    navigate("/familiaFormulario.jsx");
+    // navigate("/familiaFormulario.jsx");
   };
 
   return {
     albergues,
-    amenazas,
+    peligros,
     provincias,
     cantones,
     distritos,
