@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Agrega esto arriba
 import FormContainer from "../../components/FormComponents/FormContainer.jsx";
 import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
@@ -161,6 +161,19 @@ const FamiliaFormulario = () => {
     }));
 
   };
+
+  // Marcar automáticamente "No" si la edad es menor a 18
+  useEffect(() => {
+    if (edad < 18 && dp.estaACargoMenor !== "No") {
+      setDatos(prev => ({
+        ...prev,
+        FamiliaDatosPersonales: {
+          ...prev.FamiliaDatosPersonales,
+          estaACargoMenor: "No"
+        }
+      }));
+    }
+  }, [edad]);
 
 
 
@@ -326,14 +339,34 @@ const FamiliaFormulario = () => {
       {/* Información Personal */}
       <FoldDownComponent title="Información Personal" open>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
           <InputField
             label="ID Familia"
             name="idFamilia"
             value={codigoFamilia || ""}
             readOnly
           />
-
+          <SelectField
+            label="Tipo de Identificación"
+            name="tipoIdentificacion"
+            value={dp.tipoIdentificacion || ""}
+            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            options={["Cédula", "Pasaporte", "DIMEX"]}
+            required
+          />
+          <InputField
+            label="Número de Identificación"
+            name="numeroIdentificacion"
+            value={dp.numeroIdentificacion || ""}
+            onChange={(e) => {
+              let val = e.target.value.replace(/\D/g, "");
+              if (val.length > 9) val = val.slice(0, 9);
+              handleChange(
+                { target: { name: e.target.name, value: val } },
+                "FamiliaDatosPersonales"
+              );
+            }}
+            required
+          />
           <InputField
             label="Nombre"
             name="nombre"
@@ -353,28 +386,6 @@ const FamiliaFormulario = () => {
             name="segundoApellido"
             value={dp.segundoApellido || ""}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
-            required
-          />
-          <SelectField
-            label="Tipo de Identificación"
-            name="tipoIdentificacion"
-            value={dp.tipoIdentificacion || ""}
-            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
-            options={["Cédula", "Pasaporte", "DIMEX"]}
-            required
-          />
-          <InputField
-            label="Número de Identificación"
-            name="numeroIdentificacion"
-            value={dp.numeroIdentificacion || ""}
-            onChange={(e) => {
-              let val = e.target.value.replace(/\D/g, ""); // solo dígitos
-              if (val.length > 9) val = val.slice(0, 9); // máximo 9
-              handleChange(
-                { target: { name: e.target.name, value: val } },
-                "FamiliaDatosPersonales"
-              );
-            }}
             required
           />
           <InputField
@@ -414,18 +425,20 @@ const FamiliaFormulario = () => {
             options={["Masculino", "Femenino", "Intersexo", "Prefiero no decir"]}
             required
           />
-          <InputField
-            label="Observaciones"
-            name="observaciones"
-            value={dp.observaciones || ""}
-            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
-            type="textarea"
-          />
-          <InputField
+          <SelectField
             label="Parentesco"
             name="parentesco"
             value={dp.parentesco || ""}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            options={[
+              "Padre",
+              "Madre",
+              "Hermano(a)",
+              "Hijo(a)",
+              "Tío(a)",
+              "Abuelo(a)",
+              "Otro"
+            ]}
             required
           />
           <InputField
@@ -433,10 +446,10 @@ const FamiliaFormulario = () => {
             name="telefono"
             value={dp.telefono || ""}
             onChange={(e) => {
-              let val = e.target.value.replace(/\D/g, ""); // solo dígitos
-              if (val.length > 8) val = val.slice(0, 8); // máximo 8 dígitos
+              let val = e.target.value.replace(/\D/g, "");
+              if (val.length > 8) val = val.slice(0, 8);
               if (val.length > 4) {
-                val = val.slice(0, 4) + "-" + val.slice(4); // formato ####-####
+                val = val.slice(0, 4) + "-" + val.slice(4);
               }
               handleChange(
                 { target: { name: e.target.name, value: val } },
@@ -466,6 +479,14 @@ const FamiliaFormulario = () => {
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
             options={["No", "Sí"]}
             required
+          />
+          {/* Comentarios al final */}
+          <InputField
+            label="Observaciones"
+            name="observaciones"
+            value={dp.observaciones || ""}
+            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            type="textarea"
           />
         </div>
       </FoldDownComponent>
