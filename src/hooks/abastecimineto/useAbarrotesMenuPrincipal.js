@@ -97,7 +97,6 @@ export const useAbarrotesMenuPrincipal = () => {
       setTimeout(() => {
         setLoading(false);
         navigate('/formularioAbarrotes.jsx');
-      }, 1500);
     } catch (error) {
       console.error('Error al crear el pedido:', error);
       showCustomToast('Error', 'No se pudo guardar el formulario.', 'error');
