@@ -263,18 +263,39 @@ const FamiliaFormulario = () => {
     setSuccess(null);
 
 
-    const regexIdentificacion = /^\d{9}$/;
-    const regexTelefono = /^\d{4}-\d{4}$/;
+    const regexCedula = /^\d{9}$/;
+    const regexPasaporte = /^[A-Z]{1,3}[0-9]{6,9}$/;
+    const regexDimex = /^\d{12}$/;
 
-    if (!regexIdentificacion.test(dp.numeroIdentificacion || "")) {
+    if (dp.tipoIdentificacion === "Cédula" && !regexCedula.test(dp.numeroIdentificacion || "")) {
       showCustomToast(
         "Dato inválido",
-        "El número de identificación debe tener exactamente 9 dígitos.",
+        "La cédula debe tener exactamente 9 dígitos.",
         "error"
       );
       setLoading(false);
       return;
     }
+    if (dp.tipoIdentificacion === "Pasaporte" && !regexPasaporte.test(dp.numeroIdentificacion || "")) {
+      showCustomToast(
+        "Dato inválido",
+        "El pasaporte debe tener de 1 a 3 letras seguidas de 6 a 9 números.",
+        "error"
+      );
+      setLoading(false);
+      return;
+    }
+    if (dp.tipoIdentificacion === "DIMEX" && !regexDimex.test(dp.numeroIdentificacion || "")) {
+      showCustomToast(
+        "Dato inválido",
+        "El DIMEX debe tener exactamente 12 dígitos numéricos.",
+        "error"
+      );
+      setLoading(false);
+      return;
+    }
+
+    const regexTelefono = /^\d{4}-\d{4}$/;
 
     if (!regexTelefono.test(dp.telefono || "")) {
       showCustomToast(
@@ -357,15 +378,28 @@ const FamiliaFormulario = () => {
             label="Número de Identificación"
             name="numeroIdentificacion"
             value={dp.numeroIdentificacion || ""}
-            onChange={(e) => {
-              let val = e.target.value.replace(/\D/g, "");
-              if (val.length > 9) val = val.slice(0, 9);
+            onChange={e => {
+              let val = e.target.value;
+              if (dp.tipoIdentificacion === "Cédula") {
+                val = val.replace(/\D/g, "");
+                if (val.length > 9) val = val.slice(0, 9);
+              }
+              // Para pasaporte y DIMEX, permite letras y números (no filtra)
               handleChange(
                 { target: { name: e.target.name, value: val } },
                 "FamiliaDatosPersonales"
               );
             }}
             required
+            placeholder={
+              dp.tipoIdentificacion === "Cédula"
+                ? "Ej: 123456789"
+                : dp.tipoIdentificacion === "Pasaporte"
+                ? "Ej: ABC123456"
+                : dp.tipoIdentificacion === "DIMEX"
+                ? "Ej: 000000000000"
+                : ""
+            }
           />
           <InputField
             label="Nombre"
@@ -436,11 +470,20 @@ const FamiliaFormulario = () => {
               "Hermano(a)",
               "Hijo(a)",
               "Tío(a)",
-              "Abuelo(a)",
+              "Abuelo(a)",              
               "Otro"
             ]}
             required
           />
+          {dp.parentesco === "Otro" && (
+            <InputField
+              label="Especifique otro parentesco"
+              name="otroParentesco"
+              value={dp.otroParentesco || ""}
+              onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+              required
+            />
+          )}
           <InputField
             label="Teléfono"
             name="telefono"
