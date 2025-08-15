@@ -17,17 +17,51 @@ const ListaUsuarios = () => {
   } = useListaUsuarios();
 
   const columns = [
-    { name: "ID", selector: (row) => row.id },
-    { name: "Nombre", selector: (row) => row.nombreUsuario },
-    { name: "Correo", selector: (row) => row.correo },
-    { name: "Rol", selector: (row) => row.rol },
-    { name: "Estado", selector: (row) => (row.activo ? "Activo" : "Inactivo") },
-    { name: "Identificación", selector: (row) => row.identificacion },
-    { name: "Municipalidad", selector: (row) => row.idMunicipalidad },
+    {
+      name: "Nombre",
+      selector: (row) => row.nombreUsuario,
+      style: { minWidth: "190px", whiteSpace: "normal", textAlign: "left" },
+      headerStyle: { textAlign: "right" }
+    },
+    {
+      name: "Correo",
+      selector: (row) => row.correo,
+      style: { minWidth: "290px", maxWidth: "350px", whiteSpace: "normal", textAlign: "right" },
+      headerStyle: { textAlign: "right" }
+    },
+    {
+      name: "Rol",
+      selector: (row) => row.rol,
+      style: { minWidth: "240px", textAlign: "left", paddingRight: "10px" },
+      headerStyle: { textAlign: "right" }
+    },
+    {
+      name: "Estado",
+      selector: (row) => (row.activo ? "Activo" : "Inactivo"),
+      style: { minWidth: "240px", textAlign: "left", paddingRight: "10px" },
+      headerStyle: { textAlign: "right" }
+    },
+    {
+      name: "Identificación",
+      selector: (row) => row.identificacion,
+      style: { minWidth: "290px", textAlign: "right" },
+      headerStyle: { textAlign: "right" }
+    },
+    {
+      name: "Municipalidad",
+      selector: (row) =>
+        row.nombreMunicipalidad ||
+        (row.municipalidad.nombre) ||
+        row.municipalidad,
+      style: { minWidth: "0px", whiteSpace: "left", textAlign: "left" },
+      headerStyle: { textAlign: "center" }
+    },
     {
       ignoreRowClick: true,
       allowOverflow: true,
       button: true,
+      style: { textAlign: "left" },
+      headerStyle: { textAlign: "center" }
     },
   ];
 
@@ -37,11 +71,12 @@ const ListaUsuarios = () => {
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1">
             <InputField
-              label="Buscar por ID"
+              label="Buscar por nombre"
               name="busqueda"
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
-              placeholder="Ej: 1"
+              placeholder="Ej: Juan Pérez"
+              maxLength={50}
             />
           </div>
           <div className="flex-1 flex items-end">
