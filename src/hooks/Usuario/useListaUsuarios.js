@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { usuariosAPI } from "../../helpers/api.js";
-import { showCustomToast } from "../../components/globalComponents/CustomToaster.jsx";
+import { usuariosAPI } from "../../helpers/api";
+import { showCustomToast } from "../../components/globalComponents/CustomToaster";
 
 export const useListaUsuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -34,9 +34,15 @@ export const useListaUsuarios = () => {
     }
     setLoading(true);
     try {
-      const response = await usuariosAPI.getById(busqueda.trim());
-      const usuario = response.data?.[0]?.[0] ?? null;
-      setUsuarios(usuario ? [usuario] : []);
+      const data = await usuariosAPI.getAll();
+      const lista = Array.isArray(data) ? data : data.data ?? [];
+      const filtrados = lista.filter((u) =>
+        u.nombreUsuario?.toLowerCase().includes(busqueda.trim().toLowerCase())
+      );
+      setUsuarios(filtrados);
+      if (filtrados.length === 0) {
+        showCustomToast("Error", "Usuario no encontrado.", "error");
+      }
     } catch {
       showCustomToast("Error", "Usuario no encontrado.", "error");
       setUsuarios([]);
@@ -46,15 +52,14 @@ export const useListaUsuarios = () => {
   };
 
   const eliminarUsuario = async (id) => {
-  console.log("Eliminar usuario con ID:", id);
-  try {
-    await usuariosAPI.delete(id);
-    showCustomToast("Éxito", "Cambio de estado correctamente.", "success");
-    await fetchUsuarios();
-  } catch {
-    showCustomToast("Error", "Error al cambiar de estado.", "error");
-  }
-};
+    try {
+      await usuariosAPI.delete(id);
+      showCustomToast("Éxito", "Cambio de estado correctamente.", "success");
+      await fetchUsuarios();
+    } catch {
+      showCustomToast("Error", "Error al cambiar de estado.", "error");
+    }
+  };
 
   const abrirModalEdicion = (usuario) => {
     setUsuarioEditando(usuario);
@@ -68,10 +73,10 @@ export const useListaUsuarios = () => {
 
   const guardarCambios = async (usuarioActualizado) => {
     try {
-      await usuariosAPI.update(usuarioActualizado);
+      await usuariosAPI.update(usuarioActualizado.id, usuarioActualizado);
       showCustomToast("Éxito", "Usuario actualizado correctamente.", "success");
-      cerrarModal();
       fetchUsuarios();
+      cerrarModal();
     } catch {
       showCustomToast("Error", "Error al actualizar usuario.", "error");
     }
