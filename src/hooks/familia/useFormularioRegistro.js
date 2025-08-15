@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { alberguesAPI, amenazasAPI, familiasAPI } from "../../helpers/api";
 import obtenerTodos from "../../helpers/obtenerUbicaciones";
 import customAxios from "../../helpers/customAxios";
@@ -27,7 +27,7 @@ const useFormularioRegistro = () => {
   const [busquedaAlbergue, setBusquedaAlbergue] = useState("");
   const [showSugerenciasAlbergue, setShowSugerenciasAlbergue] = useState(false);
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   // Cargar peligros (antes amenazas)
   useEffect(() => {
@@ -178,7 +178,7 @@ const useFormularioRegistro = () => {
     }
 
     localStorage.setItem("cantidadIntegrantes", integrantes);
-    // navigate("/familiaFormulario.jsx");
+    navigate("/familiaFormulario.jsx");
   };
 
   return {

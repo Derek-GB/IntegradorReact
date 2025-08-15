@@ -29,6 +29,9 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
   const [busquedaCedula, setBusquedaCedula] = useState("");
   const [showSugerenciasCedula, setShowSugerenciasCedula] = useState(false);
 
+  // Familias recientes
+  const [familiasRecientes, setFamiliasRecientes] = useState([]);
+
   // Cargar albergues por usuario
   useEffect(() => {
     const idUsuario = localStorage.getItem("idUsuario");
@@ -76,6 +79,44 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
       }
     };
     cargarCedulas();
+  }, []);
+
+  // Cargar familias recientes al inicio
+  useEffect(() => {
+    const cargarFamiliasRecientes = async () => {
+      try {
+        const [familiasRes, personasRes] = await Promise.all([
+          familiasAPI.getAll(),
+          personasAPI.getAll(),
+        ]);
+        if (familiasRes && familiasRes.data && personasRes && personasRes.data) {
+          // Ordenar por fecha de creación descendente
+          const ordenadas = [...familiasRes.data].sort((a, b) => {
+            const fechaA = new Date(a.fechaCreacion || a.createdAt || 0);
+            const fechaB = new Date(b.fechaCreacion || b.createdAt || 0);
+            return fechaB - fechaA;
+          });
+
+          // Asociar jefe de familia
+          const recientesConJefe = ordenadas.slice(0, 10).map((f) => {
+            const jefe = personasRes.data.find(
+              (p) => p.esJefeFamilia === 1 && p.idFamilia === f.id
+            );
+            return {
+              ...f,
+              nombreJefe: jefe
+                ? `${jefe.nombre} ${jefe.primerApellido} ${jefe.segundoApellido || ""}`.trim()
+                : "No disponible",
+              cedulaJefe: jefe ? jefe.numeroIdentificacion : null,
+            };
+          });
+          setFamiliasRecientes(recientesConJefe);
+        }
+      } catch {
+        setFamiliasRecientes([]);
+      }
+    };
+    cargarFamiliasRecientes();
   }, []);
 
   const handleSubmit = async (e) => {
@@ -163,7 +204,7 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
     }
   };
 
-  const handleSeleccionarFamilia = async (familiaItem) => {
+  const handleSeleccionarFamilia = async (familiaItem, desdeRecientes = false) => {
     setLoadingFamilias(true);
     try {
       if (familiaItem.cedulaJefe) {
@@ -172,16 +213,16 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
           setFamiliaSeleccionada(res.data);
           setVistaActual("detalle");
           showCustomToast("Éxito", "Familia cargada correctamente.", "success");
+          // Si viene de recientes, guarda el contexto
+          if (desdeRecientes) {
+            setFamiliasPorAlbergue(familiasRecientes);
+            setAlbergueSeleccionado({ nombre: "Últimas familias registradas" }); // <--- aquí el cambio
+          }
         } else {
           throw new Error("No se encontraron datos completos");
         }
       } else {
-        showCustomToast(
-          "Información limitada",
-          "No se pudo obtener la cédula del jefe de familia. Use la búsqueda por identificación para ver todos los detalles.",
-          "info"
-        );
-
+        // ...tu código actual para info limitada...
         setFamiliaSeleccionada([
           {
             codigoFamilia: familiaItem.codigoFamilia,
@@ -209,6 +250,10 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
           },
         ]);
         setVistaActual("detalle");
+        if (desdeRecientes) {
+          setFamiliasPorAlbergue(familiasRecientes);
+          setAlbergueSeleccionado({ nombre: "últimas familias registradas" }); // <--- aquí el cambio
+        }
       }
     } catch (err) {
       showCustomToast("Error", "Error al cargar los detalles de la familia.", "error");
@@ -302,6 +347,8 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
     vistaActual,
     loadingAlbergues,
     loadingFamilias,
+
+    familiasRecientes,
 
     handleSubmit,
     handleSeleccionarAlbergue,

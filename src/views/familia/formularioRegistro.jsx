@@ -63,7 +63,7 @@ const FormularioRegistro = () => {
             </div>
             <div className="flex-1">
               <SelectField
-                label="Tipo de Peligro"
+                label="Eventualidad"
                 value={eventoSeleccionado}
                 onChange={(e) => setEventoSeleccionado(e.target.value)}
                 options={peligros} // usa directamente el array de peligros

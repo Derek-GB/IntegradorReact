@@ -35,6 +35,7 @@ const BusquedaFamilia = () => {
     volverABusqueda,
     volverAFamilias,
     handleEgresarFamilia,
+    familiasRecientes,
   } = useBusquedaFamiliaExtendida();
 
   // Vista de búsqueda principal
@@ -43,18 +44,20 @@ const BusquedaFamilia = () => {
       <div className="flex flex-col gap-4">
         {/* Nuevo: Autocompletar cédula */}
         <SearchAutocompleteInput
-          label="Buscar por cédula"
-          busqueda={busquedaCedula}
+          label="Buscar por Identificación"
+          busqueda={busquedaCedula.slice(0, 20)} // <-- fuerza el valor a 20 caracteres
           setBusqueda={(value) => {
-            setBusquedaCedula(value);
-            setIdentificacion(value);
+            const max20 = value.slice(0, 20);
+            setBusquedaCedula(max20);
+            setIdentificacion(max20);
           }}
           showSugerencias={showSugerenciasCedula}
           setShowSugerencias={setShowSugerenciasCedula}
           resultados={cedulasDisponibles}
           onSelect={(item) => {
-            setBusquedaCedula(item.cedula);
-            setIdentificacion(item.cedula);
+            const max20 = (item.cedula || "").slice(0, 20);
+            setBusquedaCedula(max20);
+            setIdentificacion(max20);
           }}
           optionLabelKeys={["cedula"]}
         />
@@ -67,6 +70,35 @@ const BusquedaFamilia = () => {
             Ver por Albergue
           </SubmitButton>
         </div>
+      </div>
+
+      <div className="mt-8">
+        <h2 className="text-lg font-semibold mb-2">Últimas 10 familias registradas</h2>
+        <GlobalDataTable
+          columns={[
+            { name: "#", selector: (row, i) => i + 1, width: "60px" },
+            { name: "Código Familia", selector: (row) => row.codigoFamilia || "" },
+            { name: "Jefe de Familia", selector: (row) => row.nombreCompletoJefe || row.nombreJefe || "" },
+            { name: "Fecha de Registro", selector: (row) => (row.fechaCreacion || row.createdAt || "").split("T")[0] },
+            {
+              name: "Acciones",
+              cell: (row) => (
+                <button
+                  type="button"
+                  className="bg-[#FFC107] text-black py-1 px-3 rounded-md hover:bg-[#FFB300] transition-colors text-sm font-medium"
+                  onClick={() => handleSeleccionarFamilia(row, true)}
+                >
+                  Ver detalles
+                </button>
+              ),
+              ignoreRowClick: true,
+            },
+          ]}
+          data={familiasRecientes}
+          pagination={false}
+          highlightOnHover
+          dense
+        />
       </div>
     </FormContainer>
   );
@@ -151,7 +183,7 @@ const BusquedaFamilia = () => {
                 <button
                   type="button"
                   className="bg-[#FFC107] text-black py-1 px-3 rounded-md hover:bg-[#FFB300] transition-colors text-sm font-medium"
-                  onClick={() => handleSeleccionarFamilia(row)}
+                  onClick={() => handleSeleccionarFamilia(row, true)}
                 >
                   Ver detalles
                 </button>
