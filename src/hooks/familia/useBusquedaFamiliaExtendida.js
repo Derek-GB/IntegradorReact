@@ -6,14 +6,33 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
   const [identificacion, setIdentificacion] = useState("");
   const [familia, setFamilia] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  // Albergues
   const [albergues, setAlbergues] = useState([]);
+  const [busquedaAlbergue, setBusquedaAlbergue] = useState("");
+  const [showSugerenciasAlbergue, setShowSugerenciasAlbergue] = useState(false);
+
+  // Familias y albergue seleccionado
   const [familiasPorAlbergue, setFamiliasPorAlbergue] = useState([]);
   const [albergueSeleccionado, setAlbergueSeleccionado] = useState(null);
   const [familiaSeleccionada, setFamiliaSeleccionada] = useState(null);
+
+  // Vista
   const [vistaActual, setVistaActual] = useState("busqueda");
+
+  // Loaders
   const [loadingAlbergues, setLoadingAlbergues] = useState(false);
   const [loadingFamilias, setLoadingFamilias] = useState(false);
 
+  // Cédulas
+  const [cedulasDisponibles, setCedulasDisponibles] = useState([]);
+  const [busquedaCedula, setBusquedaCedula] = useState("");
+  const [showSugerenciasCedula, setShowSugerenciasCedula] = useState(false);
+
+  // Familias recientes
+  const [familiasRecientes, setFamiliasRecientes] = useState([]);
+
+  // Cargar albergues por usuario
   useEffect(() => {
     const idUsuario = localStorage.getItem("idUsuario");
     const cargarAlbergues = async () => {
@@ -25,17 +44,14 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
 
       setLoadingAlbergues(true);
       try {
-        console.log(`[useBusquedaFamiliaExtendida] Cargando albergues para usuario ${idUsuario}...`);
         const res = await alberguesAPI.getByUsuario(idUsuario);
-        console.log("[useBusquedaFamiliaExtendida] Albergues recibidos:", res);
-
         if (res && Array.isArray(res)) {
           setAlbergues(res);
         } else if (res && res.data) {
           setAlbergues(res.data);
         } else {
           setAlbergues([]);
-          console.warn("[useBusquedaFamiliaExtendida] Respuesta inesperada al obtener albergues", res);
+          console.warn("[useBusquedaFamiliaExtendida] Respuesta inesperada", res);
         }
       } catch (error) {
         console.error("[useBusquedaFamiliaExtendida] Error al cargar albergues:", error);
@@ -48,6 +64,60 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
 
     cargarAlbergues();
   }, [idUsuario]);
+
+  // Cargar cédulas para autocomplete
+  useEffect(() => {
+    const cargarCedulas = async () => {
+      try {
+        const personasRes = await personasAPI.getAll();
+        if (personasRes && personasRes.data) {
+          const cedulasUnicas = [...new Set(personasRes.data.map((p) => p.numeroIdentificacion))];
+          setCedulasDisponibles(cedulasUnicas.map((c) => ({ cedula: c })));
+        }
+      } catch (err) {
+        console.error("[useBusquedaFamiliaExtendida] Error al cargar cédulas:", err);
+      }
+    };
+    cargarCedulas();
+  }, []);
+
+  // Cargar familias recientes al inicio
+  useEffect(() => {
+    const cargarFamiliasRecientes = async () => {
+      try {
+        const [familiasRes, personasRes] = await Promise.all([
+          familiasAPI.getAll(),
+          personasAPI.getAll(),
+        ]);
+        if (familiasRes && familiasRes.data && personasRes && personasRes.data) {
+          // Ordenar por fecha de creación descendente
+          const ordenadas = [...familiasRes.data].sort((a, b) => {
+            const fechaA = new Date(a.fechaCreacion || a.createdAt || 0);
+            const fechaB = new Date(b.fechaCreacion || b.createdAt || 0);
+            return fechaB - fechaA;
+          });
+
+          // Asociar jefe de familia
+          const recientesConJefe = ordenadas.slice(0, 10).map((f) => {
+            const jefe = personasRes.data.find(
+              (p) => p.esJefeFamilia === 1 && p.idFamilia === f.id
+            );
+            return {
+              ...f,
+              nombreJefe: jefe
+                ? `${jefe.nombre} ${jefe.primerApellido} ${jefe.segundoApellido || ""}`.trim()
+                : "No disponible",
+              cedulaJefe: jefe ? jefe.numeroIdentificacion : null,
+            };
+          });
+          setFamiliasRecientes(recientesConJefe);
+        }
+      } catch {
+        setFamiliasRecientes([]);
+      }
+    };
+    cargarFamiliasRecientes();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,7 +142,6 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
       }
     } catch (err) {
       const status = err.response?.status;
-
       if (status === 404) {
         showCustomToast(
           "No encontrado",
@@ -93,26 +162,25 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
     setVistaActual("familias");
 
     try {
-      console.log("[useBusquedaFamiliaExtendida] Cargando familias para albergue:", albergue);
       const familiasRes = await familiasAPI.getAll();
       const personasRes = await personasAPI.getAll();
 
       if (familiasRes && familiasRes.data && personasRes && personasRes.data) {
-        const familiasFiltradas = familiasRes.data.filter((familia) => familia.idAlbergue === albergue.id);
+        const familiasFiltradas = familiasRes.data.filter((f) => f.idAlbergue === albergue.id);
 
         const familiasConInfo = [];
         const codigosProcesados = new Set();
 
-        for (const familia of familiasFiltradas) {
-          if (!codigosProcesados.has(familia.codigoFamilia)) {
-            codigosProcesados.add(familia.codigoFamilia);
+        for (const f of familiasFiltradas) {
+          if (!codigosProcesados.has(f.codigoFamilia)) {
+            codigosProcesados.add(f.codigoFamilia);
 
             const jefeFamilia = personasRes.data.find(
-              (persona) => persona.esJefeFamilia === 1 && persona.idFamilia === familia.id
+              (p) => p.esJefeFamilia === 1 && p.idFamilia === f.id
             );
 
             familiasConInfo.push({
-              ...familia,
+              ...f,
               nombreJefe: jefeFamilia
                 ? `${jefeFamilia.nombre} ${jefeFamilia.primerApellido} ${jefeFamilia.segundoApellido || ""}`.trim()
                 : "No disponible",
@@ -136,26 +204,25 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
     }
   };
 
-  const handleSeleccionarFamilia = async (familiaItem) => {
+  const handleSeleccionarFamilia = async (familiaItem, desdeRecientes = false) => {
     setLoadingFamilias(true);
     try {
       if (familiaItem.cedulaJefe) {
         const res = await familiasAPI.getById(familiaItem.cedulaJefe);
-
         if (res && Array.isArray(res.data) && res.data.length > 0) {
           setFamiliaSeleccionada(res.data);
           setVistaActual("detalle");
           showCustomToast("Éxito", "Familia cargada correctamente.", "success");
+          // Si viene de recientes, guarda el contexto
+          if (desdeRecientes) {
+            setFamiliasPorAlbergue(familiasRecientes);
+            setAlbergueSeleccionado({ nombre: "Últimas familias registradas" }); // <--- aquí el cambio
+          }
         } else {
           throw new Error("No se encontraron datos completos");
         }
       } else {
-        showCustomToast(
-          "Información limitada",
-          "No se pudo obtener la cédula del jefe de familia. Use la búsqueda por identificación para ver todos los detalles.",
-          "info"
-        );
-
+        // ...tu código actual para info limitada...
         setFamiliaSeleccionada([
           {
             codigoFamilia: familiaItem.codigoFamilia,
@@ -183,6 +250,10 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
           },
         ]);
         setVistaActual("detalle");
+        if (desdeRecientes) {
+          setFamiliasPorAlbergue(familiasRecientes);
+          setAlbergueSeleccionado({ nombre: "últimas familias registradas" }); // <--- aquí el cambio
+        }
       }
     } catch (err) {
       showCustomToast("Error", "Error al cargar los detalles de la familia.", "error");
@@ -192,51 +263,43 @@ const useBusquedaFamiliaExtendida = (idUsuario) => {
     }
   };
 
-const handleEgresarFamilia = async (familiaItem) => {
-  try {
-    const idUsuarioCreacion = localStorage.getItem("idUsuario");
-    
-    if (!familiaItem?.codigoFamilia) {
-      showCustomToast("Error", "No se encontró el código de la familia.", "error");
-      return;
+  const handleEgresarFamilia = async (familiaItem) => {
+    try {
+      const idUsuarioCreacion = localStorage.getItem("idUsuario");
+
+      if (!familiaItem?.codigoFamilia) {
+        showCustomToast("Error", "No se encontró el código de la familia.", "error");
+        return;
+      }
+      if (!idUsuarioCreacion) {
+        showCustomToast("Error", "No se encontró el usuario en sesión.", "error");
+        return;
+      }
+      if (isNaN(Number(idUsuarioCreacion))) {
+        showCustomToast("Error", "ID de usuario inválido.", "error");
+        return;
+      }
+
+      const payload = {
+        id: familiaItem.codigoFamilia,
+        idModificacion: idUsuarioCreacion,
+      };
+
+      await familiasAPI.egresar(payload);
+      showCustomToast("Éxito", "La familia ha sido egresada correctamente.", "success");
+
+      if (albergueSeleccionado) {
+        await handleSeleccionarAlbergue(albergueSeleccionado);
+      }
+      if (familiaItem.cedulaJefe) {
+        const res = await familiasAPI.getById(familiaItem.cedulaJefe);
+        setFamiliaSeleccionada(res.data);
+      }
+    } catch (error) {
+      console.error("Error al egresar familia:", error);
+      showCustomToast("Error", error.message || "No se pudo egresar la familia", "error");
     }
-
-    if (!idUsuarioCreacion) {
-      showCustomToast("Error", "No se encontró el usuario en sesión.", "error");
-      return;
-    }
-
-   
-    if (isNaN(Number(idUsuarioCreacion))) {
-      showCustomToast("Error", "ID de usuario inválido.", "error");
-      return;
-    }
-
-    const payload = {
-      id: familiaItem.codigoFamilia, 
-      idModificacion: idUsuarioCreacion 
-    };
-
-    console.log("Payload enviado:", payload);
-
-    await familiasAPI.egresar(payload);
-
-    showCustomToast("Éxito", "La familia ha sido egresada correctamente.", "success");
-
-   
-    if (albergueSeleccionado) {
-      await handleSeleccionarAlbergue(albergueSeleccionado);
-    }
-    if (familiaItem.cedulaJefe) {
-      const res = await familiasAPI.getById(familiaItem.cedulaJefe);
-      setFamiliaSeleccionada(res.data);
-    }
-
-  } catch (error) {
-    console.error("Error al egresar familia:", error);
-    showCustomToast("Error", error.message || "No se pudo egresar la familia", "error");
-  }
-};
+  };
 
   const irAAlbergues = () => {
     setVistaActual("albergues");
@@ -252,6 +315,7 @@ const handleEgresarFamilia = async (familiaItem) => {
     setAlbergueSeleccionado(null);
     setFamiliaSeleccionada(null);
     setIdentificacion("");
+    setBusquedaCedula("");
   };
 
   const volverAFamilias = () => {
@@ -262,15 +326,29 @@ const handleEgresarFamilia = async (familiaItem) => {
   return {
     identificacion,
     setIdentificacion,
+    busquedaCedula,
+    setBusquedaCedula,
+    showSugerenciasCedula,
+    setShowSugerenciasCedula,
+    cedulasDisponibles,
+
     familia,
     loading,
+
+    busquedaAlbergue,
+    setBusquedaAlbergue,
+    showSugerenciasAlbergue,
+    setShowSugerenciasAlbergue,
     albergues,
+
     familiasPorAlbergue,
     albergueSeleccionado,
     familiaSeleccionada,
     vistaActual,
     loadingAlbergues,
     loadingFamilias,
+
+    familiasRecientes,
 
     handleSubmit,
     handleSeleccionarAlbergue,

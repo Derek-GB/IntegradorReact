@@ -19,7 +19,7 @@ const useFormularioRegistro = () => {
   const [idDistritoSeleccionado, setIdDistritoSeleccionado] = useState(""); // ✅ agregado
 
   const [albergues, setAlbergues] = useState([]);
-  const [amenazas, setAmenazas] = useState([]);
+  const [peligros, setPeligros] = useState([]);
   const [provincias, setProvincias] = useState([]);
   const [cantones, setCantones] = useState([]);
   const [distritos, setDistritos] = useState([]);
@@ -28,6 +28,15 @@ const useFormularioRegistro = () => {
   const [showSugerenciasAlbergue, setShowSugerenciasAlbergue] = useState(false);
 
   const navigate = useNavigate();
+
+  // Cargar peligros (antes amenazas)
+  useEffect(() => {
+    const cargarPeligros = async () => {
+      const datos = await obtenerTodos("https://api-geo-cr.vercel.app/provincias");
+      setProvincias(datos);
+    };
+    cargarPeligros();
+  }, []);
 
   // Cargar datos iniciales
   useEffect(() => {
@@ -44,7 +53,15 @@ const useFormularioRegistro = () => {
           amenazasAPI.getAll(),
         ]);
         setAlbergues(resAlbergues?.data || []);
-        setAmenazas(resAmenazas?.data || []);
+        // Extraer peligros únicos
+        const peligrosUnicos = Array.from(
+          new Set((resAmenazas?.data || []).map((a) => a.peligro))
+        )
+          .filter(Boolean)
+          .map((peligro) => ({ id: peligro, nombre: peligro }));
+        console.log("Datos crudos de amenazas:", resAmenazas?.data);
+        console.log("Peligros únicos extraídos:", peligrosUnicos);
+        setPeligros(peligrosUnicos);
       } catch {
         showCustomToast("Error", "Error al cargar datos internos", "error");
       }
@@ -166,7 +183,7 @@ const useFormularioRegistro = () => {
 
   return {
     albergues,
-    amenazas,
+    peligros,
     provincias,
     cantones,
     distritos,
