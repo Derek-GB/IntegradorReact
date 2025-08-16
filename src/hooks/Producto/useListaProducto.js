@@ -22,10 +22,12 @@ export const useListaSuministro = () => {
 
         const data = await productosAPI.getByUsuario(idUsuario);
         const lista = Array.isArray(data) ? data : data?.data ?? [];
+        // Ordena por fecha de creación descendente si existe, y toma los últimos 20
+        const ultimos = lista
+          .sort((a, b) => new Date(b.fechaCreacion || b.createdAt || 0) - new Date(a.fechaCreacion || a.createdAt || 0))
+          .slice(0, 20);
 
-        console.log("📦 Productos cargados por usuario:", lista);
-
-        setProductos(lista);
+        setProductos(ultimos);
       } catch (error) {
         console.error("❌ Error al cargar productos por usuario:", error);
         showCustomToast(
@@ -62,22 +64,19 @@ export const useListaSuministro = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const cantidadNum = Number(form.cantidad);
-      if (isNaN(cantidadNum) || cantidadNum < 0) {
-        showCustomToast('Error', 'Cantidad debe ser un número válido mayor o igual a 0', 'error');
-        setLoading(false);
-        return;
-      }
       const payload = {
         id: form.id,
         descripcion: form.descripcion || '',
-        cantidad: cantidadNum,
+        categoria: form.categoria,
+        unidadMedida: form.unidadMedida,
       };
       await productosAPI.update(payload);
       showCustomToast("Éxito", "Producto actualizado con éxito.", "success");
       setProductos(prev =>
         prev.map(p =>
-          p.id === form.id ? { ...p, descripcion: payload.descripcion, cantidad: payload.cantidad } : p
+          p.id === form.id
+            ? { ...p, descripcion: payload.descripcion, categoria: payload.categoria, unidadMedida: payload.unidadMedida }
+            : p
         )
       );
       setForm({});
@@ -107,6 +106,16 @@ export const useListaSuministro = () => {
     }
   };
 
+  // Columnas para la tabla
+  const columns = [
+    { name: "Código", selector: row => row.codigoProducto, sortable: true },
+    { name: "Nombre", selector: row => row.nombre, sortable: true },
+    { name: "Descripción", selector: row => row.descripcion, sortable: true },
+    { name: "Cantidad", selector: row => row.cantidad, sortable: true },
+    { name: "Categoría", selector: row => row.categoria, sortable: true },
+    { name: "Unidad", selector: row => row.unidadMedida, sortable: true }
+  ];
+
   return {
     productos,
     busquedaProducto,
@@ -120,5 +129,6 @@ export const useListaSuministro = () => {
     handleSelectProducto,
     actualizarProducto,
     eliminarProducto,
+    columns,
   };
 };
