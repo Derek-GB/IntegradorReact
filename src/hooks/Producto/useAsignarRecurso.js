@@ -106,6 +106,24 @@ export const useAsignarRecurso = () => {
       return;
     }
 
+    // Buscar el producto seleccionado para validar la cantidad disponible
+    const productoSeleccionado = productos.find(p => String(p.id) === String(idProducto));
+    if (!productoSeleccionado) {
+      showCustomToast('Error', 'Producto seleccionado no encontrado', 'error');
+      setLoading(false);
+      return;
+    }
+
+    if (parseInt(cantidad) > parseInt(productoSeleccionado.cantidad)) {
+      showCustomToast(
+        'Cantidad excedida',
+        `No puedes asignar más de ${productoSeleccionado.cantidad} unidades de este producto.`,
+        'error'
+      );
+      setLoading(false);
+      return;
+    }
+
     const payload = {
       idPersona: parseInt(idPersona),
       idProducto: parseInt(idProducto),
@@ -115,6 +133,13 @@ export const useAsignarRecurso = () => {
     try {
       await recursosAsignadosAPI.create(payload);
       showCustomToast('¡Éxito!', 'Recurso asignado correctamente', 'success');
+      setProductos(prev =>
+        prev.map(p =>
+          String(p.id) === String(idProducto)
+            ? { ...p, cantidad: parseInt(p.cantidad) - parseInt(cantidad) }
+            : p
+        )
+      );
       setForm({ idPersona: '', idProducto: '', cantidad: '' });
       setBusquedaPersona('');
     } catch (error) {
