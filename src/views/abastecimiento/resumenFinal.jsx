@@ -5,12 +5,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import GlobalDataTable from "../../components/globalComponents/GlobalDataTable.jsx";
 import useResumenFinal from "../../hooks/abastecimineto/useResumenFinal.js";
 import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
+import ExportExcelButton from "../../components/otros/ExportExcelButton.jsx";
+import ExportPdfButton from "../../components/otros/ExportPdfButton.jsx";
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  Button,
   TextField,
 } from "@mui/material";
 
@@ -21,6 +22,7 @@ const ResumenFinal = () => {
     descargarResumen,
     eliminarItem,
     editarItem,
+    pedidos,
   } = useResumenFinal();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -137,6 +139,43 @@ const ResumenFinal = () => {
   // Preparar datos del formulario actual para mostrar
   const datosFormularioData = datosFormulario ? [datosFormulario] : [];
 
+  // Preparar datos para exportar Excel/PDF
+  const exportData = [
+    ...(datosFormulario ? [{
+      seccion: "Formulario Actual",
+      tipo: datosFormulario.tipo || "-",
+      unidad: "personas",
+      cantidad: datosFormulario.cantidad || "-",
+      fecha: datosFormulario.fecha || "-",
+      albergue: datosFormulario.albergue?.nombre || "-",
+    }] : []),
+    ...(items?.map(item => ({
+      seccion: item.seccion || "Producto",
+      tipo: item.tipo || "-",
+      unidad: item.unidad || "-",
+      cantidad: item.cantidad || "-",
+      fecha: datosFormulario?.fecha || "-",
+      albergue: datosFormulario?.albergue?.nombre || "-",
+    })) || []),
+    ...(pedidos?.map(pedido => ({
+      seccion: pedido.seccion || "-",
+      tipo: pedido.tipo || "-",
+      unidad: pedido.unidad || "-",
+      cantidad: pedido.cantidad || "-",
+      fecha: pedido.fecha || "-",
+      albergue: pedido.albergue || "-",
+    })) || []),
+  ];
+
+  const exportHeaders = [
+    { label: "Sección", key: "seccion" },
+    { label: "Tipo", key: "tipo" },
+    { label: "Unidad", key: "unidad" },
+    { label: "Cantidad", key: "cantidad" },
+    { label: "Fecha", key: "fecha" },
+    { label: "Albergue", key: "albergue" },
+  ];
+
   return (
     <div className="space-y-6">
       <CustomToaster />
@@ -184,22 +223,26 @@ const ResumenFinal = () => {
                 </div>
               }
             />
+
+            {/* Botones de Exportación Excel y PDF */}
+            <div className="flex justify-center gap-4 mt-4">
+              <ExportExcelButton
+                data={exportData}
+                headers={exportHeaders}
+                fileName="resumen_final.xlsx"
+                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              />
+              <ExportPdfButton
+                data={exportData}
+                headers={exportHeaders}
+                fileName="resumen_final.pdf"
+                title="Resumen Final"
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              />
+            </div>
           </div>
         </div>
       )}
-
-      {/* Botón de Descargar pedido */}
-      <div className="flex justify-center pt-4">
-        <button
-          type="button"
-          onClick={descargarResumen}
-          className="bg-yellow-500 text-black px-8 py-2 rounded-md hover:bg-yellow-600 transition flex items-center gap-2"
-          title="Descargar pedido"
-        >
-          <DownloadIcon sx={{ fontSize: 20, color: "black" }} />
-          Descargar Pedido
-        </button>
-      </div>
 
       {/* Modal de Edición */}
       <Dialog
