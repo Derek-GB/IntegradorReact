@@ -127,7 +127,6 @@ const routeGroups = [
       { to: "/ajusteInventario.jsx", label: "Ajuste Inventario", icon: <Inventory /> },
       { to: "/asignacionRecursos.jsx", label: "Asignación Recursos", icon: <AssignmentReturned /> },
       { to: "/abarrotesMenuPrincipal", label: "Abastecimiento", icon: <LocalShipping /> },
-      { to: "/listaAbastecimientos.jsx", label: "Lista Abastecimientos", icon: <ListIcon /> },
       { to: "/buscarSuministros.jsx", label: "Buscar Suministros", icon: <SearchIcon /> },
       { to: "/buscarAjuste.jsx", label: "Buscar Ajustes de inventario", icon: <SearchIcon /> },
     ],
