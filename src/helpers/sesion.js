@@ -2,47 +2,71 @@ import axios from "axios";
 
 const login = async (correo, contrasena) => {
   try {
+    
     const res = await axios.post("https://api.integrador.dev/api/auth/login", {
       correo,
       contrasena,
+    }, {
+      withCredentials: true 
     });
 
+    if (!res.data.success) {
+      throw new Error(res.data.error || "Error en el login");
+    }
+
     const { token, usuario } = res.data;
-    const { id, nombre } = usuario;
+    
     if (!usuario) {
       throw new Error("No se recibió información de usuario");
     }
-    if (!id) {
+    if (!usuario.id) {
       throw new Error("No se recibió el ID del usuario");
     }
     if (!token) {
       throw new Error("No se recibió un token de autenticación");
-    } else {
-      localStorage.setItem("token", token); // ahora se usará en todas las peticiones
-      localStorage.setItem("idUsuario", id);
-      localStorage.setItem("nombreUsuario", nombre || "");
-      localStorage.setItem("userData", JSON.stringify({ username: correo, nombre: nombre || correo }));
     }
+
+    localStorage.setItem("idUsuario", usuario.id);
+    localStorage.setItem("nombreUsuario", usuario.nombreUsuario || "");
+    localStorage.setItem("userData", JSON.stringify({
+      username: correo,
+      nombre: usuario.nombreUsuario || correo
+    }));
+
+    return res.data;
+
   } catch (err) {
-    console.error("Error al iniciar sesión", err.message);
-    throw err;
+    console.error("Error al iniciar sesión:", err.response?.data?.error || err.message);
+    throw new Error(err.response?.data?.error || err.message);
   }
+};
+
+const getTokenFromCookie = () => {
+  const cookies = document.cookie.split(';');
+  for (let cookie of cookies) {
+    const [name, value] = cookie.trim().split('=');
+    if (name === 'authToken') {
+      return value;
+    }
+  }
+  return null;
 };
 
 const logout = async () => {
-  localStorage.removeItem("token");
-  if (!localStorage.getItem("idUsuario")) {
-    console.warn("No se encontró un usuario autenticado para cerrar sesión");
-    return;
-  }
-  axios.post("https://api.integrador.dev/api/auth/logout", {id: localStorage.getItem("idUsuario")})
-    .then((response) => {
-      console.log("Sesión cerrada correctamente", response.data);
-    })
-    .catch((error) => {
-      console.error("Error al cerrar sesión", error);
+  try {
+    await axios.post("https://api.integrador.dev/api/auth/logout", {}, {
+      withCredentials: true 
     });
-  localStorage.removeItem("idUsuario");
+    localStorage.clear();
+    console.log("Sesión cerrada correctamente");
+  } catch (error) {
+    console.error("Error al cerrar sesión:", error.response?.data?.error || error.message);
+    localStorage.clear();
+  }
 };
 
-export default { login, logout };
+export default { 
+  login, 
+  logout, 
+  getTokenFromCookie
+};
