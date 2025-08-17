@@ -255,13 +255,13 @@ export const personasAPI = {
     }
   },
 
-  getResumenPorAlbergue: async (idAlberguePersona) => {
-    if (!idAlberguePersona || idAlberguePersona.toString().trim() === "") {
-      throw new Error("El idAlberguePersona es requerido");
+  getResumenPorAlbergue: async (nombreAlbergue) => {
+    if (!nombreAlbergue || nombreAlbergue.toString().trim() === "") {
+      throw new Error("El nombre del albergue es requerido");
     }
-    const url = `/personas/resumen/porAlbergue/${encodeURIComponent(idAlberguePersona)}`;
+    const url = `/personas/resumen/porAlbergue/${encodeURIComponent(nombreAlbergue)}`;
     const res = await customAxios.get(url);
-    return res.data;
+    return res.data?.data ?? res.data;
   },
   getResumenPorSexo: async (idSexoPersona) => {
     if (!idSexoPersona) throw new Error("ID Sexo Persona es requerido");

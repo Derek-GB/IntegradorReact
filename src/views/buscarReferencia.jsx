@@ -21,12 +21,21 @@ const BuscarReferencias = () => {
   } = useBusquedaReferencia();
 
   const columns = [
-    { name: "Tipo de Ayuda", selector: (row) => row.tipoAyuda },
-    { name: "Descripción", selector: (row) => row.descripcion },
-    { name: "Fecha de Entrega", selector: (row) => row.fechaEntrega },
-    { name: "Responsable", selector: (row) => row.responsable },
-  ];
-
+  { name: "Tipo de Ayuda", selector: (row) => row.tipoAyuda },
+  { name: "Descripción", selector: (row) => row.descripcion },
+  { 
+    name: "Fecha de Entrega", 
+    selector: (row) => {
+      if (!row.fechaEntrega) return "";
+      const fecha = new Date(row.fechaEntrega);
+      const dia = String(fecha.getDate()).padStart(2, "0");
+      const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+      const anio = fecha.getFullYear();
+      return `${dia}-${mes}-${anio}`;
+    }
+  },
+  { name: "Responsable", selector: (row) => row.responsable },
+];
   return (
     <>
       <FormContainer title="Búsqueda de Referencia" onSubmit={handleSubmit} size="md">

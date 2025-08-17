@@ -3,7 +3,7 @@ import { toast } from "react-hot-toast";
 import { personasAPI, inventarioAPI, alberguesAPI } from "../helpers/api";
 
 const opcionesReporte = [
-    { label: "Resumen de personas por albergue", value: "personas_por_albergue", campos: [{ label: "Código del albergue", name: "idAlbergue" }] },
+    { label: "Resumen de personas por albergue", value: "personas_por_albergue", campos: [{ label: "Nombre del albergue", name: "nombreAlbergue" }] },
     { label: "Resumen de personas por sexo", value: "personas_por_sexo", campos: [{ label: "Sexo", name: "sexo" }] },
     { label: "Resumen de personas por edad", value: "personas_por_edad", campos: [{ label: "Edad", name: "edad" }] },
     { label: "Resumen de personas con discapacidad", value: "personas_discapacidad", campos: [{ label: "Código del albergue", name: "id" }] },
@@ -115,13 +115,13 @@ export function useReportesAlbergue() {
         try {
             switch (reporteSeleccionado.value) {
                 case "personas_por_albergue": {
-                    const idAlbergue = parametros.idAlbergue?.trim();
-                    if (!idAlbergue) {
-                        toast.error("Debe completar el campo: Código del albergue");
+                    const nombreAlbergue = parametros.nombreAlbergue;
+                    if (!nombreAlbergue) {
+                        toast.error("Debe seleccionar un albergue");
                         break;
                     }
-                    const resumen = await personasAPI.getResumenPorAlbergue(idAlbergue);
-                    setResultados(resumen.data ? (Array.isArray(resumen.data) ? resumen.data : [resumen.data]) : []);
+                    const resumen = await personasAPI.getResumenPorAlbergue(nombreAlbergue);
+                    setResultados(Array.isArray(resumen) ? resumen : [resumen]);
                     break;
                 }
                 case "personas_por_sexo": {
@@ -239,24 +239,28 @@ export function useReportesAlbergue() {
                 { name: "Cantidad", selector: (row) => row.cantidad ?? "", key: "cantidad", sortable: true },
                 { name: "Estado", selector: (row) => row.estado || "", key: "estado", sortable: true },
                 { name: "Comentario", selector: (row) => row.comentario || "", key: "comentario", sortable: true },
-                { name: "Código Albergue", selector: (row) => row.codigoAlbergue || "", key: "codigoAlbergue", sortable: true },
+                // Quitar código y nombre albergue de la tabla
+                // { name: "Código Albergue", selector: (row) => row.codigoAlbergue || "", key: "codigoAlbergue", sortable: true },
             ];
         }
         if (!resultados || resultados.length === 0) return [];
         const sample = resultados[0] || {};
-        return Object.keys(sample).map((key) => ({
-            name: key,
-            key: key,
-            selector: (row) => {
-                const val = row[key];
-                if (val === null || val === undefined) return "";
-                if (typeof val === "object") {
-                    return val?.nombre || (Array.isArray(val) ? val.join(", ") : JSON.stringify(val));
-                }
-                return String(val);
-            },
-            sortable: true,
-        }));
+        // Excluir el campo "id", "codigoAlbergue" y "nombreAlbergue"
+        return Object.keys(sample)
+            .filter(key => key !== "id" && key !== "codigoAlbergue" && key !== "nombreAlbergue")
+            .map((key) => ({
+                name: key,
+                key: key,
+                selector: (row) => {
+                    const val = row[key];
+                    if (val === null || val === undefined) return "";
+                    if (typeof val === "object") {
+                        return val?.nombre || (Array.isArray(val) ? val.join(", ") : JSON.stringify(val));
+                    }
+                    return String(val);
+                },
+                sortable: true,
+            }));
     };
 
     return {

@@ -9,20 +9,20 @@ import SearchAutocompleteInput from '../../components/FormComponents/SearchAutoc
 
 
 const categorias = [
-  { value: 1, nombre: "Carne" },
-  { value: 2, nombre: "Proteína" },
-  { value: 3, nombre: "Verdura" },
-  { value: 4, nombre: "Reperte" },
-  { value: 5, nombre: "Olores" },
-  { value: 6, nombre: "Abarrotes" },
-  { value: 7, nombre: "Limpieza" },
-  { value: 8, nombre: "Mobiliario" },
+  { value: 1, nombre: "Mobiliario" },
+  { value: 2, nombre: "Ropa" },
+  { value: 3, nombre: "Herramientas" },
+  { value: 4, nombre: "Papelería" },
+  { value: 5, nombre: "Electrónicos" },
+  { value: 6, nombre: "Juguetes" },
 ];
 
 const unidades = [
   { value: 1, nombre: "Mililitros" },
   { value: 2, nombre: "Gramos" },
   { value: 3, nombre: "Unidades" },
+  { value: 4, nombre: "Metros" },
+  { value: 5, nombre: "Kilos" },
 ];
 
 const RegistrarSuministro = () => {

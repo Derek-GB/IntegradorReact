@@ -3,16 +3,25 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import SubmitButton from "../FormComponents/SubmitButton.jsx";
 
-const ExportPdfButton = ({ data = [], headers = [], title = "Reporte", fileName = "reporte.pdf" }) => {
+const ExportPdfButton = ({
+  data = [],
+  headers = [],
+  title = "Reporte",
+  fileName = "reporte.pdf",
+}) => {
   const [loading, setLoading] = useState(false);
 
-  const handleExport = () => {
+  const handleExport = async () => {
     setLoading(true);
+
     try {
       const doc = new jsPDF();
 
-      doc.setFontSize(16);
-      doc.text(title, 14, 15);
+      // Solo título y fecha, sin nombre de institución
+      doc.setFontSize(14);
+      doc.text(title, 105, 20, { align: "center" });
+      doc.setFontSize(10);
+      doc.text(`Fecha de generación: ${new Date().toLocaleString()}`, 105, 28, { align: "center" });
 
       const tableHeaders = headers.map(h => h.label);
       const tableData = data.map(row => headers.map(h => row[h.key]));
@@ -20,7 +29,25 @@ const ExportPdfButton = ({ data = [], headers = [], title = "Reporte", fileName 
       autoTable(doc, {
         head: [tableHeaders],
         body: tableData,
-        startY: 25,
+        startY: 34,
+        styles: {
+          fontSize: 10,
+          cellPadding: 3,
+        },
+        headStyles: {
+          fillColor: [248, 182, 1],
+          textColor: [0, 0, 0],
+          fontStyle: "bold",
+          halign: "center",
+        },
+        bodyStyles: {
+          halign: "left",
+        },
+        alternateRowStyles: {
+          fillColor: [245, 245, 245],
+        },
+        tableLineColor: [200, 200, 200],
+        tableLineWidth: 0.1,
       });
 
       setTimeout(() => {
