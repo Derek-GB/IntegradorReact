@@ -5,23 +5,24 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import GlobalDataTable from "../../components/globalComponents/GlobalDataTable.jsx";
 import useResumenFinal from "../../hooks/abastecimineto/useResumenFinal.js";
 import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
+import ExportExcelButton from "../../components/otros/ExportExcelButton.jsx";
+import ExportPdfButton from "../../components/otros/ExportPdfButton.jsx";
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  Button,
   TextField,
 } from "@mui/material";
 
 const ResumenFinal = () => {
   const {
     items,
-    descargarResumen,
     datosFormulario,
+    descargarResumen,
     eliminarItem,
     editarItem,
-    // quitar guardarPedidosDesdeFormulario ya que no usaremos guardar
+    pedidos,
   } = useResumenFinal();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -46,6 +47,7 @@ const ResumenFinal = () => {
     handleCloseModal();
   };
 
+  // Columnas para datos del formulario actual
   const datosFormularioColumns = [
     {
       name: "Fecha",
@@ -67,12 +69,17 @@ const ResumenFinal = () => {
     },
     {
       name: "Nombre del Albergue",
-      selector: (row) => row.albergue,
+      selector: (row) => row.albergue?.nombre || row.albergue,
       sortable: true,
-      cell: (row) => <span className="font-medium">{row.albergue || "-"}</span>,
+      cell: (row) => (
+        <span className="font-medium">
+          {row.albergue?.nombre || row.albergue || "-"}
+        </span>
+      ),
     },
   ];
 
+  // Columnas para productos del formulario actual, ahora con acciones
   const productosColumns = [
     {
       name: "Categoría",
@@ -129,62 +136,113 @@ const ResumenFinal = () => {
     },
   ];
 
-  const datosFormularioData = [datosFormulario || {}];
+  // Preparar datos del formulario actual para mostrar
+  const datosFormularioData = datosFormulario ? [datosFormulario] : [];
+
+  // Preparar datos para exportar Excel/PDF
+  const exportData = [
+    ...(datosFormulario ? [{
+      seccion: "Formulario Actual",
+      tipo: datosFormulario.tipo || "-",
+      unidad: "personas",
+      cantidad: datosFormulario.cantidad || "-",
+      fecha: datosFormulario.fecha || "-",
+      albergue: datosFormulario.albergue?.nombre || "-",
+    }] : []),
+    ...(items?.map(item => ({
+      seccion: item.seccion || "Producto",
+      tipo: item.tipo || "-",
+      unidad: item.unidad || "-",
+      cantidad: item.cantidad || "-",
+      fecha: datosFormulario?.fecha || "-",
+      albergue: datosFormulario?.albergue?.nombre || "-",
+    })) || []),
+    ...(pedidos?.map(pedido => ({
+      seccion: pedido.seccion || "-",
+      tipo: pedido.tipo || "-",
+      unidad: pedido.unidad || "-",
+      cantidad: pedido.cantidad || "-",
+      fecha: pedido.fecha || "-",
+      albergue: pedido.albergue || "-",
+    })) || []),
+  ];
+
+  const exportHeaders = [
+    { label: "Sección", key: "seccion" },
+    { label: "Tipo", key: "tipo" },
+    { label: "Unidad", key: "unidad" },
+    { label: "Cantidad", key: "cantidad" },
+    { label: "Fecha", key: "fecha" },
+    { label: "Albergue", key: "albergue" },
+  ];
 
   return (
     <div className="space-y-6">
       <CustomToaster />
 
-      {/* Datos del Formulario */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-          <h2 className="text-xl font-semibold text-gray-800">Datos del Formulario</h2>
+      {/* Datos del Formulario Actual */}
+      {datosFormulario && (
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+            <h2 className="text-xl font-semibold text-gray-800">
+              Datos del Formulario Actual
+            </h2>
+          </div>
+          <div className="p-4">
+            <GlobalDataTable
+              columns={datosFormularioColumns}
+              data={datosFormularioData}
+              pagination={false}
+              noDataComponent={
+                <div className="px-6 py-4 text-center text-sm text-gray-500">
+                  No hay datos del formulario actual
+                </div>
+              }
+            />
+          </div>
         </div>
-        <div className="p-4">
-          <GlobalDataTable
-            columns={datosFormularioColumns}
-            data={datosFormularioData}
-            pagination={false}
-            noDataComponent={
-              <div className="px-6 py-4 text-center text-sm text-gray-500">
-                No hay datos del formulario disponibles
-              </div>
-            }
-          />
-        </div>
-      </div>
+      )}
 
-      {/* Productos Registrados */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-          <h2 className="text-xl font-semibold text-gray-800">Productos Registrados</h2>
-        </div>
-        <div className="p-4">
-          <GlobalDataTable
-            columns={productosColumns}
-            data={items}
-            pagination={true}
-            paginationPerPage={10}
-            noDataComponent={
-              <div className="px-6 py-4 text-center text-sm text-gray-500">
-                No hay productos registrados
-              </div>
-            }
-          />
-        </div>
-      </div>
+      {/* Productos del Formulario Actual con acciones */}
+      {items && items.length > 0 && (
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+            <h2 className="text-xl font-semibold text-gray-800">
+              Productos del Formulario Actual
+            </h2>
+          </div>
+          <div className="p-4">
+            <GlobalDataTable
+              columns={productosColumns}
+              data={items}
+              pagination={true}
+              paginationPerPage={10}
+              noDataComponent={
+                <div className="px-6 py-4 text-center text-sm text-gray-500">
+                  No hay productos en el formulario actual
+                </div>
+              }
+            />
 
-      {/* SOLO Botón de DESCARGAR */}
-      <div className="flex justify-center pt-4">
-        <button
-          type="button"
-          onClick={descargarResumen}
-          className="bg-yellow-500 text-black px-50 py-2 rounded-md hover:bg-yellow-600 transition flex items-center gap-2"
-          title="Descargar resumen"
-        >
-          <DownloadIcon sx={{ fontSize: 20, color: "black" }} />
-        </button>
-      </div>
+            {/* Botones de Exportación Excel y PDF */}
+            <div className="flex justify-center gap-4 mt-4">
+              <ExportExcelButton
+                data={exportData}
+                headers={exportHeaders}
+                fileName="resumen_final.xlsx"
+                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              />
+              <ExportPdfButton
+                data={exportData}
+                headers={exportHeaders}
+                fileName="resumen_final.pdf"
+                title="Resumen Final"
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal de Edición */}
       <Dialog
@@ -202,7 +260,7 @@ const ResumenFinal = () => {
         <DialogTitle
           sx={{ fontSize: "1.5rem", fontWeight: "bold", textAlign: "center" }}
         >
-          Editar Cantidad del Producto
+          Editar Cantidad del Pedido
         </DialogTitle>
 
         <DialogContent sx={{ mt: 2 }}>
@@ -222,7 +280,7 @@ const ResumenFinal = () => {
         <DialogActions sx={{ justifyContent: "space-between", px: 3 }}>
           <button
             onClick={handleCloseModal}
-            className="bg-yellow-500 text-black px-6 py-2 rounded-md hover:bg-yellow-600 transition"
+            className="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600 transition"
           >
             Cancelar
           </button>

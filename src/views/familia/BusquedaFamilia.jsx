@@ -4,11 +4,21 @@ import InputField from "../../components/FormComponents/InputField";
 import SubmitButton from "../../components/FormComponents/SubmitButton";
 import CustomToaster from "../../components/globalComponents/CustomToaster";
 import GlobalDataTable from "../../components/globalComponents/GlobalDataTable";
+import SearchAutocompleteInput from "../../components/FormComponents/SearchAutocompleteInput";
 
 const BusquedaFamilia = () => {
   const {
-    identificacion,
+    
     setIdentificacion,
+    busquedaCedula,
+    setBusquedaCedula,
+    showSugerenciasCedula,
+    setShowSugerenciasCedula,
+    cedulasDisponibles,
+    busquedaAlbergue,
+    setBusquedaAlbergue,
+    showSugerenciasAlbergue,
+    setShowSugerenciasAlbergue,
     familia,
     loading,
     albergues,
@@ -24,21 +34,34 @@ const BusquedaFamilia = () => {
     irAAlbergues,
     volverABusqueda,
     volverAFamilias,
-    egresarFamilia, // ✅ ahora sí lo incluimos
+    handleEgresarFamilia,
+    familiasRecientes,
   } = useBusquedaFamiliaExtendida();
 
   // Vista de búsqueda principal
   const renderVistaBusqueda = () => (
     <FormContainer title="Buscar Familia" onSubmit={handleSubmit} size="xs">
       <div className="flex flex-col gap-4">
-        <InputField
-          label="Número de Identificación"
-          name="identificacion"
-          value={identificacion}
-          onChange={(e) => setIdentificacion(e.target.value)}
-          placeholder="Ingrese el número de identificación"
-          required
+        {/* Nuevo: Autocompletar cédula */}
+        <SearchAutocompleteInput
+          label="Buscar por Identificación"
+          busqueda={busquedaCedula.slice(0, 20)} // <-- fuerza el valor a 20 caracteres
+          setBusqueda={(value) => {
+            const max20 = value.slice(0, 20);
+            setBusquedaCedula(max20);
+            setIdentificacion(max20);
+          }}
+          showSugerencias={showSugerenciasCedula}
+          setShowSugerencias={setShowSugerenciasCedula}
+          resultados={cedulasDisponibles}
+          onSelect={(item) => {
+            const max20 = (item.cedula || "").slice(0, 20);
+            setBusquedaCedula(max20);
+            setIdentificacion(max20);
+          }}
+          optionLabelKeys={["cedula"]}
         />
+
         <div className="flex flex-col md:flex-row gap-4">
           <SubmitButton color="text-black" width="flex-1" loading={loading}>
             Buscar
@@ -48,16 +71,57 @@ const BusquedaFamilia = () => {
           </SubmitButton>
         </div>
       </div>
+
+      <div className="mt-8">
+        <h2 className="text-lg font-semibold mb-2">Últimas 10 familias registradas</h2>
+        <GlobalDataTable
+          columns={[
+            { name: "#", selector: (row, i) => i + 1, width: "60px" },
+            { name: "Código Familia", selector: (row) => row.codigoFamilia || "" },
+            { name: "Jefe de Familia", selector: (row) => row.nombreCompletoJefe || row.nombreJefe || "" },
+            { name: "Fecha de Registro", selector: (row) => (row.fechaCreacion || row.createdAt || "").split("T")[0] },
+            {
+              name: "Acciones",
+              cell: (row) => (
+                <button
+                  type="button"
+                  className="bg-[#FFC107] text-black py-1 px-3 rounded-md hover:bg-[#FFB300] transition-colors text-sm font-medium"
+                  onClick={() => handleSeleccionarFamilia(row, true)}
+                >
+                  Ver detalles
+                </button>
+              ),
+              ignoreRowClick: true,
+            },
+          ]}
+          data={familiasRecientes}
+          pagination={false}
+          highlightOnHover
+          dense
+        />
+      </div>
     </FormContainer>
   );
 
   // Vista de lista de albergues
   const renderVistaAlbergues = () => (
     <FormContainer title="Seleccionar Albergue" size="lg">
-      <div className="mb-4">
+      <div className="mb-4 flex flex-col gap-4">
         <SubmitButton type="button" onClick={volverABusqueda}>
           Volver a Búsqueda
         </SubmitButton>
+
+        {/* Nuevo: Autocompletar albergue */}
+        <SearchAutocompleteInput
+          label="Buscar albergue"
+          busqueda={busquedaAlbergue}
+          setBusqueda={setBusquedaAlbergue}
+          showSugerencias={showSugerenciasAlbergue}
+          setShowSugerencias={setShowSugerenciasAlbergue}
+          resultados={albergues}
+          onSelect={(albergue) => handleSeleccionarAlbergue(albergue)}
+          optionLabelKeys={["nombre"]}
+        />
       </div>
 
       {loadingAlbergues ? (
@@ -68,10 +132,6 @@ const BusquedaFamilia = () => {
             { name: "#", selector: (row, i) => i + 1, width: "60px" },
             { name: "Nombre", selector: (row) => row.nombre || "" },
             { name: "Región", selector: (row) => row.region || "" },
-            { name: "Provincia", selector: (row) => row.provincia || "" },
-            { name: "Cantón", selector: (row) => row.canton || "" },
-            { name: "Distrito", selector: (row) => row.distrito || "" },
-            { name: "Capacidad", selector: (row) => row.capacidad || "" },
             { name: "Condición", selector: (row) => row.condicionAlbergue || "" },
             {
               name: "Acciones",
@@ -123,7 +183,7 @@ const BusquedaFamilia = () => {
                 <button
                   type="button"
                   className="bg-[#FFC107] text-black py-1 px-3 rounded-md hover:bg-[#FFB300] transition-colors text-sm font-medium"
-                  onClick={() => handleSeleccionarFamilia(row)}
+                  onClick={() => handleSeleccionarFamilia(row, true)}
                 >
                   Ver detalles
                 </button>
@@ -145,7 +205,7 @@ const BusquedaFamilia = () => {
     </FormContainer>
   );
 
-  // Vista de detalles de familia
+  // Vista de detalles de familia (no cambia)
   const renderVistaDetalle = () => {
     const familiaData = familia || familiaSeleccionada;
     if (!familiaData || familiaData.length === 0) return null;
@@ -187,14 +247,21 @@ const BusquedaFamilia = () => {
             <InputField label="N° Personas" value={familiaData.length} readOnly />
           </div>
 
-          {/* Botón para egresar familia */}
           <div className="mt-4">
-            <SubmitButton type="button" onClick={() => egresarFamilia(familiaData[0].codigoFamilia)} >
+            <SubmitButton
+              type="button"
+              onClick={() => {
+                if (familiaData[0]?.codigoFamilia) {
+                  handleEgresarFamilia(familiaData[0]);
+                } else {
+                  alert("Código de familia no disponible para egreso");
+                }
+              }}
+            >
               Egresar Familia
             </SubmitButton>
           </div>
 
-          {/* Tabla de miembros */}
           <div className="mt-4">
             <GlobalDataTable
               columns={[
@@ -213,8 +280,11 @@ const BusquedaFamilia = () => {
                 { name: "Subtipo Discapacidad", selector: (row) => (row.discapacidad === 1 ? row.subtipoDiscapacidad || "" : "-") },
                 { name: "Tipo Condición Poblacional", selector: (row) => row.tipoCondicionPoblacional || "" },
                 { name: "Contacto de Emergencia", selector: (row) => row.contactoEmergencia || "" },
-                {name: "Egresado",selector: (row) => (row.egresado ? "Sí" : "No"), },
-                {name: "Fecha de Egreso",selector: (row) => row.fechaEgreso || "No disponible", },
+                { name: "Egresado", selector: (row) => (row.egresado ? "Sí" : "No") },
+                {
+                  name: "Fecha de Egreso",
+                  selector: (row) => (row.fechaEgreso ? row.fechaEgreso.split("T")[0] : "No disponible"),
+                },
               ]}
               data={familiaData}
               pagination

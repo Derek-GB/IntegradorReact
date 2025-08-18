@@ -33,7 +33,8 @@ import Shelves from "@mui/icons-material/shelves";
 import DatasetLinked from "@mui/icons-material/datasetLinked";
 import QuickReferenceAll from "@mui/icons-material/assignmentLate";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import MapIcon from "@mui/icons-material/Map";
+import MapIcon from "@mui/icons-material/addBusiness";
+
 
 
 
@@ -105,12 +106,11 @@ const routeGroups = [
     icon: <GroupIcon />,
     routes: [
       { to: "/preFormulario.jsx", label: "Familia", icon: <GroupIcon /> },
-      { to: "/familiaFormulario.jsx", label: "Integrante", icon: <GroupIcon /> },
       { to: "/BusquedaFamilia.jsx", label: "Buscar Familia", icon: <SearchIcon /> },
     ],
   },
   {
-    label: "Mascotas",  // Nueva sección
+    label: "Mascotas",
     icon: <PetsIcon />,
     routes: [
       { to: "/registroMascota.jsx", label: "Registrar Mascota", icon: <PetsIcon /> },
@@ -123,7 +123,7 @@ const routeGroups = [
     routes: [
       { to: "/registroSuministros.jsx", label: "Registrar Suministros", icon: <Shelves /> },
       { to: "/registrarConsumibles.jsx", label: "Consumibles", icon: <LocalDiningIcon /> },
-      { to: "/listaProducto.jsx", label: "Lista Producto", icon: <ListIcon /> },
+      { to: "/listaProducto.jsx", label: "Actualizar Suministros", icon: <ListIcon /> },
       { to: "/ajusteInventario.jsx", label: "Ajuste Inventario", icon: <Inventory /> },
       { to: "/asignacionRecursos.jsx", label: "Asignación Recursos", icon: <AssignmentReturned /> },
       { to: "/abarrotesMenuPrincipal", label: "Abastecimiento", icon: <LocalShipping /> },
@@ -146,6 +146,7 @@ const routeGroups = [
     icon: <PersonAddIcon />,
     routes: [
       { to: "/registroUsuario.jsx", label: "Registrar Usuario", icon: <PersonAddIcon /> },
+      { to: "/listaUsuarios.jsx", label: "Lista Usuarios", icon: <ListIcon /> },
     ],
   },
   {
@@ -156,6 +157,8 @@ const routeGroups = [
       { to: "/ayudaForm.jsx", label: "Referencias", icon: <DatasetLinked /> },
       { to: "/reportes.jsx", label: "Reportes", icon: <QuickReferenceAll /> },
       { to: "/buscarReferencia.jsx", label: "Buscar Referencias", icon: <SearchIcon /> },
+      { to: "/registroMunicipalidad.jsx", label: "Registro Municipalidad", icon: <MapIcon /> },
+
     ],
   },
 ];

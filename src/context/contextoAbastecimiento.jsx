@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from 'react';
 import { showCustomToast } from '../components/globalComponents/CustomToaster.jsx';
-
+// eslint-disable-next-line react-refresh/only-export-components
 export const contextoAbastecimiento = createContext();
 
 export const AbastecimientoProvider = ({ children }) => {

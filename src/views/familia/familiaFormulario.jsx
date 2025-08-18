@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Agrega esto arriba
 import FormContainer from "../../components/FormComponents/FormContainer.jsx";
 import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
 import FoldDownComponent from "../../components/otros/FoldDownComponent.jsx";
@@ -6,32 +7,74 @@ import InputField from "../../components/FormComponents/InputField.jsx";
 import SelectField from "../../components/FormComponents/SelectField.jsx";
 import useIntegrante from "../../hooks/familia/useIntegrante.js";
 import { personasAPI } from "../../helpers/api.js";
+import { showCustomToast } from "../../components/globalComponents/CustomToaster.jsx";
 
 const FamiliaFormulario = () => {
   const cantidad = parseInt(localStorage.getItem("cantidadIntegrantes")) || 0;
   const [indice, setIndice] = useState(0);
 
+  const [datosIntegrantes, setDatosIntegrantes] = useState(
+    Array(cantidad).fill(null).map(() => ({
+      FamiliaDatosPersonales: {},
+      FamiliaCondicionesEspeciales: {},
+      FamiliaCaracteristicasPoblacionales: {},
+      FamiliaFirmaDigital: {},
+    }))
+  );
+
+  const [datos, setDatos] = useState(datosIntegrantes[indice] || {
+    FamiliaDatosPersonales: {},
+    FamiliaCondicionesEspeciales: {},
+    FamiliaCaracteristicasPoblacionales: {},
+    FamiliaFirmaDigital: {},
+  });
+
+  const guardarDatosIntegrante = () => {
+    setDatosIntegrantes(prev => {
+      const nuevos = [...prev];
+      nuevos[indice] = { ...datos };
+      return nuevos;
+    });
+  };
+
+  const cargarDatosIntegrante = (indiceIntegrante) => {
+    const datosIntegrante = datosIntegrantes[indiceIntegrante];
+    if (datosIntegrante) {
+      setDatos(datosIntegrante);
+    } else {
+      setDatos({
+        FamiliaDatosPersonales: {},
+        FamiliaCondicionesEspeciales: {},
+        FamiliaCaracteristicasPoblacionales: {},
+        FamiliaFirmaDigital: {},
+      });
+    }
+  };
+
   const handleSiguiente = () => {
     if (indice < cantidad - 1) {
-      setIndice(indice + 1);
+      guardarDatosIntegrante();
+      setError(null);
+      setSuccess(null);
+      const nuevoIndice = indice + 1;
+      setIndice(nuevoIndice);
+      cargarDatosIntegrante(nuevoIndice);
     } else {
-      // Ejecutar la lógica de guardar cuando sea el último integrante
+      guardarDatosIntegrante();
       handleSubmit();
     }
   };
 
   const handleRegresar = () => {
     if (indice > 0) {
-      setIndice(indice - 1);
+      guardarDatosIntegrante();
+      setError(null);
+      setSuccess(null);
+      const nuevoIndice = indice - 1;
+      setIndice(nuevoIndice);
+      cargarDatosIntegrante(nuevoIndice);
     }
   };
-
-  const [datos, setDatos] = useState({
-    FamiliaDatosPersonales: {},
-    FamiliaCondicionesEspeciales: {},
-    FamiliaCaracteristicasPoblacionales: {},
-    FamiliaFirmaDigital: {},
-  });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -43,9 +86,8 @@ const FamiliaFormulario = () => {
     paises,
     gruposIndigenasCR,
     canvasRef,
-    signaturePadRef,
     guardarFirma,
-    limpiarFirma,
+    limpiarFirma
   } = useIntegrante(datos, setDatos);
 
   const dp = datos.FamiliaDatosPersonales;
@@ -53,137 +95,245 @@ const FamiliaFormulario = () => {
   const cp = datos.FamiliaCaracteristicasPoblacionales;
   const fd = datos.FamiliaFirmaDigital;
 
-  const codigoFamilia = dp.idFamilia || localStorage.getItem("codigoFamilia") || "";
+  const obtenerFechaMaxima = () => {
+    const hoy = new Date();
+    return hoy.toISOString().split('T')[0];
+  };
 
-  const updateCampo = (campo, valor) => {
+  const codigoFamilia = localStorage.getItem("codigoFamilia") || "";
+  const idFamilia = Number(localStorage.getItem("idFamilia"));
+  const idUsuario = Number(localStorage.getItem("idUsuario")) || 42; // fallback a 42 si no hay nada
+
+
+  const verificarJefeFamilia = () => {
+    let jefeExistente = false;
+    let indiceJefe = -1;
+    for (let i = 0; i < datosIntegrantes.length; i++) {
+      if (i !== indice) {
+        const integranteDatos = datosIntegrantes[i];
+        const esJefe = integranteDatos?.FamiliaDatosPersonales?.esJefeFamilia === "Sí" ||
+          integranteDatos?.FamiliaDatosPersonales?.esJefeFamilia === true;
+        if (esJefe) {
+          jefeExistente = true;
+          indiceJefe = i;
+          break;
+        }
+      }
+    }
+    return { jefeExistente, indiceJefe };
+  };
+
+  const handleJefeFamiliaChange = (e) => {
+    const nuevoValor = e.target.value;
+    if (nuevoValor === "Sí") {
+      const { jefeExistente, indiceJefe } = verificarJefeFamilia();
+      if (jefeExistente) {
+        showCustomToast(
+          "Jefe de familia existente",
+          `Ya existe un jefe de familia en el integrante ${indiceJefe + 1}. `,
+          "info"
+        );
+
+        if (window.confirm("Ya existe un jefe de familia, ¿deseas reemplazarlo?")) {
+          confirmarCambioJefe();
+        }
+        return;
+      }
+    }
+    handleChange(e, "FamiliaDatosPersonales");
+  };
+
+  const confirmarCambioJefe = () => {
+    const { indiceJefe } = verificarJefeFamilia();
+    setDatosIntegrantes(prev => {
+      const nuevos = [...prev];
+      if (nuevos[indiceJefe] && nuevos[indiceJefe].FamiliaDatosPersonales) {
+        nuevos[indiceJefe].FamiliaDatosPersonales.esJefeFamilia = false;
+      }
+      return nuevos;
+    });
     setDatos(prev => ({
       ...prev,
       FamiliaDatosPersonales: {
         ...prev.FamiliaDatosPersonales,
-        [campo]: valor,
-      },
-    }));
-  };
-  
-
-  const obtenerIdUsuario = () => localStorage.getItem("idUsuario") || "";
-
-  const validarDatos = (dp) => {
-    if (!dp.nombre?.trim()) return "Falta el nombre.";
-    if (!dp.numeroIdentificacion?.trim()) return "Falta el número de identificación.";
-    if (!dp.tipoIdentificacion?.trim()) return "Falta el tipo de identificación.";
-    return null;
-  };
-
-  const construirPersonaPayload = (
-    dp, ce, cp, fd, codigoFamilia, idUsuarioCreacion
-  ) => ({
-    tieneCondicionSalud: ce.tieneCondicionSalud ?? true,
-    descripcionCondicionSalud: ce.descripcionCondicionSalud || ce.otrasCondiciones || "",
-    discapacidad: ce.discapacidad ?? false,
-    tipoDiscapacidad: ce.tipoDiscapacidad || "",
-    subtipoDiscapacidad: ce.subtipoDiscapacidad || "",
-    paisOrigen: cp.paises || "",
-    autoidentificacionCultural: cp.autoidentificacionCultural || "",
-    puebloIndigena: cp.grupoIndigena || "",
-    firma: fd.imagen || "",
-    idFamilia: codigoFamilia,
-    nombre: dp.nombre || "",
-    primerApellido: dp.primerApellido || "",
-    segundoApellido: dp.segundoApellido || "",
-    tipoIdentificacion: dp.tipoIdentificacion || "Cédula",
-    numeroIdentificacion: dp.numeroIdentificacion || "",
-    nacionalidad: dp.nacionalidad || "",
-    parentesco: dp.parentesco || "",
-    esJefeFamilia: dp.esJefeFamilia ?? false,
-    fechaNacimiento: dp.fechaNacimiento || "",
-    genero: dp.genero || "",
-    sexo: dp.sexo || "",
-    telefono: dp.telefono || "",
-    contactoEmergencia: dp.contactoEmergencia || "",
-    observaciones: dp.observaciones || "",
-    estaACargoMenor: dp.estaACargoMenor ?? false,
-    idUsuarioCreacion,
-  });
-
-  const crearPersonas = async (payloadArray) => {
-    const res = await personasAPI.create({ personas: payloadArray });
-    const resultados = res?.resultados || [];
-    const ids = resultados.map(r => r.id);
-
-    if (ids.length !== payloadArray.length) {
-      if (res.success && ids.length === 0) {
-        console.warn("Advertencia: No se devolvieron IDs, pero la inserción fue exitosa.");
-      } else {
-        throw new Error("No se pudieron insertar todas las personas");
+        esJefeFamilia: "Sí"
       }
-    }
+    }));
 
-    if (ids.length > 0) {
-      localStorage.setItem("idPersona", ids[0]);
-    }
-
-    return ids;
   };
+
+
+
+
+
+  const construirPersonaPayload = (datosIntegrantes, idFamilia) => {
+    const formData = new FormData();
+
+    const personasArray = datosIntegrantes.map((integrante, idx) => {
+      const dp = integrante.FamiliaDatosPersonales;
+      const ce = integrante.FamiliaCondicionesEspeciales;
+      const cp = integrante.FamiliaCaracteristicasPoblacionales;
+      const fd = integrante.FamiliaFirmaDigital;
+
+      // Generar nombre único para la firma
+      let firmaFileName = "";
+      if (fd.imagen) {
+        const identificacion = dp.numeroIdentificacion || `sinid_${idx + 1}`;
+        const timestamp = Date.now();
+        firmaFileName = `firma_${identificacion}_${timestamp}.png`;
+      }
+
+      // Construir el objeto persona
+      const persona = {
+        tieneCondicionSalud: ce.tieneCondicionSalud ?? true,
+        descripcionCondicionSalud: ce.descripcionCondicionSalud || ce.otrasCondiciones || null,
+        discapacidad: ce.discapacidad ?? false,
+        tipoDiscapacidad: ce.tipoDiscapacidad || null,
+        subtipoDiscapacidad: ce.subtipoDiscapacidad || null,
+        paisOrigen: cp.paises || null,
+        autoidentificacionCultural: cp.autoidentificacionCultural || null,
+        puebloIndigena: cp.grupoIndigena || null,
+        idFamilia: idFamilia,
+        nombre: dp.nombre || "",
+        primerApellido: dp.primerApellido || "",
+        segundoApellido: dp.segundoApellido || "",
+        tipoIdentificacion: dp.tipoIdentificacion || "Cédula",
+        numeroIdentificacion: dp.numeroIdentificacion || "",
+        nacionalidad: dp.nacionalidad || "",
+        parentesco: dp.parentesco || "",
+        esJefeFamilia: dp.esJefeFamilia === true || dp.esJefeFamilia === "Sí",
+        fechaNacimiento: dp.fechaNacimiento || "",
+        genero: dp.genero || "",
+        sexo: dp.sexo || "",
+        telefono: dp.telefono || "",
+        contactoEmergencia: dp.contactoEmergencia || null,
+        observaciones: dp.observaciones || null,
+        estaACargoMenor: Boolean(dp.estaACargoMenor),
+        idUsuarioCreacion: idUsuario,
+      };
+
+      // Solo agrega la propiedad firma si hay firma
+      if (firmaFileName) {
+        persona.firma = firmaFileName;
+      }
+
+      return persona;
+    });
+
+    formData.append("personas", JSON.stringify(personasArray));
+
+    datosIntegrantes.forEach((integrante, idx) => {
+      const dp = integrante.FamiliaDatosPersonales;
+      const fd = integrante.FamiliaFirmaDigital;
+      if (fd.imagen) {
+        const identificacion = dp.numeroIdentificacion || `sinid_${idx + 1}`;
+        const timestamp = Date.now();
+        const firmaFileName = `firma_${identificacion}_${timestamp}.png`;
+        const pngBlob = convertirBase64APng(fd.imagen);
+        formData.append("firma", pngBlob, firmaFileName);
+      }
+    });
+
+    return formData;
+  };
+
+  const crearPersonasConFirmas = async (formData) => {
+    const res = await personasAPI.create(formData);
+    return res;
+  };
+
+  const navigate = useNavigate(); // Agrega esto dentro del componente
 
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
     setSuccess(null);
 
-    const dp = datos.FamiliaDatosPersonales;
-    const ce = datos.FamiliaCondicionesEspeciales;
-    const cp = datos.FamiliaCaracteristicasPoblacionales;
-    const fd = datos.FamiliaFirmaDigital;
 
-    const mensajeError = validarDatos(dp);
-    if (mensajeError) {
-      setError("Error: " + mensajeError);
+    const regexIdentificacion = /^\d{9}$/;
+    const regexTelefono = /^\d{4}-\d{4}$/;
+
+    if (!regexIdentificacion.test(dp.numeroIdentificacion || "")) {
+      showCustomToast(
+        "Dato inválido",
+        "El número de identificación debe tener exactamente 9 dígitos.",
+        "error"
+      );
       setLoading(false);
       return;
     }
 
-    if (!codigoFamilia) {
-      setError("No se encontró el código de familia. Asegúrese de ingresarlo.");
+    if (!regexTelefono.test(dp.telefono || "")) {
+      showCustomToast(
+        "Dato inválido",
+        "El teléfono debe tener el formato 8888-8888.",
+        "error"
+      );
       setLoading(false);
       return;
     }
 
-    const idUsuarioCreacion = obtenerIdUsuario();
-    if (!idUsuarioCreacion) {
-      setError("No se encontró el idUsuario en localStorage.");
-      setLoading(false);
-      return;
-    }
+
+    const nuevosIntegrantes = [...datosIntegrantes];
+    nuevosIntegrantes[indice] = { ...datos };
 
     try {
-      const personaPayload = construirPersonaPayload(dp, ce, cp, fd, codigoFamilia, idUsuarioCreacion);
-      await crearPersonas([personaPayload]);
-      setSuccess("¡Datos guardados correctamente!");
-      alert("Registro de integrantes completado.");
-      // Aquí puedes navegar a otra página si lo deseas
+      const formData = construirPersonaPayload(nuevosIntegrantes, idFamilia);
+      const res = await crearPersonasConFirmas(formData);
+
+      if (res?.success) {
+        showCustomToast(
+          "Persona agregada correctamente",
+          "La persona fue registrada exitosamente.",
+          "success"
+        );
+        setTimeout(() => {
+          navigate("/preFormulario.jsx");
+        }, 2000);
+      } else {
+        showCustomToast(
+          "No se pudo registrar",
+          res?.errores?.[0]?.error || "No se pudo registrar la persona.",
+          "error"
+        );
+      }
     } catch (err) {
-      setError("Error al guardar los datos: " + (err.message || err));
-      console.error(err);
+      showCustomToast(
+        "No se pudo registrar",
+        err.message || "No se pudo registrar la persona.",
+        "error"
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  return (
+  const convertirBase64APng = (base64String) => {
+    const base64Data = base64String.replace(/^data:image\/[^;]+;base64,/, '');
+    const byteCharacters = atob(base64Data);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: 'image/png' });
+  };
 
+  return (
     <FormContainer
       title={`Formulario de Registro Familiar - Integrante ${indice + 1} de ${cantidad}`}
     >
       {/* Información Personal */}
       <FoldDownComponent title="Información Personal" open>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
           <InputField
-            label="Código de Familia"
+            label="ID Familia"
             name="idFamilia"
-            value={codigoFamilia}
+            value={codigoFamilia || ""}
             readOnly
           />
+
           <InputField
             label="Nombre"
             name="nombre"
@@ -203,6 +353,7 @@ const FamiliaFormulario = () => {
             name="segundoApellido"
             value={dp.segundoApellido || ""}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            required
           />
           <SelectField
             label="Tipo de Identificación"
@@ -216,7 +367,14 @@ const FamiliaFormulario = () => {
             label="Número de Identificación"
             name="numeroIdentificacion"
             value={dp.numeroIdentificacion || ""}
-            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            onChange={(e) => {
+              let val = e.target.value.replace(/\D/g, ""); // solo dígitos
+              if (val.length > 9) val = val.slice(0, 9); // máximo 9
+              handleChange(
+                { target: { name: e.target.name, value: val } },
+                "FamiliaDatosPersonales"
+              );
+            }}
             required
           />
           <InputField
@@ -225,6 +383,7 @@ const FamiliaFormulario = () => {
             type="date"
             value={dp.fechaNacimiento || ""}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            max={obtenerFechaMaxima()}
           />
           <InputField
             label="Edad"
@@ -237,18 +396,55 @@ const FamiliaFormulario = () => {
             name="nacionalidad"
             value={dp.nacionalidad || ""}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            required
+          />
+          <SelectField
+            label="Usted diría que se identifica como (Género)"
+            name="genero"
+            value={dp.genero || "Prefiero no decir"}
+            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            options={["Hombre", "Mujer", "Hombre trans/transmasculino", "Mujer trans/transfemenina", "No se identifica con ninguna de las anteriores", "Otro", "Prefiero no decir"]}
+            required
+          />
+          <SelectField
+            label="Sexo"
+            name="sexo"
+            value={dp.sexo || ""}
+            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            options={["Masculino", "Femenino", "Intersexo", "Prefiero no decir"]}
+            required
+          />
+          <InputField
+            label="Observaciones"
+            name="observaciones"
+            value={dp.observaciones || ""}
+            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            type="textarea"
           />
           <InputField
             label="Parentesco"
             name="parentesco"
             value={dp.parentesco || ""}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            required
           />
           <InputField
             label="Teléfono"
             name="telefono"
             value={dp.telefono || ""}
-            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            onChange={(e) => {
+              let val = e.target.value.replace(/\D/g, ""); // solo dígitos
+              if (val.length > 8) val = val.slice(0, 8); // máximo 8 dígitos
+              if (val.length > 4) {
+                val = val.slice(0, 4) + "-" + val.slice(4); // formato ####-####
+              }
+              handleChange(
+                { target: { name: e.target.name, value: val } },
+                "FamiliaDatosPersonales"
+              );
+            }}
+            placeholder="8888-8888"
+            required
           />
           <InputField
             label="Contacto de Emergencia"
@@ -259,22 +455,17 @@ const FamiliaFormulario = () => {
           <SelectField
             label="¿Es jefe de familia?"
             name="esJefeFamilia"
-            value={dp.esJefeFamilia ? "Sí" : "No"}
-            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            value={dp.esJefeFamilia === true || dp.esJefeFamilia === "Sí" ? "Sí" : "No"}
+            onChange={handleJefeFamiliaChange}
             options={["No", "Sí"]}
           />
           <SelectField
             label="¿Está a cargo de algún menor?"
             name="estaACargoMenor"
-            value={
-              dp.estaACargoMenor === true
-                ? "Sí"
-                : dp.estaACargoMenor === false
-                  ? "No"
-                  : ""
-            }
+            value={dp.estaACargoMenor ?? ""}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
-            options={["Sí", "No"]}
+            options={["No", "Sí"]}
+            required
           />
         </div>
       </FoldDownComponent>
@@ -367,8 +558,88 @@ const FamiliaFormulario = () => {
                 type="textarea"
               />
             </>
+
+          )}
+
+          {/* Discapacidad */}
+          <label className="text-teal-600 font-bold select-none">¿Tiene alguna discapacidad?</label>
+          <div className="flex items-center gap-6 col-span-2 mt-2">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="discapacidad"
+                checked={ce.discapacidad === true}
+                onChange={() =>
+                  setDatos(prev => ({
+                    ...prev,
+                    FamiliaCondicionesEspeciales: {
+                      ...prev.FamiliaCondicionesEspeciales,
+                      discapacidad: true,
+                      tipoDiscapacidad: "",
+                      subtipoDiscapacidad: "",
+                    },
+                  }))
+                }
+                className="form-radio h-5 w-5 text-teal-600 border-teal-600 focus:ring-teal-500"
+              />
+              <span className="text-teal-600 font-semibold select-none">Sí</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="discapacidad"
+                checked={ce.discapacidad === false}
+                onChange={() =>
+                  setDatos(prev => ({
+                    ...prev,
+                    FamiliaCondicionesEspeciales: {
+                      ...prev.FamiliaCondicionesEspeciales,
+                      discapacidad: false,
+                      tipoDiscapacidad: "",
+                      subtipoDiscapacidad: "",
+                    },
+                  }))
+                }
+                className="form-radio h-5 w-5 text-teal-600 border-teal-600 focus:ring-teal-500"
+              />
+              <span className="text-teal-600 font-semibold select-none">No</span>
+            </label>
+          </div>
+          {/* Si tiene discapacidad, mostrar tipo y subtipo */}
+          {ce.discapacidad === true && (
+            <>
+              <SelectField
+                label="Tipo de discapacidad"
+                name="tipoDiscapacidad"
+                value={ce.tipoDiscapacidad || ""}
+                onChange={e => handleChange(e, "FamiliaCondicionesEspeciales")}
+                options={[
+                  "Motora", "Visual", "Auditiva", "Intelectual", "Psicosocial", "Otra"
+                ]}
+                required
+              />
+              <SelectField
+                label="Subtipo de discapacidad"
+                name="subtipoDiscapacidad"
+                value={ce.subtipoDiscapacidad || ""}
+                onChange={e => handleChange(e, "FamiliaCondicionesEspeciales")}
+                options={[
+                  "Parcial", "Total", "Temporal", "Permanente", "Otra"
+                ]}
+                required
+              />
+              {ce.subtipoDiscapacidad === "Otra" && (
+                <InputField
+                  label="Especifique otro subtipo"
+                  name="otroSubtipoDiscapacidad"
+                  value={ce.otroSubtipoDiscapacidad || ""}
+                  onChange={e => handleChange(e, "FamiliaCondicionesEspeciales")}
+                />
+              )}
+            </>
           )}
         </fieldset>
+
       </FoldDownComponent>
 
       {/* Características Poblacionales */}
@@ -459,7 +730,7 @@ const FamiliaFormulario = () => {
       {error && <p className="error">{error}</p>}
       {success && <p className="success">{success}</p>}
 
-      {/* Botones de paginación con estados usando SubmitButton */}
+      {/* Navegación entre integrantes y guardado */}
       <div className="flex justify-center gap-4 mt-4">
         <SubmitButton
           type="button"
@@ -487,3 +758,4 @@ const FamiliaFormulario = () => {
 };
 
 export default FamiliaFormulario;
+

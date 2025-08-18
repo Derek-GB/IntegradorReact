@@ -5,6 +5,7 @@ const paises = [
   "Belice", "Costa Rica", "El Salvador", "Guatemala", "Honduras",
   "Nicaragua", "Panamá", "Argentina", "Venezuela", "Colombia"
 ];
+
 const gruposIndigenasCR = [
   "Bribri", "Cabécar", "Maleku", "Guaymí (Ngäbe)", "Boruca", "Térraba", "Chorotega"
 ];
@@ -94,7 +95,7 @@ const useIntegrante = (datos = {}, setDatos) => {
     }));
   };
 
-  // Default tipoIdentificacion
+  
   useEffect(() => {
     if (!datos.FamiliaDatosPersonales?.tipoIdentificacion) {
       setDatos(prev => ({
@@ -107,6 +108,14 @@ const useIntegrante = (datos = {}, setDatos) => {
     }
   }, []);
 
+  
+  const validarIntegrante = (dp) => {
+    if (!dp.nombre?.trim()) return "Falta el nombre.";
+    if (!dp.numeroIdentificacion?.trim()) return "Falta el número de identificación.";
+    if (!dp.tipoIdentificacion?.trim()) return "Falta el tipo de identificación.";
+    return null;
+  };
+
   return {
     edad,
     handleChange,
@@ -116,6 +125,8 @@ const useIntegrante = (datos = {}, setDatos) => {
     signaturePadRef,
     guardarFirma,
     limpiarFirma,
+    calcularEdad,
+    validarIntegrante,
   };
 };
 

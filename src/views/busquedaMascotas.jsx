@@ -1,18 +1,22 @@
 import React from "react";
 import { useBusquedaMascotas } from "../hooks/useBusquedaMascotas";
 import FormContainer from "../components/FormComponents/FormContainer";
-import InputField from "../components/FormComponents/InputField";
+import SearchAutocompleteInput from "../components/FormComponents/SearchAutocompleteInput";
 import SubmitButton from "../components/FormComponents/SubmitButton";
 import CustomToaster from "../components/globalComponents/CustomToaster";
 import GlobalDataTable from "../components/globalComponents/GlobalDataTable";
 
 const BuscarMascotas = () => {
   const {
-    codigoFamilia,
-    setCodigoFamilia,
+    familias,
+    busquedaFamilia,
+    setBusquedaFamilia,
+    showSugerencias,
+    setShowSugerencias,
+    handleFamiliaSelect,
     resultados,
     loading,
-    handleSubmit
+    handleSubmit,
   } = useBusquedaMascotas();
 
   const columns = [
@@ -27,13 +31,17 @@ const BuscarMascotas = () => {
       <FormContainer title="Búsqueda de Mascotas" onSubmit={handleSubmit} size="md">
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1">
-            <InputField
-              label="Código Familia"
-              name="codigoFamilia"
-              value={codigoFamilia}
-              onChange={(e) => setCodigoFamilia(e.target.value)}
-              placeholder="Ej: 2025-AL-Zarcero-022"
-              required
+            <SearchAutocompleteInput
+              label="Familia"
+              busqueda={busquedaFamilia}
+              setBusqueda={setBusquedaFamilia}
+              showSugerencias={showSugerencias}
+              setShowSugerencias={setShowSugerencias}
+              resultados={familias}
+              onSelect={handleFamiliaSelect}
+              optionLabelKeys={["codigoFamilia"]}
+              placeholder="Seleccione una familia"
+              disabled={loading || !(familias?.length > 0)}
             />
           </div>
 

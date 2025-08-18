@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-
 const Inicio = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [setCurrentSlide] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-
   const testimonials = [
     {
       text: "Este sistema ha revolucionado la gestión de emergencias en nuestra región. La rapidez y eficiencia son incomparables.",
@@ -40,7 +38,11 @@ const Inicio = () => {
         <div className="absolute bottom-20 left-1/4 w-12 h-12 bg-yellow-50 rounded-full opacity-25 animate-bounce delay-1000"></div>
 
         {/* Header principal */}
+
         <div className={`container mx-auto px-4 py-12 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+
+<div className={`={container mx-auto px-4 py-12 transition-all duration-1000 ${isVisible ?  'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+
           <div className="bg-white rounded-lg shadow-md mb-8 overflow-hidden">
             <div className="cursor-pointer font-bold py-6 px-6 select-none bg-teal-700 text-white hover:bg-teal-800 transition-colors duration-200 text-center">
               <div className="inline-flex items-center justify-center w-24 h-24 bg-teal-700 rounded-full mb-6 shadow-2xl animate-pulse">
@@ -198,12 +200,11 @@ const Inicio = () => {
             </div>
           </div>
 
-
         
         </div>
-      </div>
+    </div>
     </>
   );
 };
-
 export default Inicio;
+

@@ -111,17 +111,20 @@ export const familiasAPI = createApiMethods("familias", {
     }
   },
 
-  egresar: async (id, idModificacion) => {
-    try {
-      const res = await customAxios.put(`/familias/egreso`, {
-        id,
-        idModificacion
-      });
-      return res.data;
-    } catch (error) {
-      handleError(error);
-    }
-  },
+ egresar: async (payload) => {
+  try {
+    
+    const data = {
+      id: payload.id,
+      idModificacion: Number(payload.idModificacion)
+    };
+    
+    const res = await customAxios.put(`/familias/egreso`, data);
+    return res.data;
+  } catch (error) {
+    handleError(error);
+  }
+},
   // Nuevo método para obtener el autonumérico por cantón
   getNextNumero: async (canton) => {
     try {
@@ -144,7 +147,7 @@ export const familiasAPI = createApiMethods("familias", {
 });
 
 export const alberguesAPI = {
-  ...createApiMethods("albergues"),
+  ...createApiMethods("albergues",),
   getById: async (id) => {
     try {
       const res = await customAxios.get(`/albergues/consulta/id/${encodeURIComponent(id)}`);
@@ -194,19 +197,19 @@ export const alberguesAPI = {
     }
   },
   getByColor: async (color) => {
-  try {
-    if (!color || color.trim() === "") {
-      throw new Error("Color del albergue es requerido");
+    try {
+      if (!color || color.trim() === "") {
+        throw new Error("Color del albergue es requerido");
+      }
+      const colorNormalized = color.trim().toLowerCase();
+      console.log("URL llamada con color:", colorNormalized);
+      const url = `/albergues/resumen/color/${encodeURIComponent(colorNormalized)}`;
+      const res = await customAxios.get(url);
+      return res.data;
+    } catch (error) {
+      handleError(error);
     }
-    const colorNormalized = color.trim().toLowerCase();
-    console.log("URL llamada con color:", colorNormalized);
-    const url = `/albergues/resumen/color/${encodeURIComponent(colorNormalized)}`;
-    const res = await customAxios.get(url);
-    return res.data;
-  } catch (error) {
-    handleError(error);
-  }
-},
+  },
 
   getByUsuario: async (idUsuario) => {
     try {
@@ -222,7 +225,7 @@ export const alberguesAPI = {
 
 export const personasAPI = {
   ...createApiMethods("personas"),
-    getPorDiscapacidad: async (idDiscapacidad) => {
+  getPorDiscapacidad: async (idDiscapacidad) => {
     try {
       const url = `/personas/resumen/discapacidad/${encodeURIComponent(idDiscapacidad)}`;
       const response = await customAxios.get(url);
@@ -241,25 +244,26 @@ export const personasAPI = {
       handleError(error);
     }
   },
-   getResumenPorCondiciones: async (idCondicionesEspeciales) => {
-    if (!idCondicionesEspeciales) throw new Error("ID Condiciones Especiales es requerido");
+  getResumenPorCondiciones: async (idCondicion) => {
+    if (!idCondicion) throw new Error("ID Condicion es requerido");
     try {
-      const url = `/personas/resumen/condiciones/${encodeURIComponent(idCondicionesEspeciales)}`;
+      const url = `/personas/resumen/condicion/${encodeURIComponent(idCondicion)}`;
       const res = await customAxios.get(url);
       return res.data;
     } catch (error) {
       handleError(error);
     }
   },
- getResumenPorAlbergue: async (idAlberguePersona) => {
-    if (!idAlberguePersona || idAlberguePersona.toString().trim() === "") {
-      throw new Error("El idAlberguePersona es requerido");
+
+  getResumenPorAlbergue: async (nombreAlbergue) => {
+    if (!nombreAlbergue || nombreAlbergue.toString().trim() === "") {
+      throw new Error("El nombre del albergue es requerido");
     }
-    const url = `/personas/resumen/porAlbergue/${encodeURIComponent(idAlberguePersona)}`;
+    const url = `/personas/resumen/porAlbergue/${encodeURIComponent(nombreAlbergue)}`;
     const res = await customAxios.get(url);
-    return res.data;  
+    return res.data?.data ?? res.data;
   },
-   getResumenPorSexo: async (idSexoPersona) => {
+  getResumenPorSexo: async (idSexoPersona) => {
     if (!idSexoPersona) throw new Error("ID Sexo Persona es requerido");
     try {
       const res = await customAxios.get(`/personas/resumen/sexo/${encodeURIComponent(idSexoPersona)}`);
@@ -268,7 +272,7 @@ export const personasAPI = {
       handleError(error);
     }
   },
- getResumenPorEdad: async (idEdadPersona) => {
+  getResumenPorEdad: async (idEdadPersona) => {
     if (!idEdadPersona) throw new Error("ID Edad Persona es requerido");
     try {
       const res = await customAxios.get(`/personas/resumen/edad/${encodeURIComponent(idEdadPersona)}`);
@@ -304,6 +308,7 @@ export const categoriaConsumiblesAPI = createApiMethods("categoriaConsumibles");
 export const consumiblesAPI = createApiMethods("consumibles");
 export const detallePedidoConsumiblesAPI = createApiMethods("detallePedidoConsumibles");
 export const pedidoConsumiblesAPI = createApiMethods("pedidoConsumibles", {
+
   create: async (data) => {
     try {
       const res = await customAxios.post(`/pedidoConsumibles`, data);
@@ -341,6 +346,9 @@ export const pedidoConsumiblesAPI = createApiMethods("pedidoConsumibles", {
   },
 
   getAll: async () => {
+
+  getAllAbastecimientos: async () => {
+
     try {
       const res = await customAxios.get(`/pedidoConsumibles/all`);
       return res.data;
@@ -380,7 +388,33 @@ export const usuariosAPI = createApiMethods("usuarios", {
       handleError(error);
     }
   },
+  getAll: async () => {
+    try {
+      const res = await customAxios.get(`/usuarios/all`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+ delete: async (id) => {
+  const res = await customAxios.delete(`/usuarios/${id}`);
+  return res.data;
+},
+  getById: async (id) => {
+    try {
+      const res = await customAxios.get(`/usuarios/${id}`);
+      return res.data;
+    } catch (error) {
+      if (error.response?.status === 404) {
+        throw new Error("Usuario no encontrado.");
+      }
+      throw new Error("Error al buscar usuario por ID.");
+    }
+  }
 });
+
+
+
 export const mascotasAPI = {
   ...createApiMethods("mascotas"),
   getByCodigoFamilia: async (codigoFamilia) => {
@@ -483,4 +517,13 @@ export const ajusteInventarioAPI = {
       throw new Error(error.response?.data?.message || "Error en la búsqueda de ajustes");
     }
   }
+};
+
+export const detallePedidoConsumibleAPI = {
+  create: (body) =>
+    fetch("/api/detallePedidoConsumible", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }).then((r) => r.json()),
 };

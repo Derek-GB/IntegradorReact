@@ -9,7 +9,7 @@ import SearchAutocompleteInput from "../../components/FormComponents/SearchAutoc
 const FormularioRegistro = () => {
   const {
     albergues,
-    amenazas,
+    peligros, // antes amenazas
     provincias,
     cantones,
     distritos,
@@ -19,16 +19,17 @@ const FormularioRegistro = () => {
     setProvinciaSeleccionada,
     cantonSeleccionado,
     setCantonSeleccionado,
+    // NUEVO ESTADO para distrito
+    idDistritoSeleccionado,
+    setIdDistritoSeleccionado,
     eventoSeleccionado,
     setEventoSeleccionado,
     direccion,
     setDireccion,
     codigoFamilia,
-    // nombreProvincia,
     setNombreProvincia,
-    // nombreCanton,
     setNombreCanton,
-    nombreDistrito,
+    // nombreDistrito,
     setNombreDistrito,
     busquedaAlbergue,
     setBusquedaAlbergue,
@@ -62,10 +63,10 @@ const FormularioRegistro = () => {
             </div>
             <div className="flex-1">
               <SelectField
-                label="Tipo de Evento"
+                label="Eventualidad"
                 value={eventoSeleccionado}
                 onChange={(e) => setEventoSeleccionado(e.target.value)}
-                options={amenazas.map((e) => ({ nombre: e.evento, id: e.id }))}
+                options={peligros} // usa directamente el array de peligros
                 optionLabel="nombre"
                 optionValue="id"
                 required
@@ -134,12 +135,16 @@ const FormularioRegistro = () => {
             <div className="flex-1">
               <SelectField
                 label="Distrito"
-                value={nombreDistrito}
+                value={idDistritoSeleccionado}
                 onChange={(e) => {
+                  const id = e.target.value;
+                  setIdDistritoSeleccionado(id);
                   const texto = e.target.options[e.target.selectedIndex].text;
                   setNombreDistrito(texto);
                 }}
-                options={distritos.map((d) => ({ nombre: d.descripcion, id: d.idDistrito }))}
+                options={[
+                  ...distritos.map((d) => ({ nombre: d.descripcion, id: d.idDistrito })),
+                ]}
                 optionLabel="nombre"
                 optionValue="id"
                 required
@@ -159,7 +164,9 @@ const FormularioRegistro = () => {
           </div>
         </div>
 
-        <SubmitButton color="text-black" width="w-full" >Registrar</SubmitButton>
+        <SubmitButton color="text-black" width="w-full" >
+          Registrar
+        </SubmitButton>
       </div>
     </FormContainer>
   );

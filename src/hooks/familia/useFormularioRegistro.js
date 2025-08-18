@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { alberguesAPI, amenazasAPI, familiasAPI } from "../../helpers/api"; // <-- importa familiasAPI
+import { alberguesAPI, amenazasAPI, familiasAPI } from "../../helpers/api";
 import obtenerTodos from "../../helpers/obtenerUbicaciones";
 import customAxios from "../../helpers/customAxios";
 import { showCustomToast } from "../../components/globalComponents/CustomToaster";
@@ -16,9 +16,10 @@ const useFormularioRegistro = () => {
   const [nombreProvincia, setNombreProvincia] = useState("");
   const [nombreCanton, setNombreCanton] = useState("");
   const [nombreDistrito, setNombreDistrito] = useState("");
+  const [idDistritoSeleccionado, setIdDistritoSeleccionado] = useState(""); // ✅ agregado
 
   const [albergues, setAlbergues] = useState([]);
-  const [amenazas, setAmenazas] = useState([]);
+  const [peligros, setPeligros] = useState([]);
   const [provincias, setProvincias] = useState([]);
   const [cantones, setCantones] = useState([]);
   const [distritos, setDistritos] = useState([]);
@@ -28,6 +29,16 @@ const useFormularioRegistro = () => {
 
   const navigate = useNavigate();
 
+  // Cargar peligros (antes amenazas)
+  useEffect(() => {
+    const cargarPeligros = async () => {
+      const datos = await obtenerTodos("https://api-geo-cr.vercel.app/provincias");
+      setProvincias(datos);
+    };
+    cargarPeligros();
+  }, []);
+
+  // Cargar datos iniciales
   useEffect(() => {
     const cargarDatos = async () => {
       const idUsuario = localStorage.getItem("idUsuario");
@@ -42,7 +53,15 @@ const useFormularioRegistro = () => {
           amenazasAPI.getAll(),
         ]);
         setAlbergues(resAlbergues?.data || []);
-        setAmenazas(resAmenazas?.data || []);
+        // Extraer peligros únicos
+        const peligrosUnicos = Array.from(
+          new Set((resAmenazas?.data || []).map((a) => a.peligro))
+        )
+          .filter(Boolean)
+          .map((peligro) => ({ id: peligro, nombre: peligro }));
+        console.log("Datos crudos de amenazas:", resAmenazas?.data);
+        console.log("Peligros únicos extraídos:", peligrosUnicos);
+        setPeligros(peligrosUnicos);
       } catch {
         showCustomToast("Error", "Error al cargar datos internos", "error");
       }
@@ -50,6 +69,7 @@ const useFormularioRegistro = () => {
     cargarDatos();
   }, []);
 
+  // Cargar provincias
   useEffect(() => {
     const cargarProvincias = async () => {
       const datos = await obtenerTodos("https://api-geo-cr.vercel.app/provincias");
@@ -58,6 +78,7 @@ const useFormularioRegistro = () => {
     cargarProvincias();
   }, []);
 
+  // Cargar cantones al cambiar provincia
   useEffect(() => {
     if (!provinciaSeleccionada) {
       setCantones([]);
@@ -73,6 +94,7 @@ const useFormularioRegistro = () => {
     cargarCantones();
   }, [provinciaSeleccionada]);
 
+  // Cargar distritos al cambiar cantón
   useEffect(() => {
     if (!cantonSeleccionado) {
       setDistritos([]);
@@ -87,6 +109,7 @@ const useFormularioRegistro = () => {
     cargarDistritos();
   }, [cantonSeleccionado]);
 
+  // Generar código de familia
   useEffect(() => {
     const generarIdentificador = async () => {
       if (nombreProvincia && nombreCanton && integrantes) {
@@ -95,7 +118,6 @@ const useFormularioRegistro = () => {
           const year = new Date().getFullYear();
           const nuevoCodigo = `${year}-${nombreProvincia}-${nombreCanton}-${numeroFamilia}`;
           setCodigoFamilia(nuevoCodigo);
-          console.log("Código de familia generado:", nuevoCodigo);
         } catch {
           setCodigoFamilia("");
           showCustomToast("Error", "No se pudo generar el código de familia.", "error");
@@ -108,6 +130,7 @@ const useFormularioRegistro = () => {
     generarIdentificador();
   }, [nombreProvincia, nombreCanton, integrantes]);
 
+  // Crear familia
   const crearFamilia = async (e) => {
     e.preventDefault();
     const idUsuario = localStorage.getItem("idUsuario");
@@ -142,8 +165,13 @@ const useFormularioRegistro = () => {
     try {
       const res = await customAxios.post("/familias", datos);
       const idFamilia = res.data.idFamilia;
+      console.log("Respuesta backend crear familia:", res.data);
+      if (!idFamilia) {
+        showCustomToast("Error", "El backend no devolvió el id de la familia. No se podrá registrar integrantes.", "error");
+        return;
+      }
       localStorage.setItem("idFamilia", idFamilia);
-      localStorage.setItem("codigoFamilia", codigoFamilia); // <-- Agrega esta línea
+      localStorage.setItem("codigoFamilia", codigoFamilia);
       showCustomToast("Éxito", "Familia registrada correctamente.", "success");
     } catch {
       showCustomToast("Error", "No se pudo registrar la familia.", "error");
@@ -154,9 +182,8 @@ const useFormularioRegistro = () => {
   };
 
   return {
-    // States y handlers
     albergues,
-    amenazas,
+    peligros,
     provincias,
     cantones,
     distritos,
@@ -180,6 +207,8 @@ const useFormularioRegistro = () => {
     setNombreCanton,
     nombreDistrito,
     setNombreDistrito,
+    idDistritoSeleccionado,
+    setIdDistritoSeleccionado, 
     busquedaAlbergue,
     setBusquedaAlbergue,
     showSugerenciasAlbergue,
