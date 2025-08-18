@@ -22,10 +22,15 @@ export const useListaSuministro = () => {
 
         const data = await productosAPI.getByUsuario(idUsuario);
         const lista = Array.isArray(data) ? data : data?.data ?? [];
+        
+        console.log("✅ Productos obtenidos:", lista);
 
-        console.log("📦 Productos cargados por usuario:", lista);
+        // Ordena por fecha de creación descendente si existe, y toma los últimos 20
+        const ultimos = lista
+          .sort((a, b) => new Date(b.fechaCreacion || b.createdAt || 0) - new Date(a.fechaCreacion || a.createdAt || 0))
+          .slice(0, 20);
 
-        setProductos(lista);
+        setProductos(ultimos);
       } catch (error) {
         console.error("❌ Error al cargar productos por usuario:", error);
         showCustomToast(
@@ -54,6 +59,7 @@ export const useListaSuministro = () => {
   };
 
   const handleSelectProducto = (producto) => {
+    console.log("🔎 Producto seleccionado:", producto);
     setForm(producto || {});
     setBusquedaProducto(producto ? `Código: ${producto.codigoProducto} - ${producto.nombre}` : '');
   };
@@ -62,27 +68,37 @@ export const useListaSuministro = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const cantidadNum = Number(form.cantidad);
-      if (isNaN(cantidadNum) || cantidadNum < 0) {
-        showCustomToast('Error', 'Cantidad debe ser un número válido mayor o igual a 0', 'error');
+      const payload = {
+        id: form.id ?? form.idProducto, // soporte para ambos
+        descripcion: form.descripcion || '',
+        categoria: form.categoria,
+        unidadMedida: form.unidadMedida,
+      };
+
+      console.log("📤 Payload enviado al update:", payload);
+
+      // Validación previa
+      if (!payload.id || !payload.descripcion || !payload.categoria || !payload.unidadMedida) {
+        console.error("⚠️ Faltan campos obligatorios:", payload);
         setLoading(false);
         return;
       }
-      const payload = {
-        id: form.id,
-        descripcion: form.descripcion || '',
-        cantidad: cantidadNum,
-      };
+
       await productosAPI.update(payload);
       showCustomToast("Éxito", "Producto actualizado con éxito.", "success");
+
       setProductos(prev =>
         prev.map(p =>
-          p.id === form.id ? { ...p, descripcion: payload.descripcion, cantidad: payload.cantidad } : p
+          (p.id === payload.id || p.idProducto === payload.id)
+            ? { ...p, descripcion: payload.descripcion, categoria: payload.categoria, unidadMedida: payload.unidadMedida }
+            : p
         )
       );
+
       setForm({});
       setBusquedaProducto('');
-    } catch {
+    } catch (error) {
+      console.error("❌ Error al actualizar producto:", error);
       showCustomToast("Error", "Error al actualizar el producto.", "error");
     } finally {
       setLoading(false);
@@ -95,17 +111,29 @@ export const useListaSuministro = () => {
 
     setLoading(true);
     try {
-      await productosAPI.remove(form.id);
+      console.log("🗑️ Eliminando producto con ID:", form.id ?? form.idProducto);
+      await productosAPI.remove(form.id ?? form.idProducto);
       showCustomToast("Éxito", "Producto eliminado con éxito.", "success");
-      setProductos(prev => prev.filter(p => p.id !== form.id));
+      setProductos(prev => prev.filter(p => (p.id ?? p.idProducto) !== (form.id ?? form.idProducto)));
       setBusquedaProducto('');
       setForm({});
-    } catch {
+    } catch (error) {
+      console.error("❌ Error al eliminar producto:", error);
       showCustomToast("Error", "Error al eliminar el producto.", "error");
     } finally {
       setLoading(false);
     }
   };
+
+  // Columnas para la tabla
+  const columns = [
+    { name: "Código", selector: row => row.codigoProducto, sortable: true },
+    { name: "Nombre", selector: row => row.nombre, sortable: true },
+    { name: "Descripción", selector: row => row.descripcion, sortable: true },
+    { name: "Cantidad", selector: row => row.cantidad, sortable: true },
+    { name: "Categoría", selector: row => row.categoria, sortable: true },
+    { name: "Unidad", selector: row => row.unidadMedida, sortable: true }
+  ];
 
   return {
     productos,
@@ -120,5 +148,6 @@ export const useListaSuministro = () => {
     handleSelectProducto,
     actualizarProducto,
     eliminarProducto,
+    columns,
   };
 };

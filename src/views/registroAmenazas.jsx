@@ -77,7 +77,9 @@ export default function RegistroAmenazas() {
               label="Familia del Evento"
               name="familia"
               value={familia}
-              onChange={(e) => setFamilia(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 50) setFamilia(e.target.value);
+              }}
               placeholder="Ej: Hidrológico"
               required
             />
@@ -87,7 +89,9 @@ export default function RegistroAmenazas() {
               label="Evento"
               name="evento"
               value={evento}
-              onChange={(e) => setEvento(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 50) setEvento(e.target.value);
+              }}
               placeholder="Ej: Inundación"
               required
             />
@@ -100,7 +104,9 @@ export default function RegistroAmenazas() {
               label="Peligro"
               name="peligro"
               value={peligro}
-              onChange={(e) => setPeligro(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 50) setPeligro(e.target.value);
+              }}
               placeholder="Ej: Inundación"
               required
             />
@@ -110,7 +116,9 @@ export default function RegistroAmenazas() {
               label="Causa"
               name="causa"
               value={causa}
-              onChange={(e) => setCausa(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 50) setCausa(e.target.value);
+              }}
               placeholder="Ej: Lluvias continuas"
               required
             />
@@ -123,7 +131,9 @@ export default function RegistroAmenazas() {
               label="Categoría del Evento"
               name="categoriaEvento"
               value={categoriaEvento}
-              onChange={(e) => setCategoriaEvento(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 50) setCategoriaEvento(e.target.value);
+              }}
               placeholder="Ej: Natural"
               required
             />
