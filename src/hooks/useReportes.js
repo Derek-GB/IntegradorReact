@@ -4,7 +4,10 @@ import { personasAPI, inventarioAPI, alberguesAPI } from "../helpers/api";
 
 const opcionesReporte = [
     { label: "Resumen de personas por albergue", value: "personas_por_albergue", campos: [{ label: "Nombre del albergue", name: "nombreAlbergue" }] },
-    { label: "Resumen de personas por sexo", value: "personas_por_sexo", campos: [{ label: "Sexo", name: "sexo" }] },
+    { label: "Resumen de personas por sexo", value: "personas_por_sexo", campos: [
+        { label: "Sexo", name: "sexo" },
+        { label: "Nombre del albergue", name: "nombreAlbergue" }
+    ] },
     { label: "Resumen de personas por edad", value: "personas_por_edad", campos: [{ label: "Edad", name: "edad" }] },
     { label: "Resumen de personas con discapacidad", value: "personas_discapacidad", campos: [{ label: "Código del albergue", name: "id" }] },
     { label: "Resumen de suministros en albergues", value: "suministros_albergue", campos: [{ label: "Código del albergue", name: "idAlbergue" }] },
@@ -126,21 +129,32 @@ export function useReportesAlbergue() {
                 }
                 case "personas_por_sexo": {
                     const sexo = parametros.sexo?.trim();
+                    const id = parametros.id; // <-- usa 'id'
                     if (!sexo) {
                         toast.error("Debe completar el campo: Sexo");
                         break;
                     }
-                    const resumenSexo = await personasAPI.getResumenPorSexo(sexo);
+                    if (!id) {
+                        toast.error("Debe seleccionar un albergue");
+                        break;
+                    }
+                    const resumenSexo = await personasAPI.getResumenPorSexoYAlbergue(sexo, id);
                     setResultados(resumenSexo.data ? (Array.isArray(resumenSexo.data) ? resumenSexo.data : [resumenSexo.data]) : []);
                     break;
                 }
                 case "personas_por_edad": {
-                    const edad = parametros.edad?.trim();
-                    if (!edad) {
-                        toast.error("Debe completar el campo: Edad");
+                    const edadMin = parametros.edadMin;
+                    const edadMax = parametros.edadMax;
+                    const id = parametros.id;
+                    if (!edadMin || !edadMax) {
+                        toast.error("Debe completar el rango de edad");
                         break;
                     }
-                    const resumenEdad = await personasAPI.getResumenPorEdad(edad);
+                    if (!id) {
+                        toast.error("Debe seleccionar un albergue");
+                        break;
+                    }
+                    const resumenEdad = await personasAPI.getResumenPorEdadYAlbergue(id, edadMin, edadMax);
                     setResultados(resumenEdad.data ? (Array.isArray(resumenEdad.data) ? resumenEdad.data : [resumenEdad.data]) : []);
                     break;
                 }
@@ -239,13 +253,12 @@ export function useReportesAlbergue() {
                 { name: "Cantidad", selector: (row) => row.cantidad ?? "", key: "cantidad", sortable: true },
                 { name: "Estado", selector: (row) => row.estado || "", key: "estado", sortable: true },
                 { name: "Comentario", selector: (row) => row.comentario || "", key: "comentario", sortable: true },
-                // Quitar código y nombre albergue de la tabla
-                // { name: "Código Albergue", selector: (row) => row.codigoAlbergue || "", key: "codigoAlbergue", sortable: true },
+               
             ];
         }
         if (!resultados || resultados.length === 0) return [];
         const sample = resultados[0] || {};
-        // Excluir el campo "id", "codigoAlbergue" y "nombreAlbergue"
+
         return Object.keys(sample)
             .filter(key => key !== "id" && key !== "codigoAlbergue" && key !== "nombreAlbergue")
             .map((key) => ({
@@ -263,6 +276,19 @@ export function useReportesAlbergue() {
             }));
     };
 
+    function getExportData() {
+        if (
+            reporteSeleccionado?.value === "personas_por_albergue" &&
+            resultados[0]
+        ) {
+            // Excluye codigoAlbergue y nombreAlbergue de cada fila exportada
+            // (no los pongas en el objeto exportado)
+            // eslint-disable-next-line no-unused-vars
+            return resultados.map(({ codigoAlbergue, nombreAlbergue, ...rest }) => rest);
+        }
+        return resultados;
+    }
+
     return {
         opcionesReporte,
         reporteSeleccionado,
@@ -275,5 +301,6 @@ export function useReportesAlbergue() {
         handleChange,
         handleSubmit,
         buildColumns,
+        getExportData,
     };
 }

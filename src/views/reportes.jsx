@@ -69,7 +69,8 @@ const ReportesAlbergue = () => {
   const onSelectAlbergue = (albergue) => {
     setParametros(prev => ({
       ...prev,
-      nombreAlbergue: albergue.nombre // <-- Guarda el nombre, no el id
+      nombreAlbergue: albergue.nombre,
+      id: albergue.id // id lógico
     }));
     setBusquedaAlbergue(`${albergue.idAlbergue} - ${albergue.nombre}`);
     setShowSugerenciasAlbergue(false);
@@ -93,13 +94,15 @@ const ReportesAlbergue = () => {
 
   // Ajusta los headers para incluir los campos generales si es necesario
   const exportHeadersWithAlbergue = [
-    ...(reporteSeleccionado?.value === "personas_por_albergue"
-      ? [
-          { label: "Código Albergue", key: "codigoAlbergue" },
-          { label: "Nombre Albergue", key: "nombreAlbergue" },
-        ]
-      : []),
-    ...exportHeaders,
+    ...(
+      reporteSeleccionado?.value === "personas_por_albergue"
+        ? exportHeaders.filter(
+            h =>
+              h.key !== "codigoAlbergue" &&
+              h.key !== "nombreAlbergue"
+          )
+        : exportHeaders
+    ),
   ];
 
   return (
@@ -116,7 +119,7 @@ const ReportesAlbergue = () => {
         />
 
         {/* Si el reporte es por albergue, usa el autocomplete */}
-        {reporteSeleccionado?.value === "personas_por_albergue" ? (
+        {reporteSeleccionado?.value === "personas_por_albergue" && (
           <SearchAutocompleteInput
             label="Seleccionar Albergue"
             busqueda={busquedaAlbergue}
@@ -130,7 +133,71 @@ const ReportesAlbergue = () => {
             sx={{ width: '100%' }}
             disabled={loading}
           />
-        ) : (
+        )}
+
+        {reporteSeleccionado?.value === "personas_por_sexo" && (
+          <>
+            <InputField
+              label="Sexo"
+              name="sexo"
+              value={parametros.sexo || ""}
+              onChange={handleChange}
+              placeholder="Ingrese sexo"
+            />
+            <SearchAutocompleteInput
+              label="Seleccionar Albergue"
+              busqueda={busquedaAlbergue}
+              setBusqueda={setBusquedaAlbergue}
+              showSugerencias={showSugerenciasAlbergue}
+              setShowSugerencias={setShowSugerenciasAlbergue}
+              resultados={albergues}
+              onSelect={onSelectAlbergue}
+              optionLabelKeys={["idAlbergue", "nombre"]}
+              placeholder="Buscar albergue..."
+              sx={{ width: '100%' }}
+              disabled={loading}
+            />
+          </>
+        )}
+
+        {/* Nuevos campos para el reporte por edad */}
+        {reporteSeleccionado?.value === "personas_por_edad" && (
+          <>
+            <InputField
+              label="Edad mínima"
+              name="edadMin"
+              value={parametros.edadMin || ""}
+              onChange={handleChange}
+              placeholder="Ingrese edad mínima"
+              type="number"
+              min={0}
+            />
+            <InputField
+              label="Edad máxima"
+              name="edadMax"
+              value={parametros.edadMax || ""}
+              onChange={handleChange}
+              placeholder="Ingrese edad máxima"
+              type="number"
+              min={0}
+            />
+            <SearchAutocompleteInput
+              label="Seleccionar Albergue"
+              busqueda={busquedaAlbergue}
+              setBusqueda={setBusquedaAlbergue}
+              showSugerencias={showSugerenciasAlbergue}
+              setShowSugerencias={setShowSugerenciasAlbergue}
+              resultados={albergues}
+              onSelect={onSelectAlbergue}
+              optionLabelKeys={["idAlbergue", "nombre"]}
+              placeholder="Buscar albergue..."
+              sx={{ width: '100%' }}
+              disabled={loading}
+            />
+          </>
+        )}
+
+        {!["personas_por_albergue", "personas_por_sexo", "personas_por_edad"].includes(reporteSeleccionado?.value) &&
           reporteSeleccionado?.campos.map((campo) => (
             <InputField
               key={campo.name}
@@ -140,8 +207,7 @@ const ReportesAlbergue = () => {
               onChange={handleChange}
               placeholder={`Ingrese ${campo.label.toLowerCase()}`}
             />
-          ))
-        )}
+          ))}
 
         <SubmitButton width="w-full" loading={loading}>
           Generar Reporte
@@ -169,6 +235,95 @@ const ReportesAlbergue = () => {
               </div>
             )}
 
+            {/* Mostrar datos generales del albergue en resumen por sexo */}
+            {reporteSeleccionado?.value === "personas_por_sexo" && resultados[0] && (
+              <div className="flex flex-col md:flex-row gap-4 mb-4">
+                <div className="flex-1">
+                  <InputField
+                    label="Código Albergue"
+                    value={
+                      (() => {
+                        // 1. Busca por el id seleccionado en parametros (del autocomplete)
+                        let albergue = null;
+                        if (parametros.id) {
+                          albergue = albergues.find(a => String(a.id) === String(parametros.id));
+                        }
+                        // 2. Si no, busca por el idAlbergue del resultado
+                        if (!albergue && resultados[0]?.idAlbergue) {
+                          albergue = albergues.find(a => String(a.id) === String(resultados[0].idAlbergue));
+                        }
+                        // 3. Devuelve el código público si lo encuentra, si no, el valor del resultado
+                        return albergue?.idAlbergue || resultados[0]?.idAlbergue || "";
+                      })()
+                    }
+                    readOnly
+                  />
+                </div>
+                <div className="flex-1">
+                  <InputField
+                    label="Nombre Albergue"
+                    value={
+                      (() => {
+                        let albergue = null;
+                        if (parametros.id) {
+                          albergue = albergues.find(a => String(a.id) === String(parametros.id));
+                        }
+                        if (!albergue && resultados[0]?.idAlbergue) {
+                          albergue = albergues.find(a => String(a.id) === String(resultados[0].idAlbergue));
+                        }
+                        return albergue?.nombre || resultados[0]?.nombreAlbergue || "";
+                      })()
+                    }
+                    readOnly
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Mostrar datos generales del albergue en resumen por edad */}
+            {reporteSeleccionado?.value === "personas_por_edad" && resultados[0] && (
+              <div className="flex flex-col md:flex-row gap-4 mb-4">
+                <div className="flex-1">
+                  <InputField
+                    label="Código Albergue"
+                    value={
+                      (() => {
+                        // 1. Busca por el id seleccionado en parametros (del autocomplete)
+                        let albergue = null;
+                        if (parametros.id) {
+                          albergue = albergues.find(a => String(a.id) === String(parametros.id));
+                        }
+                        // 2. Si no, busca por el idAlbergue del resultado
+                        if (!albergue && resultados[0]?.idAlbergue) {
+                          albergue = albergues.find(a => String(a.id) === String(resultados[0].idAlbergue));
+                        }
+                        return albergue?.idAlbergue || resultados[0]?.idAlbergue || "";
+                      })()
+                    }
+                    readOnly
+                  />
+                </div>
+                <div className="flex-1">
+                  <InputField
+                    label="Nombre Albergue"
+                    value={
+                      (() => {
+                        let albergue = null;
+                        if (parametros.id) {
+                          albergue = albergues.find(a => String(a.id) === String(parametros.id));
+                        }
+                        if (!albergue && resultados[0]?.idAlbergue) {
+                          albergue = albergues.find(a => String(a.id) === String(resultados[0].idAlbergue));
+                        }
+                        return albergue?.nombre || resultados[0]?.nombreAlbergue || "";
+                      })()
+                    }
+                    readOnly
+                  />
+                </div>
+              </div>
+            )}
+
             <div className="mt-6">
               <GlobalDataTable columns={columns} data={resultados} rowsPerPage={10} />
             </div>
@@ -184,7 +339,37 @@ const ReportesAlbergue = () => {
                 data={getExportData()}
                 headers={exportHeadersWithAlbergue}
                 fileName={`${reporteSeleccionado?.value || "reporte"}.pdf`}
-                title={reporteSeleccionado?.label || "Reporte"}
+                title={
+                  reporteSeleccionado?.value === "personas_por_albergue" && resultados[0]
+                    ? `Resumen de personas por albergue: ${resultados[0].nombreAlbergue || ""}`
+                    : reporteSeleccionado?.value === "personas_por_sexo" && resultados[0]
+                    ? `Resumen de personas por sexo (${parametros.sexo || ""}) en albergue: ${
+                        (() => {
+                          let albergue = null;
+                          if (parametros.id) {
+                            albergue = albergues.find(a => String(a.id) === String(parametros.id));
+                          }
+                          if (!albergue && resultados[0]?.idAlbergue) {
+                            albergue = albergues.find(a => String(a.id) === String(resultados[0].idAlbergue));
+                          }
+                          return albergue?.nombre || resultados[0]?.nombreAlbergue || "";
+                        })()
+                      }`
+                    : reporteSeleccionado?.value === "personas_por_edad" && resultados[0]
+                    ? `Resumen de personas por edad (${parametros.edadMin || ""} - ${parametros.edadMax || ""}) en albergue: ${
+                        (() => {
+                          let albergue = null;
+                          if (parametros.id) {
+                            albergue = albergues.find(a => String(a.id) === String(parametros.id));
+                          }
+                          if (!albergue && resultados[0]?.idAlbergue) {
+                            albergue = albergues.find(a => String(a.id) === String(resultados[0].idAlbergue));
+                          }
+                          return albergue?.nombre || resultados[0]?.nombreAlbergue || "";
+                        })()
+                      }`
+                    : reporteSeleccionado?.label || "Reporte"
+                }
                 className="px-4 py-2 text-sm w-auto"
               />
             </div>

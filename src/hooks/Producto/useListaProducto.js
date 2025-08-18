@@ -22,6 +22,9 @@ export const useListaSuministro = () => {
 
         const data = await productosAPI.getByUsuario(idUsuario);
         const lista = Array.isArray(data) ? data : data?.data ?? [];
+        
+        console.log("✅ Productos obtenidos:", lista);
+
         // Ordena por fecha de creación descendente si existe, y toma los últimos 20
         const ultimos = lista
           .sort((a, b) => new Date(b.fechaCreacion || b.createdAt || 0) - new Date(a.fechaCreacion || a.createdAt || 0))
@@ -56,6 +59,7 @@ export const useListaSuministro = () => {
   };
 
   const handleSelectProducto = (producto) => {
+    console.log("🔎 Producto seleccionado:", producto);
     setForm(producto || {});
     setBusquedaProducto(producto ? `Código: ${producto.codigoProducto} - ${producto.nombre}` : '');
   };
@@ -65,23 +69,36 @@ export const useListaSuministro = () => {
     setLoading(true);
     try {
       const payload = {
-        id: form.id,
+        id: form.id ?? form.idProducto, // soporte para ambos
         descripcion: form.descripcion || '',
         categoria: form.categoria,
         unidadMedida: form.unidadMedida,
       };
+
+      console.log("📤 Payload enviado al update:", payload);
+
+      // Validación previa
+      if (!payload.id || !payload.descripcion || !payload.categoria || !payload.unidadMedida) {
+        console.error("⚠️ Faltan campos obligatorios:", payload);
+        setLoading(false);
+        return;
+      }
+
       await productosAPI.update(payload);
       showCustomToast("Éxito", "Producto actualizado con éxito.", "success");
+
       setProductos(prev =>
         prev.map(p =>
-          p.id === form.id
+          (p.id === payload.id || p.idProducto === payload.id)
             ? { ...p, descripcion: payload.descripcion, categoria: payload.categoria, unidadMedida: payload.unidadMedida }
             : p
         )
       );
+
       setForm({});
       setBusquedaProducto('');
-    } catch {
+    } catch (error) {
+      console.error("❌ Error al actualizar producto:", error);
       showCustomToast("Error", "Error al actualizar el producto.", "error");
     } finally {
       setLoading(false);
@@ -94,12 +111,14 @@ export const useListaSuministro = () => {
 
     setLoading(true);
     try {
-      await productosAPI.remove(form.id);
+      console.log("🗑️ Eliminando producto con ID:", form.id ?? form.idProducto);
+      await productosAPI.remove(form.id ?? form.idProducto);
       showCustomToast("Éxito", "Producto eliminado con éxito.", "success");
-      setProductos(prev => prev.filter(p => p.id !== form.id));
+      setProductos(prev => prev.filter(p => (p.id ?? p.idProducto) !== (form.id ?? form.idProducto)));
       setBusquedaProducto('');
       setForm({});
-    } catch {
+    } catch (error) {
+      console.error("❌ Error al eliminar producto:", error);
       showCustomToast("Error", "Error al eliminar el producto.", "error");
     } finally {
       setLoading(false);

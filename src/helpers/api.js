@@ -263,19 +263,38 @@ export const personasAPI = {
     const res = await customAxios.get(url);
     return res.data?.data ?? res.data;
   },
-  getResumenPorSexo: async (idSexoPersona) => {
-    if (!idSexoPersona) throw new Error("ID Sexo Persona es requerido");
+  getResumenPorSexoYAlbergue: async (sexo, idAlbergue) => {
+    if (!sexo) throw new Error("Sexo es requerido");
+    if (!idAlbergue) throw new Error("ID Albergue es requerido");
     try {
-      const res = await customAxios.get(`/personas/resumen/sexo/${encodeURIComponent(idSexoPersona)}`);
+      const res = await customAxios.get(
+        `/personas/resumen/sexo`,
+        {
+          params: {
+            sexo,
+            idAlbergue
+          }
+        }
+      );
       return res.data;
     } catch (error) {
       handleError(error);
     }
   },
-  getResumenPorEdad: async (idEdadPersona) => {
-    if (!idEdadPersona) throw new Error("ID Edad Persona es requerido");
+getResumenPorEdadYAlbergue: async (idAlbergue, edadMin, edadMax) => {
+    if (!idAlbergue) throw new Error("ID Albergue es requerido");
+    if (edadMin === undefined || edadMax === undefined) throw new Error("Edad mínima y máxima son requeridas");
     try {
-      const res = await customAxios.get(`/personas/resumen/edad/${encodeURIComponent(idEdadPersona)}`);
+      const res = await customAxios.get(
+        `/personas/resumen/edad`,
+        {
+          params: {
+            idAlbergue,
+            edadMin,
+            edadMax
+          }
+        }
+      );
       return res.data;
     } catch (error) {
       handleError(error);
