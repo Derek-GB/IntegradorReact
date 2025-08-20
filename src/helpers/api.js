@@ -300,6 +300,16 @@ getResumenPorEdadYAlbergue: async (idAlbergue, edadMin, edadMax) => {
       handleError(error);
     }
   },
+  getRecursosPorPersona: async (idPersona) => {
+    try {
+      if (!idPersona) throw new Error("ID de persona es requerido");
+      const url = `/personas/recursos/${encodeURIComponent(idPersona)}`;
+      const res = await customAxios.get(url);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
 };
 
 
