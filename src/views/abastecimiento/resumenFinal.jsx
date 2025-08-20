@@ -19,7 +19,7 @@ import {
 
 
 const ResumenFinal = () => {
-  // Para productos locales (items)
+
   const {
     items,
     editarItem: editarItemLocal,
@@ -27,7 +27,6 @@ const ResumenFinal = () => {
     datosFormulario
   } = useContext(contextoAbastecimiento);
 
-  // Para pedidos de la API (si se usan en otra parte)
   const {
     descargarResumen,
     pedidos
@@ -55,7 +54,7 @@ const ResumenFinal = () => {
     handleCloseModal();
   };
 
-  // Columnas para datos del formulario actual
+
   const datosFormularioColumns = [
     {
       name: "Fecha",
@@ -87,7 +86,7 @@ const ResumenFinal = () => {
     },
   ];
 
-  // Columnas para productos del formulario actual, ahora con acciones
+
   const productosColumns = [
     {
       name: "Categoría",
@@ -144,10 +143,10 @@ const ResumenFinal = () => {
     },
   ];
 
-  // Preparar datos del formulario actual para mostrar
+
   const datosFormularioData = datosFormulario ? [datosFormulario] : [];
 
-  // Preparar datos para exportar Excel/PDF
+
   const exportData = [
     ...(datosFormulario ? [{
       seccion: "Formulario Actual",
@@ -188,7 +187,7 @@ const ResumenFinal = () => {
     <div className="space-y-6">
       <CustomToaster />
 
-      {/* Datos del Formulario Actual */}
+      {}
       {datosFormulario && (
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
           <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
@@ -211,7 +210,7 @@ const ResumenFinal = () => {
         </div>
       )}
 
-      {/* Productos del Formulario Actual con acciones */}
+      {}
       {items && items.length > 0 && (
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
           <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
@@ -232,7 +231,7 @@ const ResumenFinal = () => {
               }
             />
 
-            {/* Botones de Exportación Excel y PDF */}
+            {}
             <div className="flex justify-center gap-4 mt-4">
               <ExportExcelButton
                 data={exportData}
@@ -252,7 +251,7 @@ const ResumenFinal = () => {
         </div>
       )}
 
-      {/* Modal de Edición */}
+      {}
       <Dialog
         open={modalOpen}
         onClose={handleCloseModal}

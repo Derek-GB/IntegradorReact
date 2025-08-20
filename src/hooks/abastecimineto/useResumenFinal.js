@@ -145,7 +145,7 @@ const useResumenFinal = () => {
       });
     });
 
-    // Filtrar para eliminar filas con tipo o cantidad inválidos ("-")
+
     const datosFiltrados = todosLosDatos.filter(item => {
       const tipoValido = item.tipo && item.tipo !== "-";
       const cantidadValida = item.cantidad && item.cantidad !== "-";
