@@ -158,7 +158,7 @@ const routeGroups = [
       { to: "/reportes.jsx", label: "Reportes", icon: <QuickReferenceAll /> },
       { to: "/buscarReferencia.jsx", label: "Buscar Referencias", icon: <SearchIcon /> },
       { to: "/registroMunicipalidad.jsx", label: "Registro Municipalidad", icon: <MapIcon /> },
-
+      { to: "/buscarAmenaza.jsx", label: "Buscar Amenazas", icon: <SearchIcon /> },
     ],
   },
 ];

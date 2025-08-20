@@ -44,6 +44,7 @@ import ReportesAlbergue from './views/reportes.jsx';
 import BuscarReferencias from './views/buscarReferencia.jsx';
 import BuscarAjustesInventario from './views/buscarAjuste.jsx';
 import RegistroMunicipalidad from './views/registroMunicipalidad.jsx';
+import BuscarAmenaza from './views/buscarAmenaza.jsx'; // Asegúrate de que la ruta es correcta
 
 //No categorizado
 import FormularioIntegrantes from "./components/formularioIntegrantes.jsx";
@@ -136,6 +137,7 @@ const App = () => {
                     <Route path="/buscarReferencia.jsx" element={<BuscarReferencias />} />
                     <Route path="/buscarAjuste.jsx" element={<BuscarAjustesInventario />} />
                     <Route path="/registroMunicipalidad.jsx" element={<RegistroMunicipalidad />} />
+                    <Route path="/buscarAmenaza.jsx" element={<BuscarAmenaza />} />
                   </Routes>
                 </div>
               </div>

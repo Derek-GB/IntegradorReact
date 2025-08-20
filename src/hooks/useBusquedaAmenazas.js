@@ -73,6 +73,7 @@ export const useBusquedaAmenazas = () => {
     selectedAmenaza,
     handleAmenazaSelect,
     resultados,
+    setResultados, // <-- AGREGA ESTA LÍNEA
     loading,
     handleSubmit,
   };
