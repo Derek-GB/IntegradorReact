@@ -105,60 +105,81 @@ const routeGroups = [
     label: "Familia",
     icon: <GroupIcon />,
     routes: [
-      { to: "/preFormulario.jsx", label: "Familia", icon: <GroupIcon /> },
-      { to: "/BusquedaFamilia.jsx", label: "Buscar Familia", icon: <SearchIcon /> },
+      { to: "/preFormulario.jsx", label: "Registrar", icon: <GroupIcon /> },
+      { to: "/BusquedaFamilia.jsx", label: "Buscar", icon: <SearchIcon /> },
     ],
   },
   {
     label: "Mascotas",
     icon: <PetsIcon />,
     routes: [
-      { to: "/registroMascota.jsx", label: "Registrar Mascota", icon: <PetsIcon /> },
-      { to: "/busquedaMascotas.jsx", label: "Buscar Mascotas", icon: <SearchIcon /> },
+      { to: "/registroMascota.jsx", label: "Registrar", icon: <PetsIcon /> },
+      { to: "/busquedaMascotas.jsx", label: "Buscar", icon: <SearchIcon /> },
     ],
   },
   {
-    label: "Suministros",
+    label: "Inventarios",
     icon: <Inventory />,
     routes: [
-      { to: "/registroSuministros.jsx", label: "Registrar Suministros", icon: <Shelves /> },
-      { to: "/registrarConsumibles.jsx", label: "Consumibles", icon: <LocalDiningIcon /> },
-      { to: "/listaProducto.jsx", label: "Actualizar Suministros", icon: <ListIcon /> },
+      { to: "/registroSuministros.jsx", label: "Registrar Producto", icon: <Shelves /> },
+      { to: "/listaProducto.jsx", label: "Buscar Producto", icon: <ListIcon /> },
       { to: "/ajusteInventario.jsx", label: "Ajuste Inventario", icon: <Inventory /> },
-      { to: "/asignacionRecursos.jsx", label: "Asignación Recursos", icon: <AssignmentReturned /> },
-      { to: "/abarrotesMenuPrincipal", label: "Abastecimiento", icon: <LocalShipping /> },
-      { to: "/buscarSuministros.jsx", label: "Buscar Suministros", icon: <SearchIcon /> },
-      { to: "/buscarAjuste.jsx", label: "Buscar Ajustes de inventario", icon: <SearchIcon /> },
+      { to: "/buscarAjuste.jsx", label: "Lista de Ajustes", icon: <SearchIcon /> },
     ],
   },
   {
-    label: "Albergue",
-    icon: <HotelIcon />,
+    label: "Alimentación",
+    icon: <LocalDiningIcon />,
     routes: [
-      { to: "/registroAlbergue.jsx", label: "Registrar Albergue", icon: <HotelIcon /> },
-      { to: "/busquedaAlbergue.jsx", label: "Buscar Albergue", icon: <SearchIcon /> },
-      { to: "/ActualizarAlbergue.jsx", label: "Lista Albergue", icon: <BusinessIcon /> },
-      { to: "/mapaAlbergues", label: "Ubicaciones Albergues", icon: <LocationOnIcon /> },
+      { to: "/registrarConsumibles.jsx", label: "Registrar", icon: <LocalDiningIcon /> },
+      { to: "/abarrotesMenuPrincipal", label: "Crear Menú", icon: <LocalShipping /> },
+     
+    ],
+  },
+  {
+    label: "Asignaciones",
+    icon: <AssignmentReturned />,
+    routes: [
+      { to: "/asignacionRecursos.jsx", label: "Registrar", icon: <AssignmentReturned /> },
+      { to: "/buscarAsignaciones.jsx", label: "Buscar", icon: <SearchIcon /> }, // Ajusta la ruta si es necesario
+    ],
+  },
+  {
+    label: "Referencias",
+    icon: <DatasetLinked />,
+    routes: [
+      { to: "/ayudaForm.jsx", label: "Registrar", icon: <DatasetLinked /> },
+      { to: "/buscarReferencia.jsx", label: "Buscar", icon: <SearchIcon /> },
+    ],
+  },
+  {
+    label: "Amenazas",
+    icon: <ReportIcon />,
+    routes: [
+      { to: "/registroAmenazas.jsx", label: "Registrar", icon: <ReportIcon /> },
+      { to: "/buscarAmenazas.jsx", label: "Buscar", icon: <SearchIcon /> }, // Debes crear esta vista si no existe
+    ],
+  },
+  {
+    label: "Reportes",
+    icon: <QuickReferenceAll />,
+    routes: [
+      { to: "/reportes.jsx", label: "Reportes", icon: <QuickReferenceAll /> },
+    ],
+  },
+  {
+    label: "Oficinas",
+    icon: <BusinessIcon />,
+    routes: [
+      { to: "/registroMunicipalidad.jsx", label: "Registrar Municipalidad", icon: <MapIcon /> },
     ],
   },
   {
     label: "Usuario",
     icon: <PersonAddIcon />,
     routes: [
-      { to: "/registroUsuario.jsx", label: "Registrar Usuario", icon: <PersonAddIcon /> },
-      { to: "/listaUsuarios.jsx", label: "Lista Usuarios", icon: <ListIcon /> },
-    ],
-  },
-  {
-    label: "Otros",
-    icon: <MoreHorizIcon />,
-    routes: [
-      { to: "/registroAmenazas.jsx", label: "Amenazas", icon: <ReportIcon /> },
-      { to: "/ayudaForm.jsx", label: "Referencias", icon: <DatasetLinked /> },
-      { to: "/reportes.jsx", label: "Reportes", icon: <QuickReferenceAll /> },
-      { to: "/buscarReferencia.jsx", label: "Buscar Referencias", icon: <SearchIcon /> },
-      { to: "/registroMunicipalidad.jsx", label: "Registro Municipalidad", icon: <MapIcon /> },
-
+      { to: "/registroUsuario.jsx", label: "Registrar", icon: <PersonAddIcon /> },
+      { to: "/listaUsuarios.jsx", label: "Buscar", icon: <ListIcon /> },
     ],
   },
 ];
@@ -380,106 +401,159 @@ export default function CustomDrawer({ onLogout, children }) {
 
             {/* Grupos desplegables */}
             {routeGroups.map((group, idx) => (
-              <ListItem
-                disablePadding
-                sx={{ display: "block" }}
-                key={group.label}
+              <ListItem disablePadding sx={{ display: "block" }} key={group.label}>
+                {group.routes.length === 1 ? (
+      // Si solo tiene una ruta, el grupo es un Link directo
+      <ListItemButton
+        component={Link}
+        to={group.routes[0].to}
+        selected={location.pathname === group.routes[0].to}
+        sx={{
+          minHeight: 48,
+          borderRadius: 2,
+          mb: 1,
+          justifyContent: open ? "initial" : "center",
+          px: 2.5,
+          color:
+            location.pathname === group.routes[0].to
+              ? accentColor
+              : textColor,
+          background:
+            location.pathname === group.routes[0].to
+              ? selectedBg
+              : "transparent",
+          "&:hover": {
+            background: selectedBg,
+            color: accentColor,
+            "& .MuiListItemIcon-root": { color: accentColor },
+          },
+          "&.Mui-selected": {
+            color: accentColor,
+            background: selectedBg,
+          },
+          transition: "background 0.2s, color 0.2s",
+        }}
+      >
+        <ListItemIcon
+          sx={{
+            color: accentColor,
+            minWidth: 0,
+            mr: open ? 3 : "auto",
+            justifyContent: "center",
+          }}
+        >
+          {group.icon}
+        </ListItemIcon>
+        <ListItemText
+          primary={group.label}
+          sx={{
+            opacity: open ? 1 : 0,
+            fontWeight: 700,
+            fontSize: 18,
+            color: textColor,
+          }}
+        />
+      </ListItemButton>
+    ) : (
+      <>
+        {/* Grupo con submenú */}
+        <ListItemButton
+          onClick={() => handleGroupToggle(idx)}
+          sx={{
+            minHeight: 48,
+            borderRadius: 2,
+            mb: 1,
+            justifyContent: open ? "initial" : "center",
+            px: 2.5,
+            color: textColor,
+            "&:hover": {
+              background: selectedBg,
+              color: accentColor,
+              "& .MuiListItemIcon-root": { color: accentColor },
+            },
+            transition: "background 0.2s, color 0.2s",
+          }}
+        >
+          <ListItemIcon
+            sx={{
+              color: accentColor,
+              minWidth: 0,
+              mr: open ? 3 : "auto",
+              justifyContent: "center",
+            }}
+          >
+            {group.icon}
+          </ListItemIcon>
+          <ListItemText
+            primary={group.label}
+            sx={{
+              opacity: open ? 1 : 0,
+              fontWeight: 700,
+              fontSize: 18,
+              color: textColor,
+            }}
+          />
+          {open ? (
+            openGroups[idx] ? (
+              <KeyboardArrowUpIcon />
+            ) : (
+              <KeyboardArrowDownIcon />
+            )
+          ) : null}
+        </ListItemButton>
+        <Collapse
+          in={openGroups[idx]}
+          timeout="auto"
+          unmountOnExit
+          sx={{
+            transition: "max-height 0.3s",
+            position: "relative",
+          }}
+        >
+          <List component="div" disablePadding>
+            {group.routes.map((route) => (
+              <ListItemButton
+                key={route.to}
+                component={Link}
+                to={route.to}
+                selected={location.pathname === route.to}
+                sx={{
+                  pl: open ? 7 : 2.5,
+                  color:
+                    location.pathname === route.to
+                      ? accentColor
+                      : mutedText,
+                  "&.Mui-selected": {
+                    color: accentColor,
+                    background: selectedBg,
+                  },
+                  fontSize: { xs: 14, sm: 16 },
+                  py: { xs: 1, sm: 1.2 },
+                  transition: "background 0.2s, color 0.2s",
+                }}
               >
-                <ListItemButton
-                  onClick={() => handleGroupToggle(idx)}
+                <ListItemIcon
                   sx={{
-                    minHeight: 48,
-                    borderRadius: 2,
-                    mb: 1,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                    color: textColor,
-                    "&:hover": {
-                      background: selectedBg,
-                      color: accentColor,
-                      "& .MuiListItemIcon-root": { color: accentColor },
-                    },
-                    transition: "background 0.2s, color 0.2s",
+                    color: accentColor,
+                    minWidth: 0,
+                    mr: open ? 2 : "auto",
+                    justifyContent: "center",
                   }}
                 >
-                  <ListItemIcon
-                    sx={{
-                      color: accentColor,
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {group.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={group.label}
-                    sx={{
-                      opacity: open ? 1 : 0,
-                      fontWeight: 700,
-                      fontSize: 18,
-                      color: textColor,
-                    }}
-                  />
-                  {open ? (
-                    openGroups[idx] ? (
-                      <KeyboardArrowUpIcon />
-                    ) : (
-                      <KeyboardArrowDownIcon />
-                    )
-                  ) : null}
-                </ListItemButton>
-                <Collapse
-                  in={openGroups[idx]}
-                  timeout="auto"
-                  unmountOnExit
-                  sx={{
-                    transition: "max-height 0.3s",
-                    position: "relative",
-                  }}
-                >
-                  <List component="div" disablePadding>
-                    {group.routes.map((route) => (
-                      <ListItemButton
-                        key={route.to}
-                        component={Link}
-                        to={route.to}
-                        selected={location.pathname === route.to}
-                        sx={{
-                          pl: open ? 7 : 2.5,
-                          color:
-                            location.pathname === route.to
-                              ? accentColor
-                              : mutedText,
-                          "&.Mui-selected": {
-                            color: accentColor,
-                            background: selectedBg,
-                          },
-                          fontSize: { xs: 14, sm: 16 },
-                          py: { xs: 1, sm: 1.2 },
-                          transition: "background 0.2s, color 0.2s",
-                        }}
-                      >
-                        <ListItemIcon
-                          sx={{
-                            color: accentColor,
-                            minWidth: 0,
-                            mr: open ? 2 : "auto",
-                            justifyContent: "center",
-                          }}
-                        >
-                          {route.icon}
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={route.label}
-                          sx={{ opacity: open ? 1 : 0 }}
-                        />
-                      </ListItemButton>
-                    ))}
-                  </List>
-                </Collapse>
-              </ListItem>
+                  {route.icon}
+                </ListItemIcon>
+                <ListItemText
+                  primary={route.label}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
             ))}
+          </List>
+        </Collapse>
+      </>
+    )}
+  </ListItem>
+))}
           </List>
         </Box>
         <Divider sx={{ background: dividerColor, mx: 2 }} />
