@@ -137,7 +137,7 @@ const routeGroups = [
     routes: [
       { to: "/registroAlbergue.jsx", label: "Registrar Albergue", icon: <HotelIcon /> },
       { to: "/busquedaAlbergue.jsx", label: "Buscar Albergue", icon: <SearchIcon /> },
-      { to: "/ActualizarAlbergue.jsx", label: "Lista Albergue", icon: <BusinessIcon /> },
+      { to: "/ActualizarAlbergue.jsx", label: "Actualizar", icon: <BusinessIcon /> },
       { to: "/mapaAlbergues", label: "Ubicaciones Albergues", icon: <LocationOnIcon /> },
     ],
   },
