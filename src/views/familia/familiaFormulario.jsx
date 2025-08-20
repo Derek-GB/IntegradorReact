@@ -219,7 +219,9 @@ const FamiliaFormulario = () => {
         genero: dp.genero || "",
         sexo: dp.sexo || "",
         telefono: dp.telefono || "",
-        contactoEmergencia: dp.contactoEmergencia || null,
+        contactoEmergencia: dp.contactoEmergenciaNombre && dp.contactoEmergenciaTelefono
+          ? `${dp.contactoEmergenciaNombre} - ${dp.contactoEmergenciaTelefono}`
+          : dp.contactoEmergenciaNombre || dp.contactoEmergenciaTelefono || null,
         observaciones: dp.observaciones || null,
         estaACargoMenor: Boolean(dp.estaACargoMenor),
         idUsuarioCreacion: idUsuario,
@@ -507,6 +509,29 @@ const FamiliaFormulario = () => {
             name="contactoEmergencia"
             value={dp.contactoEmergencia || ""}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+          />
+          <InputField
+            label="Nombre de Contacto de Emergencia"
+            name="contactoEmergenciaNombre"
+            value={dp.contactoEmergenciaNombre || ""}
+            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+          />
+          <InputField
+            label="Teléfono de Contacto de Emergencia"
+            name="contactoEmergenciaTelefono"
+            value={dp.contactoEmergenciaTelefono || ""}
+            onChange={e => {
+              let val = e.target.value.replace(/\D/g, "");
+              if (val.length > 8) val = val.slice(0, 8);
+              if (val.length > 4) {
+                val = val.slice(0, 4) + "-" + val.slice(4);
+              }
+              handleChange(
+                { target: { name: e.target.name, value: val } },
+                "FamiliaDatosPersonales"
+              );
+            }}
+            placeholder="8888-8888"
           />
           <SelectField
             label="¿Es jefe de familia?"
