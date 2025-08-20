@@ -121,8 +121,8 @@ const routeGroups = [
     label: "Inventarios",
     icon: <Inventory />,
     routes: [
-      { to: "/registroSuministros.jsx", label: "Registrar Producto", icon: <Shelves /> },
-      { to: "/listaProducto.jsx", label: "Buscar Producto", icon: <ListIcon /> },
+      { to: "/registroSuministros.jsx", label: "Registrar Suministros", icon: <Shelves /> },
+      { to: "/listaProducto.jsx", label: "Actualizar Suministro", icon: <ListIcon /> },
       { to: "/ajusteInventario.jsx", label: "Ajuste Inventario", icon: <Inventory /> },
       { to: "/buscarAjuste.jsx", label: "Lista de Ajustes", icon: <SearchIcon /> },
     ],

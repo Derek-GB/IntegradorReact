@@ -324,7 +324,20 @@ export const recursosAsignadosAPI = createApiMethods("recursosAsignados");
 export const caracteristicasPoblacionalesAPI = createApiMethods("caracteristicasPoblacionales");
 export const firmasDigitalesAPI = createApiMethods("firmasDigitales");
 export const infraestructuraAlberguesAPI = createApiMethods("infraestructuraAlbergues");
-export const amenazasAPI = createApiMethods("amenazas");
+export const amenazasAPI = createApiMethods("amenazas", {
+  getByPeligro: async (peligro) => {
+    try {
+      if (!peligro || peligro.trim() === "") {
+        throw new Error("El peligro es requerido");
+      }
+      const url = `/amenazas/peligro/${encodeURIComponent(peligro)}`;
+      const res = await customAxios.get(url);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+});
 export const categoriaConsumiblesAPI = createApiMethods("categoriaConsumibles");
 export const consumiblesAPI = createApiMethods("consumibles");
 export const detallePedidoConsumiblesAPI = createApiMethods("detallePedidoConsumibles");

@@ -11,21 +11,39 @@ export const useBusquedaAmenazas = () => {
   const [loading, setLoading] = useState(false);
   const [resultados, setResultados] = useState([]);
 
-  // Cargar amenazas para el autocomplete
+  // Cargar amenazas para el autocomplete y la tabla (solo últimas 10)
   const fetchAmenazas = async () => {
     try {
       const res = await amenazasAPI.getAll();
       const lista = Array.isArray(res?.data) ? res.data : res.data?.data || [];
-      setAmenazas(lista);
+      // Filtra peligros únicos para el autocomplete
+      const peligrosUnicos = lista.filter(
+        (item, idx, arr) => arr.findIndex(x => x.peligro === item.peligro) === idx
+      );
+      setAmenazas(peligrosUnicos);
+
+      // Ordena por fecha de creación descendente y toma las últimas 10
+      const ultimas = lista
+        .sort((a, b) => new Date(a.fechaCreacion || a.createdAt || 0) - new Date(b.fechaCreacion || b.createdAt || 0))
+        .slice(-10); // Toma las últimas 10 (más viejas a más nuevas)
+
+      setResultados(ultimas);
     } catch {
       toast.error("Error al cargar amenazas.");
       setAmenazas([]);
+      setResultados([]);
     }
   };
 
   useEffect(() => {
     fetchAmenazas();
   }, []);
+
+  useEffect(() => {
+    if (codigoAmenaza === "") {
+      fetchAmenazas();
+    }
+  }, [codigoAmenaza]);
 
   // Selección amenaza del autocomplete
   const handleAmenazaSelect = (amenaza) => {
@@ -34,14 +52,16 @@ export const useBusquedaAmenazas = () => {
     setShowSugerencias(false);
   };
 
-  // Submit buscar amenazas
+  // Submit buscar amenazas por peligro
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const codigoBusqueda = selectedAmenaza?.codigoAmenaza || codigoAmenaza;
+    // Usa el valor del input directamente si no hay selección
+    const peligroBusqueda = selectedAmenaza?.peligro || codigoAmenaza;
+    console.log("Buscando peligro:", peligroBusqueda);
 
-    if (!codigoBusqueda.trim()) {
-      toast.error("Debe ingresar o seleccionar un código de amenaza.");
+    if (!peligroBusqueda.trim()) {
+      toast.error("Debe ingresar o seleccionar un peligro.");
       return;
     }
 
@@ -49,16 +69,16 @@ export const useBusquedaAmenazas = () => {
     setResultados([]);
 
     try {
-      const data = await amenazasAPI.getById(codigoBusqueda);
-      // Si la API devuelve un array, úsalo; si es objeto, envuélvelo en array
-      const amenazasData = Array.isArray(data) ? data : [data];
+      const apiResponse = await amenazasAPI.getByPeligro(peligroBusqueda);
+      // Extrae el array de la propiedad 'data'
+      const amenazasData = Array.isArray(apiResponse?.data) ? apiResponse.data : [];
       setResultados(amenazasData);
 
       if (!amenazasData || amenazasData.length === 0) {
-        toast.error("No se encontraron datos para esta amenaza.");
+        toast.error("No se encontraron amenazas para ese peligro.");
       }
     } catch (error) {
-      toast.error(error.message || "Error al buscar amenaza.");
+      toast.error(error.message || "Error al buscar amenazas.");
     } finally {
       setLoading(false);
     }
@@ -73,7 +93,7 @@ export const useBusquedaAmenazas = () => {
     selectedAmenaza,
     handleAmenazaSelect,
     resultados,
-    setResultados, // <-- AGREGA ESTA LÍNEA
+    setResultados,
     loading,
     handleSubmit,
   };

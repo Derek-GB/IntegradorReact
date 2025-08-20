@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import FormContainer from "../components/FormComponents/FormContainer.jsx";
 import SearchAutocompleteInput from "../components/FormComponents/SearchAutocompleteInput.jsx";
 import SubmitButton from "../components/FormComponents/SubmitButton.jsx";
@@ -17,7 +16,6 @@ const BuscarAmenaza = () => {
     resultados,
     loading,
     handleSubmit,
-    setResultados,
   } = useBusquedaAmenazas();
 
   const columns = [
@@ -28,26 +26,21 @@ const BuscarAmenaza = () => {
     { name: "Categoría Evento", selector: (row) => row.CategoriaEvento },
   ];
 
-  // Mostrar todas las amenazas al cargar el componente
-  useEffect(() => {
-    setResultados(amenazas);
-  }, [amenazas, setResultados]);
-
   return (
     <>
       <FormContainer title="Búsqueda de Amenaza" onSubmit={handleSubmit} size="md">
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1">
             <SearchAutocompleteInput
-              label="Código Amenaza"
+              label="Peligro"
               busqueda={codigoAmenaza}
               setBusqueda={setCodigoAmenaza}
               showSugerencias={showSugerencias}
               setShowSugerencias={setShowSugerencias}
               resultados={amenazas}
               onSelect={handleAmenazaSelect}
-              optionLabelKeys={["codigoAmenaza", "id"]}
-              placeholder="Seleccione un código de amenaza"
+              optionLabelKeys={["peligro"]}
+              placeholder="Seleccione un peligro"
               disabled={loading || !(amenazas?.length > 0)}
             />
           </div>
