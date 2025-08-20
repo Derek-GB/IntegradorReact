@@ -17,9 +17,19 @@ const RegistroUsuario = () => {
     handleSubmit,
   } = useRegistroUsuario();
 
-  // Estados para el componente de Autocomplete de municipalidad
   const [busquedaMunicipalidad, setBusquedaMunicipalidad] = useState('');
   const [showSugerenciasMunicipalidad, setShowSugerenciasMunicipalidad] = useState(false);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "identificacion") {
+      // Allow only numbers by removing non-digit characters
+      const numericValue = value.replace(/[^0-9]/g, "").slice(0, 50);
+      handleChange({ target: { name, value: numericValue } });
+    } else {
+      handleChange({ target: { name, value: value.slice(0, 50) } });
+    }
+  };
 
   return (
     <>
@@ -34,7 +44,7 @@ const RegistroUsuario = () => {
               label="Nombre Completo"
               name="nombre"
               value={form.nombre}
-              onChange={handleChange}
+              onChange={handleInputChange}
               required
             />
           </div>
@@ -44,8 +54,10 @@ const RegistroUsuario = () => {
               label="Identificación"
               name="identificacion"
               value={form.identificacion}
-              onChange={handleChange}
+              onChange={handleInputChange}
               required
+              type="tel"
+              pattern="[0-9]*"
             />
           </div>
         </div>
@@ -57,7 +69,7 @@ const RegistroUsuario = () => {
               name="correo"
               type="email"
               value={form.correo}
-              onChange={handleChange}
+              onChange={handleInputChange}
               required
             />
           </div>
@@ -67,7 +79,7 @@ const RegistroUsuario = () => {
               name="contrasena"
               type="password"
               value={form.contrasena}
-              onChange={handleChange}
+              onChange={handleInputChange}
               required
             />
           </div>
@@ -78,7 +90,7 @@ const RegistroUsuario = () => {
             <SearchAutocompleteInput
               label="Municipalidad"
               busqueda={busquedaMunicipalidad}
-              setBusqueda={setBusquedaMunicipalidad}
+              setBusqueda={(value) => setBusquedaMunicipalidad(value.slice(0, 50))}
               showSugerencias={showSugerenciasMunicipalidad}
               setShowSugerencias={setShowSugerenciasMunicipalidad}
               resultados={municipalidades}
@@ -89,6 +101,7 @@ const RegistroUsuario = () => {
                     value: municipalidad.id || municipalidad.ID,
                   },
                 });
+                setBusquedaMunicipalidad((municipalidad.nombre || municipalidad.Nombre || "").slice(0, 50));
               }}
               optionLabelKeys={['nombre', 'Nombre']}
               placeholder="Buscar municipalidad..."
@@ -100,7 +113,7 @@ const RegistroUsuario = () => {
               label="Rol"
               name="rol"
               value={form.rol}
-              onChange={handleChange}
+              onChange={handleInputChange}
               options={roles}
               optionLabel="nombre"
               optionValue="value"
@@ -113,7 +126,7 @@ const RegistroUsuario = () => {
               label="Estado"
               name="activo"
               value={form.activo}
-              onChange={handleChange}
+              onChange={handleInputChange}
               options={estados}
               optionLabel="nombre"
               optionValue="value"
@@ -123,7 +136,7 @@ const RegistroUsuario = () => {
         </div>
 
         <div className="flex justify-center mt-8">
-          <SubmitButton width="w-full" color="twxt-black">
+          <SubmitButton width="w-full" color="text-black">
             Registrar
           </SubmitButton>
         </div>

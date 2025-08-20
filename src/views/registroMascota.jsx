@@ -52,7 +52,13 @@ export default function RegistroMascotas() {
               label="Nombre de la Mascota"
               name="nombreMascota"
               value={nombreMascota}
-              onChange={(e) => setNombreMascota(e.target.value)}
+              onChange={(e) => {
+                const valor = e.target.value;
+                if (valor.length <= 50) {
+                  setNombreMascota(valor);
+                }
+              }}
+              maxLength={50}
               placeholder="Ingrese el nombre de la mascota"
               disabled={loading}
               required
