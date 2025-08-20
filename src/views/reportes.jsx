@@ -1,4 +1,3 @@
-// src/pages/ReportesAlbergue.jsx
 import React, { useState, useEffect } from "react";
 import FormContainer from "../components/FormComponents/FormContainer.jsx";
 import InputField from "../components/FormComponents/InputField.jsx";
@@ -39,7 +38,7 @@ const ReportesAlbergue = () => {
           c.key !== "fechaCreacion" &&
           c.key !== "categoria" &&
           c.key !== "unidadProducto" &&
-          c.key !== "unidadMedida" // <-- por si la columna se llama así en algunos reportes
+          c.key !== "unidadMedida"
       )
     : buildColumns().filter(
         c =>
@@ -47,46 +46,38 @@ const ReportesAlbergue = () => {
           c.key !== "fechaCreacion" &&
           c.key !== "categoria" &&
           c.key !== "unidadProducto" &&
-          c.key !== "unidadMedida" // <-- por si la columna se llama así en algunos reportes
+          c.key !== "unidadMedida"
       );
   const exportHeaders = columns.map(c => ({ label: c.name, key: c.key }));
 
-  // Estado local para manejar busqueda/showSugerencias por cada reporte
-  // estructura: { "<reportValue>": { busqueda: "", showSugerencias: false } }
   const [autocompleteState, setAutocompleteState] = useState({});
 
-  // Inicializar la lista de albergues al montar (hook ya intenta, pero forzamos)
   useEffect(() => {
     fetchAlbergues();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Cuando cambia el reporte seleccionado, inicializa el estado del autocomplete para ese reporte
   useEffect(() => {
     if (!reporteSeleccionado?.value) return;
     const rv = reporteSeleccionado.value;
     setAutocompleteState(prev => {
-      if (prev[rv]) return prev; // ya inicializado: no mutar
+      if (prev[rv]) return prev;
       return { ...prev, [rv]: { busqueda: "", showSugerencias: false } };
     });
   }, [reporteSeleccionado]);
 
-  // Limpia los parámetros cuando cambia el reporte seleccionado
   useEffect(() => {
     setParametros({});
     setAutocompleteState({});
   }, [reporteSeleccionado]);
 
-  // Helpers para setear estado del autocomplete por reporte (solo dentro de eventos)
   const setBusquedaFor = (reportValue, value) => {
-    setAutocompleteState(prev => ({ ...prev, [reportValue]: { ...(prev[reportValue] || {}), busqueda: value } }));
+    const trimmedValue = value.slice(0, 50);
+    setAutocompleteState(prev => ({ ...prev, [reportValue]: { ...(prev[reportValue] || {}), busqueda: trimmedValue } }));
   };
   const setShowFor = (reportValue, value) => {
     setAutocompleteState(prev => ({ ...prev, [reportValue]: { ...(prev[reportValue] || {}), showSugerencias: value } }));
   };
 
-  // Util: construir props para un SearchAutocompleteInput para un reportValue
-  // IMPORTANTE: no hacer setState aquí
   const autocompleteProps = (reportValue) => {
     const state = autocompleteState[reportValue] || { busqueda: "", showSugerencias: false };
     return {
@@ -96,12 +87,11 @@ const ReportesAlbergue = () => {
       setShowSugerencias: (val) => setShowFor(reportValue, val),
       resultados: alberguesUsuario || [],
       onSelect: (albergue) => {
-        // usa el handler del hook para guardar selección por reporte
         const handler = handleAlbergueSelectFor(reportValue);
         if (typeof handler === "function") handler(albergue);
         if (albergue) {
           const label = albergue?.label ?? (albergue?.nombre ? `${albergue.nombre}` : String(albergue?.id ?? albergue?.idAlbergue ?? ""));
-          setBusquedaFor(reportValue, label);
+          setBusquedaFor(reportValue, label.slice(0, 50));
         } else {
           setBusquedaFor(reportValue, "");
         }
@@ -109,8 +99,7 @@ const ReportesAlbergue = () => {
       },
       optionLabelKeys: ["idAlbergue", "nombre"],
       onFocus: () => {
-        // forzar carga si hace falta y abrir sugerencias
-        handleAlbergueFocusFor(); // función del hook no necesita parámetro
+        handleAlbergueFocusFor();
         setShowFor(reportValue, true);
       },
       value: getAlbergueValueFor(reportValue),
@@ -145,7 +134,6 @@ const ReportesAlbergue = () => {
           optionValue="value"
         />
 
-        {/* Renderizar inputs/autocompletes según el reporte actual */}
         {reporteSeleccionado?.value === "personas_por_albergue" && (
           <SearchAutocompleteInput
             {...autocompleteProps("personas_por_albergue")}
@@ -158,8 +146,8 @@ const ReportesAlbergue = () => {
             <InputField
               label="Sexo"
               name="sexo"
-              value={parametros.sexo || ""}
-              onChange={handleChange}
+              value={parametros.sexo?.slice(0, 50) || ""}
+              onChange={(e) => handleChange({ target: { name: "sexo", value: e.target.value.slice(0, 50) } })}
               placeholder="Ingrese sexo"
             />
             <SearchAutocompleteInput
@@ -174,8 +162,8 @@ const ReportesAlbergue = () => {
             <InputField
               label="Edad mínima"
               name="edadMin"
-              value={parametros.edadMin || ""}
-              onChange={handleChange}
+              value={parametros.edadMin?.slice(0, 50) || ""}
+              onChange={(e) => handleChange({ target: { name: "edadMin", value: e.target.value.slice(0, 50) } })}
               placeholder="Ingrese edad mínima"
               type="number"
               min={0}
@@ -183,8 +171,8 @@ const ReportesAlbergue = () => {
             <InputField
               label="Edad máxima"
               name="edadMax"
-              value={parametros.edadMax || ""}
-              onChange={handleChange}
+              value={parametros.edadMax?.slice(0, 50) || ""}
+              onChange={(e) => handleChange({ target: { name: "edadMax", value: e.target.value.slice(0, 50) } })}
               placeholder="Ingrese edad máxima"
               type="number"
               min={0}
@@ -212,7 +200,7 @@ const ReportesAlbergue = () => {
               if (typeof handler === "function") handler(albergue);
               if (albergue) {
                 setParametros(prev => ({ ...prev, idAlbergue: albergue.idAlbergue ?? albergue.id ?? prev.idAlbergue, id: albergue.id ?? prev.id }));
-                setBusquedaFor("suministros_albergue", albergue?.label ?? albergue?.nombre ?? "");
+                setBusquedaFor("suministros_albergue", (albergue?.label ?? albergue?.nombre ?? "").slice(0, 50));
               } else {
                 setParametros(prev => ({ ...prev, idAlbergue: null }));
                 setBusquedaFor("suministros_albergue", "");
@@ -229,7 +217,6 @@ const ReportesAlbergue = () => {
           />
         )}
 
-        {/* Otros campos dinámicos */}
         {(!["personas_por_albergue", "personas_por_sexo", "personas_por_edad", "personas_discapacidad", "suministros_albergue"].includes(reporteSeleccionado?.value) &&
           reporteSeleccionado?.campos || []
         ).map((campo) => (
@@ -237,8 +224,8 @@ const ReportesAlbergue = () => {
             key={campo.name}
             label={campo.label}
             name={campo.name}
-            value={parametros[campo.name] || ""}
-            onChange={handleChange}
+            value={parametros[campo.name]?.slice(0, 50) || ""}
+            onChange={(e) => handleChange({ target: { name: campo.name, value: e.target.value.slice(0, 50) } })}
             placeholder={`Ingrese ${campo.label.toLowerCase()}`}
           />
         ))}
@@ -259,7 +246,7 @@ const ReportesAlbergue = () => {
                       const a = alberguesUsuario?.find(x =>
                         String(x.id) === String(id) || String(x.idAlbergue) === String(id)
                       );
-                      return a?.idAlbergue || resultados[0]?.idAlbergue || resultados[0]?.codigoAlbergue || "";
+                      return (a?.idAlbergue || resultados[0]?.idAlbergue || resultados[0]?.codigoAlbergue || "").slice(0, 50);
                     })()}
                     readOnly
                   />
@@ -272,7 +259,7 @@ const ReportesAlbergue = () => {
                       const a = alberguesUsuario?.find(x =>
                         String(x.id) === String(id) || String(x.idAlbergue) === String(id)
                       );
-                      return a?.nombre || resultados[0]?.nombreAlbergue || "";
+                      return (a?.nombre || resultados[0]?.nombreAlbergue || "").slice(0, 50);
                     })()}
                     readOnly
                   />
@@ -290,7 +277,7 @@ const ReportesAlbergue = () => {
                       const a = alberguesUsuario?.find(x =>
                         String(x.id) === String(id) || String(x.idAlbergue) === String(id)
                       );
-                      return a?.idAlbergue || resultados[0]?.idAlbergue || resultados[0]?.codigoAlbergue || "";
+                      return (a?.idAlbergue || resultados[0]?.idAlbergue || resultados[0]?.codigoAlbergue || "").slice(0, 50);
                     })()}
                     readOnly
                   />
@@ -303,7 +290,7 @@ const ReportesAlbergue = () => {
                       const a = alberguesUsuario?.find(x =>
                         String(x.id) === String(id) || String(x.idAlbergue) === String(id)
                       );
-                      return a?.nombre || resultados[0]?.nombreAlbergue || "";
+                      return (a?.nombre || resultados[0]?.nombreAlbergue || "").slice(0, 50);
                     })()}
                     readOnly
                   />
@@ -319,13 +306,13 @@ const ReportesAlbergue = () => {
               <ExportExcelButton
                 data={getExportDataLocal()}
                 headers={exportHeadersWithAlbergue}
-                fileName={`${reporteSeleccionado?.value || "reporte"}.xlsx`}
+                fileName={`${(reporteSeleccionado?.value || "reporte").slice(0, 50)}.xlsx`}
                 className="px-4 py-2 text-sm w-auto"
               />
               <ExportPdfButton
                 data={getExportDataLocal()}
                 headers={exportHeadersWithAlbergue}
-                fileName={`${reporteSeleccionado?.value || "reporte"}.pdf`}
+                fileName={`${(reporteSeleccionado?.value || "reporte").slice(0, 50)}.pdf`}
                 title={
                   reporteSeleccionado?.value === "suministros_albergue"
                     ? `Resumen de suministros — ${(() => {
@@ -333,9 +320,9 @@ const ReportesAlbergue = () => {
                         const a = alberguesUsuario?.find(x =>
                           String(x.id) === String(id) || String(x.idAlbergue) === String(id)
                         );
-                        return a?.nombre || resultados[0]?.nombreAlbergue || "";
+                        return (a?.nombre || resultados[0]?.nombreAlbergue || "").slice(0, 50);
                       })()}`
-                    : reporteSeleccionado?.label || "Reporte"
+                    : (reporteSeleccionado?.label || "Reporte").slice(0, 50)
                 }
                 className="px-4 py-2 text-sm w-auto"
               />

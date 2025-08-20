@@ -17,6 +17,19 @@ const RegistroMunicipalidad = () => {
     handleSubmit,
   } = useRegistroMunicipalidad();
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "telefono") {
+      // Allow only numbers by removing non-digit characters
+      const numericValue = value.replace(/[^0-9]/g, "").slice(0, 50);
+      handleChange({ target: { name, value: numericValue } });
+    } else if (name !== "direccion") {
+      handleChange({ target: { name, value: value.slice(0, 50) } });
+    } else {
+      handleChange(e);
+    }
+  };
+
   return (
     <>
       <FormContainer title="Registro de Municipalidad" onSubmit={handleSubmit} size="md">
@@ -28,7 +41,7 @@ const RegistroMunicipalidad = () => {
                 label="Nombre de la Municipalidad"
                 name="nombre"
                 value={form.nombre}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 placeholder="Ingrese el nombre"
                 required
               />
@@ -42,9 +55,11 @@ const RegistroMunicipalidad = () => {
                 label="Teléfono"
                 name="telefono"
                 value={form.telefono}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 placeholder="Ingrese el número de teléfono"
                 required
+                type="tel"
+                pattern="[0-9]*"
               />
             </div>
             <div className="flex-1">
@@ -53,7 +68,7 @@ const RegistroMunicipalidad = () => {
                 name="correo"
                 type="email"
                 value={form.correo}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 placeholder="Ingrese el correo"
                 required
               />
@@ -67,7 +82,7 @@ const RegistroMunicipalidad = () => {
                 label="Provincia"
                 name="provinciaSeleccionada"
                 value={form.provinciaSeleccionada}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 options={provincias}
                 optionLabel="nombre"
                 optionValue="id"
@@ -79,7 +94,7 @@ const RegistroMunicipalidad = () => {
                 label="Cantón"
                 name="cantonSeleccionado"
                 value={form.cantonSeleccionado}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 options={cantones}
                 optionLabel="nombre"
                 optionValue="id"
@@ -92,7 +107,7 @@ const RegistroMunicipalidad = () => {
                 label="Distrito"
                 name="distritoSeleccionado"
                 value={form.distritoSeleccionado}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 options={distritos}
                 optionLabel="nombre"
                 optionValue="id"
