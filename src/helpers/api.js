@@ -246,8 +246,8 @@ export const personasAPI = {
   },
 getResumenPorCondiciones: async (idAlbergue) => {
   try {
-    const res = await customAxios.get(`/personas/resumen/condiciones`, {
-      params: { idAlbergue } 
+    const res = await customAxios.get(`/condicionesEspeciales/resumen/condiciones`, {
+      params: { idAlbergue }
     });
     return res.data;
   } catch (error) {
