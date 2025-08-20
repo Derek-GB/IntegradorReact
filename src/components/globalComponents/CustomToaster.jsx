@@ -3,6 +3,7 @@ import { Toaster, toast, ToastBar } from 'react-hot-toast';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import InfoIcon from '@mui/icons-material/Info';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import CloseIcon from '@mui/icons-material/Close';
 
 const toastStyles = {
@@ -21,6 +22,11 @@ const toastStyles = {
     borderTw: 'border-[#1976d2]',
     icon: <InfoIcon style={{ color: '#1976d2', fontSize: 24, marginRight: 10 }} />,
   },
+  warning: {
+    border: '#FACC15',
+    borderTw: 'border-[#FACC15]',
+    icon: <WarningAmberIcon style={{ color: '#FACC15', fontSize: 24, marginRight: 10 }} />,
+  },
 };
 // eslint-disable-next-line react-refresh/only-export-components
 export function showCustomToast(
@@ -28,7 +34,8 @@ export function showCustomToast(
   subtitle,
   type = 'success'
 ) {
-  const { border, icon, borderTw } = toastStyles[type];
+  // fallback a info si el tipo no existe
+  const { border, icon, borderTw } = toastStyles[type] || toastStyles.info;
   toast.custom(
     (t) => (
       <div

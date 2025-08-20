@@ -4,6 +4,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import GlobalDataTable from "../../components/globalComponents/GlobalDataTable.jsx";
 import useResumenFinal from "../../hooks/abastecimineto/useResumenFinal.js";
+import { useContext } from "react";
+import { contextoAbastecimiento } from "../../context/contextoAbastecimiento.jsx";
 import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
 import ExportExcelButton from "../../components/otros/ExportExcelButton.jsx";
 import ExportPdfButton from "../../components/otros/ExportPdfButton.jsx";
@@ -15,14 +17,20 @@ import {
   TextField,
 } from "@mui/material";
 
+
 const ResumenFinal = () => {
+  // Para productos locales (items)
   const {
     items,
-    datosFormulario,
+    editarItem: editarItemLocal,
+    eliminarItem: eliminarItemLocal,
+    datosFormulario
+  } = useContext(contextoAbastecimiento);
+
+  // Para pedidos de la API (si se usan en otra parte)
+  const {
     descargarResumen,
-    eliminarItem,
-    editarItem,
-    pedidos,
+    pedidos
   } = useResumenFinal();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -43,7 +51,7 @@ const ResumenFinal = () => {
 
   const handleGuardarEdicion = () => {
     const nuevoItem = { ...items[editIndex], cantidad: editCantidad };
-    editarItem(editIndex, nuevoItem);
+    editarItemLocal(editIndex, nuevoItem);
     handleCloseModal();
   };
 
@@ -125,7 +133,7 @@ const ResumenFinal = () => {
             <EditIcon fontSize="small" />
           </button>
           <button
-            onClick={() => eliminarItem(index)}
+            onClick={() => eliminarItemLocal(index)}
             className="text-black hover:text-red-600"
             title="Eliminar"
           >
