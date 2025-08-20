@@ -157,7 +157,7 @@ const routeGroups = [
     icon: <ReportIcon />,
     routes: [
       { to: "/registroAmenazas.jsx", label: "Registrar", icon: <ReportIcon /> },
-      { to: "/buscarAmenazas.jsx", label: "Buscar", icon: <SearchIcon /> }, // Debes crear esta vista si no existe
+      { to: "/buscarAmenaza.jsx", label: "Buscar", icon: <SearchIcon /> }, // Debes crear esta vista si no existe
     ],
   },
   {
@@ -181,18 +181,6 @@ const routeGroups = [
 
       { to: "/registroUsuario.jsx", label: "Registrar Usuario", icon: <PersonAddIcon /> },
       { to: "/listaUsuarios.jsx", label: "Lista Usuarios", icon: <ListIcon /> },
-    ],
-  },
-  {
-    label: "Otros",
-    icon: <MoreHorizIcon />,
-    routes: [
-      { to: "/registroAmenazas.jsx", label: "Amenazas", icon: <ReportIcon /> },
-      { to: "/ayudaForm.jsx", label: "Referencias", icon: <DatasetLinked /> },
-      { to: "/reportes.jsx", label: "Reportes", icon: <QuickReferenceAll /> },
-      { to: "/buscarReferencia.jsx", label: "Buscar Referencias", icon: <SearchIcon /> },
-      { to: "/registroMunicipalidad.jsx", label: "Registro Municipalidad", icon: <MapIcon /> },
-      { to: "/buscarAmenaza.jsx", label: "Buscar Amenazas", icon: <SearchIcon /> },
     ],
   },
 ];
