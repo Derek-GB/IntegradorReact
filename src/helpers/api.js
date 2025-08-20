@@ -244,16 +244,16 @@ export const personasAPI = {
       handleError(error);
     }
   },
-  getResumenPorCondiciones: async (idCondicion) => {
-    if (!idCondicion) throw new Error("ID Condicion es requerido");
-    try {
-      const url = `/personas/resumen/condicion/${encodeURIComponent(idCondicion)}`;
-      const res = await customAxios.get(url);
-      return res.data;
-    } catch (error) {
-      handleError(error);
-    }
-  },
+getResumenPorCondiciones: async (idAlbergue) => {
+  try {
+    const res = await customAxios.get(`/personas/resumen/condiciones`, {
+      params: { idAlbergue } 
+    });
+    return res.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.error || error.message);
+  }
+},
 
   getResumenPorAlbergue: async (nombreAlbergue) => {
     if (!nombreAlbergue || nombreAlbergue.toString().trim() === "") {
@@ -306,7 +306,9 @@ getResumenPorEdadYAlbergue: async (idAlbergue, edadMin, edadMax) => {
 export const inventarioAPI = createApiMethods("inventario", {
   getSuministrosPorId: async (idSuministros) => {
     try {
-      const res = await customAxios.get(`/inventario/resumen/suministros/${encodeURIComponent(idSuministros)}`);
+      const res = await customAxios.get(`/inventario/resumen/suministros`, {
+        params: { idSuministros }
+      });
       return res.data;
     } catch (error) {
       handleError(error);
