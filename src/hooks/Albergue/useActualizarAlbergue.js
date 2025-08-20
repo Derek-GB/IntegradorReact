@@ -1,115 +1,90 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { alberguesAPI } from "../../helpers/api.js";
 import { showCustomToast } from "../../components/globalComponents/CustomToaster.jsx";
 
-const camposFormulario = [
-  "nombre", "region", "provincia", "canton", "distrito", "direccion",
-  "tipoEstablecimiento", "tipoAlbergue", "condicionAlbergue",
-  "administrador", "telefono", "capacidadPersonas", "capacidadColectiva",
-  "cantidadFamilias", "ocupacion", "cocina", "duchas", "serviciosSanitarios",
-  "bodega", "menajeMobiliario", "tanqueAgua", "areaTotalM2", "municipalidad", "color"
-];
+export function useActualizarAlbergue(idAlbergue) {
+  const [albergue, setAlbergue] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [actualizando, setActualizando] = useState(false);
 
-// Campos editables específicos para actualizar (puedes ajustar según "registrarAlbergue.jsx")
-const camposEditables = [
-  "nombre", "region", "provincia", "canton", "distrito", "direccion",
-  "tipoEstablecimiento", "tipoAlbergue", "condicionAlbergue",
-  "administrador", "telefono", "capacidadPersonas"
-];
+  // Cargar albergue por ID
+  useEffect(() => {
+    if (!idAlbergue) return;
 
-export function useActualizarAlbergueConBusqueda() {
-  // Búsqueda
-  const [idAlbergueBuscar, setIdAlbergueBuscar] = useState("");
-  const [nombreBuscar, setNombreBuscar] = useState("");
-  const [resultados, setResultados] = useState([]);
-  const [error, setError] = useState("");
-  const [loadingBusqueda, setLoadingBusqueda] = useState(false);
+    setLoading(true);
+    setError(null);
 
-  // Formulario actualización
-  const [form, setForm] = useState({});
-  const [loadingForm, setLoadingForm] = useState(false);
+    alberguesAPI.getById(idAlbergue)
+      .then((data) => {
+        setAlbergue(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+        showCustomToast("Error", "No se pudo cargar el albergue.", "error");
+      });
+  }, [idAlbergue]);
 
-  // Buscar albergue por ID o nombre
-  const handleBuscar = async (e) => {
-    e.preventDefault();
-    setError("");
-    setResultados([]);
-    setLoadingBusqueda(true);
-
-    try {
-      if (idAlbergueBuscar.trim() !== "") {
-        const res = await alberguesAPI.getById(idAlbergueBuscar.trim());
-        if (res?.data?.length > 0) setResultados(res.data);
-        else setError("No se encontró albergue con ese ID.");
-      } else if (nombreBuscar.trim() !== "") {
-        const res = await alberguesAPI.getByNombre(nombreBuscar.trim());
-        if (res?.data?.length > 0) setResultados(res.data);
-        else setError("No se encontró albergue con ese nombre.");
-      } else {
-        setError("Ingrese ID o nombre para buscar.");
-      }
-    } catch (err) {
-      setError("Error al buscar albergue.");
-      console.error(err);
-    } finally {
-      setLoadingBusqueda(false);
-    }
-  };
-
-  // Al seleccionar un albergue de resultados, cargar en el formulario (solo campos seleccionados)
-  const seleccionarAlbergue = (albergue) => {
-    if (!albergue) {
-      setForm({});
+  // Función para actualizar el albergue
+  const actualizarAlbergue = async (datosActualizados) => {
+    if (!albergue?.id) {
+      const msg = "ID del albergue es requerido";
+      setError(msg);
+      showCustomToast("Error", msg, "error");
       return;
     }
-    const datosParaFormulario = { idAlbergue: albergue.idAlbergue || "" };
-    camposEditables.forEach(campo => {
-      datosParaFormulario[campo] = albergue[campo] ?? "";
-    });
-    setForm(datosParaFormulario);
-    setResultados([]);
-  };
 
-  // Cambios en el formulario de actualización
-  const handleChangeForm = (e) => {
-    const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
-  };
+    setActualizando(true);
+    setError(null);
 
-  // Actualizar albergue
-  const handleActualizar = async (e) => {
-    e.preventDefault();
-    if (!form.idAlbergue) {
-      showCustomToast("Error", "Seleccione un albergue para actualizar", "error");
-      return;
-    }
     try {
-      setLoadingForm(true);
-      await alberguesAPI.update(form.idAlbergue, form);
-      showCustomToast("Éxito", "Albergue actualizado correctamente", "success");
-      // Opcional: limpiar form o resultados?
+      // Construir payload según documentación de la API
+      const payload = {
+        id: albergue.id,
+        condicionAlbergue: datosActualizados.condicionAlbergue,
+        especificacion: datosActualizados.especificacion,
+        detalleCondicion: datosActualizados.detalleCondicion,
+        administrador: datosActualizados.administrador,
+        telefono: datosActualizados.telefono,
+        idCapacidad: datosActualizados.idCapacidad,
+        seccion: datosActualizados.seccion,
+        requerimientosTecnicos: datosActualizados.requerimientosTecnicos,
+        costoRequerimientosTecnicos: datosActualizados.costoRequerimientosTecnicos,
+        idInfraestructura: datosActualizados.idInfraestructura,
+        color: datosActualizados.color,
+        idUsuarioModificacion: datosActualizados.idUsuarioModificacion,
+      };
+
+      const res = await alberguesAPI.update(payload);
+
+      setAlbergue(res); // actualizar estado con la respuesta
+      setActualizando(false);
+      showCustomToast("Éxito", "Albergue actualizado correctamente.", "success");
+      return res;
     } catch (err) {
-      showCustomToast("Error", "No se pudo actualizar el albergue", "error");
-      console.error(err);
-    } finally {
-      setLoadingForm(false);
+      setError(err.message);
+      setActualizando(false);
+      showCustomToast("Error", "No se pudo actualizar el albergue.", "error");
+      throw err;
     }
+  };
+
+  // Función para manejar cambios de input
+  const handleChange = (name, value) => {
+    setAlbergue((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return {
-    idAlbergueBuscar,
-    setIdAlbergueBuscar,
-    nombreBuscar,
-    setNombreBuscar,
-    resultados,
+    albergue,
+    loading,
     error,
-    loadingBusqueda,
-    handleBuscar,
-    seleccionarAlbergue,
-    form,
-    loadingForm,
-    handleChangeForm,
-    handleActualizar,
-    camposEditables,
+    actualizarAlbergue,
+    actualizando,
+    handleChange,
   };
 }
