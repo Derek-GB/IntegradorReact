@@ -215,7 +215,7 @@ const ResumenFinal = () => {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
           <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
             <h2 className="text-xl font-semibold text-gray-800">
-              Productos del Formulario Actual
+              Productos del formulario actual
             </h2>
           </div>
           <div className="p-4">
