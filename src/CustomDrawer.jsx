@@ -28,7 +28,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import LocalShipping from "@mui/icons-material/LocalShipping";
-import AssignmentReturned from "@mui/icons-material/Assignmentreturned";
+import AssignmentReturned from "@mui/icons-material/AssignmentReturned";
 import Shelves from "@mui/icons-material/Shelves";
 import DatasetLinked from "@mui/icons-material/DatasetLinked";
 import QuickReferenceAll from "@mui/icons-material/AssignmentLate";
