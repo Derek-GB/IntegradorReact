@@ -4,6 +4,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import GlobalDataTable from "../../components/globalComponents/GlobalDataTable.jsx";
 import useResumenFinal from "../../hooks/abastecimineto/useResumenFinal.js";
+import { useContext } from "react";
+import { contextoAbastecimiento } from "../../context/contextoAbastecimiento.jsx";
 import CustomToaster from "../../components/globalComponents/CustomToaster.jsx";
 import ExportExcelButton from "../../components/otros/ExportExcelButton.jsx";
 import ExportPdfButton from "../../components/otros/ExportPdfButton.jsx";
@@ -15,14 +17,19 @@ import {
   TextField,
 } from "@mui/material";
 
+
 const ResumenFinal = () => {
+
   const {
     items,
-    datosFormulario,
+    editarItem: editarItemLocal,
+    eliminarItem: eliminarItemLocal,
+    datosFormulario
+  } = useContext(contextoAbastecimiento);
+
+  const {
     descargarResumen,
-    eliminarItem,
-    editarItem,
-    pedidos,
+    pedidos
   } = useResumenFinal();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -43,11 +50,11 @@ const ResumenFinal = () => {
 
   const handleGuardarEdicion = () => {
     const nuevoItem = { ...items[editIndex], cantidad: editCantidad };
-    editarItem(editIndex, nuevoItem);
+    editarItemLocal(editIndex, nuevoItem);
     handleCloseModal();
   };
 
-  // Columnas para datos del formulario actual
+
   const datosFormularioColumns = [
     {
       name: "Fecha",
@@ -79,7 +86,7 @@ const ResumenFinal = () => {
     },
   ];
 
-  // Columnas para productos del formulario actual, ahora con acciones
+
   const productosColumns = [
     {
       name: "Categoría",
@@ -125,7 +132,7 @@ const ResumenFinal = () => {
             <EditIcon fontSize="small" />
           </button>
           <button
-            onClick={() => eliminarItem(index)}
+            onClick={() => eliminarItemLocal(index)}
             className="text-black hover:text-red-600"
             title="Eliminar"
           >
@@ -136,10 +143,10 @@ const ResumenFinal = () => {
     },
   ];
 
-  // Preparar datos del formulario actual para mostrar
+
   const datosFormularioData = datosFormulario ? [datosFormulario] : [];
 
-  // Preparar datos para exportar Excel/PDF
+
   const exportData = [
     ...(datosFormulario ? [{
       seccion: "Formulario Actual",
@@ -180,7 +187,7 @@ const ResumenFinal = () => {
     <div className="space-y-6">
       <CustomToaster />
 
-      {/* Datos del Formulario Actual */}
+      {}
       {datosFormulario && (
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
           <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
@@ -203,12 +210,12 @@ const ResumenFinal = () => {
         </div>
       )}
 
-      {/* Productos del Formulario Actual con acciones */}
+      {}
       {items && items.length > 0 && (
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
           <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
             <h2 className="text-xl font-semibold text-gray-800">
-              Productos del Formulario Actual
+              Productos del formulario actual
             </h2>
           </div>
           <div className="p-4">
@@ -224,7 +231,7 @@ const ResumenFinal = () => {
               }
             />
 
-            {/* Botones de Exportación Excel y PDF */}
+            {}
             <div className="flex justify-center gap-4 mt-4">
               <ExportExcelButton
                 data={exportData}
@@ -244,7 +251,7 @@ const ResumenFinal = () => {
         </div>
       )}
 
-      {/* Modal de Edición */}
+      {}
       <Dialog
         open={modalOpen}
         onClose={handleCloseModal}
