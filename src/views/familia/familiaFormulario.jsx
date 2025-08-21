@@ -459,8 +459,9 @@ const FamiliaFormulario = () => {
               required
               placeholder={
                 dp.tipoIdentificacion === "Cédula" ? "Ej: 123456789" :
-                  dp.tipoIdentificacion === "DIMEX" ? "Ej: 123456789012" :
-                    "Ej: A123456789"
+                  dp.tipoIdentificacion === "DIMEX" ? "Ej: A123456789" :
+                  dp.tipoIdentificacion === "Pasaporte" ? "Ej: ABC123456" :
+                  "Ingrese el número de identificación" 
               }
             />
             {/* Indicador de carga para búsqueda de cédula */}
