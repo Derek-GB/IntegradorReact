@@ -17,23 +17,23 @@ import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
 import Inventory from "@mui/icons-material/Inventory2";
 import LocalDiningIcon from "@mui/icons-material/LocalDining";
-import HotelIcon from "@mui/icons-material/Hotel";
+
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PetsIcon from "@mui/icons-material/Pets";
 import ReportIcon from "@mui/icons-material/Report";
 import BusinessIcon from "@mui/icons-material/Business";
 import ListIcon from "@mui/icons-material/List";
 import SearchIcon from "@mui/icons-material/Search";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
-import LocalShipping from "@mui/icons-material/localShipping";
-import AssignmentReturned from "@mui/icons-material/assignmentreturned";
-import Shelves from "@mui/icons-material/shelves";
-import DatasetLinked from "@mui/icons-material/datasetLinked";
-import QuickReferenceAll from "@mui/icons-material/assignmentLate";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import MapIcon from "@mui/icons-material/addBusiness";
+import LocalShipping from "@mui/icons-material/LocalShipping";
+import AssignmentReturned from "@mui/icons-material/Assignmentreturned";
+import Shelves from "@mui/icons-material/Shelves";
+import DatasetLinked from "@mui/icons-material/DatasetLinked";
+import QuickReferenceAll from "@mui/icons-material/AssignmentLate";
+
+import MapIcon from "@mui/icons-material/AddBusiness";
 
 
 
