@@ -1,90 +1,115 @@
-import { useState, useEffect } from "react";
+
+import React, { useState } from "react";
 import { alberguesAPI } from "../../helpers/api.js";
 import { showCustomToast } from "../../components/globalComponents/CustomToaster.jsx";
 
-export function useActualizarAlbergue(idAlbergue) {
-  const [albergue, setAlbergue] = useState(null);
-  const [loading, setLoading] = useState(true);
+export function useActualizarAlbergue() {
+  const [albergues, setAlbergues] = useState([]);
+  const [busquedaAlbergue, setBusquedaAlbergue] = useState("");
+  const [showSugerencias, setShowSugerencias] = useState(false);
+  const [form, setForm] = useState({});
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [actualizando, setActualizando] = useState(false);
 
-  // Cargar albergue por ID
-  useEffect(() => {
-    if (!idAlbergue) return;
-
+  // Buscar albergues por usuario (al presionar botón)
+  const buscarAlbergues = async () => {
     setLoading(true);
     setError(null);
-
-    alberguesAPI.getById(idAlbergue)
-      .then((data) => {
-        setAlbergue(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-        showCustomToast("Error", "No se pudo cargar el albergue.", "error");
-      });
-  }, [idAlbergue]);
-
-  // Función para actualizar el albergue
-  const actualizarAlbergue = async (datosActualizados) => {
-    if (!albergue?.id) {
-      const msg = "ID del albergue es requerido";
-      setError(msg);
-      showCustomToast("Error", msg, "error");
-      return;
-    }
-
-    setActualizando(true);
-    setError(null);
-
     try {
-      // Construir payload según documentación de la API
-      const payload = {
-        id: albergue.id,
-        condicionAlbergue: datosActualizados.condicionAlbergue,
-        especificacion: datosActualizados.especificacion,
-        detalleCondicion: datosActualizados.detalleCondicion,
-        administrador: datosActualizados.administrador,
-        telefono: datosActualizados.telefono,
-        idCapacidad: datosActualizados.idCapacidad,
-        seccion: datosActualizados.seccion,
-        requerimientosTecnicos: datosActualizados.requerimientosTecnicos,
-        costoRequerimientosTecnicos: datosActualizados.costoRequerimientosTecnicos,
-        idInfraestructura: datosActualizados.idInfraestructura,
-        color: datosActualizados.color,
-        idUsuarioModificacion: datosActualizados.idUsuarioModificacion,
-      };
-
-      const res = await alberguesAPI.update(payload);
-
-      setAlbergue(res); // actualizar estado con la respuesta
-      setActualizando(false);
-      showCustomToast("Éxito", "Albergue actualizado correctamente.", "success");
-      return res;
+      const idUsuario = localStorage.getItem("idUsuario");
+      if (!idUsuario) {
+        showCustomToast("Error", "No se encontró el ID del usuario en localStorage.", "error");
+        setLoading(false);
+        return;
+      }
+      const data = await alberguesAPI.getByUsuario(idUsuario);
+      const lista = Array.isArray(data) ? data : data?.data ?? [];
+      setAlbergues(lista);
     } catch (err) {
       setError(err.message);
-      setActualizando(false);
-      showCustomToast("Error", "No se pudo actualizar el albergue.", "error");
-      throw err;
+      setAlbergues([]);
+      showCustomToast("Error", "No se pudo cargar la lista de albergues.", "error");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Función para manejar cambios de input
+  // Limpiar form si se borra la búsqueda
+  React.useEffect(() => {
+    if ((busquedaAlbergue || "").trim() === "") {
+      setForm({});
+    }
+  }, [busquedaAlbergue]);
+
+  // Seleccionar albergue del autocompletado
+  const handleSelectAlbergue = (albergue) => {
+    setForm(albergue || {});
+    setBusquedaAlbergue(albergue ? (albergue.nombre || albergue.id || "") : "");
+  };
+
+  // Manejar cambios en los campos del formulario
   const handleChange = (name, value) => {
-    setAlbergue((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Actualizar albergue
+  const actualizarAlbergue = async (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    setActualizando(true);
+    setError(null);
+    try {
+      const toBool = (val) => val === "true" || val === true;
+      const payload = {
+        condicionAlbergue: form.condicionAlbergue,
+        especificacion: form.especificacion,
+        capacidadPersonas: Number(form.capacidadPersonas || form.idCapacidad || 0),
+        capacidadColectiva: Number(form.capacidadColectiva) || 0,
+        ocupacion: Number(form.ocupacion) || 0,
+        detalleCondicion: form.detalleCondicion,
+        cocina: toBool(form.cocina),
+        duchas: toBool(form.duchas),
+        serviciosSanitarios: toBool(form.serviciosSanitarios),
+        bodega: toBool(form.bodega),
+        menajeMobiliario: toBool(form.menajeMobiliario),
+        tanqueAgua: toBool(form.tanqueAgua),
+        administrador: form.administrador,
+        telefono: form.telefono,
+        color: form.color,
+        idUsuarioModificacion: Number(localStorage.getItem("idUsuario")) || 0,
+      };
+      if (!form.id && !form.idAlbergue) {
+        showCustomToast("Error", "Selecciona un albergue para actualizar.", "error");
+        setActualizando(false);
+        return;
+      }
+      await alberguesAPI.update(form.id || form.idAlbergue, payload);
+      showCustomToast("Éxito", "Albergue actualizado correctamente.", "success");
+      setForm({});
+      setBusquedaAlbergue("");
+      await buscarAlbergues(); // refrescar lista
+    } catch (err) {
+      setError(err.message);
+      showCustomToast("Error", "No se pudo actualizar el albergue.", "error");
+    } finally {
+      setActualizando(false);
+    }
   };
 
   return {
-    albergue,
+    albergues,
+    busquedaAlbergue,
+    setBusquedaAlbergue,
+    showSugerencias,
+    setShowSugerencias,
+    form,
+    setForm,
     loading,
     error,
-    actualizarAlbergue,
-    actualizando,
     handleChange,
+    handleSelectAlbergue,
+    actualizarAlbergue,
+    buscarAlbergues,
+    actualizando,
   };
 }
