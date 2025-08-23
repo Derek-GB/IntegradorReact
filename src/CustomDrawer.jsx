@@ -110,6 +110,15 @@ const routeGroups = [
     ],
   },
   {
+    label: "Albergue",
+    icon: <BusinessIcon />,
+    routes: [
+      { to: "/registroAlbergue.jsx", label: "Registrar", icon: <MapIcon /> },
+      { to: "/actualizarAlbergue.jsx", label: "Actualizar", icon: <BusinessIcon /> },
+      { to: "/busquedaAlbergue.jsx", label: "Buscar", icon: <SearchIcon /> },
+    ],
+  },
+  {
     label: "Mascotas",
     icon: <PetsIcon />,
     routes: [
@@ -133,7 +142,6 @@ const routeGroups = [
     routes: [
       { to: "/registrarConsumibles.jsx", label: "Registrar", icon: <LocalDiningIcon /> },
       { to: "/abarrotesMenuPrincipal", label: "Crear Menú", icon: <LocalShipping /> },
-     
     ],
   },
   {
@@ -141,7 +149,7 @@ const routeGroups = [
     icon: <AssignmentReturned />,
     routes: [
       { to: "/asignacionRecursos.jsx", label: "Registrar", icon: <AssignmentReturned /> },
-      { to: "/buscarAsignaciones.jsx", label: "Buscar", icon: <SearchIcon /> }, // Ajusta la ruta si es necesario
+      { to: "/buscarAsignaciones.jsx", label: "Buscar", icon: <SearchIcon /> },
     ],
   },
   {
@@ -157,7 +165,7 @@ const routeGroups = [
     icon: <ReportIcon />,
     routes: [
       { to: "/registroAmenazas.jsx", label: "Registrar", icon: <ReportIcon /> },
-      { to: "/buscarAmenaza.jsx", label: "Buscar", icon: <SearchIcon /> }, // Debes crear esta vista si no existe
+      { to: "/buscarAmenaza.jsx", label: "Buscar", icon: <SearchIcon /> },
     ],
   },
   {
@@ -178,7 +186,6 @@ const routeGroups = [
     label: "Usuario",
     icon: <PersonAddIcon />,
     routes: [
-
       { to: "/registroUsuario.jsx", label: "Registrar Usuario", icon: <PersonAddIcon /> },
       { to: "/listaUsuarios.jsx", label: "Lista Usuarios", icon: <ListIcon /> },
     ],
