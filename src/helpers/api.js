@@ -152,6 +152,15 @@ export const alberguesAPI = {
       handleError(error);
     }
   },
+  // Nuevo método usando la ruta de la documentación
+  getByIdTony: async (id) => {
+    try {
+      const res = await customAxios.get(`/albergues/id/${encodeURIComponent(id)}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
   getByNombre: async (nombre) => {
     try {
       const res = await customAxios.get(`/albergues/consulta/nombre/${encodeURIComponent(nombre)}`);
@@ -208,32 +217,32 @@ export const alberguesAPI = {
   },
 
   // ---- UPDATE CORREGIDO SEGÚN DOCUMENTACIÓN ----
-  update: async (albergue) => {
-    if (!albergue || !albergue.id) {
-      throw new Error("ID del albergue es requerido");
-    }
-    try {
-      const payload = {
-        id: albergue.id,
-        condicionAlbergue: albergue.condicionAlbergue,
-        especificacion: albergue.especificacion,
-        detalleCondicion: albergue.detalleCondicion,
-        administrador: albergue.administrador,
-        telefono: albergue.telefono,
-        idCapacidad: albergue.idCapacidad,
-        seccion: albergue.seccion,
-        requerimientosTecnicos: albergue.requerimientosTecnicos,
-        costoRequerimientosTecnicos: albergue.costoRequerimientosTecnicos,
-        idInfraestructura: albergue.idInfraestructura,
-        color: albergue.color,
-        idUsuarioModificacion: albergue.idUsuarioModificacion,
-      };
-      const res = await customAxios.put(`/albergues/${albergue.id}`, payload);
-      return res.data;
-    } catch (error) {
-      handleError(error);
-    }
-  },
+  // update: async (albergue) => {
+  //   if (!albergue || !albergue.id) {
+  //     throw new Error("ID del albergue es requerido");
+  //   }
+  //   try {
+  //     const payload = {
+  //       id: albergue.id,
+  //       condicionAlbergue: albergue.condicionAlbergue,
+  //       especificacion: albergue.especificacion,
+  //       detalleCondicion: albergue.detalleCondicion,
+  //       administrador: albergue.administrador,
+  //       telefono: albergue.telefono,
+  //       idCapacidad: albergue.idCapacidad,
+  //       seccion: albergue.seccion,
+  //       requerimientosTecnicos: albergue.requerimientosTecnicos,
+  //       costoRequerimientosTecnicos: albergue.costoRequerimientosTecnicos,
+  //       idInfraestructura: albergue.idInfraestructura,
+  //       color: albergue.color,
+  //       idUsuarioModificacion: albergue.idUsuarioModificacion,
+  //     };
+  //     const res = await customAxios.put(`/albergues/${albergue.id}`, payload);
+  //     return res.data;
+  //   } catch (error) {
+  //     handleError(error);
+  //   }
+  // },
 };
 
 // -------------------- El resto de las APIs --------------------
