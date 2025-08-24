@@ -76,11 +76,11 @@ const AyudaForm = () => {
             </div>
             <div className="flex-1">
               <InputField
-                label="Responsable"
+                label="Funcionario"
                 name="responsable"
                 value={form.responsable}
                 onChange={handleChange}
-                placeholder="Nombre del responsable"
+                placeholder="Nombre del Funcionario"
                 required
               />
             </div>

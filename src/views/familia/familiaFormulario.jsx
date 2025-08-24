@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Agrega esto arriba
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import FormContainer from "../../components/FormComponents/FormContainer.jsx";
 import SubmitButton from "../../components/FormComponents/SubmitButton.jsx";
 import FoldDownComponent from "../../components/otros/FoldDownComponent.jsx";
 import InputField from "../../components/FormComponents/InputField.jsx";
 import SelectField from "../../components/FormComponents/SelectField.jsx";
 import useIntegrante from "../../hooks/familia/useIntegrante.js";
+import { useBusquedaCedula } from "../../hooks/useBusquedaCedula.js";
 import { personasAPI } from "../../helpers/api.js";
 import { showCustomToast } from "../../components/globalComponents/CustomToaster.jsx";
 
@@ -28,6 +29,120 @@ const FamiliaFormulario = () => {
     FamiliaCaracteristicasPoblacionales: {},
     FamiliaFirmaDigital: {},
   });
+
+  // Integración del hook de búsqueda de cédula
+  const { data: dataCedula, loading: loadingCedula, error: errorCedula, buscarCedula } = useBusquedaCedula();
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+
+  const {
+    edad,
+    handleChange,
+    paises,
+    gruposIndigenasCR,
+    canvasRef,
+    guardarFirma,
+    limpiarFirma
+  } = useIntegrante(datos, setDatos);
+
+  const dp = datos.FamiliaDatosPersonales;
+  const ce = datos.FamiliaCondicionesEspeciales;
+  const cp = datos.FamiliaCaracteristicasPoblacionales;
+  const fd = datos.FamiliaFirmaDigital;
+
+  const navigate = useNavigate();
+  const codigoFamilia = localStorage.getItem("codigoFamilia") || "";
+  const idFamilia = Number(localStorage.getItem("idFamilia"));
+  const idUsuario = Number(localStorage.getItem("idUsuario")) || 42;
+
+  // Función para consultar cédula - simplificada
+  const consultarCedulaYAsignar = async (cedula) => {
+    if (cedula.length === 9) {
+      console.log("Consultando cédula:", cedula);
+      await buscarCedula(cedula);
+    }
+  };
+
+  // Effect para manejar los resultados de la búsqueda de cédula
+  useEffect(() => {
+    if (dataCedula) {
+      console.log("Datos de cédula recibidos:", dataCedula);
+
+      // Mapear los campos de la API a los campos del formulario
+      const nombre = dataCedula.firstname1 || "";
+      const segundoNombre = dataCedula.firstname2 || "";
+      const primerApellido = dataCedula.lastname1 || "";
+      const segundoApellido = dataCedula.lastname2 || "";
+
+      // Concatenar nombres si hay segundo nombre
+      const nombreCompleto = segundoNombre ? `${nombre} ${segundoNombre}` : nombre;
+
+      setDatos(prev => ({
+        ...prev,
+        FamiliaDatosPersonales: {
+          ...prev.FamiliaDatosPersonales,
+          nombre: nombreCompleto,
+          primerApellido: primerApellido,
+          segundoApellido: segundoApellido,
+        }
+      }));
+
+      showCustomToast(
+        "Datos encontrados",
+        "Los datos de la cédula han sido cargados automáticamente.",
+        "success"
+      );
+    }
+  }, [dataCedula]);
+
+  // Effect para manejar errores de la búsqueda de cédula
+  useEffect(() => {
+    if (errorCedula) {
+      console.log("Error en búsqueda de cédula:", errorCedula);
+      showCustomToast(
+        "Cédula no encontrada",
+        errorCedula || "No se encontraron datos para esta cédula. Puede continuar llenando manualmente.",
+        "warning"
+      );
+    }
+  }, [errorCedula]);
+
+  // Effect para consultar automáticamente cuando se completa la cédula
+  useEffect(() => {
+    const cedula = dp.numeroIdentificacion;
+    if (dp.tipoIdentificacion === "Cédula" && cedula && cedula.length === 9) {
+      // Debounce para evitar múltiples consultas
+      const timer = setTimeout(() => {
+        consultarCedulaYAsignar(cedula);
+      }, 500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [dp.numeroIdentificacion, dp.tipoIdentificacion]);
+
+  // Handler especial para el campo de número de identificación
+  const handleIdentificacionChange = (e) => {
+    let val = e.target.value.replace(/\D/g, "");
+
+    // Limitar según el tipo de identificación
+    if (dp.tipoIdentificacion === "Cédula" && val.length > 9) {
+      val = val.slice(0, 9);
+    } else if (dp.tipoIdentificacion === "DIMEX" && val.length > 12) {
+      val = val.slice(0, 12);
+    }
+
+    handleChange(
+      { target: { name: e.target.name, value: val } },
+      "FamiliaDatosPersonales"
+    );
+  };
+
+  const obtenerFechaMaxima = () => {
+    const hoy = new Date();
+    return hoy.toISOString().split('T')[0];
+  };
 
   const guardarDatosIntegrante = () => {
     setDatosIntegrantes(prev => {
@@ -75,35 +190,6 @@ const FamiliaFormulario = () => {
       cargarDatosIntegrante(nuevoIndice);
     }
   };
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
-
-  const {
-    edad,
-    handleChange,
-    paises,
-    gruposIndigenasCR,
-    canvasRef,
-    guardarFirma,
-    limpiarFirma
-  } = useIntegrante(datos, setDatos);
-
-  const dp = datos.FamiliaDatosPersonales;
-  const ce = datos.FamiliaCondicionesEspeciales;
-  const cp = datos.FamiliaCaracteristicasPoblacionales;
-  const fd = datos.FamiliaFirmaDigital;
-
-  const obtenerFechaMaxima = () => {
-    const hoy = new Date();
-    return hoy.toISOString().split('T')[0];
-  };
-
-  const codigoFamilia = localStorage.getItem("codigoFamilia") || "";
-  const idFamilia = Number(localStorage.getItem("idFamilia"));
-  const idUsuario = Number(localStorage.getItem("idUsuario")) || 42; // fallback a 42 si no hay nada
-
 
   const verificarJefeFamilia = () => {
     let jefeExistente = false;
@@ -159,12 +245,20 @@ const FamiliaFormulario = () => {
         esJefeFamilia: "Sí"
       }
     }));
-
   };
 
-
-
-
+  // Marcar automáticamente "No" si la edad es menor a 18
+  useEffect(() => {
+    if (edad < 18 && dp.estaACargoMenor !== "No") {
+      setDatos(prev => ({
+        ...prev,
+        FamiliaDatosPersonales: {
+          ...prev.FamiliaDatosPersonales,
+          estaACargoMenor: "No"
+        }
+      }));
+    }
+  }, [edad]);
 
   const construirPersonaPayload = (datosIntegrantes, idFamilia) => {
     const formData = new FormData();
@@ -175,7 +269,6 @@ const FamiliaFormulario = () => {
       const cp = integrante.FamiliaCaracteristicasPoblacionales;
       const fd = integrante.FamiliaFirmaDigital;
 
-      // Generar nombre único para la firma
       let firmaFileName = "";
       if (fd.imagen) {
         const identificacion = dp.numeroIdentificacion || `sinid_${idx + 1}`;
@@ -183,7 +276,6 @@ const FamiliaFormulario = () => {
         firmaFileName = `firma_${identificacion}_${timestamp}.png`;
       }
 
-      // Construir el objeto persona
       const persona = {
         tieneCondicionSalud: ce.tieneCondicionSalud ?? true,
         descripcionCondicionSalud: ce.descripcionCondicionSalud || ce.otrasCondiciones || null,
@@ -206,13 +298,14 @@ const FamiliaFormulario = () => {
         genero: dp.genero || "",
         sexo: dp.sexo || "",
         telefono: dp.telefono || "",
-        contactoEmergencia: dp.contactoEmergencia || null,
+        contactoEmergencia: dp.contactoEmergenciaNombre && dp.contactoEmergenciaTelefono
+          ? `${dp.contactoEmergenciaNombre} - ${dp.contactoEmergenciaTelefono}`
+          : dp.contactoEmergenciaNombre || dp.contactoEmergenciaTelefono || null,
         observaciones: dp.observaciones || null,
         estaACargoMenor: Boolean(dp.estaACargoMenor),
         idUsuarioCreacion: idUsuario,
       };
 
-      // Solo agrega la propiedad firma si hay firma
       if (firmaFileName) {
         persona.firma = firmaFileName;
       }
@@ -242,27 +335,45 @@ const FamiliaFormulario = () => {
     return res;
   };
 
-  const navigate = useNavigate(); // Agrega esto dentro del componente
-
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
     setSuccess(null);
 
+    // Validaciones
+    const regexCedula = /^\d{9}$/;
+    const regexPasaporte = /^[A-Z]{1,3}[0-9]{6,9}$/;
+    const regexDimex = /^\d{12}$/;
 
-    const regexIdentificacion = /^\d{9}$/;
-    const regexTelefono = /^\d{4}-\d{4}$/;
-
-    if (!regexIdentificacion.test(dp.numeroIdentificacion || "")) {
+    if (dp.tipoIdentificacion === "Cédula" && !regexCedula.test(dp.numeroIdentificacion || "")) {
       showCustomToast(
         "Dato inválido",
-        "El número de identificación debe tener exactamente 9 dígitos.",
+        "La cédula debe tener exactamente 9 dígitos.",
+        "error"
+      );
+      setLoading(false);
+      return;
+    }
+    if (dp.tipoIdentificacion === "Pasaporte" && !regexPasaporte.test(dp.numeroIdentificacion || "")) {
+      showCustomToast(
+        "Dato inválido",
+        "El pasaporte debe tener de 1 a 3 letras seguidas de 6 a 9 números.",
+        "error"
+      );
+      setLoading(false);
+      return;
+    }
+    if (dp.tipoIdentificacion === "DIMEX" && !regexDimex.test(dp.numeroIdentificacion || "")) {
+      showCustomToast(
+        "Dato inválido",
+        "El DIMEX debe tener exactamente 12 dígitos numéricos.",
         "error"
       );
       setLoading(false);
       return;
     }
 
+    const regexTelefono = /^\d{4}-\d{4}$/;
     if (!regexTelefono.test(dp.telefono || "")) {
       showCustomToast(
         "Dato inválido",
@@ -272,7 +383,6 @@ const FamiliaFormulario = () => {
       setLoading(false);
       return;
     }
-
 
     const nuevosIntegrantes = [...datosIntegrantes];
     nuevosIntegrantes[indice] = { ...datos };
@@ -326,14 +436,44 @@ const FamiliaFormulario = () => {
       {/* Información Personal */}
       <FoldDownComponent title="Información Personal" open>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
           <InputField
             label="ID Familia"
             name="idFamilia"
             value={codigoFamilia || ""}
             readOnly
           />
-
+          <SelectField
+            label="Tipo de Identificación"
+            name="tipoIdentificacion"
+            value={dp.tipoIdentificacion || ""}
+            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            options={["Cédula", "Pasaporte", "DIMEX"]}
+            required
+          />
+          <div className="relative">
+            <InputField
+              label="Número de Identificación"
+              name="numeroIdentificacion"
+              value={dp.numeroIdentificacion || ""}
+              onChange={handleIdentificacionChange}
+              required
+              placeholder={
+                dp.tipoIdentificacion === "Cédula" ? "Ej: 123456789" :
+                  dp.tipoIdentificacion === "DIMEX" ? "Ej: A123456789" :
+                  dp.tipoIdentificacion === "Pasaporte" ? "Ej: ABC123456" :
+                  "Ingrese el número de identificación" 
+              }
+            />
+            {/* Indicador de carga para búsqueda de cédula */}
+            {loadingCedula && dp.tipoIdentificacion === "Cédula" && (
+              <div className="absolute right-2 top-8 text-blue-500">
+                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+              </div>
+            )}
+          </div>
           <InputField
             label="Nombre"
             name="nombre"
@@ -353,28 +493,6 @@ const FamiliaFormulario = () => {
             name="segundoApellido"
             value={dp.segundoApellido || ""}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
-            required
-          />
-          <SelectField
-            label="Tipo de Identificación"
-            name="tipoIdentificacion"
-            value={dp.tipoIdentificacion || ""}
-            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
-            options={["Cédula", "Pasaporte", "DIMEX"]}
-            required
-          />
-          <InputField
-            label="Número de Identificación"
-            name="numeroIdentificacion"
-            value={dp.numeroIdentificacion || ""}
-            onChange={(e) => {
-              let val = e.target.value.replace(/\D/g, ""); // solo dígitos
-              if (val.length > 9) val = val.slice(0, 9); // máximo 9
-              handleChange(
-                { target: { name: e.target.name, value: val } },
-                "FamiliaDatosPersonales"
-              );
-            }}
             required
           />
           <InputField
@@ -414,29 +532,40 @@ const FamiliaFormulario = () => {
             options={["Masculino", "Femenino", "Intersexo", "Prefiero no decir"]}
             required
           />
-          <InputField
-            label="Observaciones"
-            name="observaciones"
-            value={dp.observaciones || ""}
-            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
-            type="textarea"
-          />
-          <InputField
+          <SelectField
             label="Parentesco"
             name="parentesco"
             value={dp.parentesco || ""}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            options={[
+              "Padre",
+              "Madre",
+              "Hermano(a)",
+              "Hijo(a)",
+              "Tío(a)",
+              "Abuelo(a)",
+              "Otro"
+            ]}
             required
           />
+          {dp.parentesco === "Otro" && (
+            <InputField
+              label="Especifique otro parentesco"
+              name="otroParentesco"
+              value={dp.otroParentesco || ""}
+              onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+              required
+            />
+          )}
           <InputField
             label="Teléfono"
             name="telefono"
             value={dp.telefono || ""}
             onChange={(e) => {
-              let val = e.target.value.replace(/\D/g, ""); // solo dígitos
-              if (val.length > 8) val = val.slice(0, 8); // máximo 8 dígitos
+              let val = e.target.value.replace(/\D/g, "");
+              if (val.length > 8) val = val.slice(0, 8);
               if (val.length > 4) {
-                val = val.slice(0, 4) + "-" + val.slice(4); // formato ####-####
+                val = val.slice(0, 4) + "-" + val.slice(4);
               }
               handleChange(
                 { target: { name: e.target.name, value: val } },
@@ -447,10 +576,27 @@ const FamiliaFormulario = () => {
             required
           />
           <InputField
-            label="Contacto de Emergencia"
-            name="contactoEmergencia"
-            value={dp.contactoEmergencia || ""}
+            label="Nombre de Contacto de Emergencia"
+            name="contactoEmergenciaNombre"
+            value={dp.contactoEmergenciaNombre || ""}
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+          />
+          <InputField
+            label="Teléfono de Contacto de Emergencia"
+            name="contactoEmergenciaTelefono"
+            value={dp.contactoEmergenciaTelefono || ""}
+            onChange={e => {
+              let val = e.target.value.replace(/\D/g, "");
+              if (val.length > 8) val = val.slice(0, 8);
+              if (val.length > 4) {
+                val = val.slice(0, 4) + "-" + val.slice(4);
+              }
+              handleChange(
+                { target: { name: e.target.name, value: val } },
+                "FamiliaDatosPersonales"
+              );
+            }}
+            placeholder="8888-8888"
           />
           <SelectField
             label="¿Es jefe de familia?"
@@ -466,6 +612,13 @@ const FamiliaFormulario = () => {
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
             options={["No", "Sí"]}
             required
+          />
+          <InputField
+            label="Observaciones"
+            name="observaciones"
+            value={dp.observaciones || ""}
+            onChange={e => handleChange(e, "FamiliaDatosPersonales")}
+            type="textarea"
           />
         </div>
       </FoldDownComponent>
@@ -558,7 +711,6 @@ const FamiliaFormulario = () => {
                 type="textarea"
               />
             </>
-
           )}
 
           {/* Discapacidad */}
@@ -639,7 +791,6 @@ const FamiliaFormulario = () => {
             </>
           )}
         </fieldset>
-
       </FoldDownComponent>
 
       {/* Características Poblacionales */}
@@ -688,7 +839,7 @@ const FamiliaFormulario = () => {
       </FoldDownComponent>
 
       {/* Firma Digital */}
-      {dp.esJefeFamilia && (
+      {(dp.esJefeFamilia === true || dp.esJefeFamilia === "Sí") && (
         <FoldDownComponent title="Firma Digital" open>
           <div className="flex flex-col items-center gap-4">
             <div className="rounded-lg shadow-md bg-white border border-gray-300 w-[400px] h-[150px] flex items-center justify-center">
@@ -726,6 +877,7 @@ const FamiliaFormulario = () => {
         </FoldDownComponent>
       )}
 
+      {/* Mostrar estado de carga o error */}
       {loading && <p className="mensaje-cargando">Guardando datos...</p>}
       {error && <p className="error">{error}</p>}
       {success && <p className="success">{success}</p>}
@@ -753,9 +905,7 @@ const FamiliaFormulario = () => {
         </SubmitButton>
       </div>
     </FormContainer>
-
   );
 };
 
 export default FamiliaFormulario;
-

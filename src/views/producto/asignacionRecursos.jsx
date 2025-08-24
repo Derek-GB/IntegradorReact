@@ -24,6 +24,20 @@ const AsignarRecurso = () => {
   const [busquedaProducto, setBusquedaProducto] = useState('');
   const [showSugerenciasProducto, setShowSugerenciasProducto] = useState(false);
 
+  // Restricción de 50 caracteres en búsqueda de persona
+  const handleBusquedaPersona = (valor) => {
+    if (valor.length <= 50) {
+      setBusquedaPersona(valor);
+    }
+  };
+
+  // Restricción de 50 caracteres en búsqueda de producto
+  const handleBusquedaProducto = (valor) => {
+    if (valor.length <= 50) {
+      setBusquedaProducto(valor);
+    }
+  };
+
   return (
     <>
       <CustomToaster />
@@ -33,7 +47,7 @@ const AsignarRecurso = () => {
             <SearchAutocompleteInput
               label="Persona (Identificación)"
               busqueda={busquedaPersona}
-              setBusqueda={setBusquedaPersona}
+              setBusqueda={handleBusquedaPersona}
               showSugerencias={showSugerenciasPersona}
               setShowSugerencias={setShowSugerenciasPersona}
               resultados={personasFiltradas}
@@ -48,7 +62,7 @@ const AsignarRecurso = () => {
             <SearchAutocompleteInput
               label="Producto"
               busqueda={busquedaProducto}
-              setBusqueda={setBusquedaProducto}
+              setBusqueda={handleBusquedaProducto}
               showSugerencias={showSugerenciasProducto}
               setShowSugerencias={setShowSugerenciasProducto}
               resultados={productos}

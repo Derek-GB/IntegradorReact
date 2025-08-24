@@ -5,11 +5,12 @@ import SelectField from "../../components/FormComponents/SelectField";
 import InputField from "../../components/FormComponents/InputField";
 import SubmitButton from "../../components/FormComponents/SubmitButton";
 import SearchAutocompleteInput from "../../components/FormComponents/SearchAutocompleteInput";
+import { useState, useMemo } from "react";
 
 const FormularioRegistro = () => {
   const {
     albergues,
-    amenazas,
+    peligros, // antes amenazas
     provincias,
     cantones,
     distritos,
@@ -22,7 +23,6 @@ const FormularioRegistro = () => {
     // NUEVO ESTADO para distrito
     idDistritoSeleccionado,
     setIdDistritoSeleccionado,
-    eventoSeleccionado,
     setEventoSeleccionado,
     direccion,
     setDireccion,
@@ -38,6 +38,18 @@ const FormularioRegistro = () => {
     crearFamilia,
     setAlbergueSeleccionado,
   } = useFormularioRegistro();
+
+  // Estados para búsqueda de eventualidad
+  const [busquedaEventualidad, setBusquedaEventualidad] = useState("");
+  const [showSugerenciasEventualidad, setShowSugerenciasEventualidad] = useState(false);
+
+  // Filtrar peligros según búsqueda
+  const peligrosFiltrados = useMemo(() => {
+    if (!busquedaEventualidad) return [];
+    return peligros.filter((p) =>
+      p.nombre?.toLowerCase().includes(busquedaEventualidad.toLowerCase())
+    );
+  }, [peligros, busquedaEventualidad]);
 
   return (
     <FormContainer title="Registro de Familia en Albergue" onSubmit={crearFamilia} size="xl">
@@ -62,14 +74,23 @@ const FormularioRegistro = () => {
               />
             </div>
             <div className="flex-1">
-              <SelectField
-                label="Tipo de Evento"
-                value={eventoSeleccionado}
-                onChange={(e) => setEventoSeleccionado(e.target.value)}
-                options={amenazas.map((e) => ({ nombre: e.evento, id: e.id }))}
-                optionLabel="nombre"
-                optionValue="id"
-                required
+              <SearchAutocompleteInput
+                label="Eventualidad"
+                busqueda={busquedaEventualidad}
+                setBusqueda={(value) => {
+                  setBusquedaEventualidad(value);
+                  setShowSugerenciasEventualidad(true);
+                }}
+                showSugerencias={showSugerenciasEventualidad}
+                setShowSugerencias={setShowSugerenciasEventualidad}
+                resultados={peligrosFiltrados}
+                onSelect={(item) => {
+                  setEventoSeleccionado(item.nombre);
+                  setBusquedaEventualidad(item.nombre);
+                  setShowSugerenciasEventualidad(false);
+                }}
+                optionLabelKeys={["nombre"]}
+                placeholder="Buscar eventualidad..."
               />
             </div>
           </div>
