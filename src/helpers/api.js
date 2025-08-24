@@ -152,6 +152,15 @@ export const alberguesAPI = {
       handleError(error);
     }
   },
+  // Nuevo método usando la ruta de la documentación
+  getByIdTony: async (id) => {
+    try {
+      const res = await customAxios.get(`/albergues/id/${encodeURIComponent(id)}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
   getByNombre: async (nombre) => {
     try {
       const res = await customAxios.get(`/albergues/consulta/nombre/${encodeURIComponent(nombre)}`);

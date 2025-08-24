@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { alberguesAPI } from "../../helpers/api.js";
 import { showCustomToast } from "../../components/globalComponents/CustomToaster.jsx";
@@ -43,9 +42,30 @@ export function useActualizarAlbergue() {
   }, [busquedaAlbergue]);
 
   // Seleccionar albergue del autocompletado
-  const handleSelectAlbergue = (albergue) => {
-    setForm(albergue || {});
-    setBusquedaAlbergue(albergue ? (albergue.nombre || albergue.id || "") : "");
+  const handleSelectAlbergue = async (albergue) => {
+    setBusquedaAlbergue(albergue ? (albergue.nombre || albergue.idAlbergue || "") : "");
+    let id = albergue?.id;
+    if (!id && albergue?.idAlbergue) {
+      const encontrado = albergues.find(a => a.idAlbergue === albergue.idAlbergue);
+      id = encontrado?.id;
+    }
+    if (!id) {
+      setForm({});
+      return;
+    }
+    setLoading(true);
+    try {
+      console.log("ID enviado a getByIdTony:", id);
+      const respuesta = await alberguesAPI.getByIdTony(id); // <-- usa el nuevo método
+      const datosCompletos = Array.isArray(respuesta?.data) ? respuesta.data[0] : respuesta?.data;
+      console.log("Datos completos del albergue:", datosCompletos);
+      setForm(datosCompletos || {});
+    } catch {
+      setForm({});
+      showCustomToast("Error", "No se pudo cargar los datos completos del albergue.", "error");
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Manejar cambios en los campos del formulario

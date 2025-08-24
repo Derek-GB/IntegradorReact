@@ -73,7 +73,7 @@ function ActualizarAlbergue() {
       showCustomToast("Selecciona un albergue", "Debes seleccionar un albergue antes de continuar.", "info");
       return;
     }
-    handleSelectAlbergue(albergueSeleccionado);
+    await handleSelectAlbergue(albergueSeleccionado); // <-- ahora es async
     setShowSugerencias(false);
   };
 
