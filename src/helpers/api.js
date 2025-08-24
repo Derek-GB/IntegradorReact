@@ -428,6 +428,25 @@ export const usuariosAPI = createApiMethods("usuarios", {
 });
 
 // ---------------- APIs ADICIONALES ----------------
-export const mascotasAPI = createApiMethods("mascotas");
+export const mascotasAPI = createApiMethods("mascotas", {
+  // Nuevo método para obtener mascotas por código de familia
+  getByCodigoFamilia: async (codigoFamilia) => {
+    try {
+      const res = await customAxios.get(`/mascotas/consulta/familia/${encodeURIComponent(codigoFamilia)}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+});
 export const referenciasAPI = createApiMethods("referencias");
-export const ajusteInventarioAPI = createApiMethods("ajusteInventario");
+export const ajusteInventarioAPI = createApiMethods("ajusteInventario", {
+  getByNombreProducto: async (nombreProducto) => {
+    try {
+      const res = await customAxios.get(`/ajusteInventario/producto/${encodeURIComponent(nombreProducto)}`);
+      return res.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+});
