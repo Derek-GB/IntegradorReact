@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+
 const Inicio = () => {
   const [setCurrentSlide] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const navigate = useNavigate();
+
   const testimonials = [
     {
       text: "Este sistema ha revolucionado la gestión de emergencias en nuestra región. La rapidez y eficiencia son incomparables.",
@@ -38,7 +42,7 @@ const Inicio = () => {
         <div className="absolute bottom-20 left-1/4 w-12 h-12 bg-yellow-50 rounded-full opacity-25 animate-bounce delay-1000"></div>
 
         {/* Header principal */}
-<div className={`={container mx-auto px-4 py-12 transition-all duration-1000 ${isVisible ?  'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className={`={container mx-auto px-4 py-12 transition-all duration-1000 ${isVisible ?  'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="bg-white rounded-lg shadow-md mb-8 overflow-hidden">
             <div className="cursor-pointer font-bold py-6 px-6 select-none bg-teal-700 text-white hover:bg-teal-800 transition-colors duration-200 text-center">
               <div className="inline-flex items-center justify-center w-24 h-24 bg-teal-700 rounded-full mb-6 shadow-2xl animate-pulse">
@@ -70,7 +74,9 @@ const Inicio = () => {
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3">Registro de Familias</h3>
                 <p className="text-gray-600 leading-relaxed">Sistema rápido y seguro para el registro de familias afectadas con validación en tiempo real</p>
-                <div className="mt-4 flex items-center text-yellow-700 font-semibold">
+                <div className="mt-4 flex items-center text-yellow-700 font-semibold cursor-pointer"
+                     onClick={() => navigate("/preFormulario.jsx")}
+                >
                   <span className="text-sm">Ver más</span>
                   <span className="material-icons ml-1 text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
                 </div>
@@ -84,7 +90,9 @@ const Inicio = () => {
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3">Control de Suministros</h3>
                 <p className="text-gray-600 leading-relaxed">Gestión eficiente del inventario y distribución de recursos con alertas automáticas</p>
-                <div className="mt-4 flex items-center text-teal-700 font-semibold">
+                <div className="mt-4 flex items-center text-teal-700 font-semibold cursor-pointer"
+                     onClick={() => navigate("/registroSuministros.jsx")}
+                >
                   <span className="text-sm">Ver más</span>
                   <span className="material-icons ml-1 text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
                 </div>
@@ -98,7 +106,10 @@ const Inicio = () => {
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3">Gestión de Albergues</h3>
                 <p className="text-gray-600 leading-relajadas">Administración centralizada de espacios y capacidades con monitoreo en vivo</p>
-                <div className="mt-4 flex items-center text-yellow-700 font-semibold">
+                <div
+                  className="mt-4 flex items-center text-yellow-700 font-semibold cursor-pointer"
+                  onClick={() => navigate("/registroAlbergue.jsx")}
+                >
                   <span className="text-sm">Ver más</span>
                   <span className="material-icons ml-1 text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
                 </div>
@@ -112,7 +123,9 @@ const Inicio = () => {
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3">Respuesta Rápida</h3>
                 <p className="text-gray-600 leading-relajadas">Coordinación ágil y efectiva ante situaciones de emergencia con notificaciones push</p>
-                <div className="mt-4 flex items-center text-teal-700 font-semibold">
+                <div className="mt-4 flex items-center text-teal-700 font-semibold cursor-pointer"
+                     onClick={() => navigate("/reportes.jsx")}
+                >
                   <span className="text-sm">Ver más</span>
                   <span className="material-icons ml-1 text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
                 </div>
