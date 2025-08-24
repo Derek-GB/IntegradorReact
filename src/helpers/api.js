@@ -439,7 +439,52 @@ export const mascotasAPI = createApiMethods("mascotas", {
     }
   }
 });
-export const referenciasAPI = createApiMethods("referencias");
+export const referenciasAPI = {
+  ...createApiMethods("referencias"),
+
+  getByCodigoFamilia: async (codigoFamilia) => {
+    try {
+      const url = `/familias/obtener/referencia/${encodeURIComponent(codigoFamilia)}`;
+      const res = await customAxios.get(url);
+
+      const data = res.data.data;
+
+      let referenciasFiltradas;
+
+      if (Array.isArray(data)) {
+        // Si es array, mapeamos normalmente
+        referenciasFiltradas = data.map(ref => ({
+          idFamilia: ref.idFamilia,
+          tipoAyuda: ref.tipoAyuda,
+          descripcion: ref.descripcion,
+          fechaEntrega: ref.fechaEntrega,
+          responsable: ref.responsable,
+        }));
+      } else if (data && typeof data === "object") {
+        // Si es objeto, envolvemos en array
+        referenciasFiltradas = [{
+          idFamilia: data.idFamilia,
+          tipoAyuda: data.tipoAyuda,
+          descripcion: data.descripcion,
+          fechaEntrega: data.fechaEntrega,
+          responsable: data.responsable,
+        }];
+      } else {
+        referenciasFiltradas = [];
+      }
+
+      return {
+        success: true,
+        data: referenciasFiltradas,
+        message: res.data.message,
+      };
+
+    } catch (error) {
+      console.error("Error al buscar referencias:", error.response?.data || error);
+      throw new Error(error.response?.data?.message || "Error en la búsqueda de referencias");
+    }
+  }
+};
 export const ajusteInventarioAPI = createApiMethods("ajusteInventario", {
   getByNombreProducto: async (nombreProducto) => {
     try {
@@ -450,3 +495,12 @@ export const ajusteInventarioAPI = createApiMethods("ajusteInventario", {
     }
   }
 });
+
+export const detallePedidoConsumibleAPI = {
+  create: (body) =>
+    fetch("/api/detallePedidoConsumible", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }).then((r) => r.json()),
+};
