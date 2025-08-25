@@ -460,8 +460,8 @@ const FamiliaFormulario = () => {
               placeholder={
                 dp.tipoIdentificacion === "Cédula" ? "Ej: 123456789" :
                   dp.tipoIdentificacion === "DIMEX" ? "Ej: A123456789" :
-                  dp.tipoIdentificacion === "Pasaporte" ? "Ej: ABC123456" :
-                  "Ingrese el número de identificación" 
+                    dp.tipoIdentificacion === "Pasaporte" ? "Ej: ABC123456" :
+                      "Ingrese el número de identificación"
               }
             />
             {/* Indicador de carga para búsqueda de cédula */}
@@ -671,8 +671,8 @@ const FamiliaFormulario = () => {
             <>
               <SelectField
                 label="Tipo de antecedente médico"
-                name="tipoDiscapacidad"
-                value={ce.tipoDiscapacidad || ""}
+                name="tipoCondicionEspecial"
+                value={ce.tipoCondicionEspecial || ""}
                 onChange={e => handleChange(e, "FamiliaCondicionesEspeciales")}
                 options={[
                   "Embarazo", "Presión", "Hipertensión", "Diabetes",
@@ -680,26 +680,26 @@ const FamiliaFormulario = () => {
                   "Enfermedad renal", "Cáncer", "Otro"
                 ]}
               />
-              {ce.tipoDiscapacidad === "Otro" && (
+              {ce.tipoCondicionEspecial === "Otro" && (
                 <InputField
                   label="Especifique otro tipo de condición"
-                  name="otroTipoDiscapacidad"
-                  value={ce.otroTipoDiscapacidad || ""}
+                  name="otroTipoCondicionEspecial"
+                  value={ce.otroTipoCondicionEspecial || ""}
                   onChange={e => handleChange(e, "FamiliaCondicionesEspeciales")}
                 />
               )}
               <SelectField
                 label="Subtipo de antecedente médico"
-                name="subtipoDiscapacidad"
-                value={ce.subtipoDiscapacidad || ""}
+                name="subtipoCondicionEspecial"
+                value={ce.subtipoCondicionEspecial || ""}
                 onChange={e => handleChange(e, "FamiliaCondicionesEspeciales")}
                 options={["Presión baja", "Presión alta", "Crónica", "Otro"]}
               />
-              {ce.subtipoDiscapacidad === "Otro" && (
+              {ce.subtipoCondicionEspecial === "Otro" && (
                 <InputField
                   label="Especifique otro subtipo"
-                  name="otroSubtipoDiscapacidad"
-                  value={ce.otroSubtipoDiscapacidad || ""}
+                  name="otroSubtipoCondicionEspecial"
+                  value={ce.otroSubtipoCondicionEspecial || ""}
                   onChange={e => handleChange(e, "FamiliaCondicionesEspeciales")}
                 />
               )}
@@ -714,7 +714,9 @@ const FamiliaFormulario = () => {
           )}
 
           {/* Discapacidad */}
-          <label className="text-teal-600 font-bold select-none">¿Tiene alguna discapacidad?</label>
+          <label className="text-teal-600 font-bold select-none col-span-2 mt-4">
+            ¿Tiene alguna discapacidad?
+          </label>
           <div className="flex items-center gap-6 col-span-2 mt-2">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
