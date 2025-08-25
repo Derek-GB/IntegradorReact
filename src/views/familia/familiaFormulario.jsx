@@ -624,9 +624,9 @@ const FamiliaFormulario = () => {
       </FoldDownComponent>
 
       {/* Condiciones Especiales */}
-      <FoldDownComponent title="Condiciones Especiales" open>
+      <FoldDownComponent title="Antecedentes médicos" open>
         <fieldset className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <label className="text-teal-600 font-bold select-none">¿Tiene alguna condición especial?</label>
+          <label className="text-teal-600 font-bold select-none">¿Tiene algun antecedente médico?</label>
           <div className="flex items-center gap-6 col-span-2 mt-2">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -670,7 +670,7 @@ const FamiliaFormulario = () => {
           {ce.tieneCondicionSalud === true && (
             <>
               <SelectField
-                label="Tipo de condición especial"
+                label="Tipo de antecedente médico"
                 name="tipoDiscapacidad"
                 value={ce.tipoDiscapacidad || ""}
                 onChange={e => handleChange(e, "FamiliaCondicionesEspeciales")}
@@ -689,7 +689,7 @@ const FamiliaFormulario = () => {
                 />
               )}
               <SelectField
-                label="Subtipo de condición especial"
+                label="Subtipo de antecedente médico"
                 name="subtipoDiscapacidad"
                 value={ce.subtipoDiscapacidad || ""}
                 onChange={e => handleChange(e, "FamiliaCondicionesEspeciales")}
@@ -704,7 +704,7 @@ const FamiliaFormulario = () => {
                 />
               )}
               <InputField
-                label="Describa brevemente la condición especial"
+                label="Describa brevemente el antecedente médico"
                 name="descripcionCondicionSalud"
                 value={ce.descripcionCondicionSalud || ""}
                 onChange={e => handleChange(e, "FamiliaCondicionesEspeciales")}
@@ -806,7 +806,7 @@ const FamiliaFormulario = () => {
               className="form-checkbox h-5 w-5 text-teal-600 border-teal-600 focus:ring-teal-500 rounded transition-all duration-150"
             />
             <label htmlFor="indigena" className="text-teal-600 font-bold select-none">
-              Población Indígena
+              Grupo étnico indígena
             </label>
           </div>
           {cp.indigena && (
@@ -824,7 +824,7 @@ const FamiliaFormulario = () => {
             value={cp.autoidentificacionCultural || ""}
             onChange={e => handleChange(e, "FamiliaCaracteristicasPoblacionales")}
             options={[
-              "china", "indígena", "afrodescendiente", "mestiza",
+              "oriental", "indígena", "afrodescendiente", "mestiza",
               "blanca", "otra", "NS/NR"
             ]}
           />

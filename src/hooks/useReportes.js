@@ -16,7 +16,7 @@ const opcionesReporte = [
   { label: "Resumen de personas con discapacidad", value: "personas_discapacidad", campos: [{ label: "Nombre del albergue", name: "nombreAlbergue" }] },
   { label: "Resumen de suministros en albergues", value: "suministros_albergue", campos: [{ label: "Nombre del albergue", name: "nombreAlbergue" }] },
   { label: "Resumen de albergues por color de alerta", value: "albergues_por_color", campos: [{ label: "Color del albergue", name: "color" }] },
-  { label: "Resumen de condiciones especiales por albergue", value: "condiciones_especiales", campos: [] },
+  { label: "Resumen de antecedentes médicos por albergue", value: "condiciones_especiales", campos: [] },
 ];
 
 export function useReportesAlbergue() {

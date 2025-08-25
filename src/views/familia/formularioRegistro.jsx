@@ -176,7 +176,7 @@ const FormularioRegistro = () => {
 
           <div>
             <InputField
-              label="Dirección"
+              label="Dirección exacta de procedencia"
               value={direccion}
               onChange={(e) => setDireccion(e.target.value)}
               placeholder="Ej: 100m norte del parque"
