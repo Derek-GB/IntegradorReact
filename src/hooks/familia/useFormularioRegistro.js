@@ -162,6 +162,18 @@ const useFormularioRegistro = () => {
       idUsuarioCreacion: parseInt(idUsuario),
     };
 
+    // 📋 Visualizar datos que se envían a la API
+    console.log("🚀 Datos enviados a la API /familias:", datos);
+    console.log("📝 Detalles del envío:", {
+      "Albergue seleccionado": albergueSeleccionado,
+      "Evento seleccionado": eventoSeleccionado,
+      "Código familia": codigoFamilia,
+      "Integrantes": integrantes,
+      "Ubicación": `${nombreProvincia} > ${nombreCanton} > ${nombreDistrito}`,
+      "Dirección": direccion,
+      "ID Usuario": idUsuario
+    });
+
     try {
       const res = await customAxios.post("/familias", datos);
       const idFamilia = res.data.idFamilia;

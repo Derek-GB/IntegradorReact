@@ -279,6 +279,8 @@ const FamiliaFormulario = () => {
       const persona = {
         tieneCondicionSalud: ce.tieneCondicionSalud ?? true,
         descripcionCondicionSalud: ce.descripcionCondicionSalud || ce.otrasCondiciones || null,
+        usaMedicamentos: ce.usaTratamiento ?? false,
+        traeMedicamentos: ce.traeTratamiento ?? false,
         discapacidad: ce.discapacidad ?? false,
         tipoDiscapacidad: ce.tipoDiscapacidad || null,
         subtipoDiscapacidad: ce.subtipoDiscapacidad || null,
@@ -331,8 +333,82 @@ const FamiliaFormulario = () => {
   };
 
   const crearPersonasConFirmas = async (formData) => {
-    const res = await personasAPI.create(formData);
-    return res;
+    // 📋 Visualizar datos que se envían a la API de personas
+    console.log("🚀 FormData enviado a la API /personas:");
+    
+    // Mostrar las personas que se están enviando
+    const personasStr = formData.get("personas");
+    if (personasStr) {
+      const personas = JSON.parse(personasStr);
+      console.log("👥 Personas a registrar:", personas);
+      console.log("📊 Cantidad de personas:", personas.length);
+      console.log("🔍 JSON exacto enviado:", personasStr);
+      
+      // Mostrar detalles de cada persona
+      personas.forEach((persona, index) => {
+        console.log(`👤 Persona ${index + 1}:`, {
+          "Nombre completo": `${persona.nombre} ${persona.primerApellido} ${persona.segundoApellido}`,
+          "Identificación": `${persona.tipoIdentificacion}: ${persona.numeroIdentificacion}`,
+          "Parentesco": persona.parentesco,
+          "Es jefe familia": persona.esJefeFamilia,
+          "Tiene condición salud": persona.tieneCondicionSalud,
+          "Usa medicamentos": persona.usaMedicamentos,
+          "Trae medicamentos": persona.traeMedicamentos,
+          "Discapacidad": persona.discapacidad,
+          "ID Familia": persona.idFamilia
+        });
+        console.log(`📋 Objeto completo Persona ${index + 1}:`, persona);
+      });
+    }
+    
+    // Mostrar archivos adjuntos (firmas)
+    const firmas = [];
+    for (let pair of formData.entries()) {
+      if (pair[0] === "firma") {
+        firmas.push(pair[1].name);
+      }
+    }
+    if (firmas.length > 0) {
+      console.log("📝 Firmas adjuntas:", firmas);
+    }
+
+    try {
+      console.log("🔄 Enviando datos al servidor...");
+      const res = await personasAPI.create(formData);
+      console.log("🔍 RESPUESTA COMPLETA:", res);
+      console.log("🔍 TIPO DE SUCCESS:", typeof res.success, res.success);
+      console.log("🔍 ERRORES RAW:", res.errores);
+      console.log("🔍 RESULTADOS RAW:", res.resultados);
+      
+      // Forzar logging de errores
+      console.log("❌ FORZANDO LOGGING DE ERRORES:");
+      if (res.errores) {
+        console.log("📋 Array de errores:", res.errores);
+        for (let i = 0; i < res.errores.length; i++) {
+          console.log(`🚨 Error ${i + 1}:`, res.errores[i]);
+          console.log(`🔍 Propiedades del error ${i + 1}:`, Object.keys(res.errores[i]));
+          for (let key in res.errores[i]) {
+            console.log(`   ${key}:`, res.errores[i][key]);
+          }
+        }
+      }
+      
+      // Forzar logging de resultados
+      console.log("📊 FORZANDO LOGGING DE RESULTADOS:");
+      if (res.resultados) {
+        console.log("� Array de resultados:", res.resultados);
+        for (let i = 0; i < res.resultados.length; i++) {
+          console.log(`📄 Resultado ${i + 1}:`, res.resultados[i]);
+        }
+      }
+      
+      return res;
+    } catch (error) {
+      console.error("❌ Error del servidor:", error);
+      console.error("📄 Detalles del error:", error.response?.data);
+      console.error("🔢 Status code:", error.response?.status);
+      throw error;
+    }
   };
 
   const handleSubmit = async () => {
@@ -384,6 +460,25 @@ const FamiliaFormulario = () => {
       return;
     }
 
+    // Validación específica para medicamentos
+    if (ce.usaTratamiento === true && (ce.traeTratamiento === undefined || ce.traeTratamiento === null)) {
+      showCustomToast(
+        "Campo requerido",
+        "Debe especificar si trae su tratamiento médico.",
+        "error"
+      );
+      setLoading(false);
+      return;
+    }
+
+    console.log("🔍 Validación de medicamentos:", {
+      "Usa tratamiento": ce.usaTratamiento,
+      "Trae tratamiento": ce.traeTratamiento,
+      "Tipo usaTratamiento": typeof ce.usaTratamiento,
+      "Tipo traeTratamiento": typeof ce.traeTratamiento,
+      "Condiciones especiales completas": ce
+    });
+
     const nuevosIntegrantes = [...datosIntegrantes];
     nuevosIntegrantes[indice] = { ...datos };
 
@@ -401,9 +496,30 @@ const FamiliaFormulario = () => {
           navigate("/preFormulario.jsx");
         }, 2000);
       } else {
+        // DEBUGGING FORZADO
+        console.log("🚨 ENTRANDO A BLOQUE DE ERROR");
+        console.log("🚨 RES COMPLETO:", res);
+        console.log("🚨 RES.SUCCESS:", res?.success);
+        console.log("🚨 RES.ERRORES:", res?.errores);
+        
+        // Mostrar errores detallados en consola
+        console.log("❌ Respuesta con errores del servidor:", res);
+        
+        // Construir mensaje de error más detallado
+        let mensajeError = "No se pudo registrar la persona.";
+        if (res?.errores && res.errores.length > 0) {
+          console.log("🔍 PROCESANDO ERRORES:", res.errores);
+          const erroresTexto = res.errores.map((error, index) => {
+            console.log(`🔍 Error ${index}:`, error);
+            return error.error || error.mensaje || error.message || JSON.stringify(error);
+          }).join(", ");
+          mensajeError = erroresTexto;
+          console.log("🔍 MENSAJE FINAL:", mensajeError);
+        }
+        
         showCustomToast(
           "No se pudo registrar",
-          res?.errores?.[0]?.error || "No se pudo registrar la persona.",
+          mensajeError,
           "error"
         );
       }
