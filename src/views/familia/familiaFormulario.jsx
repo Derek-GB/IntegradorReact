@@ -124,15 +124,15 @@ const FamiliaFormulario = () => {
 
   // Handler especial para el campo de número de identificación
   const handleIdentificacionChange = (e) => {
-    let val = e.target.value.replace(/\D/g, "");
-
-    // Limitar según el tipo de identificación
-    if (dp.tipoIdentificacion === "Cédula" && val.length > 9) {
-      val = val.slice(0, 9);
-    } else if (dp.tipoIdentificacion === "DIMEX" && val.length > 12) {
-      val = val.slice(0, 12);
+    let val = e.target.value;
+    const tipo = dp.tipoIdentificacion || "Cédula";
+    if (tipo === "Cédula") {
+      val = val.replace(/\D/g, "").slice(0, 9);
+    } else if (tipo === "DIMEX") {
+      val = val.replace(/[^\d]/g, "").slice(0, 12);
+    } else if (tipo === "Pasaporte") {
+      val = val.replace(/[^A-Za-z0-9]/g, "").slice(0, 15);
     }
-
     handleChange(
       { target: { name: e.target.name, value: val } },
       "FamiliaDatosPersonales"
@@ -516,6 +516,13 @@ const FamiliaFormulario = () => {
             onChange={e => handleChange(e, "FamiliaDatosPersonales")}
             required
           />
+            <SelectField
+            label="País de origen"
+            name="paises"
+            value={cp.paises || ""}
+            onChange={e => handleChange(e, "FamiliaCaracteristicasPoblacionales")}
+            options={paises}
+          />
           <SelectField
             label="Usted diría que se identifica como (Género)"
             name="genero"
@@ -674,11 +681,7 @@ const FamiliaFormulario = () => {
                 name="tipoDiscapacidad"
                 value={ce.tipoDiscapacidad || ""}
                 onChange={e => handleChange(e, "FamiliaCondicionesEspeciales")}
-                options={[
-                  "Embarazo", "Presión", "Hipertensión", "Diabetes",
-                  "Problemas cardíacos", "Problemas respiratorios",
-                  "Enfermedad renal", "Cáncer", "Otro"
-                ]}
+                options={["Embarazo", "Presión", "Hipertensión", "Diabetes", "Problemas cardíacos", "Problemas respiratorios", "Enfermedad renal", "Cáncer", "Otro"]}
               />
               {ce.tipoDiscapacidad === "Otro" && (
                 <InputField
@@ -710,6 +713,64 @@ const FamiliaFormulario = () => {
                 onChange={e => handleChange(e, "FamiliaCondicionesEspeciales")}
                 type="textarea"
               />
+
+              {/* Medicamentos dentro de antecedentes médicos */}
+              <div className="mt-6 mb-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="col-span-2 md:flex md:items-start md:gap-12">
+                  <div className="mb-4 md:mb-0">
+                    <label className="text-teal-600 font-bold select-none mb-2 block">¿Usa tratamiento?</label>
+                    <div className="flex items-center gap-6">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="usaTratamiento"
+                          checked={ce.usaTratamiento === true}
+                          onChange={() => handleChange({ target: { name: "usaTratamiento", value: true, type: "radio" } }, "FamiliaCondicionesEspeciales")}
+                          className="form-radio h-5 w-5 text-teal-600 border-teal-600 focus:ring-teal-500"
+                        />
+                        <span className="text-teal-600 font-semibold select-none">Sí</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="usaTratamiento"
+                          checked={ce.usaTratamiento === false}
+                          onChange={() => handleChange({ target: { name: "usaTratamiento", value: false, type: "radio" } }, "FamiliaCondicionesEspeciales")}
+                          className="form-radio h-5 w-5 text-teal-600 border-teal-600 focus:ring-teal-500"
+                        />
+                        <span className="text-teal-600 font-semibold select-none">No</span>
+                      </label>
+                    </div>
+                  </div>
+                  {ce.usaTratamiento === true && (
+                    <div className="mb-4 md:mb-0">
+                      <label className="text-teal-600 font-bold select-none mb-2 block">¿Trae su tratamiento?</label>
+                      <div className="flex items-center gap-6">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="traeTratamiento"
+                            checked={ce.traeTratamiento === true}
+                            onChange={() => handleChange({ target: { name: "traeTratamiento", value: true, type: "radio" } }, "FamiliaCondicionesEspeciales")}
+                            className="form-radio h-5 w-5 text-teal-600 border-teal-600 focus:ring-teal-500"
+                          />
+                          <span className="text-teal-600 font-semibold select-none">Sí</span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="traeTratamiento"
+                            checked={ce.traeTratamiento === false}
+                            onChange={() => handleChange({ target: { name: "traeTratamiento", value: false, type: "radio" } }, "FamiliaCondicionesEspeciales")}
+                            className="form-radio h-5 w-5 text-teal-600 border-teal-600 focus:ring-teal-500"
+                          />
+                          <span className="text-teal-600 font-semibold select-none">No</span>
+                        </label>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </>
           )}
 
@@ -828,13 +889,7 @@ const FamiliaFormulario = () => {
               "blanca", "otra", "NS/NR"
             ]}
           />
-          <SelectField
-            label="País de origen"
-            name="paises"
-            value={cp.paises || ""}
-            onChange={e => handleChange(e, "FamiliaCaracteristicasPoblacionales")}
-            options={paises}
-          />
+        
         </fieldset>
       </FoldDownComponent>
 
