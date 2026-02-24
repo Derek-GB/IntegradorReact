@@ -10,6 +10,16 @@ import { useBusquedaCedula } from "../../hooks/useBusquedaCedula.js";
 import { personasAPI } from "../../helpers/api.js";
 import { showCustomToast } from "../../components/globalComponents/CustomToaster.jsx";
 
+// Subtipos de alergia según el tipo seleccionado
+const SUBTIPOS_ALERGIA = {
+  "Alimentaria": ["Leche", "Huevo", "Pescado", "Mariscos", "Maní", "Frutos secos", "Trigo", "Soya", "Gluten", "Fresa", "Kiwi", "Otro"],
+  "Medicamentos": ["Penicilina", "Aspirina", "Antiinflamatorios", "Anestésicos", "Otro"],
+  "Ambiental": ["Polen de gramíneas", "Ácaros del polvo", "Moho", "Polvo", "Otro"],
+  "Animales": ["Gatos", "Perros", "Conejos", "Hámsters", "Otro"],
+  "Picaduras de insectos": ["Abejas", "Avispas", "Hormigas", "Otro"],
+  "Otros": ["Otro"],
+};
+
 const FamiliaFormulario = () => {
   const cantidad = parseInt(localStorage.getItem("cantidadIntegrantes")) || 0;
   const [indice, setIndice] = useState(0);
@@ -304,6 +314,13 @@ const FamiliaFormulario = () => {
         observaciones: dp.observaciones || null,
         estaACargoMenor: Boolean(dp.estaACargoMenor),
         idUsuarioCreacion: idUsuario,
+        // Alergias
+        tieneAlergia: ce.tieneAlergia ?? false,
+        tipoAlergia: ce.tipoAlergia || null,
+        subtipoAlergia: ce.subtipoAlergia === "Otro"
+          ? ce.otroSubtipoAlergia || null
+          : ce.subtipoAlergia || null,
+        descripcionAlergia: ce.descripcionAlergia || null,
       };
 
       if (firmaFileName) {
@@ -790,6 +807,109 @@ const FamiliaFormulario = () => {
                   onChange={e => handleChange(e, "FamiliaCondicionesEspeciales")}
                 />
               )}
+            </>
+          )}
+        </fieldset>
+      </FoldDownComponent>
+
+      {/* Alergias */}
+      <FoldDownComponent title="Alergias" open>
+        <fieldset className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <label className="text-teal-600 font-bold select-none col-span-2">
+            ¿Posee alguna alergia?
+          </label>
+          <div className="flex items-center gap-6 col-span-2 mt-2">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="tieneAlergia"
+                checked={ce.tieneAlergia === true}
+                onChange={() =>
+                  setDatos(prev => ({
+                    ...prev,
+                    FamiliaCondicionesEspeciales: {
+                      ...prev.FamiliaCondicionesEspeciales,
+                      tieneAlergia: true,
+                    },
+                  }))
+                }
+                className="form-radio h-5 w-5 text-teal-600 border-teal-600 focus:ring-teal-500"
+              />
+              <span className="text-teal-600 font-semibold select-none">Sí</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="tieneAlergia"
+                checked={ce.tieneAlergia === false}
+                onChange={() =>
+                  setDatos(prev => ({
+                    ...prev,
+                    FamiliaCondicionesEspeciales: {
+                      ...prev.FamiliaCondicionesEspeciales,
+                      tieneAlergia: false,
+                      tipoAlergia: "",
+                      subtipoAlergia: "",
+                      descripcionAlergia: "",
+                    },
+                  }))
+                }
+                className="form-radio h-5 w-5 text-teal-600 border-teal-600 focus:ring-teal-500"
+              />
+              <span className="text-teal-600 font-semibold select-none">No</span>
+            </label>
+          </div>
+
+          {ce.tieneAlergia === true && (
+            <>
+              <SelectField
+                label="Tipo de alergia"
+                name="tipoAlergia"
+                value={ce.tipoAlergia || ""}
+                onChange={e => {
+                  // Al cambiar el tipo, limpiamos el subtipo
+                  setDatos(prev => ({
+                    ...prev,
+                    FamiliaCondicionesEspeciales: {
+                      ...prev.FamiliaCondicionesEspeciales,
+                      tipoAlergia: e.target.value,
+                      subtipoAlergia: "",
+                    },
+                  }));
+                }}
+                options={Object.keys(SUBTIPOS_ALERGIA)}
+                required
+              />
+
+              {ce.tipoAlergia && (
+                <SelectField
+                  label="Subtipo de alergia"
+                  name="subtipoAlergia"
+                  value={ce.subtipoAlergia || ""}
+                  onChange={e => handleChange(e, "FamiliaCondicionesEspeciales")}
+                  options={SUBTIPOS_ALERGIA[ce.tipoAlergia] || []}
+                  required
+                />
+              )}
+
+              {ce.subtipoAlergia === "Otro" && (
+                <InputField
+                  label="Especifique el subtipo de alergia"
+                  name="otroSubtipoAlergia"
+                  value={ce.otroSubtipoAlergia || ""}
+                  onChange={e => handleChange(e, "FamiliaCondicionesEspeciales")}
+                  required
+                />
+              )}
+
+              <InputField
+                label="Describa brevemente la alergia (reacciones, síntomas)"
+                name="descripcionAlergia"
+                value={ce.descripcionAlergia || ""}
+                onChange={e => handleChange(e, "FamiliaCondicionesEspeciales")}
+                type="textarea"
+                placeholder="Ej: dificultad para respirar, urticaria leve, anafilaxia..."
+              />
             </>
           )}
         </fieldset>
